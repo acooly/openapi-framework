@@ -40,20 +40,6 @@
             <artifactId>openapi-framework-manage</artifactId>
         </dependency>
 
-        <!-- boss框架 -->
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-module-security</artifactId>
-            <version>${acooly.secutiry.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-module-security</artifactId>
-            <classifier>static</classifier>
-            <version>${acooly.secutiry.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-taglibs</artifactId>
