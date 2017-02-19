@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>openapi</param-value>
+	</context-param>
+
+	<!-- Spring配置 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:spring/applicationContext-main.xml
+		</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>logConfigLocation</param-name>
+		<param-value>classpath:logback.xml</param-value>
+	</context-param>
+
+	<!--Setting system property -->
+	<listener>
+		<listener-class>com.acooly.integration.SystemPropertyIntergrationListener</listener-class>
+	</listener>
+
+	<!--Intergration log4j/slf4j/commons-logger/jdk14-logger to log4j -->
+	<listener>
+		<listener-class>com.acooly.integration.log.LogbackIntergrationListener</listener-class>
+	</listener>
+
+	<!--Spring Context loader -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- OpenApi framework DispatchServlet -->
+	<servlet>
+		<servlet-name>OpenApiFramework</servlet-name>
+		<servlet-class>com.yiji.framework.openapi.core.servlet.OpenAPIDispatchServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OpenApiFramework</servlet-name>
+		<url-pattern>/gateway.html</url-pattern>
+	</servlet-mapping>
+
+
+	<session-config>
+		<session-timeout>300</session-timeout>
+	</session-config>
+
+	<welcome-file-list>
+		<welcome-file>/index.html</welcome-file>
+	</welcome-file-list>
+
+</web-app>

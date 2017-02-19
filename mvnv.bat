@@ -1,0 +1,1 @@
+mvn versions:set -DgenerateBackupPoms=false

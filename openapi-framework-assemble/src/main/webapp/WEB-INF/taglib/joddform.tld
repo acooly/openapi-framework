@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN" "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+
+<taglib>
+    <tlib-version>1.1.2</tlib-version>
+    <jsp-version>2.0</jsp-version>
+    <short-name>jodd_form</short-name>
+    <uri>http://www.springside.org.cn/jodd_form</uri>
+    <description>
+        Jodd Form modify by springside
+    </description>
+
+    <!-- form tag -->
+
+    <tag>
+        <name>form</name>
+        <tag-class>org.springside.framework.taglib.FormTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>form tag</description>
+        <attribute>
+            <name>bean</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <name>scope</name>
+        </attribute>
+    </tag>
+</taglib>
