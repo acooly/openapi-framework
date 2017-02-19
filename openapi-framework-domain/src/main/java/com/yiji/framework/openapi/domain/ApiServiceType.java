@@ -9,6 +9,8 @@ package com.yiji.framework.openapi.domain;
 
 
 import com.acooly.core.common.domain.AbstractEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Comparator;
 import java.util.Date;
@@ -23,6 +25,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "api_service_type")
+@JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
 public class ApiServiceType extends AbstractEntity {
     /**
      * serialVersionUID
