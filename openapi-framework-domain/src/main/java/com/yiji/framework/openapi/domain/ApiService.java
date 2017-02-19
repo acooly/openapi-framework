@@ -54,12 +54,11 @@ public class ApiService extends AbstractEntity {
      */
     private String comments;
 
-
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})
+    @JoinColumn(name = "type_id")
     private ApiServiceType apiServiceType;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})
-    @JoinColumn(name = "type_id")
     public ApiServiceType getApiServiceType() {
         return apiServiceType;
     }

@@ -11,7 +11,10 @@ import com.acooly.core.common.domain.AbstractEntity;
 import com.yiji.framework.openapi.common.enums.SecretType;
 import com.yiji.framework.openapi.common.enums.SignType;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -38,10 +41,12 @@ public class ApiPartner extends AbstractEntity {
     /**
      * 安全方案
      */
+    @Enumerated(EnumType.STRING)
     private SecretType secretType;
     /**
      * 签名类型
      */
+    @Enumerated(EnumType.STRING)
     private SignType signType;
     /**
      * 秘钥
@@ -76,7 +81,7 @@ public class ApiPartner extends AbstractEntity {
         this.partnerName = partnerName;
     }
 
-    @Enumerated(EnumType.STRING)
+
     public SecretType getSecretType() {
         return this.secretType;
     }
@@ -85,7 +90,6 @@ public class ApiPartner extends AbstractEntity {
         this.secretType = secretType;
     }
 
-    @Enumerated(EnumType.STRING)
     public SignType getSignType() {
         return this.signType;
     }
