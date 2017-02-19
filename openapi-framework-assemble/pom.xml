@@ -14,7 +14,7 @@
 
     <properties>
         <deploy.skip>true</deploy.skip>
-        <acooly.secutiry.version>3.4.10</acooly.secutiry.version>
+        <acooly.secutiry.version>4.0.0-SNAPSHOT</acooly.secutiry.version>
     </properties>
 
     <dependencies>
