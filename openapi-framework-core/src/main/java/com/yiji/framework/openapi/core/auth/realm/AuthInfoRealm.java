@@ -9,7 +9,7 @@ package com.yiji.framework.openapi.core.auth.realm;
  * @date 2014年6月27日
  */
 public interface AuthInfoRealm {
-
+	String APP_CLIENT_REALM="appClientAuthInfoRealm";
 	Object getAuthenticationInfo(String partnerId);
 
 	Object getAuthorizationInfo(String partnerId);

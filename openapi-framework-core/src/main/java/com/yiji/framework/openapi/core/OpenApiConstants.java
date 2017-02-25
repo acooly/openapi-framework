@@ -23,4 +23,9 @@ public class OpenApiConstants {
      */
     public static final String PERFORMANCE_LOGGER = "com.yiji.framework.openapi_PERFORMANCE_LOGGER";
 
+    /**
+     * 是否启用app支持
+     */
+    public static final String APP_CLIENT_ENABLE="openapi.appClient";
+
 }

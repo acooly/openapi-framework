@@ -51,6 +51,17 @@ public abstract class ApiMessage {
     @OpenApiField(desc = "交易订单号", constraint = "在有交易的场景必须填写。具有交易唯一性")
     private String merchOrderNo;
 
+    @OpenApiField(desc = "是否为移动客户端访问", constraint = "非必填")
+    private boolean appClient = false;
+
+    public boolean isAppClient() {
+        return appClient;
+    }
+
+    public void setAppClient(boolean appClient) {
+        this.appClient = appClient;
+    }
+
     public String getMerchOrderNo() {
         return merchOrderNo;
     }

@@ -43,7 +43,7 @@ public enum ApiServiceResultCode implements Messageable {
 	NOTIFY_ERROR("NOTIFY_ERROR", "异步通知失败"),
 
 	REQUEST_GID_NOT_EXSIT("REQUEST_GID_NOT_EXSIT", "gid不存在"),
-
+	APP_CLIENT_NOT_SUPPORT("APP_CLIENT_NOT_SUPPORT","不支持移动端访问"),
 	;
 	private final String code;
 	private final String message;

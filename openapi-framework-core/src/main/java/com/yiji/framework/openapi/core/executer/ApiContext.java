@@ -71,6 +71,8 @@ public class ApiContext {
 
     private String userAgent;
 
+    private boolean appClient;
+
     public String getGid() {
         return gid;
     }
@@ -208,6 +210,14 @@ public class ApiContext {
         this.protocol = protocol;
     }
 
+    public boolean isAppClient() {
+        return appClient;
+    }
+
+    public void setAppClient(boolean appClient) {
+        this.appClient = appClient;
+    }
+
     public void init(Map<String, String> requestData, ApiService apiService) {
         this.setOpenApiService(apiService.getClass().getAnnotation(OpenApiService.class));
         String theVersion = this.getOpenApiService().version();
@@ -217,6 +227,6 @@ public class ApiContext {
         String theProtocol = requestData.get(ApiConstants.PROTOCOL);
         this.protocol = StringUtils.isNotBlank(theProtocol) ? ApiProtocol.valueOf(theProtocol)
                 : ApiProtocol.HTTP_FORM_JSON;
-
+        this.appClient=Boolean.valueOf(requestData.get("appClient"));
     }
 }

@@ -56,9 +56,9 @@ public class SpringProxyAuthInfoRealm extends CacheableAuthInfoRealm {
 			this.simpleAuthInfoRealm = defaultSimpleAuthInfoRealm;
 		}
 
-		for (SimpleAuthInfoRealm air : simpleAuthInfoRealms.values()) {
-			if (air != defaultSimpleAuthInfoRealm && air != this) {
-				this.simpleAuthInfoRealm = air;
+		for (Map.Entry<String,SimpleAuthInfoRealm> air : simpleAuthInfoRealms.entrySet()) {
+			if (air.getValue() != defaultSimpleAuthInfoRealm && air.getValue() != this&&!air.getKey().equals(APP_CLIENT_REALM)) {
+				this.simpleAuthInfoRealm = air.getValue();
 				break;
 			}
 		}
