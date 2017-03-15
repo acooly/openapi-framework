@@ -3,7 +3,7 @@
 -- ----------------------------
 DROP TABLE IF EXISTS `api_order_info`;
 CREATE TABLE `api_order_info` (
-  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `gid` varchar(40) NOT NULL COMMENT '统一流水',
   `request_no` varchar(40) NOT NULL COMMENT '请求号',
   `partner_id` varchar(40) NOT NULL COMMENT '商户ID',
@@ -18,8 +18,8 @@ CREATE TABLE `api_order_info` (
   `return_url` varchar(256) DEFAULT NULL COMMENT '返回地址',
   `business_info` varchar(1024) DEFAULT NULL COMMENT '扩展信息',
   `context` varchar(128) DEFAULT NULL COMMENT '会话信息',
-  `raw_add_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `raw_update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `raw_add_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `raw_update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_PARTNER_REQUEST` (`partner_id`,`request_no`) USING BTREE,
   KEY `IDX_ORDER_GID` (`gid`) USING BTREE,
@@ -48,8 +48,8 @@ CREATE TABLE `api_notify_message` (
   `next_send_time` datetime DEFAULT NULL,
   `status` varchar(16) NOT NULL,
   `execute_status` varchar(16) NOT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`),
   KEY `IDX_NOTIFY_STATUS` (`status`,`execute_status`),
   KEY `IDX_NOTIFY_QUERY` (`gid`,`partner_id`)
