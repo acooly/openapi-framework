@@ -31,7 +31,7 @@ public class MoneySerializer implements ObjectSerializer {
 	}
 
 	@Override
-	public void write(JSONSerializer serializer, Object object, Object fieldName, Type fieldType) throws IOException {
+	public void write(JSONSerializer serializer, Object object, Object fieldName, Type fieldType, int features) throws IOException {
 		SerializeWriter out = serializer.getWriter();
 		Money value = (Money) object;
 		if (value == null) {
