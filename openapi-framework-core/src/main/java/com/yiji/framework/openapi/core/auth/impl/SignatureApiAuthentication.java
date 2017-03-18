@@ -1,5 +1,7 @@
 package com.yiji.framework.openapi.core.auth.impl;
 
+import com.acooly.core.common.boot.Env;
+import com.acooly.core.utils.enums.Messageable;
 import com.yiji.framework.openapi.common.ApiConstants;
 import com.yiji.framework.openapi.common.exception.ApiServiceException;
 import com.yiji.framework.openapi.common.utils.Strings;
@@ -24,6 +26,7 @@ import java.util.Map;
  */
 @Component
 public class SignatureApiAuthentication implements ApiAuthentication {
+    private static NotSupport notSupport=new NotSupport();
 
     private static final Logger logger = LoggerFactory.getLogger(SignatureApiAuthentication.class);
 
@@ -43,6 +46,11 @@ public class SignatureApiAuthentication implements ApiAuthentication {
             String signType = Strings.isBlankDefault(ApiUtils.getParameter(requestData, ApiConstants.SIGN_TYPE), SignTypeEnum.MD5.name());
             String requestSign = ApiUtils.getParameter(requestData, ApiConstants.SIGN);
             String partnerId = ApiUtils.getParameter(requestData, ApiConstants.PARTNER_ID);
+            if ("test".equals(partnerId)) {
+                if (Env.isOnline()) {
+                    throw new ApiServiceException(notSupport);
+                }
+            }
             Signer<Map<String, String>> signer = signerFactory.getSigner(signType);
             signer.verify(requestSign, (String) authInfoRealm.getAuthenticationInfo(partnerId),
                     requestData);
@@ -86,6 +94,19 @@ public class SignatureApiAuthentication implements ApiAuthentication {
 
     public void setAuthInfoRealm(AuthInfoRealm authInfoRealm) {
         this.authInfoRealm = authInfoRealm;
+    }
+
+    public static class NotSupport implements Messageable {
+
+        @Override
+        public String code() {
+            return "TEST_NOT_SUPPORT_IN_PRODUCTION";
+        }
+
+        @Override
+        public String message() {
+            return "生产环境不能使用测试帐号";
+        }
     }
 
 }
