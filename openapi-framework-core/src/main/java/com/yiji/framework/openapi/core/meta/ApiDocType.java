@@ -21,11 +21,11 @@ public @interface ApiDocType {
      * 解决方案类型编码
      * @return
      */
-    String code() default "Common";
+    String code();
 
     /**
      * 解决方案类型名称
      * @return
      */
-    String name() default "通用类型";
+    String name();
 }
