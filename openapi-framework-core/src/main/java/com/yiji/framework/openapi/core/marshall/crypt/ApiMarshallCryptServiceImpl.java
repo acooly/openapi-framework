@@ -4,12 +4,12 @@ import java.io.UnsupportedEncodingException;
 
 import com.yiji.framework.openapi.common.enums.ApiServiceResultCode;
 import com.yiji.framework.openapi.common.exception.ApiServiceException;
+import com.yiji.framework.openapi.common.utils.Cryptos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.acooly.core.utils.Cryptos;
 import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Exceptions;
 import com.yiji.framework.openapi.core.auth.realm.AuthInfoRealm;

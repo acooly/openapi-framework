@@ -12,6 +12,7 @@ import com.yiji.framework.openapi.common.exception.ApiServiceException;
 import com.yiji.framework.openapi.common.message.ApiRequest;
 import com.yiji.framework.openapi.common.message.ApiResponse;
 import com.yiji.framework.openapi.core.exception.ApiServiceExceptionHander;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
  * @author acooly
  */
 @Service
+@Slf4j
 public class DefaultApiServiceExceptionHander implements ApiServiceExceptionHander {
 
     @Override
@@ -27,6 +29,7 @@ public class DefaultApiServiceExceptionHander implements ApiServiceExceptionHand
         if (ApiServiceException.class.isAssignableFrom(ase.getClass())) {
             handleApiServiceException(apiResponse, (ApiServiceException) ase);
         } else {
+            log.error("处理服务[{}]异常",apiRequest.getService(),ase);
             handleInternalException(apiResponse);
         }
     }
