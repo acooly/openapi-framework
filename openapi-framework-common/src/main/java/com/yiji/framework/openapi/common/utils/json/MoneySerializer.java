@@ -10,14 +10,14 @@
  */
 package com.yiji.framework.openapi.common.utils.json;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-
 import com.acooly.core.utils.Money;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.alibaba.fastjson.serializer.SerializeWriter;
 import com.yiji.framework.openapi.common.convert.ApiServiceConversionService;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
 
 /**
  * @author qzhanbo@yiji.com
@@ -38,7 +38,7 @@ public class MoneySerializer implements ObjectSerializer {
 			out.writeNull();
 			return;
 		}
-		out.write(ApiServiceConversionService.INSTANCE.convert(value, String.class));
+		out.writeString(ApiServiceConversionService.INSTANCE.convert(value, String.class));
 	}
 
 }
