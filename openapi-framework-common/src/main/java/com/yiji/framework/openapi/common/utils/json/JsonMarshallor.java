@@ -10,17 +10,13 @@
  */
 package com.yiji.framework.openapi.common.utils.json;
 
-import java.lang.reflect.Type;
-
 import com.acooly.core.utils.Money;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.serializer.JSONSerializer;
-import com.alibaba.fastjson.serializer.ObjectSerializer;
-import com.alibaba.fastjson.serializer.SerializeConfig;
-import com.alibaba.fastjson.serializer.SerializeWriter;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.serializer.*;
+
+import java.lang.reflect.Type;
 
 /**
  * Object <--> json
@@ -85,7 +81,7 @@ public class JsonMarshallor {
 		serializer.config(SerializerFeature.WriteDateUseDateFormat, true);
 		serializer.setDateFormat("yyyy-MM-dd HH:mm:ss");
 		serializer.config(SerializerFeature.QuoteFieldNames, true);
-		serializer.config(SerializerFeature.DisableCircularReferenceDetect, false);
+		serializer.config(SerializerFeature.DisableCircularReferenceDetect, true);
 		
 		return serializer;
 	}
