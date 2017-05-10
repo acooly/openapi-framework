@@ -26,6 +26,7 @@ public final class ApiConstants {
 	public static final String CONTEXT = "context";
 	public static final String OID = "oid";
 	public static final String MERCH_ORDER_NO = "merchOrderNo";
+	public static final String SEND_MESSAGE_SERVICE_NAME = "sendMessageService";
 
 	public static final String VERSION_DEFAULT = "1.0";
 

@@ -7,18 +7,7 @@
  */
 package com.yiji.framework.openapi.core.notify.impl;
 
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.yiji.framework.openapi.facade.order.ApiNotifyOrder;
-
+import com.acooly.core.utils.Ids;
 import com.yiji.framework.openapi.common.ApiConstants;
 import com.yiji.framework.openapi.common.enums.ApiServiceResultCode;
 import com.yiji.framework.openapi.common.exception.ApiServiceException;
@@ -33,6 +22,16 @@ import com.yiji.framework.openapi.core.service.base.ApiService;
 import com.yiji.framework.openapi.core.service.factory.ApiServiceFactory;
 import com.yiji.framework.openapi.domain.OrderInfo;
 import com.yiji.framework.openapi.service.OrderInfoService;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.yiji.framework.openapi.facade.order.ApiNotifyOrder;
+
+import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * 框架异步通知处理 默认实现
@@ -94,6 +93,40 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
             notifySendMessage.setMerchOrderNo(apiNotify.getMerchOrderNo());
             notifySendMessage.setRequestNo(apiNotify.getRequestNo());
             notifySendMessage.setParameters(notifyMap);
+            apiNotifySender.send(notifySendMessage);
+        } catch (ApiServiceException ase) {
+            logger.warn("异步通知 失败:", ase);
+            throw ase;
+        } catch (Exception e) {
+            logger.warn("异步通知 失败:", e);
+            throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, "处理失败,请查openApi日志堆栈");
+        } finally {
+            MDC.clear();
+        }
+    }
+
+    @Override
+    public void send(ApiNotifyOrder apiNotifyOrder) {
+        MDC.put(ApiConstants.GID, apiNotifyOrder.getGid());
+        try {
+            // 获取订单信息
+            apiNotifyOrder.check();
+            String notifyUrl = apiNotifyOrder.getParameter(ApiConstants.NOTIFY_URL);
+            if (StringUtils.isBlank(notifyUrl)) {
+                throw new ApiServiceException(ApiServiceResultCode.NOTIFY_ERROR, "notifyUrl为空，不发送通知。");
+            }
+            ApiContextHolder.init();
+            ApiContextHolder.getApiContext().setGid(apiNotifyOrder.getGid());
+            // 交给CS系统发送
+            NotifySendMessage notifySendMessage = new NotifySendMessage();
+            notifySendMessage.setGid(apiNotifyOrder.getGid());
+            notifySendMessage.setPartnerId(apiNotifyOrder.getPartnerId());
+            notifySendMessage.setService(ApiConstants.SEND_MESSAGE_SERVICE_NAME);
+            notifySendMessage.setVersion(ApiConstants.VERSION_DEFAULT);
+            notifySendMessage.setUrl(notifyUrl);
+            notifySendMessage.setMerchOrderNo(Ids.oid());
+            notifySendMessage.setRequestNo(Ids.oid());
+            notifySendMessage.setParameters(apiNotifyOrder.getParameters());
             apiNotifySender.send(notifySendMessage);
         } catch (ApiServiceException ase) {
             logger.warn("异步通知 失败:", ase);

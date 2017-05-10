@@ -20,4 +20,6 @@ public interface ApiNotifyHandler {
 
     void notify(ApiNotifyOrder apiNotifyOrder);
 
+    void send(ApiNotifyOrder apiNotifyOrder);
+
 }
