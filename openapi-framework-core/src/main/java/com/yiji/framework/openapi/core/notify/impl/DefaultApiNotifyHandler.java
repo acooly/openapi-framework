@@ -9,7 +9,9 @@ package com.yiji.framework.openapi.core.notify.impl;
 
 import com.acooly.core.utils.Ids;
 import com.yiji.framework.openapi.common.ApiConstants;
+import com.yiji.framework.openapi.common.enums.ApiProtocol;
 import com.yiji.framework.openapi.common.enums.ApiServiceResultCode;
+import com.yiji.framework.openapi.common.enums.SignType;
 import com.yiji.framework.openapi.common.exception.ApiServiceException;
 import com.yiji.framework.openapi.common.message.ApiNotify;
 import com.yiji.framework.openapi.core.auth.realm.AuthInfoRealm;
@@ -111,22 +113,48 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
         try {
             // 获取订单信息
             apiNotifyOrder.check();
-            String notifyUrl = apiNotifyOrder.getParameter(ApiConstants.NOTIFY_URL);
-            if (StringUtils.isBlank(notifyUrl)) {
+            OrderInfo orderInfo = new OrderInfo();
+            orderInfo.setGid(apiNotifyOrder.getGid());
+            orderInfo.setPartnerId(apiNotifyOrder.getPartnerId());
+            orderInfo.setNotifyUrl(apiNotifyOrder.getParameter(ApiConstants.NOTIFY_URL));
+            orderInfo.setProtocol(ApiProtocol.HTTP_FORM_JSON);
+            orderInfo.setRequestNo(Ids.oid());
+            orderInfo.setOid(Ids.oid());
+            orderInfo.setService(apiNotifyOrder.getParameter(ApiConstants.SERVICE));
+            orderInfo.setVersion(apiNotifyOrder.getParameter(ApiConstants.VERSION));
+            orderInfo.setSignType(SignType.MD5.code());
+            if (StringUtils.isBlank(orderInfo.getNotifyUrl())) {
                 throw new ApiServiceException(ApiServiceResultCode.NOTIFY_ERROR, "notifyUrl为空，不发送通知。");
+            }
+
+            if (StringUtils.isBlank(orderInfo.getService())) {
+                throw new ApiServiceException(ApiServiceResultCode.NOTIFY_ERROR, "service为空，不发送通知。");
+            }
+
+            if (StringUtils.isBlank(orderInfo.getVersion())) {
+                throw new ApiServiceException(ApiServiceResultCode.NOTIFY_ERROR, "version为空，不发送通知。");
             }
             ApiContextHolder.init();
             ApiContextHolder.getApiContext().setGid(apiNotifyOrder.getGid());
+
+            // 查找对应服务并调用异步业务处理
+            ApiService apiService = apiServiceFactory.getApiService(orderInfo.getService(), orderInfo.getVersion());
+            ApiNotify apiNotify = apiService.handleNotify(orderInfo, apiNotifyOrder);
+            ApiContextHolder.getApiContext().setApiService(apiService);
+            ApiContextHolder.getApiContext().setResponse(apiNotify);
+            // 组装报文
+            Map<String, String> notifyMap = (Map<String, String>) apiMarshallFactory
+                    .getNotifyMarshall(orderInfo.getProtocol()).marshall(apiNotify);
             // 交给CS系统发送
             NotifySendMessage notifySendMessage = new NotifySendMessage();
             notifySendMessage.setGid(apiNotifyOrder.getGid());
-            notifySendMessage.setPartnerId(apiNotifyOrder.getPartnerId());
-            notifySendMessage.setService(ApiConstants.SEND_MESSAGE_SERVICE_NAME);
-            notifySendMessage.setVersion(ApiConstants.VERSION_DEFAULT);
-            notifySendMessage.setUrl(notifyUrl);
-            notifySendMessage.setMerchOrderNo(Ids.oid());
-            notifySendMessage.setRequestNo(Ids.oid());
-            notifySendMessage.setParameters(apiNotifyOrder.getParameters());
+            notifySendMessage.setPartnerId(apiNotify.getPartnerId());
+            notifySendMessage.setService(apiNotify.getService());
+            notifySendMessage.setVersion(apiNotify.getVersion());
+            notifySendMessage.setUrl(orderInfo.getNotifyUrl());
+            notifySendMessage.setMerchOrderNo(apiNotify.getMerchOrderNo());
+            notifySendMessage.setRequestNo(apiNotify.getRequestNo());
+            notifySendMessage.setParameters(notifyMap);
             apiNotifySender.send(notifySendMessage);
         } catch (ApiServiceException ase) {
             logger.warn("异步通知 失败:", ase);
