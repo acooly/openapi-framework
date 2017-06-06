@@ -7,18 +7,21 @@
  */
 package com.yiji.framework.openapi.core.log;
 
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.yiji.framework.openapi.common.enums.ApiBusiType;
+import com.yiji.framework.openapi.core.executer.ApiContext;
+import com.yiji.framework.openapi.core.executer.ApiContextHolder;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * OpenApi统一日志默认实现
@@ -26,9 +29,11 @@ import com.google.common.collect.Sets;
  * @author zhangpu
  */
 @Component
-public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
+public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler,InitializingBean {
 
 	private static final Logger logger = LoggerFactory.getLogger("ParamsLogger");
+	private static final Logger apiQuerylogger = LoggerFactory.getLogger("API-QUERY");
+
 	public static final String DEF_MASK_KEYS = "cardNo,idcard,mobileNo,userName";
 	public static final String DEF_IGNORE_KEYS = "password,pass,passwd";
 	/**
@@ -48,15 +53,26 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
 	private Set<String> masks;
 	private Set<String> ignores;
 
+	private Boolean queryLogSeparation;
+
 	@Override
 	public void log(String label, String msg) {
-		logger.info(StringUtils.trimToEmpty(label) + msg);
+		if(isSep()){
+			apiQuerylogger.info(StringUtils.trimToEmpty(label) + msg);
+		}else{
+			logger.info(StringUtils.trimToEmpty(label) + msg);
+		}
 	}
 
 	@Override
 	public void log(String label, Map<String, ?> data) {
+		boolean sep = isSep();
 		if (data == null || data.size() == 0) {
-			logger.info(StringUtils.trimToEmpty(label) + "{}", "{}");
+			if(sep){
+				apiQuerylogger.info(StringUtils.trimToEmpty(label) + "{}", "{}");
+			}else{
+				logger.info(StringUtils.trimToEmpty(label) + "{}", "{}");
+			}
 			return;
 		}
 		Map<String, String> logData = Maps.newTreeMap();
@@ -73,7 +89,23 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
 				logData.put(entry.getKey(), entry.getValue().toString());
 			}
 		}
-		logger.info(StringUtils.trimToEmpty(label) + JSON.toJSONString(logData));
+		if(sep){
+			apiQuerylogger.info(StringUtils.trimToEmpty(label) + JSON.toJSONString(logData));
+		}else{
+			logger.info(StringUtils.trimToEmpty(label) + JSON.toJSONString(logData));
+		}
+	}
+
+	private boolean isSep(){
+		if(!queryLogSeparation){
+			return false;
+		}
+		ApiContext apiContext = ApiContextHolder.getApiContext();
+		if(apiContext==null){
+			return false;
+		}
+		return ApiContextHolder.getApiContext().getOpenApiService().busiType() == ApiBusiType.Query;
+
 	}
 
 	protected boolean needMask(String key) {
@@ -147,4 +179,9 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
 		this.ignoreKeys = ignoreKeys;
 	}
 
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		String property = System.getProperty("openapi.queryLogSeparationEnable");
+		queryLogSeparation=Boolean.parseBoolean(property);
+	}
 }
