@@ -19,6 +19,7 @@ import com.yiji.framework.openapi.core.auth.ApiAuthentication;
 import com.yiji.framework.openapi.core.notify.ApiNotifyHandler;
 import com.yiji.framework.openapi.core.security.sign.SignTypeEnum;
 import com.yiji.framework.openapi.domain.OrderInfo;
+import com.yiji.framework.openapi.service.ApiPartnerService;
 import com.yiji.framework.openapi.service.OrderInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.yiji.framework.openapi.facade.api.OpenApiRemoteService;
 import org.yiji.framework.openapi.facade.order.ApiNotifyOrder;
+import org.yiji.framework.openapi.facade.order.ApiQueryOrder;
 import org.yiji.framework.openapi.facade.result.ApiNotifyResult;
 
 import javax.annotation.Resource;
@@ -47,6 +49,9 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
     private OrderInfoService orderInfoService;
     @Resource
     private ApiAuthentication apiAuthentication;
+
+    @Resource
+    private ApiPartnerService apiPartnerService;
 
     /**
      * 异步通知处理
@@ -106,6 +111,23 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
         try {
             apiNotifyOrder.check();
             apiNotifyHandler.send(apiNotifyOrder);
+        } catch (ApiServiceException e) {
+            result.setStatus(ResultStatus.failure);
+            result.setDetail(e.getDetail());
+        } catch (Exception e) {
+            result.setStatus(ResultStatus.failure);
+            result.setDetail(e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public ResultBase getPartnerSercretKey(ApiQueryOrder apiQueryOrder) {
+        ResultBase result = new ResultBase();
+        try {
+            apiQueryOrder.check();
+            String sercretKey = apiPartnerService.getPartnerSercretKey(apiQueryOrder.getPartnerId());
+            result.setParameter("sercretKey",sercretKey);
         } catch (ApiServiceException e) {
             result.setStatus(ResultStatus.failure);
             result.setDetail(e.getDetail());

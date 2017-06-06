@@ -9,6 +9,7 @@ package org.yiji.framework.openapi.facade.api;
 
 import com.acooly.core.common.facade.ResultBase;
 import org.yiji.framework.openapi.facade.order.ApiNotifyOrder;
+import org.yiji.framework.openapi.facade.order.ApiQueryOrder;
 import org.yiji.framework.openapi.facade.result.ApiNotifyResult;
 
 
@@ -49,5 +50,16 @@ public interface OpenApiRemoteService {
      * @return ResultBase 中的status为sucess表示通知已投递
      */
     ResultBase sendMessage(ApiNotifyOrder apiNotifyOrder);
+
+    /**
+     * 根据partnerId获取商户密钥
+     * 返回的商户密钥从map里面取，key=sercretKey
+     * 参数partnerId和git必传
+     *
+     * @param apiQueryOrder
+     * @return
+     */
+    ResultBase getPartnerSercretKey(ApiQueryOrder apiQueryOrder);
+
 
 }
