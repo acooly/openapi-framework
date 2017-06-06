@@ -7,19 +7,7 @@
  */
 package com.yiji.framework.openapi.core.notify.api;
 
-import java.util.Map;
-
-import javax.annotation.Resource;
-
 import com.acooly.core.common.facade.ResultBase;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.yiji.framework.openapi.facade.api.OpenApiRemoteService;
-import org.yiji.framework.openapi.facade.order.ApiNotifyOrder;
-import org.yiji.framework.openapi.facade.result.ApiNotifyResult;
-
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.ResultStatus;
 import com.google.common.collect.Maps;
@@ -32,6 +20,16 @@ import com.yiji.framework.openapi.core.notify.ApiNotifyHandler;
 import com.yiji.framework.openapi.core.security.sign.SignTypeEnum;
 import com.yiji.framework.openapi.domain.OrderInfo;
 import com.yiji.framework.openapi.service.OrderInfoService;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.yiji.framework.openapi.facade.api.OpenApiRemoteService;
+import org.yiji.framework.openapi.facade.order.ApiNotifyOrder;
+import org.yiji.framework.openapi.facade.result.ApiNotifyResult;
+
+import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * OpenApi 通知远程服务实现 （facade接口实现）
@@ -99,6 +97,22 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
             result.setDetail(e.getMessage());
         }
         logger.info("服务跳回 出参:{}", result);
+        return result;
+    }
+
+    @Override
+    public ResultBase sendMessage(ApiNotifyOrder apiNotifyOrder) {
+        ResultBase result = new ResultBase();
+        try {
+            apiNotifyOrder.check();
+            apiNotifyHandler.send(apiNotifyOrder);
+        } catch (ApiServiceException e) {
+            result.setStatus(ResultStatus.failure);
+            result.setDetail(e.getDetail());
+        } catch (Exception e) {
+            result.setStatus(ResultStatus.failure);
+            result.setDetail(e.getMessage());
+        }
         return result;
     }
 
