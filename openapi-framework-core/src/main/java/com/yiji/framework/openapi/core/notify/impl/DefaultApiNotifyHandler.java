@@ -123,6 +123,9 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
             orderInfo.setService(apiNotifyOrder.getParameter(ApiConstants.SERVICE));
             orderInfo.setVersion(apiNotifyOrder.getParameter(ApiConstants.VERSION));
             orderInfo.setSignType(SignType.MD5.code());
+            if(StringUtils.isNotBlank(apiNotifyOrder.getParameter(ApiConstants.MERCH_ORDER_NO))) {
+                orderInfo.setOrderNo(apiNotifyOrder.getParameter(ApiConstants.MERCH_ORDER_NO));
+            }
             if (StringUtils.isBlank(orderInfo.getNotifyUrl())) {
                 throw new ApiServiceException(ApiServiceResultCode.NOTIFY_ERROR, "notifyUrl为空，不发送通知。");
             }
