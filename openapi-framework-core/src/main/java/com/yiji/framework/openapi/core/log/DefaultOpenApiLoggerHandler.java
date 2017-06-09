@@ -104,6 +104,9 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler,Initial
 		if(apiContext==null){
 			return false;
 		}
+		if(ApiContextHolder.getApiContext().getOpenApiService()==null){
+			return false;
+		}
 		return ApiContextHolder.getApiContext().getOpenApiService().busiType() == ApiBusiType.Query;
 
 	}
