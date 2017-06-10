@@ -7,12 +7,12 @@
  */
 package org.yiji.framework.openapi.facade.result;
 
-import java.util.Map;
-
 import com.acooly.core.common.facade.ResultBase;
+import com.acooly.core.utils.Encodes;
 import org.apache.commons.lang3.StringUtils;
 
-import com.acooly.core.utils.Encodes;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author zhangpu
@@ -37,10 +37,18 @@ public class ApiNotifyResult extends ResultBase {
 	public String getQueryString() {
 		setParameter("sign", this.sign);
 		StringBuilder sb = new StringBuilder();
-		for (Map.Entry<String, Object> entry : getParameters().entrySet()) {
-			sb.append(entry.getKey()).append("=").append(Encodes.urlEncode((String) entry.getValue())).append("&");
+		Iterator<Map.Entry<String, Object>> it = getParameters().entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, Object> entry = it.next();
+			if (entry.getValue() != null) {
+				sb.append(entry.getKey()).append('=').append(Encodes.urlEncode((String)entry.getValue()));
+			}else{
+				continue;
+			}
+			if (it.hasNext()) {
+				sb.append('&');
+			}
 		}
-		sb.substring(0, sb.length() - 1);
 		return sb.toString();
 	}
 
