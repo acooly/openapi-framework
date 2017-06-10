@@ -29,7 +29,11 @@ public class DefaultApiServiceExceptionHander implements ApiServiceExceptionHand
         if (ApiServiceException.class.isAssignableFrom(ase.getClass())) {
             handleApiServiceException(apiResponse, (ApiServiceException) ase);
         } else {
-            log.error("处理服务[{}]异常",apiRequest.getService(),ase);
+            String serviceName="";
+            if(apiRequest != null){
+                serviceName=apiRequest.getService();
+            }
+            log.error("处理服务[{}]异常",serviceName,ase);
             handleInternalException(apiResponse);
         }
     }
