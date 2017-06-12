@@ -1,3 +1,6 @@
+<#if ssoEnable>
+    <#include "*/include.ftl">
+</#if>
 <script type="text/javascript">
 
     function manage_apiServiceType_loadTree(defaultNode, clear) {
