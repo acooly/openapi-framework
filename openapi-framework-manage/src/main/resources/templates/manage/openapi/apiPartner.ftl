@@ -1,3 +1,6 @@
+<#if ssoEnable>
+    <#include "*/include.ftl">
+</#if>`
 <script type="text/javascript">
 $(function() {
 	$.acooly.framework.registerKeydown('manage_apiPartner_searchform','manage_apiPartner_datagrid');
@@ -12,11 +15,12 @@ function manage_apiPartner_showSetting(){
         $.messager.alert('提示','请先选中操作的接入方记录');
         return;
     }
-    $.acooly.layout.addTab({
+    $('<div/>').dialog({
         title:'设置接入方权限',
         href:'/manage/openapi/apiPartnerService/setting.html?id='+row.id,
-        closable : true,
-        iconCls : 'icons-resource-access-user'
+        modal: true,
+        width: 1000,
+        height: 450,
     });
 
 }
