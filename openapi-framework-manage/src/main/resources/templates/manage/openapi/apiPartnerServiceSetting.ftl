@@ -1,6 +1,3 @@
-<#if ssoEnable>
-    <#include "*/include.ftl">
-</#if>`
 <style>
     .servicelist {
     }
