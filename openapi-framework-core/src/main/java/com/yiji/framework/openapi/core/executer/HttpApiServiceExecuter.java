@@ -7,20 +7,6 @@
  */
 package com.yiji.framework.openapi.core.executer;
 
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.StringUtils;
-import org.perf4j.StopWatch;
-import org.perf4j.slf4j.Slf4JStopWatch;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
-import org.springframework.stereotype.Component;
-
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.validate.Validators;
@@ -50,6 +36,19 @@ import com.yiji.framework.openapi.core.service.enums.ApiScheme;
 import com.yiji.framework.openapi.core.service.factory.ApiServiceFactory;
 import com.yiji.framework.openapi.core.util.ApiUtils;
 import com.yiji.framework.openapi.service.OrderInfoService;
+import org.apache.commons.lang3.StringUtils;
+import org.perf4j.StopWatch;
+import org.perf4j.slf4j.Slf4JStopWatch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 /**
  * 服务执行HTTP实现
@@ -75,7 +74,7 @@ public class HttpApiServiceExecuter implements ApiServiceExecuter<HttpServletReq
     private OrderInfoService orderInfoService;
     @Resource
     private EventPublisher eventPublisher;
-    @Resource
+    @Autowired
     private ApiServiceExceptionHander apiServiceExceptionHander;
 
     @SuppressWarnings("rawtypes")
