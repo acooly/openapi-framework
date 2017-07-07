@@ -15,12 +15,31 @@ function manage_apiPartner_showSetting(){
         $.messager.alert('提示','请先选中操作的接入方记录');
         return;
     }
+//    $('<div/>').dialog({
+//        title:'设置接入方权限',
+//        href:'/manage/openapi/apiPartnerService/setting.html?id='+row.id,
+//        modal: true,
+//        width: 1000,
+//        height: 450,
+//    });
+
     $('<div/>').dialog({
         title:'设置接入方权限',
-        href:'/manage/openapi/apiPartnerService/setting.html?id='+row.id,
-        modal: true,
-        width: 1000,
-        height: 450,
+        href : '/manage/openapi/apiPartnerService/setting.html?id='+row.id,
+        width : 1000,
+        height : 450,
+        modal : true,
+        buttons : [ {
+            text : '关闭',
+            iconCls : 'icon-cancel',
+            handler : function() {
+                var d = $(this).closest('.window-body');
+                d.dialog('close');
+            }
+        } ],
+        onClose : function() {
+            $(this).dialog('destroy');
+        }
     });
 
 }
@@ -42,8 +61,8 @@ function manage_apiPartner_showSetting(){
                 签名类型: <select style="width:80px;height:27px;" name="search_EQ_signType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option>
             <#list allSignTypes as k,v><option value="${k}">${v}</option></#list>
             </select>
-                创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-                至 <input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+                <#--创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />-->
+                <#--至 <input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />-->
                 <a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_apiPartner_searchform','manage_apiPartner_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
