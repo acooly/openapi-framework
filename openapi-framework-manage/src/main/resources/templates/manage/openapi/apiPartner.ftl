@@ -15,31 +15,12 @@ function manage_apiPartner_showSetting(){
         $.messager.alert('提示','请先选中操作的接入方记录');
         return;
     }
-//    $('<div/>').dialog({
-//        title:'设置接入方权限',
-//        href:'/manage/openapi/apiPartnerService/setting.html?id='+row.id,
-//        modal: true,
-//        width: 1000,
-//        height: 450,
-//    });
-
     $('<div/>').dialog({
         title:'设置接入方权限',
-        href : '/manage/openapi/apiPartnerService/setting.html?id='+row.id,
-        width : 1000,
-        height : 450,
-        modal : true,
-        buttons : [ {
-            text : '关闭',
-            iconCls : 'icon-cancel',
-            handler : function() {
-                var d = $(this).closest('.window-body');
-                d.dialog('close');
-            }
-        } ],
-        onClose : function() {
-            $(this).dialog('destroy');
-        }
+        href:'/manage/openapi/apiPartnerService/setting.html?id='+row.id,
+        modal: true,
+        width: 1000,
+        height: 450,
     });
 
 }
