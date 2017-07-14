@@ -181,7 +181,7 @@ public class NotifyMessageDaoImpl extends AbstractJdbcTemplateDao implements Not
     @Override
     public List<NotifyMessage> listUnProcessed(Integer topNum) {
         String sql = getSelectSql() + " where status = '" + TaskStatus.Waitting.code() + "' and execute_status = '"
-                + TaskExecuteStatus.Unprocessed.code() + "' order by id";
+                + TaskExecuteStatus.Unprocessed.code() + "' and next_send_time<=now() order by id";
         if (getDbType() == DbType.mysql) {
             sql += " limit 0,5";
         } else if (getDbType() == DbType.oracle) {
