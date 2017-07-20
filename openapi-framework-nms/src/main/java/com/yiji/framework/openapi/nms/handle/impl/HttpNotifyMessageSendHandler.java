@@ -10,6 +10,7 @@ package com.yiji.framework.openapi.nms.handle.impl;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.net.HttpResult;
 import com.acooly.core.utils.net.Https;
+import com.yiji.framework.openapi.core.notify.impl.DefaultApiNotifySender;
 import com.yiji.framework.openapi.domain.NotifyMessage;
 import com.yiji.framework.openapi.common.enums.MessageType;
 import com.yiji.framework.openapi.common.enums.TaskExecuteStatus;
@@ -19,6 +20,11 @@ import com.yiji.framework.openapi.service.NotifyMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +37,7 @@ import java.util.GregorianCalendar;
  * @author zhangpu
  */
 @Component
-public class HttpNotifyMessageSendHandler implements NotifyMessageSendHandler {
+public class HttpNotifyMessageSendHandler implements NotifyMessageSendHandler, ApplicationContextAware, InitializingBean {
 
     private static Logger logger = LoggerFactory.getLogger(HttpNotifyMessageSendHandler.class);
 
@@ -39,6 +45,12 @@ public class HttpNotifyMessageSendHandler implements NotifyMessageSendHandler {
     private NotifyMessageService notifyMessageService;
     @Resource
     private TaskExecutor notifyTaskExecutor;
+
+    private ApplicationContext applicationContext;
+
+    private String connectionTimeout;
+
+    private String socketTimeout;
 
     /**
      * 通知间隔时间,第一次隔两分钟，然后隔10分钟... 一共通知11次,失败后通知10次,55小时42分钟
@@ -79,7 +91,7 @@ public class HttpNotifyMessageSendHandler implements NotifyMessageSendHandler {
         String result = null;
         String respInfo = null;
         try {
-            HttpResult httpResult = Https.getInstance().post(notifyMessage.getUrl(), notifyMessage.getParameters());
+            HttpResult httpResult = Https.getCustomInstance(connectionTimeout, socketTimeout).post(notifyMessage.getUrl(), notifyMessage.getParameters());
             result = httpResult.getBody();
             logger.info("通知地址:{}", notifyMessage.getUrl());
             logger.info("通知内容:{}", notifyMessage.getParameters());
@@ -144,4 +156,15 @@ public class HttpNotifyMessageSendHandler implements NotifyMessageSendHandler {
         return MessageType.HTTP;
     }
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        DefaultApiNotifySender defaultApiNotifySender = applicationContext.getBean(DefaultApiNotifySender.class);
+        this.connectionTimeout = defaultApiNotifySender.getConnectionTimeout();
+        this.socketTimeout = defaultApiNotifySender.getSocketTimeout();
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 }

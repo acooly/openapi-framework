@@ -13,6 +13,8 @@ import com.acooly.core.utils.net.HttpResult;
 import com.acooly.core.utils.net.Https;
 import com.yiji.framework.openapi.core.notify.ApiNotifySender;
 import com.yiji.framework.openapi.core.notify.domain.NotifySendMessage;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Component;
  *
  * @author acooly
  */
+@Getter
+@Setter
 @Component
 public class DefaultApiNotifySender implements ApiNotifySender {
 
@@ -61,11 +65,4 @@ public class DefaultApiNotifySender implements ApiNotifySender {
         return result.length() < 50 && result.contains("success");
     }
 
-    public void setConnectionTimeout(String connectionTimeout) {
-        this.connectionTimeout = connectionTimeout;
-    }
-
-    public void setSocketTimeout(String socketTimeout) {
-        this.socketTimeout = socketTimeout;
-    }
 }
