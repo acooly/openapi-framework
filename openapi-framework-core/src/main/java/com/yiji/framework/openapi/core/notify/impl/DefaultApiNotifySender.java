@@ -27,10 +27,13 @@ public class DefaultApiNotifySender implements ApiNotifySender {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultApiNotifySender.class);
 
+    private String connectionTimeout;
+    private String socketTimeout;
+
     @Override
     public void send(NotifySendMessage notifySendMessage) {
         try {
-            HttpResult httpResult = Https.getInstance().post(notifySendMessage.getUrl(), notifySendMessage.getParameters());
+            HttpResult httpResult = Https.getCustomInstance(connectionTimeout, socketTimeout).post(notifySendMessage.getUrl(), notifySendMessage.getParameters());
             String result = httpResult.getBody();
             logger.info("异步通知 url:{}", notifySendMessage.getUrl());
             logger.info("异步通知 content:{}", notifySendMessage.getParameters());
@@ -56,5 +59,13 @@ public class DefaultApiNotifySender implements ApiNotifySender {
             return true;
         }
         return result.length() < 50 && result.contains("success");
+    }
+
+    public void setConnectionTimeout(String connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
+    }
+
+    public void setSocketTimeout(String socketTimeout) {
+        this.socketTimeout = socketTimeout;
     }
 }
