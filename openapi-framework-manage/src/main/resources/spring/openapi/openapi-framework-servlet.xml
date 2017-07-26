@@ -7,7 +7,7 @@
 
     <description>项目控制器扫描定义。定义非com.acooly包开头项目的控制器</description>
 
-    <context:component-scan base-package="com.yiji.framework.openapi" use-default-filters="false">
+    <context:component-scan base-package="com.acooly.openapi.framework" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 </beans>

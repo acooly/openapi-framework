@@ -7,7 +7,7 @@
 
     <import resource="classpath*:spring/openapi/openapi-framework-service-persistent.xml"/>
 
-    <context:component-scan base-package="com.yiji.framework.openapi.core"/>
+    <context:component-scan base-package="com.acooly.openapi.framework.core"/>
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource"/>

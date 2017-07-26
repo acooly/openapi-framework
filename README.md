@@ -7,8 +7,8 @@ OpenApi综合解决方案外部版本，用于集团内非易极付环境内部�
 ### 特性能力
 
 * OpenAPI核心服务框架
-* [OpenAPI异步通知服务](http://gitlab.yiji/zhangpu/openapi-framework/tree/master/openapi-framework-nms#README)
-* [OpenApi运营管理服务](http://gitlab.yiji/zhangpu/openapi-framework/tree/master/openapi-framework-manage#README)
+* [OpenAPI异步通知服务](http://gitlab.acooly.cn/zhangpu/openapi-framework/tree/master/openapi-framework-nms#README)
+* [OpenApi运营管理服务](http://gitlab.acooly.cn/zhangpu/openapi-framework/tree/master/openapi-framework-manage#README)
 * OpenApi开放平台服务
 * OpenApi运营知识库
 * OpenApi自动化SDK
@@ -16,7 +16,7 @@ OpenApi综合解决方案外部版本，用于集团内非易极付环境内部�
 ### 开发规范
 
 * OpenApi服务开发规范
-* <a href="http://gitlab.yiji/zhangpu/openapi-framework/tree/master/openapi-framework-core#README">OpenApi商户开发规范</a>
+* <a href="http://gitlab.acooly.cn/zhangpu/openapi-framework/tree/master/openapi-framework-core#README">OpenApi商户开发规范</a>
 
 ### 演示和Demo
 

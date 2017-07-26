@@ -8,10 +8,10 @@
 
 
 	<dubbo:service
-		interface="org.yiji.framework.openapi.facade.api.OpenApiRemoteService"
+		interface="com.acooly.openapi.framework.facade.api.OpenApiRemoteService"
 		ref="openApiRemoteService" version="1.0" />
 
 	<bean id="openApiRemoteService"
-		class="com.yiji.framework.openapi.core.notify.api.OpenApiRemoteServiceImpl" />
+		class="com.acooly.openapi.framework.core.notify.api.OpenApiRemoteServiceImpl" />
 
 </beans>

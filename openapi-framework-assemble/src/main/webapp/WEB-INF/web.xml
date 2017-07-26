@@ -128,7 +128,7 @@
 	<!-- OpenApi framework DispatchServlet -->
 	<servlet>
 		<servlet-name>OpenApiFramework</servlet-name>
-		<servlet-class>com.yiji.framework.openapi.core.servlet.OpenAPIDispatchServlet</servlet-class>
+		<servlet-class>com.acooly.openapi.framework.core.servlet.OpenAPIDispatchServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>OpenApiFramework</servlet-name>
@@ -190,7 +190,7 @@
 	<!-- NotifyReceiveMockServlet -->
 	<servlet>
 		<servlet-name>NotifyReceiveMockServlet</servlet-name>
-		<servlet-class>com.yiji.framework.openapi.test.mock.NotifyReceiveMockServlet</servlet-class>
+		<servlet-class>com.acooly.openapi.framework.test.mock.NotifyReceiveMockServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>NotifyReceiveMockServlet</servlet-name>
@@ -199,7 +199,7 @@
 
 	<servlet>
 		<servlet-name>NotifySenderMockServlet</servlet-name>
-		<servlet-class>com.yiji.framework.openapi.test.mock.NotifySenderMockServlet</servlet-class>
+		<servlet-class>com.acooly.openapi.framework.test.mock.NotifySenderMockServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>NotifySenderMockServlet</servlet-name>
