@@ -14,7 +14,6 @@
 
     <properties>
         <deploy.skip>true</deploy.skip>
-        <acooly.secutiry.version>4.0.0-SNAPSHOT</acooly.secutiry.version>
     </properties>
 
     <dependencies>
@@ -59,22 +58,22 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-jpa</artifactId>
-            <version>4.0.0-SNAPSHOT</version>
+            <version>${acooly.framework.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-security</artifactId>
-            <version>4.0.0-SNAPSHOT</version>
+            <version>${acooly.framework.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-threadpool</artifactId>
-            <version>4.0.0-SNAPSHOT</version>
+            <version>${acooly.framework.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-web</artifactId>
-            <version>4.0.0-SNAPSHOT</version>
+            <version>${acooly.framework.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
