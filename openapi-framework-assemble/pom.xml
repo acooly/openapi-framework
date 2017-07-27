@@ -10,7 +10,7 @@
         <version>4.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>acooly-openapi-assemble</artifactId>
+    <artifactId>openapi-framework-assemble</artifactId>
 
     <properties>
         <deploy.skip>true</deploy.skip>
