@@ -57,7 +57,7 @@ OpenApi服务框架提供API服务的统一处理和执行能力。主要由open
 
 ```xml
 <dependency>
-	<groupId>com.yiji</groupId>
+	<groupId>com.acooly</groupId>
 	<artifactId>openapi-framework-core</artifactId>
 	<version>${openapi-framework.version}</version>
 </dependency>

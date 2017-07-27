@@ -10,13 +10,12 @@
  */
 package com.acooly.openapi.framework.core.service.factory;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
+import com.acooly.openapi.framework.core.meta.OpenApiService;
+import com.acooly.openapi.framework.core.service.base.ApiService;
+import com.acooly.openapi.framework.core.service.route.ServiceRouter;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -25,11 +24,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-import com.acooly.openapi.framework.core.meta.OpenApiService;
-import com.acooly.openapi.framework.core.service.base.ApiService;
-import com.acooly.openapi.framework.core.service.route.ServiceRouter;
+import javax.annotation.Resource;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * 服务工厂
@@ -69,7 +67,7 @@ public class ApiServiceFactoryImpl implements ApiServiceFactory, ApplicationCont
 		OpenApiService openApiService = getOpenApiServiceAnnotation(curApiService);
 		if (openApiService == null) {
 			throw new RuntimeException("openapi服务" + curApiService.getClass()
-					+ "必须要标记com.yiji.mobilepay.OpenApiService注解");
+					+ "必须要标记com.acooly.openapi.framework.core.meta.OpenApiService注解");
 		}
 		if (servicesMap.containsKey(openApiService.name())) {
 			Iterator<ApiService> iterator = servicesMap.get(openApiService.name()).iterator();

@@ -21,7 +21,7 @@ public class OpenApiConstants {
     /**
      * 性能日志logger
      */
-    public static final String PERFORMANCE_LOGGER = "com.yiji.framework.openapi_PERFORMANCE_LOGGER";
+    public static final String PERFORMANCE_LOGGER = "com.acooly.framework.openapi_PERFORMANCE_LOGGER";
 
     /**
      * 是否启用app支持

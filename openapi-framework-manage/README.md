@@ -14,7 +14,7 @@ OpenAPI体系，除了服务框架能力外，还需要对应的运营管理功�
 
 ```xml
 <dependency>
-	<groupId>com.yiji</groupId>
+	<groupId>com.acooly</groupId>
 	<artifactId>openapi-framework-manage</artifactId>
 	<version>${openapi-framework.version}</version>
 </dependency>

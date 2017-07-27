@@ -20,7 +20,7 @@ OpenAPI framework 异步消息发送服务
 
 ```xml
 <dependency>
-	<groupId>com.yiji</groupId>
+	<groupId>com.acooly</groupId>
 	<artifactId>openapi-framework-nms</artifactId>
 	<version>${openapi-framework.version}</version>
 </dependency>

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>openapi-framework</artifactId>
-        <groupId>com.yiji</groupId>
+        <groupId>com.acooly</groupId>
         <version>4.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,7 +13,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.yiji</groupId>
+            <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-core</artifactId>
         </dependency>
     </dependencies>

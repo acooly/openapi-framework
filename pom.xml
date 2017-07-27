@@ -9,7 +9,7 @@
         <version>4.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.yiji</groupId>
+    <groupId>com.acooly</groupId>
     <artifactId>openapi-framework</artifactId>
     <version>4.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -20,79 +20,79 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.yiji</groupId>
+                <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.yiji</groupId>
+                <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-domain</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.yiji</groupId>
+                <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.yiji</groupId>
+                <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-service-persistent</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
 
             <dependency>
-                <groupId>com.yiji</groupId>
+                <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-manage</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.yiji</groupId>
+                <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-manage-provider</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.yiji</groupId>
+                <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-manage-consumer</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.yiji</groupId>
+                <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.yiji</groupId>
+                <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-facade</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.yiji</groupId>
+                <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-facade-provider</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
 
             <dependency>
-                <groupId>com.yiji</groupId>
+                <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-nms</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.yiji</groupId>
+                <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-test</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
 
             <dependency>
-                <groupId>com.yiji</groupId>
+                <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-sdk</artifactId>
                 <version>${project.version}</version>
             </dependency>

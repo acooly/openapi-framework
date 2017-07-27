@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.yiji</groupId>
+        <groupId>com.acooly</groupId>
         <artifactId>openapi-framework</artifactId>
         <version>4.0.0-SNAPSHOT</version>
     </parent>
@@ -21,28 +21,34 @@
 
         <!-- 服务集成 -->
         <dependency>
-            <groupId>com.yiji</groupId>
+            <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.yiji</groupId>
+            <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-nms</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.yiji</groupId>
+            <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-test</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.yiji</groupId>
+            <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-manage</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-taglibs</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet.jsp</groupId>
+                    <artifactId>jsp-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -50,7 +56,40 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-jpa</artifactId>
+            <version>4.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-security</artifactId>
+            <version>4.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-threadpool</artifactId>
+            <version>4.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-web</artifactId>
+            <version>4.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>4.3.6.RELEASE</version>
+        </dependency>
     </dependencies>
 
-
+    <build>
+        <finalName>openapi-framework</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

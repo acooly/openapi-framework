@@ -1,0 +1,4 @@
+INSERT INTO `api_partner` (`id`,`partner_id`,`partner_name`,`secret_type`,`sign_type`,`secret_key`,`create_time`,`update_time`,`comments`) VALUES (1,'test','test','digest','MD5','06f7aab08aa2431e6dae6a156fc9e0b4','2017-03-18 13:28:35','2017-03-18 13:48:07','测试帐号(仅测试环境使用)');
+INSERT INTO `api_partner_service` (`id`,`partner_id`,`parner_name`,`apipartnerid`,`apiserviceid`,`service_name`,`service_version`,`service_title`,`create_time`,`update_time`,`comments`) VALUES (1,'test','test',1,1,'*','1.0','测试','2017-03-18 13:37:52','2017-03-18 13:53:33',NULL);
+INSERT INTO `api_service_type` (`id`,`parent_id`,`path`,`sort_time`,`name`,`create_time`,`update_time`,`comments`) VALUES (1,NULL,'100',1489815324151,'测试','2017-03-18 13:35:24','2017-03-18 13:55:28','');
+INSERT INTO `api_service` (`id`,`code`,`name`,`version`,`title`,`type_id`,`create_time`,`update_time`,`comments`) VALUES (1,'*_1.0','*','1.0','测试',1,'2017-03-18 13:36:30','2017-03-18 13:55:04','');

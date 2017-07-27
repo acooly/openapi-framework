@@ -29,7 +29,7 @@ import java.util.UUID;
  */
 public class OrderPayApiServiceTest extends AbstractApiServieTests {
     {
-        gatewayUrl = "http://localhost:8090/gateway.html";
+        gatewayUrl = "http://localhost:8089/gateway.html";
         key = "c9cef22553af973d4b04a012f9cb8ea8";
         partnerId = "20140411020055684571";
         notifyUrl = "http://127.0.0.1:8090/notify/receiver";
