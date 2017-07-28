@@ -8,7 +8,7 @@
  * qiubo@qq.com 2017-07-25 15:00 创建
  *
  */
-package com.acooly.openapi.framework.core.meta;
+package com.acooly.openapi.framework.common.annotation;
 
 import org.springframework.stereotype.Service;
 

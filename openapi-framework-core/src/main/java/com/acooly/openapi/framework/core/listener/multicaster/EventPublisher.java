@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 
 import com.acooly.openapi.framework.core.listener.ApiListener;
 import com.acooly.openapi.framework.core.listener.event.OpenApiEvent;
-import com.acooly.openapi.framework.core.meta.OpenApiListener;
+import com.acooly.openapi.framework.common.annotation.OpenApiListener;
 import com.acooly.openapi.framework.core.service.base.ApiService;
 
 /**

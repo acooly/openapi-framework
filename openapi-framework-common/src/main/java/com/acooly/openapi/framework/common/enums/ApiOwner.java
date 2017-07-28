@@ -1,4 +1,4 @@
-package com.acooly.openapi.framework.core.service.enums;
+package com.acooly.openapi.framework.common.enums;
 
 /**
  * API所属系统

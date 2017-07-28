@@ -2,10 +2,10 @@ package com.acooly.openapi.framework.service.test.api;
 
 import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
-import com.acooly.openapi.framework.core.meta.OpenApiNote;
-import com.acooly.openapi.framework.core.meta.OpenApiService;
+import com.acooly.openapi.framework.common.annotation.OpenApiNote;
+import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.core.service.base.BaseApiService;
-import com.acooly.openapi.framework.core.service.enums.ResponseType;
+import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.service.test.response.CreateOrderResponse;
 import com.acooly.openapi.framework.service.test.request.CreateOrderRequest;
 

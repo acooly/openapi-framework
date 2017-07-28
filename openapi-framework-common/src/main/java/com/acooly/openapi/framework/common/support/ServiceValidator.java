@@ -8,7 +8,7 @@
  * qiubo@qq.com 2017-07-27 02:19 创建
  *
  */
-package com.acooly.openapi.framework.core.service.base;
+package com.acooly.openapi.framework.common.support;
 
 import java.util.Map;
 

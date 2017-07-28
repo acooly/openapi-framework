@@ -16,7 +16,7 @@ import com.acooly.openapi.framework.core.executer.ApiContextHolder;
 import com.acooly.openapi.framework.core.marshall.ApiRequestMarshall;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
 import com.acooly.openapi.framework.core.marshall.crypt.ApiMarshallCryptService;
-import com.acooly.openapi.framework.core.util.ApiUtils;
+import com.acooly.openapi.framework.common.utils.ApiUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

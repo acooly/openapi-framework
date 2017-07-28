@@ -15,9 +15,9 @@ import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
-import com.acooly.openapi.framework.core.meta.OpenApiService;
+import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.core.service.base.ApiService;
-import com.acooly.openapi.framework.core.service.enums.ResponseType;
+import com.acooly.openapi.framework.common.enums.ResponseType;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;

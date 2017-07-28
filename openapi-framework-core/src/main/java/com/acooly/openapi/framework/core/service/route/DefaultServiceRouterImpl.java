@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.base.Strings;
 import com.acooly.openapi.framework.core.exception.impl.ApiServiceRouteException;
-import com.acooly.openapi.framework.core.meta.OpenApiService;
+import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.core.service.base.ApiService;
 
 /**

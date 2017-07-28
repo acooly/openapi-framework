@@ -69,7 +69,7 @@ public class ApiPartnerServiceServiceImpl extends EntityServiceImpl<ApiPartnerSe
             }
         }
         if (removeIds.size() > 0) {
-            getEntityDao().removes(removeIds.toArray(new Long[]{}));
+            getEntityDao().removes(removeIds.toArray(new Long[removeIds.size()]));
         }
 
         ApiPartnerService aps = null;

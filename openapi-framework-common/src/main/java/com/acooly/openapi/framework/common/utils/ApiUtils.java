@@ -7,7 +7,7 @@
  * 修订记录:
  * kuli@yiji.com 2016-06-06 17:55 创建
  */
-package com.acooly.openapi.framework.core.util;
+package com.acooly.openapi.framework.common.utils;
 
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;

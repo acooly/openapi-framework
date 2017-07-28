@@ -8,7 +8,7 @@
  * qiubo@qq.com 2017-08-02 02:51 创建
  *
  */
-package com.acooly.openapi.framework.core.meta;
+package com.acooly.openapi.framework.common.annotation;
 
 import java.lang.annotation.*;
 

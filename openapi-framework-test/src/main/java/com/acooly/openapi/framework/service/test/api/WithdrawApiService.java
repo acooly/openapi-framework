@@ -8,9 +8,9 @@ import com.acooly.openapi.framework.service.test.request.WithdrawRequest;
 import com.acooly.openapi.framework.service.test.response.WithdrawResponse;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import com.acooly.openapi.framework.core.meta.OpenApiService;
+import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.core.service.base.BaseApiService;
-import com.acooly.openapi.framework.core.service.enums.ResponseType;
+import com.acooly.openapi.framework.common.enums.ResponseType;
 
 /**
  * @author zhangpu

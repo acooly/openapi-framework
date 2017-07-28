@@ -11,7 +11,7 @@ import com.acooly.openapi.framework.core.exception.impl.ApiServiceAuthentication
 import com.acooly.openapi.framework.core.security.sign.SignTypeEnum;
 import com.acooly.openapi.framework.core.security.sign.Signer;
 import com.acooly.openapi.framework.core.security.sign.SignerFactory;
-import com.acooly.openapi.framework.core.util.ApiUtils;
+import com.acooly.openapi.framework.common.utils.ApiUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

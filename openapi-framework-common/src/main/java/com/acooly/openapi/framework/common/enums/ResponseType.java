@@ -8,13 +8,13 @@
  * qiubo@qq.com 2017-07-27 01:44 创建
  *
  */
-package com.acooly.openapi.framework.core.service.enums;
+package com.acooly.openapi.framework.common.enums;
 
 import java.util.Map;
 
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.core.service.base.ServiceValidator;
-import com.acooly.openapi.framework.core.util.ApiUtils;
+import com.acooly.openapi.framework.common.support.ServiceValidator;
+import com.acooly.openapi.framework.common.utils.ApiUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**

@@ -8,7 +8,7 @@
  * qiubo@qq.com 2017-07-25 15:00 创建
  *
  */
-package com.acooly.openapi.framework.core.meta;
+package com.acooly.openapi.framework.common.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -18,10 +18,10 @@ import java.lang.annotation.Target;
 
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
-import com.acooly.openapi.framework.core.service.enums.ApiScheme;
+import com.acooly.openapi.framework.common.enums.ApiScheme;
+import com.acooly.openapi.framework.common.enums.ResponseType;
 import org.springframework.stereotype.Service;
 
-import com.acooly.openapi.framework.core.service.enums.ResponseType;
 
 /**
  *

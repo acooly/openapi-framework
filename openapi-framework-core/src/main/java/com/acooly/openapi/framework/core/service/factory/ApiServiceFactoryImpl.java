@@ -11,7 +11,7 @@
 package com.acooly.openapi.framework.core.service.factory;
 
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
-import com.acooly.openapi.framework.core.meta.OpenApiService;
+import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.core.service.base.ApiService;
 import com.acooly.openapi.framework.core.service.route.ServiceRouter;
 import com.google.common.collect.HashMultimap;

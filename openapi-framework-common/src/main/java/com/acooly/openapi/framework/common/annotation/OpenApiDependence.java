@@ -5,7 +5,7 @@
  * date:2016年3月18日
  *
  */
-package com.acooly.openapi.framework.core.meta;
+package com.acooly.openapi.framework.common.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

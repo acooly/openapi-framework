@@ -10,7 +10,7 @@
  */
 package com.acooly.openapi.framework.core.executer;
 
-import com.acooly.openapi.framework.core.meta.ArchOnly;
+import com.acooly.openapi.framework.common.annotation.ArchOnly;
 
 /**
  * 仅限框架内调用

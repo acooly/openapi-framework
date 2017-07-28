@@ -1,5 +1,6 @@
 package com.acooly.openapi.framework.common.message;
 
+import com.acooly.core.utils.ToString;
 import com.google.common.base.Objects;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiAlias;
@@ -137,16 +138,6 @@ public abstract class ApiMessage {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("requestNo", requestNo)
-                .add("service", service)
-                .add("partnerId", partnerId)
-                .add("signType", signType)
-                .add("sign", sign)
-                .add("protocol", protocol)
-                .add("version", version)
-                .add("context", context)
-                .add("merchOrderNo", merchOrderNo)
-                .toString();
+        return ToString.toString(this);
     }
 }

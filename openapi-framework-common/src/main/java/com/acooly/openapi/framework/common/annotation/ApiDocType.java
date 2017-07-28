@@ -3,7 +3,7 @@
  * zhike@yiji.com 2017-03-31 13:40 创建
  *
  */
-package com.acooly.openapi.framework.core.meta;
+package com.acooly.openapi.framework.common.annotation;
 
 import java.lang.annotation.*;
 
