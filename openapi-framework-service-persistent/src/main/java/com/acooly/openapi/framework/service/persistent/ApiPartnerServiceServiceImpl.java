@@ -9,9 +9,6 @@ package com.acooly.openapi.framework.service.persistent;
 
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Strings;
-import com.acooly.openapi.framework.service.ApiServiceTypeService;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.acooly.openapi.framework.common.dto.ApiServiceDto;
 import com.acooly.openapi.framework.domain.ApiPartner;
 import com.acooly.openapi.framework.domain.ApiPartnerService;
@@ -19,11 +16,15 @@ import com.acooly.openapi.framework.domain.ApiService;
 import com.acooly.openapi.framework.domain.ApiServiceType;
 import com.acooly.openapi.framework.service.ApiPartnerServiceService;
 import com.acooly.openapi.framework.service.ApiServiceService;
+import com.acooly.openapi.framework.service.ApiServiceTypeService;
 import com.acooly.openapi.framework.service.persistent.dao.ApiPartnerServiceDao;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +70,8 @@ public class ApiPartnerServiceServiceImpl extends EntityServiceImpl<ApiPartnerSe
             }
         }
         if (removeIds.size() > 0) {
-            getEntityDao().removes(removeIds.toArray(new Long[removeIds.size()]));
+            Serializable[] serializables = removeIds.toArray(new Long[]{});
+            getEntityDao().removes(serializables);
         }
 
         ApiPartnerService aps = null;

@@ -54,11 +54,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public OrderInfo findByGid(String gid) {
-        return findByGid(gid, null);
-    }
-
-    @Override
     public OrderInfo findByGid(String gid, String partnerId) {
         try {
             List<OrderInfo> orderInfos = orderInfoDao.findByGid(partnerId, gid);

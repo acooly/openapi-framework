@@ -22,9 +22,6 @@ public interface OrderInfoService {
 
     void checkUnique(String partnerId, String orderNo);
 
-    @Deprecated
-    OrderInfo findByGid(String gid);
-
     OrderInfo findByGid(String gid, String partnerId);
 
     String findGidByTrade(String partnerId, String service, String version, String merchOrderNo);

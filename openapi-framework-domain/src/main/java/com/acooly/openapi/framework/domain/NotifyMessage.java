@@ -8,6 +8,7 @@
 package com.acooly.openapi.framework.domain;
 
 import com.acooly.core.common.facade.LinkedHashMapParameterize;
+import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.validate.jsr303.HttpUrl;
 import com.google.common.base.Objects;
 import com.acooly.openapi.framework.common.enums.MessageType;
@@ -208,18 +209,6 @@ public class NotifyMessage extends LinkedHashMapParameterize<String, String> imp
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-                .add("id", id)
-                .add("gid", gid)
-                .add("requestNo", requestNo)
-                .add("merchOrderNo", merchOrderNo)
-                .add("partnerId", partnerId)
-                .add("service", service)
-                .add("createTime", createTime)
-                .add("sendCount", sendCount)
-                .add("status", status)
-                .add("executeStatus", executeStatus)
-                .add("respInfo", respInfo)
-                .toString();
+        return ToString.toString(this);
     }
 }
