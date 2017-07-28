@@ -1,2 +1,0 @@
-V	170508070221Z		01	unknown	/C=CN/ST=CQ/O=yiji/OU=yiji.com/CN=yiji.com/emailAddress=kuli@yiji.com
-V	170508082527Z		02	unknown	/C=CN/ST=CQ/O=yiji/OU=acooly.cn/CN=acooly.cn/emailAddress=zhangpu@acooly.cn
