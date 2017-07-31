@@ -10,10 +10,16 @@
  */
 package com.acooly.openapi.framework.core.service.factory;
 
-import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
+import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
+import com.acooly.openapi.framework.common.enums.ApiMessageType;
+import com.acooly.openapi.framework.common.message.ApiNotify;
+import com.acooly.openapi.framework.common.message.ApiRequest;
+import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
 import com.acooly.openapi.framework.core.service.base.ApiService;
 import com.acooly.openapi.framework.core.service.route.ServiceRouter;
+import com.acooly.openapi.framework.core.util.GenericsUtils;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.slf4j.Logger;
@@ -23,11 +29,14 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+
+import static com.acooly.openapi.framework.common.enums.ResponseType.ASNY;
 
 /**
  * 服务工厂
@@ -69,6 +78,7 @@ public class ApiServiceFactoryImpl implements ApiServiceFactory, ApplicationCont
 			throw new RuntimeException("openapi服务" + curApiService.getClass()
 					+ "必须要标记com.acooly.openapi.framework.core.meta.OpenApiService注解");
 		}
+		checkApiService(curApiService);
 		if (servicesMap.containsKey(openApiService.name())) {
 			Iterator<ApiService> iterator = servicesMap.get(openApiService.name()).iterator();
 			while (iterator.hasNext()) {
@@ -84,6 +94,27 @@ public class ApiServiceFactoryImpl implements ApiServiceFactory, ApplicationCont
 		// 启动时检查是否有属性名重复的情况.并加载缓存
 		ObjectAccessor.of(curApiService.getRequestBean());
 		ObjectAccessor.of(curApiService.getResponseBean());
+	}
+
+	private void checkApiService(ApiService curApiService){
+		Class requestClazz=GenericsUtils.getSuperClassGenricType(curApiService.getClass(), 0);
+		Class responseClazz=GenericsUtils.getSuperClassGenricType(curApiService.getClass(), 1);
+		Assert.isAssignable(ApiRequest.class,requestClazz);
+		Assert.isAssignable(ApiResponse.class,responseClazz);
+		OpenApiMessage annotation = (OpenApiMessage) requestClazz.getAnnotation(OpenApiMessage.class);
+		Assert.notNull(annotation,requestClazz+"必须标注@OpenApiMessage");
+		Assert.isTrue(annotation.type()== ApiMessageType.Request);
+		 annotation = (OpenApiMessage) responseClazz.getAnnotation(OpenApiMessage.class);
+		Assert.notNull(annotation,responseClazz+"必须标注@OpenApiMessage");
+		Assert.isTrue(annotation.type()== ApiMessageType.Response);
+		OpenApiService apiServiceAnnotation = getOpenApiServiceAnnotation(curApiService);
+		if(apiServiceAnnotation.responseType()==ASNY){
+			ApiNotify apiNotifyBean = curApiService.getApiNotifyBean();
+			Assert.notNull(apiNotifyBean);
+			annotation = apiNotifyBean.getClass().getAnnotation(OpenApiMessage.class);
+			Assert.notNull(annotation,responseClazz+"必须标注@OpenApiMessage");
+			Assert.isTrue(annotation.type()== ApiMessageType.Notify);
+		}
 	}
 
 	/**
