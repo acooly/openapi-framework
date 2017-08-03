@@ -101,19 +101,20 @@ public class ApiServiceFactoryImpl implements ApiServiceFactory, ApplicationCont
 		Class responseClazz=GenericsUtils.getSuperClassGenricType(curApiService.getClass(), 1);
 		Assert.isAssignable(ApiRequest.class,requestClazz);
 		Assert.isAssignable(ApiResponse.class,responseClazz);
-		OpenApiMessage annotation = (OpenApiMessage) requestClazz.getAnnotation(OpenApiMessage.class);
-		Assert.notNull(annotation,requestClazz+"必须标注@OpenApiMessage");
-		Assert.isTrue(annotation.type()== ApiMessageType.Request);
-		 annotation = (OpenApiMessage) responseClazz.getAnnotation(OpenApiMessage.class);
-		Assert.notNull(annotation,responseClazz+"必须标注@OpenApiMessage");
-		Assert.isTrue(annotation.type()== ApiMessageType.Response);
 		OpenApiService apiServiceAnnotation = getOpenApiServiceAnnotation(curApiService);
+		OpenApiMessage annotation = (OpenApiMessage) requestClazz.getAnnotation(OpenApiMessage.class);
+		String msg="服务:"+annotation.service()+"的报文类%s必须标注@OpenApiMessage";
+		Assert.notNull(annotation,String.format(msg,requestClazz));
+		Assert.isTrue(annotation.type()== ApiMessageType.Request,String.format(msg,responseClazz)+"，且type=ApiMessageType.Request");
+		 annotation = (OpenApiMessage) responseClazz.getAnnotation(OpenApiMessage.class);
+		Assert.notNull(annotation,String.format(msg,responseClazz));
+		Assert.isTrue(annotation.type()== ApiMessageType.Response,String.format(msg,responseClazz)+"，且type=ApiMessageType.Response");
 		if(apiServiceAnnotation.responseType()==ASNY){
 			ApiNotify apiNotifyBean = curApiService.getApiNotifyBean();
 			Assert.notNull(apiNotifyBean);
 			annotation = apiNotifyBean.getClass().getAnnotation(OpenApiMessage.class);
-			Assert.notNull(annotation,responseClazz+"必须标注@OpenApiMessage");
-			Assert.isTrue(annotation.type()== ApiMessageType.Notify);
+			Assert.notNull(annotation,String.format(msg,apiNotifyBean.getClass()));
+			Assert.isTrue(annotation.type()== ApiMessageType.Notify,String.format(msg,apiNotifyBean.getClass())+"，且type=ApiMessageType.Notify");
 		}
 	}
 
