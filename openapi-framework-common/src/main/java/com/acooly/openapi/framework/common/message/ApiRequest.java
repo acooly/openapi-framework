@@ -1,6 +1,10 @@
 package com.acooly.openapi.framework.common.message;
 
+import com.acooly.core.common.facade.OrderBase;
+import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
+import org.slf4j.MDC;
+import org.springframework.beans.BeanUtils;
 
 public class ApiRequest extends ApiMessage {
 
@@ -32,6 +36,13 @@ public class ApiRequest extends ApiMessage {
 
     public void setReturnUrl(String returnUrl) {
         this.returnUrl = returnUrl;
+    }
+
+    public <T extends OrderBase> T toOrder(Class<T> clazz){
+       T t= BeanUtils.instantiate(clazz);
+       t.setGid(MDC.get("gid"));
+       BeanCopier.copy(this,t);
+       return t;
     }
 
 }
