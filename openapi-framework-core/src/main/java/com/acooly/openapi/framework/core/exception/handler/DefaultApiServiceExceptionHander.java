@@ -8,6 +8,7 @@
 package com.acooly.openapi.framework.core.exception.handler;
 
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.utils.enums.Messageable;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiRequest;
@@ -29,8 +30,8 @@ public class DefaultApiServiceExceptionHander implements ApiServiceExceptionHand
     public void handleApiServiceException(ApiRequest apiRequest, ApiResponse apiResponse, Throwable ase) {
         if (ApiServiceException.class.isAssignableFrom(ase.getClass())) {
             handleApiServiceException(apiResponse, (ApiServiceException) ase);
-        } else if(BusinessException.class.isAssignableFrom(ase.getClass())) {
-            handleBusinessException(apiResponse, (BusinessException) ase);
+        } else if(Messageable.class.isAssignableFrom(ase.getClass())) {
+            handleMessageable(apiResponse, (BusinessException) ase);
         }else{
             String serviceName="";
             if(apiRequest != null){
@@ -40,10 +41,10 @@ public class DefaultApiServiceExceptionHander implements ApiServiceExceptionHand
             handleInternalException(apiResponse);
         }
     }
-    protected void handleBusinessException(ApiResponse apiResponse, BusinessException ex) {
-        apiResponse.setResultCode(ex.getCode());
-        apiResponse.setResultMessage(ex.getMessage());
-        apiResponse.setResultDetail(ex.getMessage());
+    protected void handleMessageable(ApiResponse apiResponse, Messageable ex) {
+        apiResponse.setResultCode(ex.code());
+        apiResponse.setResultMessage(ex.message());
+        apiResponse.setResultDetail(ex.message());
     }
     /**
      * 服务异常处理
