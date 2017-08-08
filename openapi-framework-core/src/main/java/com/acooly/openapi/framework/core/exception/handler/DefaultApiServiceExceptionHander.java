@@ -7,6 +7,7 @@
  */
 package com.acooly.openapi.framework.core.exception.handler;
 
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiRequest;
@@ -28,7 +29,9 @@ public class DefaultApiServiceExceptionHander implements ApiServiceExceptionHand
     public void handleApiServiceException(ApiRequest apiRequest, ApiResponse apiResponse, Throwable ase) {
         if (ApiServiceException.class.isAssignableFrom(ase.getClass())) {
             handleApiServiceException(apiResponse, (ApiServiceException) ase);
-        } else {
+        } else if(BusinessException.class.isAssignableFrom(ase.getClass())) {
+            handleBusinessException(apiResponse, (BusinessException) ase);
+        }else{
             String serviceName="";
             if(apiRequest != null){
                 serviceName=apiRequest.getService();
@@ -37,7 +40,11 @@ public class DefaultApiServiceExceptionHander implements ApiServiceExceptionHand
             handleInternalException(apiResponse);
         }
     }
-
+    protected void handleBusinessException(ApiResponse apiResponse, BusinessException ex) {
+        apiResponse.setResultCode(ex.getCode());
+        apiResponse.setResultMessage(ex.getMessage());
+        apiResponse.setResultDetail(ex.getMessage());
+    }
     /**
      * 服务异常处理
      *
