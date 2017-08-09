@@ -8,7 +8,7 @@
 
 
 	<dubbo:service
-		interface="com.acooly.openapi.framework.facade.api.OpenApiRemoteService"
+		interface="com.acooly.openapi.framework.facade.api.OpenApproiRemoteService"
 		ref="openApiRemoteService" version="1.0" />
 
 	<bean id="openApiRemoteService"
