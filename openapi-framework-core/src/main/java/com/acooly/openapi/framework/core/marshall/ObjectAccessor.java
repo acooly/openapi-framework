@@ -59,12 +59,7 @@ public class ObjectAccessor<T> {
     /**
      * 忽略transient字段
      */
-    private final static Predicate<Field> allAcceptPredicate = new Predicate<Field>() {
-        @Override
-        public boolean apply(Field input) {
-            return true;
-        }
-    };
+    private final static Predicate<Field> allAcceptPredicate = input -> true;
 
     public static <T> ObjectAccessor<T> of(T target) {
         return new ObjectAccessor<T>(target);
@@ -76,19 +71,14 @@ public class ObjectAccessor<T> {
         Map<String, Field> fieldMap = classMap.get(target.getClass());
         if (fieldMap == null) {
             final Map<String, Field> tmpMap = Maps.newHashMap();
-            ReflectionUtils.doWithFields(this.target.getClass(), new ReflectionUtils.FieldCallback() {
-                public void doWith(Field field) {
-                    OpenApiField openApiField = field.getAnnotation(OpenApiField.class);
-                    if (openApiField == null) {
-                        logger.warn("发现没有标注OpenApiField的字段{}", field);
-                        return;
-                    }
-                    if (tmpMap.containsKey(field.getName())) {
-                        throw new ApiServiceException(ApiServiceResultCode.FIELD_NOT_UNIQUE,
-                                field + "和" + tmpMap.get(field.getName()) + "重名");
-                    } else {
-                        tmpMap.put(field.getName(), field);
-                    }
+            ReflectionUtils.doWithFields(this.target.getClass(), field -> {
+                OpenApiField openApiField = field.getAnnotation(OpenApiField.class);
+                if (openApiField == null) {
+                    logger.warn("发现没有标注OpenApiField的字段{}", field);
+                    return;
+                }
+                if (!tmpMap.containsKey(field.getName())) {
+                    tmpMap.put(field.getName(), field);
                 }
             });
             classMap.put(target.getClass(), tmpMap);
