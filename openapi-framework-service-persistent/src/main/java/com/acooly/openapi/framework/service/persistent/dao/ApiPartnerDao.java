@@ -25,5 +25,5 @@ public interface ApiPartnerDao extends EntityJpaDao<ApiPartner, Long>, ApiPartne
     ApiPartner queryByPartnerId(String partnerId);
 
     @Query(value = "FROM ApiPartner WHERE id != ?1 AND partnerId=?2")
-    ApiPartner queryExceptIdByPartnerId(Long id,String partnerId);
+    ApiPartner queryExceptIdByPartnerId(Long id, String partnerId);
 }

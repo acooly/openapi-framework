@@ -6,6 +6,8 @@ package com.acooly.openapi.framework.service.test.request;
 
 import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
+import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
+import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import org.hibernate.validator.constraints.Length;
 
@@ -15,6 +17,7 @@ import javax.validation.constraints.NotNull;
  * @author zhangpu
  * @date 2014年7月29日
  */
+@OpenApiMessage(service = "withdraw", type = ApiMessageType.Request)
 public class WithdrawRequest extends ApiRequest {
 
     public static enum busiTypeEnum {

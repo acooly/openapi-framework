@@ -12,6 +12,10 @@
         display: inline;
         float: left;
         margin-right: 5px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        padding: 3px 3px;
+        margin-bottom:5px;
     }
 
     .servicelist h2,h3 {
@@ -19,10 +23,16 @@
     }
 
     .servicelist h2{
-        border-bottom: 1px solid #dddddd; margin-top: 10px;
+        border-bottom: 1px solid #dddddd; margin-top: 5px;
     }
 
     .servicelist ul li span {cursor: pointer;}
+
+    .servicelist ul li div {float:left;height: 36px;line-height: 36px;margin-right: 5px;}
+
+    .servicelist ul li a {float:left;color:#000;text-decoration:none; }
+    .servicelist ul li a:hover {color:#393D49;}
+    .servicelist ul li a:visited {color:#000;}
 
     .partnerinfo {margin: 5px;}
     .partnerinfo span {margin-right: 10px; font-size: 14px;}
@@ -31,17 +41,8 @@
 </style>
 <!-- 布局 -->
 <div id="manage_apiPartner_setting_layout" class="easyui-layout" data-options="fit:true,border:true">
-
-    <div data-options="region:'north',split:true,border:false,collapsible:false" style="padding:10px;height:50px;">
-        <!-- 接入商信息 -->
-        <div class="partnerinfo" id="manage_partnersetting_info">
-            <span><label>接入方名称:</label> ${apiPartner.partnerName}</span>
-            <span><label>接入方ID:</label> ${apiPartner.partnerId}</span>
-
-        </div>
-    </div>
     <!-- 可选服务视图 -->
-    <div data-options="region:'west',split:false,border:true,collapsible:false" title="可选服务列表" style="width:600px;padding:10px">
+    <div data-options="region:'west',split:false,border:true,collapsible:false" style="width:605px;padding:5px">
         <div class="servicelist">
             <!-- 查询框 -->
             <div class="tableForm">
@@ -53,45 +54,37 @@
             <!-- 可选服务列表,按一级分类显示 -->
             <div id="availableApis">
                 <h3>通用服务</h3>
-                <ul>
-                    <li><input type="checkbox"><a href="#" title="创建订单:createOrder:v1.0" class="easyui-tooltip">createOrder</a></li>
-                    <li><input type="checkbox"><a href="#" title="创建订单:createOrder:v1.0" class="easyui-tooltip">createOrder</a></li>
-                    <li><input type="checkbox"><a href="#" title="创建订单:createOrder:v1.0" class="easyui-tooltip">createOrder</a></li>
-                    <li><input type="checkbox"><a href="#" title="创建订单:createOrder:v1.0" class="easyui-tooltip">createOrder</a></li>
-                    <li><input type="checkbox"><a href="#" title="创建订单:createOrder:v1.0" class="easyui-tooltip">createOrder</a></li>
-                    <li><input type="checkbox"><a href="#" title="创建订单:createOrder:v1.0" class="easyui-tooltip">createOrder</a></li>
-                    <li><input type="checkbox"><a href="#" title="创建订单:createOrder:v1.0" class="easyui-tooltip">createOrder</a></li>
-                    <li><input type="checkbox"><a href="#" title="创建订单:createOrder:v1.0" class="easyui-tooltip">createOrder</a></li>
-                </ul>
+                <ul></ul>
                 <div style="clear: both;"></div>
 
             </div>
         </div>
     </div>
 
-    <!-- 已选服务视图 -->
-    <div data-options="region:'center',split:false,border:true,collapsible:false" title="操作">
-        <div id="manage_apiPartnerService_titlebar" style="padding:2px">
-            <a href="javascript:void(0)" class="easyui-linkbutton" style="width:100%;margin-bottom: 5px;" onclick="manage_apiPartner_service_add()">
-                <div style="margin-bottom: 5px; margin-top: 10px;"><i class="fa fa-chevron-right fa-lg fa-fw fa-col" style="font-size: 30px;"></i></div></a>
-            <a href="javascript:void(0)" class="easyui-linkbutton" style="width:100%;margin-bottom: 5px;" onclick="manage_apiPartner_service_remove()">
-                <div style="margin-bottom: 5px; margin-top: 10px;"><i class="fa fa-chevron-left fa-lg fa-fw fa-col" style="font-size: 30px;"></i></div></a>
-            <a href="javascript:void(0)" class="easyui-linkbutton" style="width:100%" onclick="manage_apiPartner_service_save()">
-                <i class="fa fa-floppy-o fa-lg fa-fw fa-col" style="font-size: 30px;margin-top: 6px;"></i><div style="margin-top: -2px;">保存设置</div></a>
+    <!-- 操作按钮 -->
+    <div data-options="region:'center',split:false,border:true,collapsible:false" >
+        <div id="manage_apiPartnerService_titlebar" style="padding:60px 11px;">
+            <a href="javascript:void(0)" class="easyui-linkbutton" style="margin-bottom: 5px;" onclick="manage_apiPartner_service_add()">
+                <i class="fa fa-chevron-right fa-lg fa-fw fa-col" style="font-size: 20px;margin-top: 6px;"></i><div style="margin-top: -2px;">添加</div>
+            </a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" style="margin-bottom: 5px;" onclick="manage_apiPartner_service_remove()">
+                <i class="fa fa-chevron-left fa-lg fa-fw fa-col" style="font-size: 20px;margin-top: 6px;"></i><div style="margin-top: -2px;">移除</div>
+            </a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="manage_apiPartner_service_save()">
+                <i class="fa fa-floppy-o fa-lg fa-fw fa-col" style="font-size: 20px;margin-top: 6px;"></i><div style="margin-top: -2px;">保存</div>
+            </a>
         </div>
     </div>
 
 
     <!-- 已选服务视图 -->
-    <div data-options="region:'east',split:false,border:true,collapsible:false" title="开通服务" style="width: 100px;">
+    <div data-options="region:'east',split:false,border:true,collapsible:false" style="width: 100px;">
         <form id="manage_apipartnerservice_form">
         <input type="hidden" id="manage_partnerservice_apipartnerid" name="apiPartnerId" value="${apiPartner.id}"/>
         <div class="servicelist" id="manage_apipartnerservice">
-            <h2>选择的服务:</h2>
+            <h3>选择的服务:</h3>
             <ul id="manage_apipartnerservice_selected"></ul>
-            <div style="clear: both;"></div>
-
-            <h2>已开通服务:</h2>
+            <div style="clear: both;margin-top: 5px;"><hr></div>
             <div id="manage_apipartner_authedApis"></div>
         </div>
         </form>
@@ -123,7 +116,8 @@
                         if(value && value.length > 0){
                             var section = '<h3>'+key+'</h3><ul>';
                             $.each(value,function(index,e){
-                                section += '<li><input id="manage_apiService_api_'+e.id+'" name="manage_apiService_api" value="'+e.id+','+e.name+','+e.title+','+e.version+'" type="checkbox"><span onclick="$(\'#manage_apiService_api_'+e.id+'\').click()" title="'+e.title+':'+e.name+':'+e.version+'">'+e.name+'</span></li>';
+                                section += '<li><div><input id="manage_apiService_api_'+e.id+'" name="manage_apiService_api" value="'+e.id+','+e.name+','+e.title+','+e.version+'" type="checkbox"></div>' +
+                                        '<a href="javascript:;" onclick="$(\'#manage_apiService_api_'+e.id+'\').click()" title="'+e.title+':'+e.name+':'+e.version+'">'+e.title+'<br>'+e.name+'</a></li>';
                             });
                             apiList += section + '</ul><div style="clear: both;"></div>';
                         }
@@ -153,8 +147,8 @@
                         if(value && value.length > 0){
                             var section = '<h3>'+key+'</h3><ul>';
                             $.each(value,function(index,e){
-                                section += '<li><input name="manage_partner_api" value="'+e.id+'" type="checkbox">' +
-                                        '<span title="'+e.title+':'+e.name+':v'+e.version+'" onclick="$(this).siblings().click();">'+e.name+'</span></li>';
+                                section += '<li><div><input name="manage_partner_api" value="'+e.id+'" type="checkbox"></div>' +
+                                        '<a href="javascript:;" title="'+e.title+':'+e.name+':v'+e.version+'" onclick="$(this).siblings().children().click();">'+e.title+'<br>'+e.name+'</a></li>';
                             });
                             apiList += section + '</ul><div style="clear: both;"></div>';
                         }
@@ -180,8 +174,8 @@
             var id = apiVals[0],name=apiVals[1],title=apiVals[2],version=apiVals[3];
             var exist = existCheck(id);
             if(!exist){
-                apiHtml = '<li><input name="manage_partner_api" value="'+id+'" type="checkbox">' +
-                        '<span title="'+title+':'+name+':v'+version+'" onclick="$(this).siblings().click();">'+name+'</span></li>';
+                apiHtml = '<li><div><input name="manage_partner_api" value="'+id+'" type="checkbox"></div>' +
+                        '<a href="javascript:;" title="'+title+':'+name+':v'+version+'" onclick="$(this).siblings().children().click();">'+title+'<br>'+name+'</a></li>';
                 $('#manage_apipartnerservice_selected').append(apiHtml);
             }
 
@@ -193,7 +187,7 @@
      */
     function manage_apiPartner_service_remove(){
         $('input[name="manage_partner_api"]:checked').each(function(){
-            $(this).parent().remove();
+            $(this).parent().parent().remove();
         });
     }
 
