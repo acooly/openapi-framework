@@ -19,7 +19,7 @@ function manage_apiPartner_showSetting(){
     $('<div/>').dialog({
         href:'/manage/openapi/apiPartnerService/setting.html?id='+row.id,
         width: 1000,
-        height: 600,
+        height: 450,
         modal: true,
         title: '设置接入方权限: '+row.partnerId,
         buttons: [{
