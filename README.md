@@ -85,7 +85,7 @@ OpenApi服务框架提供API服务的统一处理和执行能力。主要由open
 
 ### OpenAPI异步通知发送服务集成
 
-OpenAPI框架（core）的异步通知模块设计为可插拔模式，可插入服务的API接口为：com.yiji.framework.openapi.core.notify.ApiNotifySender 
+OpenAPI框架（core）的异步通知模块设计为可插拔模式，可插入服务的API接口为：com.acooly.openapi.framework.core.notify.ApiNotifySender 
 
 ```java
 /*
