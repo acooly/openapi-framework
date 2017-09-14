@@ -7,7 +7,6 @@
  */
 package com.acooly.openapi.framework.core.exception.handler;
 
-import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
@@ -31,7 +30,7 @@ public class DefaultApiServiceExceptionHander implements ApiServiceExceptionHand
         if (ApiServiceException.class.isAssignableFrom(ase.getClass())) {
             handleApiServiceException(apiResponse, (ApiServiceException) ase);
         } else if(Messageable.class.isAssignableFrom(ase.getClass())) {
-            handleMessageable(apiResponse, (BusinessException) ase);
+            handleMessageable(apiResponse, (Messageable) ase);
         }else{
             String serviceName="";
             if(apiRequest != null){
