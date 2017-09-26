@@ -44,17 +44,17 @@ public abstract class PageApiResponse<T> extends ApiResponse {
   }
 
   public <U> void setPageResult(PageResult<U> pageResult, BiConsumer<U, T> consumer) {
+    if (responseClass == null) {
+      responseClass = GenericsUtils.getSuperClassGenricType(getClass(), 0);
+    }
     PageInfo<U> pageInfo = pageResult.getDto();
     List<T> rows = Lists.newArrayList();
     for (U dto : pageInfo.getPageResults()) {
-      if (responseClass == null) {
-        responseClass = GenericsUtils.getSuperClassGenricType(getClass(), 0);
-        T o = BeanCopier.copy(dto, (Class<T>) responseClass);
-        if (consumer != null) {
-          consumer.accept(dto, o);
-        }
-        rows.add(o);
+      T o = BeanCopier.copy(dto, (Class<T>) responseClass);
+      if (consumer != null) {
+        consumer.accept(dto, o);
       }
+      rows.add(o);
     }
     this.setTotalPages(pageInfo.getTotalPage());
     this.setTotalRows(pageInfo.getTotalCount());
