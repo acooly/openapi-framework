@@ -22,7 +22,6 @@ import java.util.function.BiConsumer;
 @Setter
 public abstract class PageApiResponse<T> extends ApiResponse {
 
-  private static Class<?> responseClass = null;
 
   @NotNull
   @OpenApiField(desc = "总行数")
@@ -44,9 +43,7 @@ public abstract class PageApiResponse<T> extends ApiResponse {
   }
 
   public <U> void setPageResult(PageResult<U> pageResult, BiConsumer<U, T> consumer) {
-    if (responseClass == null) {
-      responseClass = GenericsUtils.getSuperClassGenricType(getClass(), 0);
-    }
+    Class<?> responseClass = GenericsUtils.getSuperClassGenricType(getClass(), 0);
     PageInfo<U> pageInfo = pageResult.getDto();
     List<T> rows = Lists.newArrayList();
     for (U dto : pageInfo.getPageResults()) {
