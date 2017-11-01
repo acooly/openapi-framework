@@ -7,6 +7,7 @@
  */
 package com.acooly.openapi.framework.common.exception;
 
+import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.Messageable;
 
 /**
@@ -33,7 +34,7 @@ public class ApiServiceException extends RuntimeException {
 	 * @param detail
 	 */
 	public ApiServiceException(String resultCode, String resultMessage, String detail) {
-		super(resultCode + ":" + resultMessage + ":" + detail);
+		super(resultCode + ":" + resultMessage + (Strings.isNotBlank(detail)?":" + detail:""));
 		this.resultCode = resultCode;
 		this.resultMessage = resultMessage;
 		this.detail = detail;
