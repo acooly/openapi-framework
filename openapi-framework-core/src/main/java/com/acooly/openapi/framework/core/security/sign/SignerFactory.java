@@ -13,5 +13,5 @@ package com.acooly.openapi.framework.core.security.sign;
  */
 public interface SignerFactory<T> {
 
-  Signer<T> getSigner(String signType);
+  Signer<T> getSigner(SignTypeEnum signType);
 }

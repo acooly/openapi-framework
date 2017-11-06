@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @date 2014年8月3日
  */
 @Component("apiMd5Signer")
-public class Md5Signer extends AbstractMapSourceSigner {
+public class Md5Signer extends AbstractSigner {
 
   @Override
   protected String doSign(String waitToSignStr, String key) {

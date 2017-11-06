@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * <p>Created by zhangpu on 2015/1/23.
  */
 @Component("apiHmacSha1Signer")
-public class HmacSha1Signer extends AbstractMapSourceSigner {
+public class HmacSha1Signer extends AbstractSigner {
 
   @Override
   protected String doSign(String waitToSignStr, String key) {

@@ -15,16 +15,14 @@ import java.util.Map;
  * @author zhangpu
  */
 public enum ApiProtocol implements Messageable {
-  HTTP_FORM_JSON("HTTP_FORM_JSON", "请求表单,响应JSON报文"),
+  JSON("JSON", "JSON报文"),
 
-  HTTP_XML("HTTP_XML", "XML报文"),
-
-  HTTP_JSON("HTTP_JSON", "JSON报文");
+  XML("XML", "XML报文");
 
   private final String code;
   private final String message;
 
-  private ApiProtocol(String code, String message) {
+  ApiProtocol(String code, String message) {
     this.code = code;
     this.message = message;
   }
@@ -50,7 +48,7 @@ public enum ApiProtocol implements Messageable {
         return status;
       }
     }
-    throw new IllegalArgumentException("ApiProtocol not legal:" + code);
+    throw new IllegalArgumentException("协议不合法:" + code);
   }
 
   /**

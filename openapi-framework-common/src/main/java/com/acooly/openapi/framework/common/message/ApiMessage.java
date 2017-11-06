@@ -38,7 +38,7 @@ public abstract class ApiMessage {
   private String sign;
 
   @OpenApiField(desc = "服务协议", constraint = "非必填")
-  private String protocol = "HTTP_FORM_JSON";
+  private String protocol = "JSON";
 
   @OpenApiField(desc = "服务版本", constraint = "非必填")
   private String version = ApiConstants.VERSION_DEFAULT;

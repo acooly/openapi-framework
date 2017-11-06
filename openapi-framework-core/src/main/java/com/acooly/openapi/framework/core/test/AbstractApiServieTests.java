@@ -34,7 +34,7 @@ public abstract class AbstractApiServieTests {
   protected static final String ENCODING = "utf-8";
   protected Logger logger = LoggerFactory.getLogger(this.getClass());
   protected String signType = SignTypeEnum.MD5.toString();
-  protected String protocal = ApiProtocol.HTTP_FORM_JSON.code();
+  protected String protocal = ApiProtocol.JSON.code();
   protected String gatewayUrl = "http://127.0.0.1:8080/gateway";
   protected String key = OpenApiConstants.DEF_SECRETKEY;
   protected String partnerId = "zhangpu";

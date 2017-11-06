@@ -14,6 +14,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import java.util.EnumMap;
 import java.util.Map;
 
 /**
@@ -31,22 +32,22 @@ public class SignerFactoryImpl<T>
 
   private ApplicationContext applicationContext;
 
-  private Map<String, Signer<T>> signerMap;
+  private EnumMap<SignTypeEnum, Signer<T>> signerMap;
 
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Override
   public void afterPropertiesSet() throws Exception {
-    signerMap = Maps.newHashMap();
+    signerMap = Maps.newEnumMap(SignTypeEnum.class);
     Map<String, Signer> signers = applicationContext.getBeansOfType(Signer.class);
     for (Map.Entry<String, Signer> entry : signers.entrySet()) {
-      String signName = entry.getValue().getSinType().name();
-      signerMap.put(signName, entry.getValue());
-      logger.debug("加载{}签名处理器:{}", signName, entry.getValue().getClass().getName());
+      Signer signer = entry.getValue();
+      signerMap.put(signer.getSinType(), signer);
+      logger.debug("加载{}签名处理器:{}", signer.getSinType(), signer.getClass().getName());
     }
   }
 
   @Override
-  public Signer<T> getSigner(String signType) {
+  public Signer<T> getSigner(SignTypeEnum signType) {
     Signer<T> signer = signerMap.get(signType);
     if (signer == null) {
       throw new ApiServiceAuthenticationException("不支持的signType[" + signType + "]");

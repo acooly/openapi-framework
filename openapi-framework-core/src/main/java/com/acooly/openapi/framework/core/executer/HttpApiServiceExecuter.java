@@ -8,12 +8,10 @@
 package com.acooly.openapi.framework.core.executer;
 
 import com.acooly.core.utils.Ids;
-import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.validate.Validators;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiDependence;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
-import com.acooly.openapi.framework.common.enums.ApiScheme;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiRequest;
@@ -109,17 +107,12 @@ public class HttpApiServiceExecuter
     ApiContext apiContext = getApiContext();
     apiContext.setOrignalRequest(orignalRequest);
     apiContext.setOrignalResponse(orignalResponse);
-
-    // 原始请求数据处理
-    Map<String, String> requestData = Servlets.getParameters(orignalRequest);
-    apiContext.setRequestData(requestData);
-    MDC.put(ApiConstants.REQUEST_NO, ApiUtils.getRequestNo(requestData));
+    apiContext.initRequestParam();
     try {
-      // 基础验证,查找服务并初始化处理
-      doBasicValidate(requestData);
-      ApiService apiService = getApiService(requestData);
-      apiContext.init(requestData, apiService);
-      apiService = apiContext.getApiService();
+      ApiService apiService =
+          apiServiceFactory.getApiService(
+              apiContext.getServiceName(), apiContext.getServiceVersion());
+      apiContext.init(apiService);
 
       ApiRequest apiRequest = apiService.getRequestBean();
       ApiResponse apiResponse = apiService.getResponseBean();
@@ -127,9 +120,11 @@ public class HttpApiServiceExecuter
       apiContext.setRequest(apiRequest);
       apiContext.setResponse(apiResponse);
       initGid();
-      getRequestUserAgent(apiContext, orignalRequest);
+      apiContext.getOpenApiService().responseType().validate(apiContext.getRequestData());
+
     } finally {
-      logRequestData(requestData);
+      // todo
+      //      logRequestData(requestData);
     }
     return apiContext;
   }
@@ -208,7 +203,7 @@ public class HttpApiServiceExecuter
     apiResponse.setProtocol(
         StringUtils.isNotBlank(requestData.get(ApiConstants.PROTOCOL))
             ? requestData.get(ApiConstants.PROTOCOL)
-            : ApiProtocol.HTTP_FORM_JSON.code());
+            : ApiProtocol.JSON.code());
   }
 
   protected void doResponse(ApiContext apiContext, HttpServletResponse response) {
@@ -266,62 +261,12 @@ public class HttpApiServiceExecuter
   }
 
   /**
-   * 入口基础参数检查
-   *
-   * @param requestData
-   */
-  protected void doBasicValidate(Map<String, String> requestData) {
-    // 格式校验
-    doBasicFormatValidate(requestData);
-    // 非空校验
-    StringBuilder sb = new StringBuilder();
-    if (StringUtils.isBlank(ApiUtils.getRequestNo(requestData))) {
-      sb.append("请求号(requestNo/orderNo);");
-    }
-    if (StringUtils.isBlank(requestData.get(ApiConstants.SERVICE))) {
-      sb.append("服务名(service);");
-    }
-    if (StringUtils.isBlank(requestData.get(ApiConstants.PARTNER_ID))) {
-      sb.append("商户号(partnerId);");
-    }
-    if (StringUtils.isBlank(requestData.get(ApiConstants.SIGN))) {
-      sb.append("签名(sign);");
-    }
-    if (StringUtils.isBlank(sb.toString())) {
-      return;
-    }
-    throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, sb.toString() + " 是必填项");
-  }
-
-  /**
-   * 入口基础参数格式校验
-   *
-   * @param requestData
-   */
-  protected void doBasicFormatValidate(Map<String, String> requestData) {
-    StringBuilder sb = new StringBuilder();
-    String protocol = requestData.get(ApiConstants.PROTOCOL);
-    if (StringUtils.isNotBlank(protocol)
-        && !StringUtils.equals(ApiProtocol.HTTP_FORM_JSON.code(), protocol)) {
-      sb.append("协议类型(protocol);");
-    }
-    if (StringUtils.isBlank(sb.toString())) {
-      return;
-    }
-    throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, sb.toString() + " 格式错误");
-  }
-  /**
    * marshall 前check
    *
    * @param apiContext
    * @param request
    */
   protected void doUnmarshallBeforeVerify(ApiContext apiContext, HttpServletRequest request) {
-    doBasicValidate(apiContext.getRequestData());
-    // 验证scheme
-    doVerifyScheme(apiContext, request);
-    // 验证服务基本参数
-    doValidateServiceParam(apiContext);
     // 认证
     doAuthenticate(apiContext);
   }
@@ -342,40 +287,12 @@ public class HttpApiServiceExecuter
   }
 
   /**
-   * 请求scheme验证
-   *
-   * @param apiContext
-   * @param request
-   */
-  protected void doVerifyScheme(ApiContext apiContext, HttpServletRequest request) {
-    String requestScheme = request.getScheme();
-    if (apiContext.getOpenApiService().scheme() == null
-        || apiContext.getOpenApiService().scheme() == ApiScheme.ALL) {
-      return;
-    }
-    if (!apiContext.getOpenApiService().scheme().getScheme().equalsIgnoreCase(requestScheme)) {
-      throw new ApiServiceException(
-          ApiServiceResultCode.UNSUPPORTED_SECHEME,
-          "支持的scheme为:" + apiContext.getOpenApiService().scheme());
-    }
-  }
-
-  /**
    * 幂等性校验
    *
    * @param apiRequest
    */
   protected void doVerifyIdempotence(ApiRequest apiRequest) {
     orderInfoService.checkUnique(apiRequest.getPartnerId(), apiRequest.getRequestNo());
-  }
-
-  /**
-   * 服务参数校验
-   *
-   * @param apiContext
-   */
-  protected void doValidateServiceParam(ApiContext apiContext) {
-    apiContext.getOpenApiService().responseType().validate(apiContext.getRequestData());
   }
 
   /** 公共Api参数合法性检查 */
@@ -399,7 +316,7 @@ public class HttpApiServiceExecuter
    * @param apiContext
    */
   protected void doAuthenticate(ApiContext apiContext) {
-    apiAuthentication.authenticate(apiContext.getRequestData());
+    apiAuthentication.authenticate(apiContext);
     apiContext.setAuthenticated(true);
   }
 
@@ -419,14 +336,6 @@ public class HttpApiServiceExecuter
     }
     apiServiceExceptionHander.handleApiServiceException(
         apiContext.getRequest(), apiContext.getResponse(), e);
-  }
-
-  protected ApiService getApiService(Map<String, String> request) {
-    String service = request.get(ApiConstants.SERVICE);
-    Validators.assertEmpty(ApiConstants.SERVICE, service);
-    String version =
-        Strings.isBlankDefault(request.get(ApiConstants.VERSION), ApiConstants.VERSION_DEFAULT);
-    return apiServiceFactory.getApiService(service, version);
   }
 
   private void publishBeforeServiceExecuteEvent(ApiContext apiContext) {
@@ -461,12 +370,6 @@ public class HttpApiServiceExecuter
 
   private StopWatch initPerfLog(ApiContext apiContext) {
     return new Slf4JStopWatch(apiContext.getServiceName(), perlogger);
-  }
-
-  // add by mayansen
-  private void getRequestUserAgent(ApiContext apiContext, HttpServletRequest request) {
-    String userAgent = request.getHeader("User-Agent");
-    apiContext.setUserAgent(userAgent);
   }
 
   private void logRequestData(Map<String, String> requestData) {

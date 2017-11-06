@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * <p>Created by zhangpu on 2015/1/23.
  */
 @Component("apiSha256Signer")
-public class Sha256Signer extends AbstractMapSourceSigner {
+public class Sha256Signer extends AbstractSigner {
 
   @Override
   protected String doSign(String waitToSignStr, String key) {

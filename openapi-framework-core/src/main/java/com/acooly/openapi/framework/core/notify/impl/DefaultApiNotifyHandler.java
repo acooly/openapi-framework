@@ -115,7 +115,7 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
       orderInfo.setGid(apiNotifyOrder.getGid());
       orderInfo.setPartnerId(apiNotifyOrder.getPartnerId());
       orderInfo.setNotifyUrl(apiNotifyOrder.getParameter(ApiConstants.NOTIFY_URL));
-      orderInfo.setProtocol(ApiProtocol.HTTP_FORM_JSON);
+      orderInfo.setProtocol(ApiProtocol.JSON);
       orderInfo.setRequestNo(Ids.oid());
       orderInfo.setOid(Ids.oid());
       orderInfo.setService(apiNotifyOrder.getParameter(ApiConstants.SERVICE));

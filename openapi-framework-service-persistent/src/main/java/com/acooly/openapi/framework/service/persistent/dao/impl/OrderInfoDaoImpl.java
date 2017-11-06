@@ -60,7 +60,7 @@ public class OrderInfoDaoImpl extends AbstractJdbcTemplateDao implements OrderIn
           orderInfo.setProtocol(
               Strings.isNotBlank(protocol)
                   ? ApiProtocol.valueOf(protocol)
-                  : ApiProtocol.HTTP_FORM_JSON);
+                  : ApiProtocol.JSON);
           orderInfo.setNotifyUrl(rs.getString(11));
           orderInfo.setReturnUrl(rs.getString(12));
           orderInfo.setBusinessInfo(rs.getString(13));

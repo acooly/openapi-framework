@@ -49,7 +49,11 @@ public class ApiServiceException extends RuntimeException {
   }
 
   public ApiServiceException(Messageable apiServiceResultCode) {
-    this(apiServiceResultCode, null);
+    this(apiServiceResultCode, (String) null);
+  }
+
+  public ApiServiceException(Messageable apiServiceResultCode, Throwable cause) {
+    super(apiServiceResultCode.code() + ":" + apiServiceResultCode.message(), cause);
   }
 
   public ApiServiceException(Messageable apiServiceResultCode, String detail) {

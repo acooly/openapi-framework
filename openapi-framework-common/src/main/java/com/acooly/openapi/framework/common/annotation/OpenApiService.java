@@ -12,7 +12,6 @@ package com.acooly.openapi.framework.common.annotation;
 
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
-import com.acooly.openapi.framework.common.enums.ApiScheme;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import org.springframework.stereotype.Service;
 
@@ -56,12 +55,6 @@ public @interface OpenApiService {
    */
   ResponseType responseType() default ResponseType.SYN;
 
-  /**
-   * 访问通讯协议
-   *
-   * @return
-   */
-  ApiScheme scheme() default ApiScheme.ALL;
 
   /**
    * 归属

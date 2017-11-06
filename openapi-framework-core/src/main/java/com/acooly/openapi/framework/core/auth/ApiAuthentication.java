@@ -4,6 +4,8 @@
  */
 package com.acooly.openapi.framework.core.auth;
 
+import com.acooly.openapi.framework.core.executer.ApiContext;
+
 import java.util.Map;
 
 /**
@@ -14,9 +16,9 @@ import java.util.Map;
  */
 public interface ApiAuthentication {
 
-  void authenticate(Map<String, String> response);
+  void authenticate(ApiContext apiContext);
 
-  void signature(Map<String, String> response);
+  String signature(Map<String, String> response);
 
-  void signature(Map<String, String> responseData, String partnerId, String signType);
+  String signature(Map<String, String> responseData, String partnerId, String signType);
 }

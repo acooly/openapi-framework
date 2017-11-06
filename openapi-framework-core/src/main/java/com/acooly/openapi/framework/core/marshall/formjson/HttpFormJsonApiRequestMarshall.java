@@ -70,6 +70,6 @@ public class HttpFormJsonApiRequestMarshall
 
   @Override
   public ApiProtocol getProtocol() {
-    return ApiProtocol.HTTP_FORM_JSON;
+    return ApiProtocol.JSON;
   }
 }

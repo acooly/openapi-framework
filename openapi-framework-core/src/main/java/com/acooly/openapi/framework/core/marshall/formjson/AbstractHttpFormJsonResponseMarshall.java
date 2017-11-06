@@ -166,7 +166,7 @@ public abstract class AbstractHttpFormJsonResponseMarshall<T, S extends ApiRespo
 
   @Override
   public ApiProtocol getProtocol() {
-    return ApiProtocol.HTTP_FORM_JSON;
+    return ApiProtocol.JSON;
   }
 
   protected void doBeforeMarshall(ApiResponse apiResponse, Map<String, ?> data) {}
