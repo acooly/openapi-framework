@@ -14,17 +14,16 @@ import java.util.List;
 
 /**
  * 服务分类 Service接口
- * <p>
- * Date: 2016-07-16 01:57:05
+ *
+ * <p>Date: 2016-07-16 01:57:05
  *
  * @author acooly
  */
 public interface ApiServiceTypeService extends EntityService<ApiServiceType> {
 
-    ApiServiceType create(Long parentId, String name, String comments);
+  ApiServiceType create(Long parentId, String name, String comments);
 
-    List<ApiServiceType> loadTree(Long parentId);
+  List<ApiServiceType> loadTree(Long parentId);
 
-    List<ApiServiceType> loadTopTypes();
-
+  List<ApiServiceType> loadTopTypes();
 }

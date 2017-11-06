@@ -13,20 +13,17 @@ import com.acooly.module.ds.AbstractJdbcTemplateDao;
 import com.acooly.openapi.framework.service.persistent.dao.ApiPartnerCustomDao;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
-/**
- * @author acooly
- */
+/** @author acooly */
 public class ApiPartnerDaoImpl extends AbstractJdbcTemplateDao implements ApiPartnerCustomDao {
 
-    @Override
-    public String getPartnerSercretKey(String partnerId) {
-        String sql = "select secret_key from api_partner t1 where t1.partner_id = '" + partnerId + "'";
-        SqlRowSet rs = jdbcTemplate.queryForRowSet(sql);
-        if(rs != null && rs.next()){
-            return rs.getString(1);
-        }else{
-            return null;
-        }
+  @Override
+  public String getPartnerSercretKey(String partnerId) {
+    String sql = "select secret_key from api_partner t1 where t1.partner_id = '" + partnerId + "'";
+    SqlRowSet rs = jdbcTemplate.queryForRowSet(sql);
+    if (rs != null && rs.next()) {
+      return rs.getString(1);
+    } else {
+      return null;
     }
-
+  }
 }

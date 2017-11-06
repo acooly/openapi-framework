@@ -18,75 +18,70 @@ import javax.validation.constraints.NotNull;
  * 跳转提现页面
  *
  * @author cuifuqiang
- *
  */
 @OpenApiMessage(service = "redirectWithdraw", type = ApiMessageType.Response)
 public class WithdrawRedirectResponse extends ApiResponse {
-	
-	@NotEmpty
-	@Length(max = 32)
-	@OpenApiField(desc = "用户UserId", constraint = "用户UserId")
-	private String userId;
 
-	@NotNull
-	@OpenApiField(desc = "交易金额", constraint = "交易金额，单位：元")
-	private Money amount;
-	
-	@Length(max = 32)
-	@OpenApiField(desc = "提现账户", constraint = "提现账户")
-	private String accountNo;
-	
-	@NotNull
-	@Length(min = 20, max = 64)
-	@OpenApiField(desc = "全站统一流水号")
-	private String gid;
+  @NotEmpty
+  @Length(max = 32)
+  @OpenApiField(desc = "用户UserId", constraint = "用户UserId")
+  private String userId;
 
-	/**
-	 * 参数校验,校验失败请抛出OrderCheckException
-	 */
-	public void check() throws OrderCheckException {
-		String orderNo = getMerchOrderNo();
-		if (StringUtils.isBlank(orderNo)) {
-			throw new ApiServiceException(FinancePayApiErrorCode.TRADE_ORDER_CREATE_ERROR, "orderNo:交易订单号不能为空");
-		}
-		long amongCent = getAmount().getCent();
-		if (amongCent <= 0) {
-			throw new ApiServiceException(FinancePayApiErrorCode.PARAMETER_ERROR, "交易金额必须大于0");
-		}
-	}
+  @NotNull
+  @OpenApiField(desc = "交易金额", constraint = "交易金额，单位：元")
+  private Money amount;
 
-	public String getUserId() {
-		return userId;
-	}
+  @Length(max = 32)
+  @OpenApiField(desc = "提现账户", constraint = "提现账户")
+  private String accountNo;
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+  @NotNull
+  @Length(min = 20, max = 64)
+  @OpenApiField(desc = "全站统一流水号")
+  private String gid;
 
-	public Money getAmount() {
-		return amount;
-	}
+  /** 参数校验,校验失败请抛出OrderCheckException */
+  public void check() throws OrderCheckException {
+    String orderNo = getMerchOrderNo();
+    if (StringUtils.isBlank(orderNo)) {
+      throw new ApiServiceException(
+          FinancePayApiErrorCode.TRADE_ORDER_CREATE_ERROR, "orderNo:交易订单号不能为空");
+    }
+    long amongCent = getAmount().getCent();
+    if (amongCent <= 0) {
+      throw new ApiServiceException(FinancePayApiErrorCode.PARAMETER_ERROR, "交易金额必须大于0");
+    }
+  }
 
-	public void setAmount(Money amount) {
-		this.amount = amount;
-	}
-	
-	public String getAccountNo() {
-		return accountNo;
-	}
+  public String getUserId() {
+    return userId;
+  }
 
-	public void setAccountNo(String accountNo) {
-		this.accountNo = accountNo;
-	}
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
 
-	public String getGid() {
-		return this.gid;
-	}
+  public Money getAmount() {
+    return amount;
+  }
 
-	public void setGid(String gid) {
-		this.gid = gid;
-	}
-	
+  public void setAmount(Money amount) {
+    this.amount = amount;
+  }
+
+  public String getAccountNo() {
+    return accountNo;
+  }
+
+  public void setAccountNo(String accountNo) {
+    this.accountNo = accountNo;
+  }
+
+  public String getGid() {
+    return this.gid;
+  }
+
+  public void setGid(String gid) {
+    this.gid = gid;
+  }
 }
-
-    

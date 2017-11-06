@@ -14,17 +14,17 @@ import java.util.Map;
 
 /**
  * 收到用户请求时的事件.
+ *
  * @author qiubo@qq.com
  */
 public class RequestReceivedEvent extends SystemEvent {
-	private Map<String, String> requestData;
-	
-	public RequestReceivedEvent(Map<String, String> requestData) {
-		this.requestData = requestData;
-	}
-	
-	public Map<String, String> getRequestData() {
-		return requestData;
-	}
-	
+  private Map<String, String> requestData;
+
+  public RequestReceivedEvent(Map<String, String> requestData) {
+    this.requestData = requestData;
+  }
+
+  public Map<String, String> getRequestData() {
+    return requestData;
+  }
 }

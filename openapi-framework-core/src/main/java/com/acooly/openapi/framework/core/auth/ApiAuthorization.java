@@ -4,7 +4,6 @@
  */
 package com.acooly.openapi.framework.core.auth;
 
-
 import com.acooly.openapi.framework.common.message.ApiRequest;
 
 /**
@@ -15,5 +14,5 @@ import com.acooly.openapi.framework.common.message.ApiRequest;
  */
 public interface ApiAuthorization {
 
-    void authorize(ApiRequest apiRequest);
+  void authorize(ApiRequest apiRequest);
 }

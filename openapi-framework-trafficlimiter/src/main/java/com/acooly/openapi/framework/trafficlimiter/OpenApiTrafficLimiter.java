@@ -31,59 +31,55 @@ import java.util.Map;
  * @author acooly
  */
 @Service
-public class OpenApiTrafficLimiter implements TrafficLimiterFilter, TrafficLimiterFilterChain, InitializingBean {
+public class OpenApiTrafficLimiter
+    implements TrafficLimiterFilter, TrafficLimiterFilterChain, InitializingBean {
 
-    private static final Logger logger = LoggerFactory.getLogger(OpenApiTrafficLimiter.class);
+  private static final Logger logger = LoggerFactory.getLogger(OpenApiTrafficLimiter.class);
 
-    private Map<Messageable, TrafficLimiterFilter> filterChain = Maps.newLinkedHashMap();
+  private Map<Messageable, TrafficLimiterFilter> filterChain = Maps.newLinkedHashMap();
 
+  @Autowired private ApplicationContext context;
 
-    @Autowired
-    private ApplicationContext context;
-
-    @Override
-    public void evaluate(ApiRequest request) throws TrafficLimiterException {
-        for (Map.Entry<Messageable, TrafficLimiterFilter> entry : mapFilters().entrySet()) {
-            entry.getValue().evaluate(request);
-        }
+  @Override
+  public void evaluate(ApiRequest request) throws TrafficLimiterException {
+    for (Map.Entry<Messageable, TrafficLimiterFilter> entry : mapFilters().entrySet()) {
+      entry.getValue().evaluate(request);
     }
+  }
 
+  @Override
+  public TrafficLimiterType getTrafficLimiterType() {
+    return null;
+  }
 
-    @Override
-    public TrafficLimiterType getTrafficLimiterType() {
-        return null;
+  @Override
+  public boolean enable() {
+    return false;
+  }
+
+  @Override
+  public void addFilter(TrafficLimiterFilter filter) {
+    filterChain.put(filter.getTrafficLimiterType(), filter);
+    logger.info("成功注册流控策略: {}", filter);
+  }
+
+  @Override
+  public List<TrafficLimiterFilter> listFilters() {
+    return Lists.newArrayList(filterChain.values());
+  }
+
+  @Override
+  public Map<Messageable, TrafficLimiterFilter> mapFilters() {
+    return filterChain;
+  }
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    Map<String, TrafficLimiterFilter> beans = context.getBeansOfType(TrafficLimiterFilter.class);
+    for (TrafficLimiterFilter trafficLimiterFilter : beans.values()) {
+      if (trafficLimiterFilter.enable()) {
+        addFilter(trafficLimiterFilter);
+      }
     }
-
-
-    @Override
-    public boolean enable() {
-        return false;
-    }
-
-    @Override
-    public void addFilter(TrafficLimiterFilter filter) {
-        filterChain.put(filter.getTrafficLimiterType(), filter);
-        logger.info("成功注册流控策略: {}", filter);
-    }
-
-    @Override
-    public List<TrafficLimiterFilter> listFilters() {
-        return Lists.newArrayList(filterChain.values());
-    }
-
-    @Override
-    public Map<Messageable, TrafficLimiterFilter> mapFilters() {
-        return filterChain;
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        Map<String, TrafficLimiterFilter> beans = context.getBeansOfType(TrafficLimiterFilter.class);
-        for (TrafficLimiterFilter trafficLimiterFilter : beans.values()) {
-            if (trafficLimiterFilter.enable()) {
-                addFilter(trafficLimiterFilter);
-            }
-        }
-    }
-
+  }
 }

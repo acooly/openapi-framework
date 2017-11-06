@@ -10,13 +10,10 @@
  */
 package com.acooly.openapi.framework.core.auth.permission;
 
-/**
- *
- * @author qiubo@qq.com
- */
+/** @author qiubo@qq.com */
 public class AllPermission implements Permission {
-	@Override
-	public boolean implies(String resource) {
-		return true;
-	}
+  @Override
+  public boolean implies(String resource) {
+    return true;
+  }
 }

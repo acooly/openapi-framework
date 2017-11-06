@@ -14,8 +14,8 @@ import com.acooly.openapi.framework.core.listener.event.ServiceEvent;
 
 /**
  * 只处理服务级的事件
+ *
  * @author qiubo@qq.com
  */
-public class ServiceEventMulticaster<E extends ServiceEvent> extends AbstractOpenApiEventMulticaster<E> {
-
-}
+public class ServiceEventMulticaster<E extends ServiceEvent>
+    extends AbstractOpenApiEventMulticaster<E> {}

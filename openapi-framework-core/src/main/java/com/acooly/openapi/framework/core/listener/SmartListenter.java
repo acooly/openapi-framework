@@ -12,9 +12,7 @@ package com.acooly.openapi.framework.core.listener;
 
 import com.acooly.openapi.framework.core.listener.event.OpenApiEvent;
 
-/**
- * @author qiubo@qq.com
- */
+/** @author qiubo@qq.com */
 public interface SmartListenter<E extends OpenApiEvent> extends ApiListener<E> {
-	boolean supportsEventType(Class<E> eventType);
+  boolean supportsEventType(Class<E> eventType);
 }

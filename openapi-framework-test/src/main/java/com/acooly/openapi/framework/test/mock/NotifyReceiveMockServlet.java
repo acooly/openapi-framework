@@ -1,7 +1,7 @@
 /*
  * acooly.cn Inc.
  * Copyright (c) 2016 All Rights Reserved.
- * create by zhangpu 
+ * create by zhangpu
  * date:2016年3月21日
  *
  */
@@ -20,50 +20,45 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 
-/**
- * @author zhangpu
- */
+/** @author zhangpu */
 public class NotifyReceiveMockServlet extends HttpServlet {
 
-    /**
-     * UID
-     */
-    private static final long serialVersionUID = 4730933269416485351L;
-    protected final static Logger logger = LoggerFactory.getLogger(NotifyReceiveMockServlet.class);
-    String key = "c9cef22553af973d4b04a012f9cb8ea8";
+  protected static final Logger logger = LoggerFactory.getLogger(NotifyReceiveMockServlet.class);
+  /** UID */
+  private static final long serialVersionUID = 4730933269416485351L;
+  String key = "c9cef22553af973d4b04a012f9cb8ea8";
 
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        logger.info("商户接收通知MOCK：{}", Servlets.getParameters(req));
+  @Override
+  protected void service(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException, IOException {
+    logger.info("商户接收通知MOCK：{}", Servlets.getParameters(req));
 
-        String sign = req.getParameter("sign");
-        String signType = req.getParameter("signType");
-        Writer w = resp.getWriter();
-        try {
-            // SignerFactory sf =
-            // WebApplicationContextUtils.getWebApplicationContext(getServletContext())
-            // .getBean(SignerFactory.class);
-            // Signer signer = sf.getSigner(signType);
-            // signer.verify(sign, key, Servlets.getParamMap(req));
-            w.write("success");
-            logger.info("success. signType:{}", signType);
-        } catch (Exception e) {
-            w.write("failure:" + e.getMessage());
-            logger.info("failure.signType:{},error:{}", signType, e.getMessage());
-        } finally {
-            IOUtils.closeQuietly(w);
-        }
-
+    String sign = req.getParameter("sign");
+    String signType = req.getParameter("signType");
+    Writer w = resp.getWriter();
+    try {
+      // SignerFactory sf =
+      // WebApplicationContextUtils.getWebApplicationContext(getServletContext())
+      // .getBean(SignerFactory.class);
+      // Signer signer = sf.getSigner(signType);
+      // signer.verify(sign, key, Servlets.getParamMap(req));
+      w.write("success");
+      logger.info("success. signType:{}", signType);
+    } catch (Exception e) {
+      w.write("failure:" + e.getMessage());
+      logger.info("failure.signType:{},error:{}", signType, e.getMessage());
+    } finally {
+      IOUtils.closeQuietly(w);
     }
+  }
 
-    @Override
-    public void destroy() {
-        super.destroy();
-    }
+  @Override
+  public void destroy() {
+    super.destroy();
+  }
 
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-    }
-
+  @Override
+  public void init(ServletConfig config) throws ServletException {
+    super.init(config);
+  }
 }

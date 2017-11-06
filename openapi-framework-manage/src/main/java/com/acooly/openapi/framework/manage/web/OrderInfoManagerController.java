@@ -16,27 +16,26 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(value = "/manage/openapi/orderInfo")
 public class OrderInfoManagerController extends AbstractJQueryEntityController {
 
-    {
-        allowMapping = "list,query";
-    }
+  @Resource private OrderInfoService orderInfoService;
 
-    @Resource
-    private OrderInfoService orderInfoService;
+  {
+    allowMapping = "list,query";
+  }
 
-    @Override
-    protected PageInfo<OrderInfo> doList(HttpServletRequest request, HttpServletResponse response, Model model)
-            throws Exception {
-        return orderInfoService.query(getPageInfo(request), getSearchParams(request), getSortMap(request));
-    }
+  @Override
+  protected PageInfo<OrderInfo> doList(
+      HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
+    return orderInfoService.query(
+        getPageInfo(request), getSearchParams(request), getSortMap(request));
+  }
 
-    @Override
-    public int getDefaultPageSize() {
-        return 20;
-    }
+  @Override
+  public int getDefaultPageSize() {
+    return 20;
+  }
 
-    @Override
-    public String index(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return super.index(request, response, model);
-    }
-
+  @Override
+  public String index(HttpServletRequest request, HttpServletResponse response, Model model) {
+    return super.index(request, response, model);
+  }
 }

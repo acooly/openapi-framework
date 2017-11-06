@@ -10,9 +10,5 @@
  */
 package com.acooly.openapi.framework.core.listener.event;
 
-/**
- * @author qiubo@qq.com
- */
-public class OpenApiEvent {
-	
-}
+/** @author qiubo@qq.com */
+public class OpenApiEvent {}

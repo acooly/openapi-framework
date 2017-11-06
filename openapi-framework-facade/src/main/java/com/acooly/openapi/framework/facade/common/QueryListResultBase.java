@@ -9,26 +9,21 @@
  */
 package com.acooly.openapi.framework.facade.common;
 
-
 import com.acooly.core.common.facade.ResultBase;
 
 import java.util.List;
 
-/**
- * @author acooly
- */
+/** @author acooly */
 public class QueryListResultBase<T> extends ResultBase {
 
-    /**
-     * 列表对象
-     */
-    private List<T> entiries;
+  /** 列表对象 */
+  private List<T> entiries;
 
-    public List<T> getEntiries() {
-        return entiries;
-    }
+  public List<T> getEntiries() {
+    return entiries;
+  }
 
-    public void setEntiries(List<T> entiries) {
-        this.entiries = entiries;
-    }
+  public void setEntiries(List<T> entiries) {
+    this.entiries = entiries;
+  }
 }

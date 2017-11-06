@@ -9,12 +9,7 @@
  */
 package com.acooly.openapi.framework.trafficlimiter.exception;
 
-
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 
-/**
- * @author acooly
- */
-public class TrafficLimiterException extends ApiServiceException {
-
-}
+/** @author acooly */
+public class TrafficLimiterException extends ApiServiceException {}

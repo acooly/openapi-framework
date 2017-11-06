@@ -9,10 +9,8 @@
  */
 package com.acooly.openapi.framework.service.persistent.dao;
 
-/**
- * @author acooly
- */
+/** @author acooly */
 public interface ApiPartnerCustomDao {
 
-    String getPartnerSercretKey(String partnerId);
+  String getPartnerSercretKey(String partnerId);
 }

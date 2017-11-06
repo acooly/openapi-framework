@@ -1,7 +1,7 @@
 /*
  * acooly.cn Inc.
  * Copyright (c) 2016 All Rights Reserved.
- * create by zhangpu 
+ * create by zhangpu
  * date:2016年3月17日
  *
  */
@@ -18,13 +18,14 @@ import java.util.Map;
  */
 public interface OrderInfoService {
 
-    void insert(OrderInfo orderInfo);
+  void insert(OrderInfo orderInfo);
 
-    void checkUnique(String partnerId, String orderNo);
+  void checkUnique(String partnerId, String orderNo);
 
-    OrderInfo findByGid(String gid, String partnerId);
+  OrderInfo findByGid(String gid, String partnerId);
 
-    String findGidByTrade(String partnerId, String service, String version, String merchOrderNo);
+  String findGidByTrade(String partnerId, String service, String version, String merchOrderNo);
 
-    PageInfo<OrderInfo> query(PageInfo<OrderInfo> pageInfo, Map<String, Object> map, Map<String, Boolean> orderMap);
+  PageInfo<OrderInfo> query(
+      PageInfo<OrderInfo> pageInfo, Map<String, Object> map, Map<String, Boolean> orderMap);
 }

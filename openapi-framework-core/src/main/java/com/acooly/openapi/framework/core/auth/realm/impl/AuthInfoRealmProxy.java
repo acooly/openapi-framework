@@ -31,70 +31,69 @@ import static com.acooly.openapi.framework.core.OpenApiConstants.APP_CLIENT_ENAB
 @Component("authInfoRealm")
 public class AuthInfoRealmProxy implements AuthInfoRealm, InitializingBean {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthInfoRealmProxy.class);
+  private static final Logger logger = LoggerFactory.getLogger(AuthInfoRealmProxy.class);
 
-    @Resource
-    private ApplicationContext applicationContext;
+  @Resource private ApplicationContext applicationContext;
 
-    private AuthInfoRealm targetBean;
-    private AuthInfoRealm appAuthInfoRealm;
+  private AuthInfoRealm targetBean;
+  private AuthInfoRealm appAuthInfoRealm;
 
-    @Override
-    public Object getAuthenticationInfo(String partnerId) {
-        return getTargetBean().getAuthenticationInfo(partnerId);
+  @Override
+  public Object getAuthenticationInfo(String partnerId) {
+    return getTargetBean().getAuthenticationInfo(partnerId);
+  }
+
+  @Override
+  public Object getAuthorizationInfo(String partnerId) {
+    return getTargetBean().getAuthorizationInfo(partnerId);
+  }
+
+  protected AuthInfoRealm getTargetBean() {
+    if (ApiContextHolder.getApiContext() != null
+        && ApiContextHolder.getApiContext().isAppClient()) {
+      if (appAuthInfoRealm == null) {
+        throw new ApiServiceException(APP_CLIENT_NOT_SUPPORT);
+      }
+      return appAuthInfoRealm;
+    } else {
+      return this.targetBean;
     }
+  }
 
-    @Override
-    public Object getAuthorizationInfo(String partnerId) {
-        return getTargetBean().getAuthorizationInfo(partnerId);
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    Map<String, AuthInfoRealm> beans = applicationContext.getBeansOfType(AuthInfoRealm.class);
+    AuthInfoRealm defaultBean = null;
+    Iterator<Map.Entry<String, AuthInfoRealm>> it = beans.entrySet().iterator();
+    while (it.hasNext()) {
+      Map.Entry<String, AuthInfoRealm> entry = it.next();
+      if (entry.getValue().getClass().equals(this.getClass())) {
+        it.remove();
+      }
+      if (entry.getKey().equals(APP_CLIENT_REALM)) {
+        it.remove();
+      }
+      if (entry.getValue().getClass().equals(SpringProxyAuthInfoRealm.class)) {
+        defaultBean = entry.getValue();
+        it.remove();
+      } else if (entry.getValue().getClass().equals(DefaultAuthInfoRealm.class)) {
+        defaultBean = entry.getValue();
+        it.remove();
+      }
     }
-
-    protected AuthInfoRealm getTargetBean() {
-        if (ApiContextHolder.getApiContext() != null && ApiContextHolder.getApiContext().isAppClient()) {
-            if (appAuthInfoRealm == null) {
-                throw new ApiServiceException(APP_CLIENT_NOT_SUPPORT);
-            }
-            return appAuthInfoRealm;
-        } else {
-            return this.targetBean;
-        }
+    if (beans.size() == 0) {
+      this.targetBean = defaultBean;
+    } else {
+      this.targetBean = beans.entrySet().iterator().next().getValue();
     }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        Map<String, AuthInfoRealm> beans = applicationContext.getBeansOfType(AuthInfoRealm.class);
-        AuthInfoRealm defaultBean = null;
-        Iterator<Map.Entry<String, AuthInfoRealm>> it = beans.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, AuthInfoRealm> entry = it.next();
-            if (entry.getValue().getClass().equals(this.getClass())) {
-                it.remove();
-            }
-            if (entry.getKey().equals(APP_CLIENT_REALM)) {
-                it.remove();
-            }
-            if (entry.getValue().getClass().equals(SpringProxyAuthInfoRealm.class)) {
-                defaultBean = entry.getValue();
-                it.remove();
-            } else if (entry.getValue().getClass().equals(DefaultAuthInfoRealm.class)) {
-                defaultBean = entry.getValue();
-                it.remove();
-            }
-        }
-        if (beans.size() == 0) {
-            this.targetBean = defaultBean;
-        } else {
-            this.targetBean = beans.entrySet().iterator().next().getValue();
-        }
-        logger.info("Proxy target bean: {}", targetBean.getClass());
-        Boolean appClient = Boolean.parseBoolean(System.getProperty(APP_CLIENT_ENABLE));
-        if (appClient) {
-            try {
-                appAuthInfoRealm = applicationContext.getBean(APP_CLIENT_REALM, AuthInfoRealm.class);
-            } catch (BeansException e) {
-                logger.error("openapi启动了移动端特性支持，需要定义bean name=appClientAuthInfoRealm的AuthInfoRealm");
-            }
-        }
+    logger.info("Proxy target bean: {}", targetBean.getClass());
+    Boolean appClient = Boolean.parseBoolean(System.getProperty(APP_CLIENT_ENABLE));
+    if (appClient) {
+      try {
+        appAuthInfoRealm = applicationContext.getBean(APP_CLIENT_REALM, AuthInfoRealm.class);
+      } catch (BeansException e) {
+        logger.error("openapi启动了移动端特性支持，需要定义bean name=appClientAuthInfoRealm的AuthInfoRealm");
+      }
     }
-
+  }
 }

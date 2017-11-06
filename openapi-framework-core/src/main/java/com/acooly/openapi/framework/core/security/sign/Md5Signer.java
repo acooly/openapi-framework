@@ -16,14 +16,13 @@ import org.springframework.stereotype.Component;
 @Component("apiMd5Signer")
 public class Md5Signer extends AbstractMapSourceSigner {
 
-	@Override
-	protected String doSign(String waitToSignStr, String key) {
-		return DigestUtils.md5Hex(waitToSignStr + key);
-	}
+  @Override
+  protected String doSign(String waitToSignStr, String key) {
+    return DigestUtils.md5Hex(waitToSignStr + key);
+  }
 
-	@Override
-	public SignTypeEnum getSinType() {
-		return SignTypeEnum.MD5;
-	}
-
+  @Override
+  public SignTypeEnum getSinType() {
+    return SignTypeEnum.MD5;
+  }
 }

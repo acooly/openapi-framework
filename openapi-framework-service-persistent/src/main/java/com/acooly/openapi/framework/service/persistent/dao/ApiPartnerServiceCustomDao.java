@@ -9,18 +9,14 @@
  */
 package com.acooly.openapi.framework.service.persistent.dao;
 
-
 import com.acooly.openapi.framework.common.dto.ApiServiceDto;
 
 import java.util.List;
 
-/**
- * @author acooly
- */
+/** @author acooly */
 public interface ApiPartnerServiceCustomDao {
 
-    List<ApiServiceDto> queryPartnerService(Long partnerId);
+  List<ApiServiceDto> queryPartnerService(Long partnerId);
 
-    List<String> getAuthorizedServices(String partnerId);
-
+  List<String> getAuthorizedServices(String partnerId);
 }

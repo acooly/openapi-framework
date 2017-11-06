@@ -20,11 +20,9 @@ import com.acooly.openapi.framework.trafficlimiter.exception.TrafficLimiterExcep
  */
 public interface TrafficLimiterFilter {
 
+  void evaluate(ApiRequest request) throws TrafficLimiterException;
 
-    void evaluate(ApiRequest request) throws TrafficLimiterException;
+  boolean enable();
 
-    boolean enable();
-
-    Messageable getTrafficLimiterType();
-
+  Messageable getTrafficLimiterType();
 }

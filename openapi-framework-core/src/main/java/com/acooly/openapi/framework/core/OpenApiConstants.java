@@ -9,23 +9,15 @@
  */
 package com.acooly.openapi.framework.core;
 
-/**
- * @author acooly
- */
+/** @author acooly */
 public class OpenApiConstants {
 
+  public static final String WILDCARD_TOKEN = "*";
+  public static final String DEF_SECRETKEY = "c9cef22553af973d4b04a012f9cb8ea8";
 
-    public static final String WILDCARD_TOKEN = "*";
-    public static final String DEF_SECRETKEY = "c9cef22553af973d4b04a012f9cb8ea8";
+  /** 性能日志logger */
+  public static final String PERFORMANCE_LOGGER = "com.acooly.framework.openapi_PERFORMANCE_LOGGER";
 
-    /**
-     * 性能日志logger
-     */
-    public static final String PERFORMANCE_LOGGER = "com.acooly.framework.openapi_PERFORMANCE_LOGGER";
-
-    /**
-     * 是否启用app支持
-     */
-    public static final String APP_CLIENT_ENABLE="openapi.appClient";
-
+  /** 是否启用app支持 */
+  public static final String APP_CLIENT_ENABLE = "openapi.appClient";
 }

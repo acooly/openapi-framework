@@ -20,22 +20,23 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
-/**
- * @author acooly
- */
+/** @author acooly */
 @Component
 public class NmsApiNotifySenderImpl implements ApiNotifySender {
 
-    private static final Logger logger = LoggerFactory.getLogger(NmsApiNotifySenderImpl.class);
+  private static final Logger logger = LoggerFactory.getLogger(NmsApiNotifySenderImpl.class);
 
-    @Resource
-    private NotifyMessageSendService notifyMessageSendService;
+  @Resource private NotifyMessageSendService notifyMessageSendService;
 
-    @Override
-    public void send(NotifySendMessage notifySendMessage) {
-        logger.info("ApiNotifySender nms 实现");
-        NotifyMessage notifyMessage = new NotifyMessage();
-        BeanCopier.copy(notifySendMessage, notifyMessage, BeanCopier.CopyStrategy.IGNORE_NULL, BeanCopier.NoMatchingRule.IGNORE);
-        notifyMessageSendService.sendNotifyMessage(notifyMessage);
-    }
+  @Override
+  public void send(NotifySendMessage notifySendMessage) {
+    logger.info("ApiNotifySender nms 实现");
+    NotifyMessage notifyMessage = new NotifyMessage();
+    BeanCopier.copy(
+        notifySendMessage,
+        notifyMessage,
+        BeanCopier.CopyStrategy.IGNORE_NULL,
+        BeanCopier.NoMatchingRule.IGNORE);
+    notifyMessageSendService.sendNotifyMessage(notifyMessage);
+  }
 }

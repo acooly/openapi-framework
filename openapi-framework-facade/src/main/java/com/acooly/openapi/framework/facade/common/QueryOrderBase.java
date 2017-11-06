@@ -15,47 +15,39 @@ import com.google.common.collect.Maps;
 
 import java.util.Map;
 
-/**
- * @author acooly
- */
+/** @author acooly */
 public class QueryOrderBase<T> extends OrderBase {
 
-    /**
-     * 分页对象
-     */
-    private PageInfo<T> pageInfo = new PageInfo<>(1, 10);
+  /** 分页对象 */
+  private PageInfo<T> pageInfo = new PageInfo<>(1, 10);
 
-    /**
-     * 查询条件
-     */
-    private Map<String, Object> searchMap = Maps.newHashMap();
+  /** 查询条件 */
+  private Map<String, Object> searchMap = Maps.newHashMap();
 
-    /**
-     * 排序条件
-     */
-    private Map<String, Boolean> sortMap;
+  /** 排序条件 */
+  private Map<String, Boolean> sortMap;
 
-    public PageInfo<T> getPageInfo() {
-        return pageInfo;
-    }
+  public PageInfo<T> getPageInfo() {
+    return pageInfo;
+  }
 
-    public void setPageInfo(PageInfo<T> pageInfo) {
-        this.pageInfo = pageInfo;
-    }
+  public void setPageInfo(PageInfo<T> pageInfo) {
+    this.pageInfo = pageInfo;
+  }
 
-    public Map<String, Object> getSearchMap() {
-        return searchMap;
-    }
+  public Map<String, Object> getSearchMap() {
+    return searchMap;
+  }
 
-    public void setSearchMap(Map<String, Object> searchMap) {
-        this.searchMap = searchMap;
-    }
+  public void setSearchMap(Map<String, Object> searchMap) {
+    this.searchMap = searchMap;
+  }
 
-    public Map<String, Boolean> getSortMap() {
-        return sortMap;
-    }
+  public Map<String, Boolean> getSortMap() {
+    return sortMap;
+  }
 
-    public void setSortMap(Map<String, Boolean> sortMap) {
-        this.sortMap = sortMap;
-    }
+  public void setSortMap(Map<String, Boolean> sortMap) {
+    this.sortMap = sortMap;
+  }
 }

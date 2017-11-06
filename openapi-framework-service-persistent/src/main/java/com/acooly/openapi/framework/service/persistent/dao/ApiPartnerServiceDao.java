@@ -1,7 +1,7 @@
 /*
  * acooly.cn Inc.
  * Copyright (c) 2016 All Rights Reserved.
- * create by zhangpu 
+ * create by zhangpu
  * date:2016-07-28
  *
  */
@@ -14,17 +14,17 @@ import java.util.List;
 
 /**
  * api_partner_service JPA Dao
- * <p>
- * Date: 2016-07-28 15:33:42
+ *
+ * <p>Date: 2016-07-28 15:33:42
  *
  * @author Acooly Code Generator
  */
-public interface ApiPartnerServiceDao extends EntityJpaDao<ApiPartnerService, Long>, ApiPartnerServiceCustomDao {
+public interface ApiPartnerServiceDao
+    extends EntityJpaDao<ApiPartnerService, Long>, ApiPartnerServiceCustomDao {
 
-    ApiPartnerService findByApipartneridAndApiserviceid(Long apipartnerid, Long apiserviceid);
+  ApiPartnerService findByApipartneridAndApiserviceid(Long apipartnerid, Long apiserviceid);
 
-    List<ApiPartnerService> findByApipartnerid(Long apipartnerid);
+  List<ApiPartnerService> findByApipartnerid(Long apipartnerid);
 
-    Long countByApiserviceidIn(List<Long> ids);
-
+  Long countByApiserviceidIn(List<Long> ids);
 }

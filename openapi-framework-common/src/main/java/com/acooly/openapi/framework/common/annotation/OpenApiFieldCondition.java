@@ -22,10 +22,6 @@ import java.lang.annotation.*;
 @Documented
 public @interface OpenApiFieldCondition {
 
-    /**
-     * 添加可选的说明
-     */
-    String value();
-
-
+  /** 添加可选的说明 */
+  String value();
 }

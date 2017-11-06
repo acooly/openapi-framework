@@ -10,8 +10,6 @@
  */
 package com.acooly.openapi.framework.common.annotation;
 
-import org.springframework.stereotype.Service;
-
 import java.lang.annotation.*;
 
 /**
@@ -23,12 +21,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface OpenApiNote {
-    /**
-     * 服务业务介绍
-     *
-     * @return
-     */
-    String value() default "";
-
-
+  /**
+   * 服务业务介绍
+   *
+   * @return
+   */
+  String value() default "";
 }

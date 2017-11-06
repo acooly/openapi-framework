@@ -14,7 +14,7 @@ import com.acooly.openapi.framework.core.listener.event.OpenApiEvent;
 
 /**
  * 可以处理所有事件
+ *
  * @author qiubo@qq.com
  */
-public class SystemEventMulticaster extends AbstractOpenApiEventMulticaster<OpenApiEvent> {
-}
+public class SystemEventMulticaster extends AbstractOpenApiEventMulticaster<OpenApiEvent> {}

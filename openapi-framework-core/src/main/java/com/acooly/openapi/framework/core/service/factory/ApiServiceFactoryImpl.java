@@ -40,102 +40,116 @@ import static com.acooly.openapi.framework.common.enums.ResponseType.ASNY;
 
 /**
  * 服务工厂
- * 
- * 根据服务命名约定查找spring容器内的服务
- * 
+ *
+ * <p>根据服务命名约定查找spring容器内的服务
+ *
  * @author zhangpu
  * @author Bohr.Qiu <qiubo@qq.com>
- * 
  */
 @Component
-public class ApiServiceFactoryImpl implements ApiServiceFactory, ApplicationContextAware, InitializingBean {
+public class ApiServiceFactoryImpl
+    implements ApiServiceFactory, ApplicationContextAware, InitializingBean {
 
-	private static final Logger logger = LoggerFactory.getLogger(ApiServiceFactoryImpl.class);
+  private static final Logger logger = LoggerFactory.getLogger(ApiServiceFactoryImpl.class);
 
-	private ApplicationContext applicationContext;
+  private ApplicationContext applicationContext;
 
-	private Multimap<String, ApiService> servicesMap = null;
+  private Multimap<String, ApiService> servicesMap = null;
 
-	@Resource(name = "serviceRouter")
-	private ServiceRouter serviceRouter;
+  @Resource(name = "serviceRouter")
+  private ServiceRouter serviceRouter;
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		servicesMap = HashMultimap.create();
-		Map<String, ApiService> apiServiceBeansMap = applicationContext.getBeansOfType(ApiService.class);
-		if (apiServiceBeansMap.isEmpty()) {
-			logger.warn("openapi没有对外提供服务");
-			return;
-		}
-		for (ApiService apiService : apiServiceBeansMap.values()) {
-			registerService(apiService, servicesMap);
-		}
-	}
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    servicesMap = HashMultimap.create();
+    Map<String, ApiService> apiServiceBeansMap =
+        applicationContext.getBeansOfType(ApiService.class);
+    if (apiServiceBeansMap.isEmpty()) {
+      logger.warn("openapi没有对外提供服务");
+      return;
+    }
+    for (ApiService apiService : apiServiceBeansMap.values()) {
+      registerService(apiService, servicesMap);
+    }
+  }
 
-	private void registerService(ApiService curApiService, Multimap<String, ApiService> servicesMap) {
-		OpenApiService openApiService = getOpenApiServiceAnnotation(curApiService);
-		if (openApiService == null) {
-			throw new RuntimeException("openapi服务" + curApiService.getClass()
-					+ "必须要标记com.acooly.openapi.framework.core.meta.OpenApiService注解");
-		}
-		checkApiService(curApiService);
-		if (servicesMap.containsKey(openApiService.name())) {
-			Iterator<ApiService> iterator = servicesMap.get(openApiService.name()).iterator();
-			while (iterator.hasNext()) {
-				ApiService apiService = iterator.next();
-				if (getOpenApiServiceAnnotation(apiService).version().equals(openApiService.version())) {
-					throw new RuntimeException("服务冲突:" + curApiService.getClass() + "和" + apiService.getClass());
-				}
-			}
-		}
-		servicesMap.put(openApiService.name(), curApiService);
-		logger.info("加载openapi服务[{}] {}:{}  {} {}", openApiService.desc(), openApiService.name(),
-				openApiService.version(), curApiService.getClass().getName(), openApiService.responseType().name());
-		// 启动时检查是否有属性名重复的情况.并加载缓存
-		ObjectAccessor.of(curApiService.getRequestBean());
-		ObjectAccessor.of(curApiService.getResponseBean());
-	}
+  private void registerService(ApiService curApiService, Multimap<String, ApiService> servicesMap) {
+    OpenApiService openApiService = getOpenApiServiceAnnotation(curApiService);
+    if (openApiService == null) {
+      throw new RuntimeException(
+          "openapi服务"
+              + curApiService.getClass()
+              + "必须要标记com.acooly.openapi.framework.core.meta.OpenApiService注解");
+    }
+    checkApiService(curApiService);
+    if (servicesMap.containsKey(openApiService.name())) {
+      Iterator<ApiService> iterator = servicesMap.get(openApiService.name()).iterator();
+      while (iterator.hasNext()) {
+        ApiService apiService = iterator.next();
+        if (getOpenApiServiceAnnotation(apiService).version().equals(openApiService.version())) {
+          throw new RuntimeException(
+              "服务冲突:" + curApiService.getClass() + "和" + apiService.getClass());
+        }
+      }
+    }
+    servicesMap.put(openApiService.name(), curApiService);
+    logger.info(
+        "加载openapi服务[{}] {}:{}  {} {}",
+        openApiService.desc(),
+        openApiService.name(),
+        openApiService.version(),
+        curApiService.getClass().getName(),
+        openApiService.responseType().name());
+    // 启动时检查是否有属性名重复的情况.并加载缓存
+    ObjectAccessor.of(curApiService.getRequestBean());
+    ObjectAccessor.of(curApiService.getResponseBean());
+  }
 
-	private void checkApiService(ApiService curApiService){
-		Class requestClazz=GenericsUtils.getSuperClassGenricType(curApiService.getClass(), 0);
-		Class responseClazz=GenericsUtils.getSuperClassGenricType(curApiService.getClass(), 1);
-		Assert.isAssignable(ApiRequest.class,requestClazz);
-		Assert.isAssignable(ApiResponse.class,responseClazz);
-		OpenApiService apiServiceAnnotation = getOpenApiServiceAnnotation(curApiService);
-		OpenApiMessage annotation = (OpenApiMessage) requestClazz.getAnnotation(OpenApiMessage.class);
-		String msg="服务:"+annotation.service()+"的报文类%s必须标注@OpenApiMessage";
-		Assert.notNull(annotation,String.format(msg,requestClazz));
-		Assert.isTrue(annotation.type()== ApiMessageType.Request,String.format(msg,responseClazz)+"，且type=ApiMessageType.Request");
-		 annotation = (OpenApiMessage) responseClazz.getAnnotation(OpenApiMessage.class);
-		Assert.notNull(annotation,String.format(msg,responseClazz));
-		Assert.isTrue(annotation.type()== ApiMessageType.Response,String.format(msg,responseClazz)+"，且type=ApiMessageType.Response");
-		if(apiServiceAnnotation.responseType()==ASNY){
-			ApiNotify apiNotifyBean = curApiService.getApiNotifyBean();
-			Assert.notNull(apiNotifyBean);
-			annotation = apiNotifyBean.getClass().getAnnotation(OpenApiMessage.class);
-			Assert.notNull(annotation,String.format(msg,apiNotifyBean.getClass()));
-			Assert.isTrue(annotation.type()== ApiMessageType.Notify,String.format(msg,apiNotifyBean.getClass())+"，且type=ApiMessageType.Notify");
-		}
-	}
+  private void checkApiService(ApiService curApiService) {
+    Class requestClazz = GenericsUtils.getSuperClassGenricType(curApiService.getClass(), 0);
+    Class responseClazz = GenericsUtils.getSuperClassGenricType(curApiService.getClass(), 1);
+    Assert.isAssignable(ApiRequest.class, requestClazz);
+    Assert.isAssignable(ApiResponse.class, responseClazz);
+    OpenApiService apiServiceAnnotation = getOpenApiServiceAnnotation(curApiService);
+    OpenApiMessage annotation = (OpenApiMessage) requestClazz.getAnnotation(OpenApiMessage.class);
+    String msg = "服务:" + annotation.service() + "的报文类%s必须标注@OpenApiMessage";
+    Assert.notNull(annotation, String.format(msg, requestClazz));
+    Assert.isTrue(
+        annotation.type() == ApiMessageType.Request,
+        String.format(msg, responseClazz) + "，且type=ApiMessageType.Request");
+    annotation = (OpenApiMessage) responseClazz.getAnnotation(OpenApiMessage.class);
+    Assert.notNull(annotation, String.format(msg, responseClazz));
+    Assert.isTrue(
+        annotation.type() == ApiMessageType.Response,
+        String.format(msg, responseClazz) + "，且type=ApiMessageType.Response");
+    if (apiServiceAnnotation.responseType() == ASNY) {
+      ApiNotify apiNotifyBean = curApiService.getApiNotifyBean();
+      Assert.notNull(apiNotifyBean);
+      annotation = apiNotifyBean.getClass().getAnnotation(OpenApiMessage.class);
+      Assert.notNull(annotation, String.format(msg, apiNotifyBean.getClass()));
+      Assert.isTrue(
+          annotation.type() == ApiMessageType.Notify,
+          String.format(msg, apiNotifyBean.getClass()) + "，且type=ApiMessageType.Notify");
+    }
+  }
 
-	/**
-	 * @param serviceName
-	 * @param version
-	 * @return
-	 */
-	@Override
-	public ApiService getApiService(String serviceName, String version) {
-		Collection<ApiService> apiServices = servicesMap.get(serviceName);
-		return serviceRouter.route(serviceName, version, apiServices);
-	}
+  /**
+   * @param serviceName
+   * @param version
+   * @return
+   */
+  @Override
+  public ApiService getApiService(String serviceName, String version) {
+    Collection<ApiService> apiServices = servicesMap.get(serviceName);
+    return serviceRouter.route(serviceName, version, apiServices);
+  }
 
-	private OpenApiService getOpenApiServiceAnnotation(ApiService apiService) {
-		return apiService.getClass().getAnnotation(OpenApiService.class);
+  private OpenApiService getOpenApiServiceAnnotation(ApiService apiService) {
+    return apiService.getClass().getAnnotation(OpenApiService.class);
+  }
 
-	}
-
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
-	}
+  @Override
+  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    this.applicationContext = applicationContext;
+  }
 }

@@ -27,46 +27,46 @@ import java.util.Map;
 @Service("notifyMessageService")
 public class NotifyMessageServiceImpl implements NotifyMessageService {
 
-    @Resource
-    private NotifyMessageDao notifyMessageDao;
+  @Resource private NotifyMessageDao notifyMessageDao;
 
-    @Override
-    public NotifyMessage get(Long id) {
-        return notifyMessageDao.get(id);
-    }
+  @Override
+  public NotifyMessage get(Long id) {
+    return notifyMessageDao.get(id);
+  }
 
-    @Override
-    public void insert(NotifyMessage notifyMessage) {
-        notifyMessageDao.insert(notifyMessage);
-    }
+  @Override
+  public void insert(NotifyMessage notifyMessage) {
+    notifyMessageDao.insert(notifyMessage);
+  }
 
-    @Override
-    public void updateStatus(NotifyMessage notifyMessage) {
-        notifyMessageDao.updateStatus(notifyMessage);
-    }
+  @Override
+  public void updateStatus(NotifyMessage notifyMessage) {
+    notifyMessageDao.updateStatus(notifyMessage);
+  }
 
-    @Override
-    public int updateProccessingStatus(NotifyMessage notifyMessage) {
-        return notifyMessageDao.updateProccessingStatus(notifyMessage);
-    }
+  @Override
+  public int updateProccessingStatus(NotifyMessage notifyMessage) {
+    return notifyMessageDao.updateProccessingStatus(notifyMessage);
+  }
 
-    @Override
-    public void updateForManage(NotifyMessage notifyMessage) {
-        notifyMessageDao.updateForManage(notifyMessage);
-    }
+  @Override
+  public void updateForManage(NotifyMessage notifyMessage) {
+    notifyMessageDao.updateForManage(notifyMessage);
+  }
 
-    @Override
-    public void updateProccessingStatus(List<NotifyMessage> notifyMessages) {
-        notifyMessageDao.updateProccessingStatus(notifyMessages);
-    }
+  @Override
+  public void updateProccessingStatus(List<NotifyMessage> notifyMessages) {
+    notifyMessageDao.updateProccessingStatus(notifyMessages);
+  }
 
-    @Override
-    public List<NotifyMessage> listUnProcessed(Integer topNum) {
-        return notifyMessageDao.listUnProcessed(topNum);
-    }
+  @Override
+  public List<NotifyMessage> listUnProcessed(Integer topNum) {
+    return notifyMessageDao.listUnProcessed(topNum);
+  }
 
-    @Override
-    public PageInfo<NotifyMessage> query(PageInfo<NotifyMessage> pageInfo, Map<String, Object> map, Map<String, Boolean> orderMap) {
-        return notifyMessageDao.query(pageInfo, map, orderMap);
-    }
+  @Override
+  public PageInfo<NotifyMessage> query(
+      PageInfo<NotifyMessage> pageInfo, Map<String, Object> map, Map<String, Boolean> orderMap) {
+    return notifyMessageDao.query(pageInfo, map, orderMap);
+  }
 }

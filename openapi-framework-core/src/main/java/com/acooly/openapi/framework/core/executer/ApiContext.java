@@ -12,221 +12,205 @@ package com.acooly.openapi.framework.core.executer;
 
 import com.acooly.core.utils.Ids;
 import com.acooly.openapi.framework.common.ApiConstants;
+import com.acooly.openapi.framework.common.annotation.OpenApiService;
+import com.acooly.openapi.framework.common.enums.ApiProtocol;
+import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.common.enums.ApiProtocol;
-import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.core.service.base.ApiService;
-import com.acooly.openapi.framework.common.enums.ResponseType;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-/**
- * @author qiubo@qq.com
- */
+/** @author qiubo@qq.com */
 public class ApiContext {
 
-    private HttpServletRequest orignalRequest;
-    private HttpServletResponse orignalResponse;
+  Map<String, String> requestData;
+  private HttpServletRequest orignalRequest;
+  private HttpServletResponse orignalResponse;
+  /** 是否已认证通过 */
+  private boolean authenticated = false;
+  /** 交易级内部ID */
+  private String gid;
+  /** 请求及内部ID */
+  private String oid;
+  private OpenApiService openApiService;
+  @SuppressWarnings("rawtypes")
+  private ApiService apiService;
+  private ApiRequest request;
+  private ApiResponse response;
+  private String redirectUrl;
 
-    /**
-     * 是否已认证通过
-     */
-    private boolean authenticated = false;
+  /** 服务名称 */
+  private String serviceName;
+  /** 服务版本 */
+  private String serviceVersion;
+  /** 访问协议 */
+  private ApiProtocol protocol = ApiProtocol.HTTP_FORM_JSON;
 
-    /**
-     * 交易级内部ID
-     */
-    private String gid;
-    /**
-     * 请求及内部ID
-     */
-    private String oid;
+  private String userAgent;
 
-    private OpenApiService openApiService;
-    @SuppressWarnings("rawtypes")
-    private ApiService apiService;
+  private boolean appClient;
 
-    private ApiRequest request;
-    private ApiResponse response;
+  public String getGid() {
+    return gid;
+  }
 
-    Map<String, String> requestData;
-    private String redirectUrl;
+  public void setGid(String gid) {
+    this.gid = gid;
+  }
 
-    /**
-     * 服务名称
-     */
-    private String serviceName;
-    /**
-     * 服务版本
-     */
-    private String serviceVersion;
-    /**
-     * 访问协议
-     */
-    private ApiProtocol protocol = ApiProtocol.HTTP_FORM_JSON;
+  public void initGid() {
+    gid = Ids.gid();
+  }
 
-    private String userAgent;
+  public OpenApiService getOpenApiService() {
+    return openApiService;
+  }
 
-    private boolean appClient;
+  public void setOpenApiService(OpenApiService openApiService) {
+    this.openApiService = openApiService;
+    setServiceName(openApiService.name());
+  }
 
-    public String getGid() {
-        return gid;
+  public Map<String, String> getRequestData() {
+    return requestData;
+  }
+
+  public void setRequestData(Map<String, String> requestData) {
+    this.requestData = requestData;
+  }
+
+  /**
+   * 响应类型是否是重定向
+   *
+   * @return
+   */
+  public boolean isRedirect() {
+    if (openApiService == null) {
+      return false;
     }
+    return openApiService.responseType() == ResponseType.REDIRECT;
+  }
 
-    public void setGid(String gid) {
-        this.gid = gid;
-    }
+  public String getRedirectUrl() {
+    return redirectUrl;
+  }
 
-    public void initGid() {
-        gid = Ids.gid();
-    }
+  public void setRedirectUrl(String redirectUrl) {
+    this.redirectUrl = redirectUrl;
+  }
 
-    public OpenApiService getOpenApiService() {
-        return openApiService;
-    }
+  public String getServiceName() {
+    return serviceName;
+  }
 
-    public void setOpenApiService(OpenApiService openApiService) {
-        this.openApiService = openApiService;
-        setServiceName(openApiService.name());
-    }
+  public void setServiceName(String serviceName) {
+    this.serviceName = serviceName;
+  }
 
-    public Map<String, String> getRequestData() {
-        return requestData;
-    }
+  public ApiService getApiService() {
+    return apiService;
+  }
 
-    public void setRequestData(Map<String, String> requestData) {
-        this.requestData = requestData;
-    }
+  public void setApiService(ApiService apiService) {
+    this.apiService = apiService;
+  }
 
-    /**
-     * 响应类型是否是重定向
-     *
-     * @return
-     */
-    public boolean isRedirect() {
-        if (openApiService == null) {
-            return false;
-        }
-        return openApiService.responseType() == ResponseType.REDIRECT;
-    }
+  public HttpServletRequest getOrignalRequest() {
+    return orignalRequest;
+  }
 
-    public String getRedirectUrl() {
-        return redirectUrl;
-    }
+  public void setOrignalRequest(HttpServletRequest orignalRequest) {
+    this.orignalRequest = orignalRequest;
+  }
 
-    public void setRedirectUrl(String redirectUrl) {
-        this.redirectUrl = redirectUrl;
-    }
+  public HttpServletResponse getOrignalResponse() {
+    return orignalResponse;
+  }
 
-    public String getServiceName() {
-        return serviceName;
-    }
+  public void setOrignalResponse(HttpServletResponse orignalResponse) {
+    this.orignalResponse = orignalResponse;
+  }
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
-    }
+  public boolean isAuthenticated() {
+    return authenticated;
+  }
 
-    public ApiService getApiService() {
-        return apiService;
-    }
+  public void setAuthenticated(boolean authenticated) {
+    this.authenticated = authenticated;
+  }
 
-    public void setApiService(ApiService apiService) {
-        this.apiService = apiService;
-    }
+  public String getOid() {
+    return oid;
+  }
 
-    public HttpServletRequest getOrignalRequest() {
-        return orignalRequest;
-    }
+  public void setOid(String oid) {
+    this.oid = oid;
+  }
 
-    public void setOrignalRequest(HttpServletRequest orignalRequest) {
-        this.orignalRequest = orignalRequest;
-    }
+  public ApiRequest getRequest() {
+    return request;
+  }
 
-    public HttpServletResponse getOrignalResponse() {
-        return orignalResponse;
-    }
+  public void setRequest(ApiRequest request) {
+    this.request = request;
+  }
 
-    public void setOrignalResponse(HttpServletResponse orignalResponse) {
-        this.orignalResponse = orignalResponse;
-    }
+  public ApiResponse getResponse() {
+    return response;
+  }
 
-    public boolean isAuthenticated() {
-        return authenticated;
-    }
+  public void setResponse(ApiResponse response) {
+    this.response = response;
+  }
 
-    public void setAuthenticated(boolean authenticated) {
-        this.authenticated = authenticated;
-    }
+  public String getServiceVersion() {
+    return serviceVersion;
+  }
 
-    public String getOid() {
-        return oid;
-    }
+  public void setServiceVersion(String serviceVersion) {
+    this.serviceVersion = serviceVersion;
+  }
 
-    public void setOid(String oid) {
-        this.oid = oid;
-    }
+  public String getUserAgent() {
+    return userAgent;
+  }
 
-    public ApiRequest getRequest() {
-        return request;
-    }
+  public void setUserAgent(String userAgent) {
+    this.userAgent = userAgent;
+  }
 
-    public void setRequest(ApiRequest request) {
-        this.request = request;
-    }
+  public ApiProtocol getProtocol() {
+    return protocol;
+  }
 
-    public ApiResponse getResponse() {
-        return response;
-    }
+  public void setProtocol(ApiProtocol protocol) {
+    this.protocol = protocol;
+  }
 
-    public void setResponse(ApiResponse response) {
-        this.response = response;
-    }
+  public boolean isAppClient() {
+    return appClient;
+  }
 
-    public String getServiceVersion() {
-        return serviceVersion;
-    }
+  public void setAppClient(boolean appClient) {
+    this.appClient = appClient;
+  }
 
-    public void setServiceVersion(String serviceVersion) {
-        this.serviceVersion = serviceVersion;
-    }
-
-    public String getUserAgent() {
-        return userAgent;
-    }
-
-    public void setUserAgent(String userAgent) {
-        this.userAgent = userAgent;
-    }
-
-    public ApiProtocol getProtocol() {
-        return protocol;
-    }
-
-    public void setProtocol(ApiProtocol protocol) {
-        this.protocol = protocol;
-    }
-
-    public boolean isAppClient() {
-        return appClient;
-    }
-
-    public void setAppClient(boolean appClient) {
-        this.appClient = appClient;
-    }
-
-    public void init(Map<String, String> requestData, ApiService apiService) {
-        this.setOpenApiService(apiService.getClass().getAnnotation(OpenApiService.class));
-        String theVersion = this.getOpenApiService().version();
-        this.serviceVersion = StringUtils.isBlank(theVersion) ? ApiConstants.VERSION_DEFAULT : theVersion;
-        this.setRequestData(requestData);
-        this.setApiService(apiService);
-        String theProtocol = requestData.get(ApiConstants.PROTOCOL);
-        this.protocol = StringUtils.isNotBlank(theProtocol) ? ApiProtocol.valueOf(theProtocol)
-                : ApiProtocol.HTTP_FORM_JSON;
-        this.appClient=Boolean.valueOf(requestData.get("appClient"));
-    }
+  public void init(Map<String, String> requestData, ApiService apiService) {
+    this.setOpenApiService(apiService.getClass().getAnnotation(OpenApiService.class));
+    String theVersion = this.getOpenApiService().version();
+    this.serviceVersion =
+        StringUtils.isBlank(theVersion) ? ApiConstants.VERSION_DEFAULT : theVersion;
+    this.setRequestData(requestData);
+    this.setApiService(apiService);
+    String theProtocol = requestData.get(ApiConstants.PROTOCOL);
+    this.protocol =
+        StringUtils.isNotBlank(theProtocol)
+            ? ApiProtocol.valueOf(theProtocol)
+            : ApiProtocol.HTTP_FORM_JSON;
+    this.appClient = Boolean.valueOf(requestData.get("appClient"));
+  }
 }

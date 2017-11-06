@@ -1,7 +1,7 @@
 /*
  * acooly.cn Inc.
  * Copyright (c) 2016 All Rights Reserved.
- * create by zhangpu 
+ * create by zhangpu
  * date:2016年3月17日
  *
  */
@@ -11,13 +11,12 @@ import com.acooly.openapi.framework.common.enums.ApiProtocol;
 
 /**
  * 组装接口
- * 
+ *
  * @author zhangpu
  */
 public interface ApiMarshall<T, S> {
 
-	T marshall(S source);
+  T marshall(S source);
 
-	ApiProtocol getProtocol();
-
+  ApiProtocol getProtocol();
 }

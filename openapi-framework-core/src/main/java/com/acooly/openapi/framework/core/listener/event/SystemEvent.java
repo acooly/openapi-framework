@@ -12,8 +12,7 @@ package com.acooly.openapi.framework.core.listener.event;
 
 /**
  * 框架级别的事件,仅框架监听器可以接受处理此事件
+ *
  * @author qiubo@qq.com
  */
-public class SystemEvent extends OpenApiEvent {
-	
-}
+public class SystemEvent extends OpenApiEvent {}

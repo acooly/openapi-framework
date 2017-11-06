@@ -20,45 +20,45 @@ import java.util.Set;
  */
 public class ApiQueryOrder extends OrderBase implements Parameterize<String, String> {
 
-    private Map<String, String> parameters = Maps.newLinkedHashMap();
+  private Map<String, String> parameters = Maps.newLinkedHashMap();
 
-    @Override
-    public void setParameter(String key, String value) {
-        this.parameters.put(key, value);
-    }
+  @Override
+  public void setParameter(String key, String value) {
+    this.parameters.put(key, value);
+  }
 
-    @Override
-    public String getParameter(String key) {
-        return this.parameters.get(key);
-    }
+  @Override
+  public String getParameter(String key) {
+    return this.parameters.get(key);
+  }
 
-    @Override
-    public void removeParameter(String key) {
-        this.parameters.remove(key);
-    }
+  @Override
+  public void removeParameter(String key) {
+    this.parameters.remove(key);
+  }
 
-    @Override
-    public Map<String, String> getParameters() {
-        return this.parameters;
-    }
+  @Override
+  public Map<String, String> getParameters() {
+    return this.parameters;
+  }
 
-    @Override
-    public void setParameters(Map<String, String> parameters) {
-        this.parameters = parameters;
-    }
+  @Override
+  public void setParameters(Map<String, String> parameters) {
+    this.parameters = parameters;
+  }
 
-    @Override
-    public Set<String> keySet() {
-        return this.parameters.keySet();
-    }
+  @Override
+  public Set<String> keySet() {
+    return this.parameters.keySet();
+  }
 
-    @Override
-    public Collection<String> values() {
-        return this.parameters.values();
-    }
+  @Override
+  public Collection<String> values() {
+    return this.parameters.values();
+  }
 
-    @Override
-    public void clear() {
-        this.parameters.clear();
-    }
+  @Override
+  public void clear() {
+    this.parameters.clear();
+  }
 }

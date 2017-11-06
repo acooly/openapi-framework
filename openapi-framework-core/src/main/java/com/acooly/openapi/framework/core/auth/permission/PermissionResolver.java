@@ -10,9 +10,7 @@
  */
 package com.acooly.openapi.framework.core.auth.permission;
 
-/**
- * @author qiubo@qq.com
- */
+/** @author qiubo@qq.com */
 public interface PermissionResolver {
-	Permission resolvePermission(String permissionString);
+  Permission resolvePermission(String permissionString);
 }

@@ -13,11 +13,8 @@ import com.acooly.openapi.framework.domain.ApiScheme;
 /**
  * 服务方案 Service接口
  *
- * Date: 2016-07-16 01:57:25
+ * <p>Date: 2016-07-16 01:57:25
  *
  * @author acooly
- *
  */
-public interface ApiSchemeService extends EntityService<ApiScheme> {
-
-}
+public interface ApiSchemeService extends EntityService<ApiScheme> {}

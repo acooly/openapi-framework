@@ -10,14 +10,13 @@
  */
 package com.acooly.openapi.framework.core.auth.permission;
 
-/**
- * @author qiubo@qq.com
- */
+/** @author qiubo@qq.com */
 public interface Permission {
-    /**
-     * 判断资源是否有权限.
-     * @param resource
-     * @return
-     */
-	boolean implies(String resource);
+  /**
+   * 判断资源是否有权限.
+   *
+   * @param resource
+   * @return
+   */
+  boolean implies(String resource);
 }

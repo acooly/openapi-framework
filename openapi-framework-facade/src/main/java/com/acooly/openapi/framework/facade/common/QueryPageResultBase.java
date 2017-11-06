@@ -12,21 +12,17 @@ package com.acooly.openapi.framework.facade.common;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.facade.ResultBase;
 
-/**
- * @author acooly
- */
+/** @author acooly */
 public class QueryPageResultBase<T> extends ResultBase {
 
-    /**
-     * 分页对象
-     */
-    private PageInfo<T> pageInfo = new PageInfo<>(1, 10);
+  /** 分页对象 */
+  private PageInfo<T> pageInfo = new PageInfo<>(1, 10);
 
-    public PageInfo<T> getPageInfo() {
-        return pageInfo;
-    }
+  public PageInfo<T> getPageInfo() {
+    return pageInfo;
+  }
 
-    public void setPageInfo(PageInfo<T> pageInfo) {
-        this.pageInfo = pageInfo;
-    }
+  public void setPageInfo(PageInfo<T> pageInfo) {
+    this.pageInfo = pageInfo;
+  }
 }

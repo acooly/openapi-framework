@@ -10,14 +10,15 @@
  */
 package com.acooly.openapi.framework.core.service.route;
 
-import java.util.Collection;
-
 import com.acooly.openapi.framework.core.service.base.ApiService;
+
+import java.util.Collection;
 
 /**
  * 服务路由器
+ *
  * @author qiubo@qq.com
  */
 public interface ServiceRouter {
-	ApiService route(String serviceName, String version, Collection<ApiService> apiServices);
+  ApiService route(String serviceName, String version, Collection<ApiService> apiServices);
 }

@@ -1,21 +1,19 @@
 package com.acooly.openapi.framework.common.enums;
 
 public enum ApiScheme {
+  ALL("all"),
 
-	ALL("all"),
+  HTTP("http"),
 
-	HTTP("http"),
+  HTTPS("https");
 
-	HTTPS("https");
+  private String scheme;
 
-	private String scheme;
+  private ApiScheme(String scheme) {
+    this.scheme = scheme;
+  }
 
-	private ApiScheme(String scheme) {
-		this.scheme = scheme;
-	}
-
-	public String getScheme() {
-		return scheme;
-	}
-
+  public String getScheme() {
+    return scheme;
+  }
 }

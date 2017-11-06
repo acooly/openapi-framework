@@ -10,14 +10,12 @@
  */
 package com.acooly.openapi.framework.core.listener;
 
-import java.util.EventListener;
-
 import com.acooly.openapi.framework.core.listener.event.OpenApiEvent;
 
-/**
- * @author qiubo@qq.com
- */
+import java.util.EventListener;
+
+/** @author qiubo@qq.com */
 public interface ApiListener<E extends OpenApiEvent> extends EventListener, Ordered {
-	
-	void onOpenApiEvent(E event);
+
+  void onOpenApiEvent(E event);
 }

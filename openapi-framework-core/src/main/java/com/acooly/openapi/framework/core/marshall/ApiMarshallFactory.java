@@ -1,7 +1,7 @@
 /*
  * acooly.cn Inc.
  * Copyright (c) 2016 All Rights Reserved.
- * create by zhangpu 
+ * create by zhangpu
  * date:2016年3月17日
  *
  */
@@ -11,17 +11,16 @@ import com.acooly.openapi.framework.common.enums.ApiProtocol;
 
 /**
  * Marshall 工厂接口
- * 
+ *
  * @author zhangpu
  */
 public interface ApiMarshallFactory {
 
-	ApiRequestMarshall getRequestMarshall(ApiProtocol protocols);
+  ApiRequestMarshall getRequestMarshall(ApiProtocol protocols);
 
-	ApiResponseMarshall getResponseMarshall(ApiProtocol protocols);
+  ApiResponseMarshall getResponseMarshall(ApiProtocol protocols);
 
-	ApiRedirectMarshall getRedirectMarshall(ApiProtocol protocols);
+  ApiRedirectMarshall getRedirectMarshall(ApiProtocol protocols);
 
-	ApiNotifyMarshall getNotifyMarshall(ApiProtocol protocols);
-
+  ApiNotifyMarshall getNotifyMarshall(ApiProtocol protocols);
 }

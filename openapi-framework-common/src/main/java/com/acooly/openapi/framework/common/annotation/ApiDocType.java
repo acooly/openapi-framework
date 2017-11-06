@@ -17,15 +17,17 @@ import java.lang.annotation.*;
 @Documented
 public @interface ApiDocType {
 
-    /**
-     * 解决方案类型编码
-     * @return
-     */
-    String code();
+  /**
+   * 解决方案类型编码
+   *
+   * @return
+   */
+  String code();
 
-    /**
-     * 解决方案类型名称
-     * @return
-     */
-    String name();
+  /**
+   * 解决方案类型名称
+   *
+   * @return
+   */
+  String name();
 }

@@ -15,7 +15,7 @@ import java.lang.annotation.*;
 /**
  * 标识此字段为openapi的字段别名
  *
- * 主要用于兼容老接口的字段定义
+ * <p>主要用于兼容老接口的字段定义
  *
  * @author zhangpu@aliyun.com
  */
@@ -24,11 +24,10 @@ import java.lang.annotation.*;
 @Documented
 public @interface OpenApiAlias {
 
-    /**
-     * 别名
-     *
-     * @return
-     */
-    String value() default "";
-
+  /**
+   * 别名
+   *
+   * @return
+   */
+  String value() default "";
 }

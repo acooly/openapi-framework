@@ -20,10 +20,12 @@ import org.springframework.stereotype.Service;
  * @author acooly
  */
 @Service("apiNotifySender")
-public class ApiNotifySenderImpl extends AbstractSpringProxyBean<ApiNotifySender, DefaultApiNotifySender> implements ApiNotifySender {
+public class ApiNotifySenderImpl
+    extends AbstractSpringProxyBean<ApiNotifySender, DefaultApiNotifySender>
+    implements ApiNotifySender {
 
-    @Override
-    public void send(NotifySendMessage notifySendMessage) {
-        getTarget().send(notifySendMessage);
-    }
+  @Override
+  public void send(NotifySendMessage notifySendMessage) {
+    getTarget().send(notifySendMessage);
+  }
 }

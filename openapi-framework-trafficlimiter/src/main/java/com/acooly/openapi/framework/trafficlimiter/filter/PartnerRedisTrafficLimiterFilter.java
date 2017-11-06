@@ -15,27 +15,25 @@ import com.acooly.openapi.framework.trafficlimiter.enums.TrafficLimiterType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-/**
- * @author acooly
- */
+/** @author acooly */
 @Service
 public class PartnerRedisTrafficLimiterFilter extends AbstractRedisTrafficLimiterFilter {
 
-    @Value("${traficlimiter.partner.default}")
-    private int maxCounterPerSecond;
+  @Value("${traficlimiter.partner.default}")
+  private int maxCounterPerSecond;
 
-    @Override
-    protected String getKey(ApiRequest request) {
-        return request.getPartnerId();
-    }
+  @Override
+  protected String getKey(ApiRequest request) {
+    return request.getPartnerId();
+  }
 
-    @Override
-    protected int getMaxCounterPerSecond() {
-        return maxCounterPerSecond;
-    }
+  @Override
+  protected int getMaxCounterPerSecond() {
+    return maxCounterPerSecond;
+  }
 
-    @Override
-    public Messageable getTrafficLimiterType() {
-        return TrafficLimiterType.Partner_Traffic_limit;
-    }
+  @Override
+  public Messageable getTrafficLimiterType() {
+    return TrafficLimiterType.Partner_Traffic_limit;
+  }
 }

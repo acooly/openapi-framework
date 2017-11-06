@@ -1,191 +1,199 @@
 /*
  * acooly.cn Inc.
  * Copyright (c) 2016 All Rights Reserved.
- * create by zhangpu 
+ * create by zhangpu
  * date:2016年3月17日
  *
  */
 package com.acooly.openapi.framework.domain;
 
+import com.acooly.openapi.framework.common.enums.ApiProtocol;
+
 import java.io.Serializable;
 import java.util.Date;
 
-import com.acooly.openapi.framework.common.enums.ApiProtocol;
-
 /**
  * 请求订单实体
- * 
+ *
  * @author zhangpu
- * 
  */
 public class OrderInfo implements Serializable {
 
-	/**
-	 * UID
-	 */
-	private static final long serialVersionUID = -8639008164669020986L;
-	private Long id;
-	private String gid;
-	private String oid;
-	private String requestNo;
-	/** 商户订单号:merchOrderNo */
-	private String orderNo;
-	private String partnerId;
-	private String service;
-	private String version;
-	private String signType;
-	private String returnUrl;
-	private String notifyUrl;
-	private String charset;
-	private ApiProtocol protocol;
-	private String businessInfo;
-	private Date rawAddTime;
-	private Date rawUpdateTime;
+  /** UID */
+  private static final long serialVersionUID = -8639008164669020986L;
 
-	private String context;
+  private Long id;
+  private String gid;
+  private String oid;
+  private String requestNo;
+  /** 商户订单号:merchOrderNo */
+  private String orderNo;
 
-	public Long getId() {
-		return id;
-	}
+  private String partnerId;
+  private String service;
+  private String version;
+  private String signType;
+  private String returnUrl;
+  private String notifyUrl;
+  private String charset;
+  private ApiProtocol protocol;
+  private String businessInfo;
+  private Date rawAddTime;
+  private Date rawUpdateTime;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  private String context;
 
-	public String getGid() {
-		return gid;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public void setGid(String gid) {
-		this.gid = gid;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public String getOrderNo() {
-		return orderNo;
-	}
+  public String getGid() {
+    return gid;
+  }
 
-	public void setOrderNo(String orderNo) {
-		this.orderNo = orderNo;
-	}
+  public void setGid(String gid) {
+    this.gid = gid;
+  }
 
-	public String getPartnerId() {
-		return partnerId;
-	}
+  public String getOrderNo() {
+    return orderNo;
+  }
 
-	public String getService() {
-		return service;
-	}
+  public void setOrderNo(String orderNo) {
+    this.orderNo = orderNo;
+  }
 
-	public void setService(String service) {
-		this.service = service;
-	}
+  public String getPartnerId() {
+    return partnerId;
+  }
 
-	public void setPartnerId(String partnerId) {
-		this.partnerId = partnerId;
-	}
+  public void setPartnerId(String partnerId) {
+    this.partnerId = partnerId;
+  }
 
-	public String getReturnUrl() {
-		return returnUrl;
-	}
+  public String getService() {
+    return service;
+  }
 
-	public void setReturnUrl(String returnUrl) {
-		this.returnUrl = returnUrl;
-	}
+  public void setService(String service) {
+    this.service = service;
+  }
 
-	public String getNotifyUrl() {
-		return notifyUrl;
-	}
+  public String getReturnUrl() {
+    return returnUrl;
+  }
 
-	public void setNotifyUrl(String notifyUrl) {
-		this.notifyUrl = notifyUrl;
-	}
+  public void setReturnUrl(String returnUrl) {
+    this.returnUrl = returnUrl;
+  }
 
-	public String getCharset() {
-		return charset;
-	}
+  public String getNotifyUrl() {
+    return notifyUrl;
+  }
 
-	public void setCharset(String charset) {
-		this.charset = charset;
-	}
+  public void setNotifyUrl(String notifyUrl) {
+    this.notifyUrl = notifyUrl;
+  }
 
-	public String getBusinessInfo() {
-		return businessInfo;
-	}
+  public String getCharset() {
+    return charset;
+  }
 
-	public void setBusinessInfo(String businessInfo) {
-		this.businessInfo = businessInfo;
-	}
+  public void setCharset(String charset) {
+    this.charset = charset;
+  }
 
-	public Date getRawAddTime() {
-		return rawAddTime == null ? null : (Date) rawAddTime.clone();
-	}
+  public String getBusinessInfo() {
+    return businessInfo;
+  }
 
-	public void setRawAddTime(Date rawAddTime) {
-		this.rawAddTime = (rawAddTime == null ? null : (Date) rawAddTime.clone());
-	}
+  public void setBusinessInfo(String businessInfo) {
+    this.businessInfo = businessInfo;
+  }
 
-	public Date getRawUpdateTime() {
-		return rawUpdateTime == null ? null : (Date) rawUpdateTime.clone();
-	}
+  public Date getRawAddTime() {
+    return rawAddTime == null ? null : (Date) rawAddTime.clone();
+  }
 
-	public void setRawUpdateTime(Date rawUpdateTime) {
-		this.rawUpdateTime = (rawUpdateTime == null ? null : (Date) rawUpdateTime.clone());
-	}
+  public void setRawAddTime(Date rawAddTime) {
+    this.rawAddTime = (rawAddTime == null ? null : (Date) rawAddTime.clone());
+  }
 
-	public String getVersion() {
-		return version;
-	}
+  public Date getRawUpdateTime() {
+    return rawUpdateTime == null ? null : (Date) rawUpdateTime.clone();
+  }
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
+  public void setRawUpdateTime(Date rawUpdateTime) {
+    this.rawUpdateTime = (rawUpdateTime == null ? null : (Date) rawUpdateTime.clone());
+  }
 
-	public String getSignType() {
-		return signType;
-	}
+  public String getVersion() {
+    return version;
+  }
 
-	public void setSignType(String signType) {
-		this.signType = signType;
-	}
+  public void setVersion(String version) {
+    this.version = version;
+  }
 
-	public String getRequestNo() {
-		return requestNo;
-	}
+  public String getSignType() {
+    return signType;
+  }
 
-	public void setRequestNo(String requestNo) {
-		this.requestNo = requestNo;
-	}
+  public void setSignType(String signType) {
+    this.signType = signType;
+  }
 
-	public String getOid() {
-		return oid;
-	}
+  public String getRequestNo() {
+    return requestNo;
+  }
 
-	public void setOid(String oid) {
-		this.oid = oid;
-	}
+  public void setRequestNo(String requestNo) {
+    this.requestNo = requestNo;
+  }
 
-	public String getContext() {
-		return context;
-	}
+  public String getOid() {
+    return oid;
+  }
 
-	public void setContext(String context) {
-		this.context = context;
-	}
+  public void setOid(String oid) {
+    this.oid = oid;
+  }
 
-	public ApiProtocol getProtocol() {
-		return protocol;
-	}
+  public String getContext() {
+    return context;
+  }
 
-	public void setProtocol(ApiProtocol protocol) {
-		this.protocol = protocol;
-	}
+  public void setContext(String context) {
+    this.context = context;
+  }
 
-	@Override
-	public String toString() {
-		return String.format(
-		        "{gid:%s, requestNo:%s, orderNo:%s, partnerId:%s, service:%s, version:%s, signType:%s, returnUrl:%s, notifyUrl:%s, rawAddTime:%s, rawUpdateTime:%s, context:%s}",
-		        gid, requestNo, orderNo, partnerId, service, version, signType, returnUrl, notifyUrl, rawAddTime,
-		        rawUpdateTime, context);
-	}
+  public ApiProtocol getProtocol() {
+    return protocol;
+  }
 
+  public void setProtocol(ApiProtocol protocol) {
+    this.protocol = protocol;
+  }
+
+  @Override
+  public String toString() {
+    return String.format(
+        "{gid:%s, requestNo:%s, orderNo:%s, partnerId:%s, service:%s, version:%s, signType:%s, returnUrl:%s, notifyUrl:%s, rawAddTime:%s, rawUpdateTime:%s, context:%s}",
+        gid,
+        requestNo,
+        orderNo,
+        partnerId,
+        service,
+        version,
+        signType,
+        returnUrl,
+        notifyUrl,
+        rawAddTime,
+        rawUpdateTime,
+        context);
+  }
 }

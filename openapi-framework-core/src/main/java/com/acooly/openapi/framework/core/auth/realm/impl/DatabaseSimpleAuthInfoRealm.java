@@ -17,26 +17,21 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * @author acooly
- * 默认实现:直接读取数据库实现
- */
+/** @author acooly 默认实现:直接读取数据库实现 */
 @Component
 public class DatabaseSimpleAuthInfoRealm implements SimpleAuthInfoRealm {
 
-    @Resource
-    private ApiPartnerService apiPartnerService;
+  @Resource private ApiPartnerService apiPartnerService;
 
-    @Resource
-    private ApiPartnerServiceService apiPartnerServiceService;
+  @Resource private ApiPartnerServiceService apiPartnerServiceService;
 
-    @Override
-    public String getSecretKey(String accessKey) {
-        return apiPartnerService.getPartnerSercretKey(accessKey);
-    }
+  @Override
+  public String getSecretKey(String accessKey) {
+    return apiPartnerService.getPartnerSercretKey(accessKey);
+  }
 
-    @Override
-    public List<String> getAuthorizedServices(String accessKey) {
-        return apiPartnerServiceService.getAuthorizedServices(accessKey);
-    }
+  @Override
+  public List<String> getAuthorizedServices(String accessKey) {
+    return apiPartnerServiceService.getAuthorizedServices(accessKey);
+  }
 }

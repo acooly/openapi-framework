@@ -11,6 +11,8 @@ package com.acooly.openapi.framework.core.security.sign;
  * @date 2014年8月3日
  */
 public enum SignTypeEnum {
-
-	MD5, Sha1Hex, Sha256Hex, HmacSha1Hex;
+  MD5,
+  Sha1Hex,
+  Sha256Hex,
+  HmacSha1Hex;
 }

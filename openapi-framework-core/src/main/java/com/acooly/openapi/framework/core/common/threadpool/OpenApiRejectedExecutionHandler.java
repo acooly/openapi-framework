@@ -15,13 +15,14 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 如果线程池处理不过来,交给调用线程执行
+ *
  * @author qiubo@qq.com
  */
 public class OpenApiRejectedExecutionHandler implements RejectedExecutionHandler {
-	
-	public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
-		if (!e.isShutdown()) {
-			r.run();
-		}
-	}
+
+  public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+    if (!e.isShutdown()) {
+      r.run();
+    }
+  }
 }

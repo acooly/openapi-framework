@@ -15,15 +15,12 @@ import java.util.Map;
 
 /**
  * 服务分类 Service接口
- * <p>
- * Date: 2016-07-16 01:57:14
+ *
+ * <p>Date: 2016-07-16 01:57:14
  *
  * @author acooly
  */
 public interface ApiServiceService extends EntityService<ApiService> {
 
-
-    Map<String, List<ApiService>> searchApiService(String key);
-
-
+  Map<String, List<ApiService>> searchApiService(String key);
 }

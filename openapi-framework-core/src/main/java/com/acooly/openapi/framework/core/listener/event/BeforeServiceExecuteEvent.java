@@ -10,28 +10,28 @@
  */
 package com.acooly.openapi.framework.core.listener.event;
 
-
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 
 /**
  * 服务执行之前的事件.
+ *
  * @author qiubo@qq.com
  */
 public class BeforeServiceExecuteEvent extends ServiceEvent {
-	private ApiResponse apiResponse = null;
-	private ApiRequest apiRequest = null;
-	
-	public BeforeServiceExecuteEvent(ApiRequest apiRequest, ApiResponse apiResponse) {
-		this.apiResponse = apiResponse;
-		this.apiRequest = apiRequest;
-	}
-	
-	public ApiResponse getApiResponse() {
-		return apiResponse;
-	}
-	
-	public ApiRequest getApiRequest() {
-		return apiRequest;
-	}
+  private ApiResponse apiResponse = null;
+  private ApiRequest apiRequest = null;
+
+  public BeforeServiceExecuteEvent(ApiRequest apiRequest, ApiResponse apiResponse) {
+    this.apiResponse = apiResponse;
+    this.apiRequest = apiRequest;
+  }
+
+  public ApiResponse getApiResponse() {
+    return apiResponse;
+  }
+
+  public ApiRequest getApiRequest() {
+    return apiRequest;
+  }
 }

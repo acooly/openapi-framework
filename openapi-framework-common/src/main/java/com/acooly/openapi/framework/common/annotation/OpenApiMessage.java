@@ -1,12 +1,11 @@
 /*
  * acooly.cn Inc.
  * Copyright (c) 2016 All Rights Reserved.
- * create by zhangpu 
+ * create by zhangpu
  * date:2016年3月31日
  *
  */
 package com.acooly.openapi.framework.common.annotation;
-
 
 import com.acooly.openapi.framework.common.enums.ApiMessageType;
 
@@ -23,24 +22,24 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OpenApiMessage {
-    /**
-     * 报文类型
-     *
-     * @return
-     */
-    public ApiMessageType type() default ApiMessageType.Request;
+  /**
+   * 报文类型
+   *
+   * @return
+   */
+  public ApiMessageType type() default ApiMessageType.Request;
 
-    /**
-     * 服务名称
-     *
-     * @return
-     */
-    public String service() default "";
+  /**
+   * 服务名称
+   *
+   * @return
+   */
+  public String service() default "";
 
-    /**
-     * 服务版本
-     * @return
-     */
-    public String version() default "1.0";
-
+  /**
+   * 服务版本
+   *
+   * @return
+   */
+  public String version() default "1.0";
 }

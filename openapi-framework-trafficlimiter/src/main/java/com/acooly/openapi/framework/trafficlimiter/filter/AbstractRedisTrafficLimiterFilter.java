@@ -28,61 +28,60 @@ import org.springframework.data.redis.core.RedisTemplate;
  */
 public abstract class AbstractRedisTrafficLimiterFilter implements TrafficLimiterFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractRedisTrafficLimiterFilter.class);
+  private static final Logger logger =
+      LoggerFactory.getLogger(AbstractRedisTrafficLimiterFilter.class);
 
-    @Autowired
-    protected RedisTemplate<String, String> redisTemplate;
+  @Autowired protected RedisTemplate<String, String> redisTemplate;
 
-
-    @Override
-    public void evaluate(ApiRequest request) {
-        String key = getKey(request) + System.currentTimeMillis() / 1000;
-        logger.debug("key:{}", key);
-        String current = redisTemplate.opsForValue().get(key);
-        if (current != null && Long.valueOf(current) >= getMaxCounterPerSecond()) {
-            throw new TrafficLimiterException();
-        } else {
-            final byte[] rawKey = key.getBytes();
-            redisTemplate.execute(new RedisCallback<Object>() {
-                @Override
-                public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                    connection.multi();
-                    connection.incr(rawKey);
-                    connection.expire(rawKey, 1);
-                    connection.exec();
-                    return null;
-                }
-            });
-        }
+  @Override
+  public void evaluate(ApiRequest request) {
+    String key = getKey(request) + System.currentTimeMillis() / 1000;
+    logger.debug("key:{}", key);
+    String current = redisTemplate.opsForValue().get(key);
+    if (current != null && Long.valueOf(current) >= getMaxCounterPerSecond()) {
+      throw new TrafficLimiterException();
+    } else {
+      final byte[] rawKey = key.getBytes();
+      redisTemplate.execute(
+          new RedisCallback<Object>() {
+            @Override
+            public Object doInRedis(RedisConnection connection) throws DataAccessException {
+              connection.multi();
+              connection.incr(rawKey);
+              connection.expire(rawKey, 1);
+              connection.exec();
+              return null;
+            }
+          });
     }
+  }
 
-    /**
-     * 缓存的key
-     *
-     * @param request
-     * @return
-     */
-    protected abstract String getKey(ApiRequest request);
+  /**
+   * 缓存的key
+   *
+   * @param request
+   * @return
+   */
+  protected abstract String getKey(ApiRequest request);
 
-    /**
-     * 每秒最大允许数量
-     *
-     * @return
-     */
-    protected abstract int getMaxCounterPerSecond();
+  /**
+   * 每秒最大允许数量
+   *
+   * @return
+   */
+  protected abstract int getMaxCounterPerSecond();
 
+  @Override
+  public boolean enable() {
+    return getMaxCounterPerSecond() > 0;
+  }
 
-    @Override
-    public boolean enable() {
-        return getMaxCounterPerSecond() > 0;
-    }
-
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
-                .add("type", getTrafficLimiterType())
-                .add("enable", enable())
-                .add("max",getMaxCounterPerSecond())
-                .toString();
-    }
+  @Override
+  public String toString() {
+    return Objects.toStringHelper(this)
+        .add("type", getTrafficLimiterType())
+        .add("enable", enable())
+        .add("max", getMaxCounterPerSecond())
+        .toString();
+  }
 }

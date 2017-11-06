@@ -15,22 +15,23 @@ import com.acooly.openapi.framework.common.message.ApiResponse;
 
 /**
  * 服务执行完后的事件.
+ *
  * @author qiubo@qq.com
  */
 public class AfterServiceExecuteEvent extends ServiceEvent {
-	private ApiResponse apiResponse = null;
-	private ApiRequest apiRequest = null;
-	
-	public AfterServiceExecuteEvent(ApiRequest apiRequest, ApiResponse apiResponse) {
-		this.apiResponse = apiResponse;
-		this.apiRequest = apiRequest;
-	}
-	
-	public ApiResponse getApiResponse() {
-		return apiResponse;
-	}
-	
-	public ApiRequest getApiRequest() {
-		return apiRequest;
-	}
+  private ApiResponse apiResponse = null;
+  private ApiRequest apiRequest = null;
+
+  public AfterServiceExecuteEvent(ApiRequest apiRequest, ApiResponse apiResponse) {
+    this.apiResponse = apiResponse;
+    this.apiRequest = apiRequest;
+  }
+
+  public ApiResponse getApiResponse() {
+    return apiResponse;
+  }
+
+  public ApiRequest getApiRequest() {
+    return apiRequest;
+  }
 }

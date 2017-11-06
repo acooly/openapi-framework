@@ -21,10 +21,9 @@ import java.util.Map;
  */
 public interface TrafficLimiterFilterChain {
 
-    void addFilter(TrafficLimiterFilter filter);
+  void addFilter(TrafficLimiterFilter filter);
 
-    List<TrafficLimiterFilter> listFilters();
+  List<TrafficLimiterFilter> listFilters();
 
-    Map<Messageable, TrafficLimiterFilter> mapFilters();
-
+  Map<Messageable, TrafficLimiterFilter> mapFilters();
 }

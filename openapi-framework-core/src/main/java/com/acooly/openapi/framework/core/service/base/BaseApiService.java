@@ -9,17 +9,16 @@ import com.acooly.openapi.framework.common.message.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Api服务基类
- * <p/>
- * 提供转换工具和帮助支持
+ *
+ * <p>提供转换工具和帮助支持
  *
  * @author zhangpu
  * @date 2014年5月16日
  */
-public abstract class BaseApiService<O extends ApiRequest, R extends ApiResponse> extends AbstractApiService<O, R> {
+public abstract class BaseApiService<O extends ApiRequest, R extends ApiResponse>
+    extends AbstractApiService<O, R> {
 
-    protected static Logger logger = LoggerFactory.getLogger(BaseApiService.class);
-
+  protected static Logger logger = LoggerFactory.getLogger(BaseApiService.class);
 }

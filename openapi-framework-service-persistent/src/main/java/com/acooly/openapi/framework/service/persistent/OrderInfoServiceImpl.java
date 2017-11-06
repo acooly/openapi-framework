@@ -1,7 +1,7 @@
 /*
  * acooly.cn Inc.
  * Copyright (c) 2016 All Rights Reserved.
- * create by zhangpu 
+ * create by zhangpu
  * date:2016年3月17日
  *
  */
@@ -27,64 +27,69 @@ import java.util.Map;
  */
 @Service("orderInfoService")
 public class OrderInfoServiceImpl implements OrderInfoService {
-    @Autowired
-    private OrderInfoDao orderInfoDao;
+  @Autowired private OrderInfoDao orderInfoDao;
 
-    @Override
-    public PageInfo<OrderInfo> query(PageInfo<OrderInfo> pageInfo, Map<String, Object> map,
-                                     Map<String, Boolean> orderMap) {
-        return orderInfoDao.query(pageInfo, map, orderMap);
+  @Override
+  public PageInfo<OrderInfo> query(
+      PageInfo<OrderInfo> pageInfo, Map<String, Object> map, Map<String, Boolean> orderMap) {
+    return orderInfoDao.query(pageInfo, map, orderMap);
+  }
+
+  @Transactional
+  @Override
+  public void insert(OrderInfo orderInfo) {
+    try {
+      orderInfoDao.insert(orderInfo);
+    } catch (Exception e) {
+      throw new ApiServiceException(
+          ApiServiceResultCode.INTERNAL_ERROR, "写入订单到数据库失败:" + e.getMessage());
     }
+  }
 
-    @Transactional
-    @Override
-    public void insert(OrderInfo orderInfo) {
-        try {
-            orderInfoDao.insert(orderInfo);
-        } catch (Exception e) {
-            throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, "写入订单到数据库失败:" + e.getMessage());
+  @Override
+  public void checkUnique(String partnerId, String orderNo) {
+    if (orderInfoDao.countByPartnerIdAndOrderNo(partnerId, orderNo) > 0) {
+      throw new ApiServiceException(
+          ApiServiceResultCode.REQUEST_NO_NOT_UNIQUE, "{requestNo:" + orderNo + "}");
+    }
+  }
+
+  @Override
+  public OrderInfo findByGid(String gid, String partnerId) {
+    try {
+      List<OrderInfo> orderInfos = orderInfoDao.findByGid(partnerId, gid);
+      if (orderInfos == null || orderInfos.size() == 0) {
+        return null;
+      }
+      if (orderInfos.size() == 1) {
+        return orderInfos.iterator().next();
+      }
+
+      for (OrderInfo orderInfo : orderInfos) {
+        if (StringUtils.isNotBlank(orderInfo.getNotifyUrl())) {
+          return orderInfo;
         }
+      }
+      return null;
+    } catch (Exception e) {
+      throw new ApiServiceException(
+          ApiServiceResultCode.INTERNAL_ERROR, "GID对应的请求订单失败:" + e.getMessage());
     }
+  }
 
-    @Override
-    public void checkUnique(String partnerId, String orderNo) {
-        if (orderInfoDao.countByPartnerIdAndOrderNo(partnerId, orderNo) > 0) {
-            throw new ApiServiceException(ApiServiceResultCode.REQUEST_NO_NOT_UNIQUE, "{requestNo:" + orderNo + "}");
-        }
+  @Override
+  public String findGidByTrade(
+      String partnerId, String service, String version, String merchOrderNo) {
+    try {
+      List<OrderInfo> orderInfos =
+          orderInfoDao.findGidByTrade(partnerId, service, version, merchOrderNo);
+      if (orderInfos == null || orderInfos.size() == 0) {
+        return null;
+      }
+      return orderInfos.iterator().next().getGid();
+    } catch (Exception e) {
+      throw new ApiServiceException(
+          ApiServiceResultCode.INTERNAL_ERROR, "交易对应的GID查詢:" + e.getMessage());
     }
-
-    @Override
-    public OrderInfo findByGid(String gid, String partnerId) {
-        try {
-            List<OrderInfo> orderInfos = orderInfoDao.findByGid(partnerId, gid);
-            if (orderInfos == null || orderInfos.size() == 0) {
-                return null;
-            }
-            if (orderInfos.size() == 1) {
-                return orderInfos.iterator().next();
-            }
-
-            for (OrderInfo orderInfo : orderInfos) {
-                if (StringUtils.isNotBlank(orderInfo.getNotifyUrl())) {
-                    return orderInfo;
-                }
-            }
-            return null;
-        } catch (Exception e) {
-            throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, "GID对应的请求订单失败:" + e.getMessage());
-        }
-    }
-
-    @Override
-    public String findGidByTrade(String partnerId, String service, String version, String merchOrderNo) {
-        try {
-            List<OrderInfo> orderInfos = orderInfoDao.findGidByTrade(partnerId, service, version, merchOrderNo);
-            if (orderInfos == null || orderInfos.size() == 0) {
-                return null;
-            }
-            return orderInfos.iterator().next().getGid();
-        } catch (Exception e) {
-            throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, "交易对应的GID查詢:" + e.getMessage());
-        }
-    }
+  }
 }

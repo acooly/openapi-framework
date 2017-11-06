@@ -4,6 +4,5 @@ import com.acooly.openapi.framework.core.service.base.ApiService;
 
 public interface ApiServiceFactory {
 
-	ApiService getApiService(String serviceName, String version);
-
+  ApiService getApiService(String serviceName, String version);
 }

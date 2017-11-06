@@ -12,9 +12,7 @@ package com.acooly.openapi.framework.common.support;
 
 import java.util.Map;
 
-/**
- * @author qiubo@qq.com
- */
+/** @author qiubo@qq.com */
 public interface ServiceValidator {
-	void validate(Map<String, String> requestData);
+  void validate(Map<String, String> requestData);
 }
