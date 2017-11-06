@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>openapi-framework</artifactId>
-    <version>5.0.0-SNAPSHOT</version>
+    <version>4.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <properties>
         <acooly.framework.version>4.1.0-SNAPSHOT</acooly.framework.version>
