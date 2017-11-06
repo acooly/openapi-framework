@@ -8,7 +8,6 @@ import com.acooly.core.utils.Money;
 import com.acooly.core.utils.net.HttpResult;
 import com.acooly.core.utils.net.Https;
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.core.security.sign.SignTypeEnum;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
@@ -50,7 +49,6 @@ public class OrderPayApiServiceTest extends AbstractApiServieTests {
     request.setBuyeryEmail("zhangpu@163.com");
     request.setBuyeryMobileNo("13898765453");
     request.setBuyerCertNo("330702194706165014");
-    request.setSignType(SignTypeEnum.MD5.toString());
     request.setPassword(encrypt("12312312"));
     request.setContext("这是客户端参数:{userName:1,\"password\":\"12121\"}");
     List<GoodInfo> goodInfos = Lists.newArrayList();
@@ -89,7 +87,6 @@ public class OrderPayApiServiceTest extends AbstractApiServieTests {
     request.setMerchOrderNo("1234567890=-09876543");
     request.setAmount(amount);
     request.setPayerUserId("09876543211234567890");
-    request.setSignType(SignTypeEnum.MD5.toString());
     request.setContext("这是客户端参数:{userName:1,\"password\":\"12121\"}");
     request.setNotifyUrl(notifyUrl);
     request(request, PayOrderResponse.class);

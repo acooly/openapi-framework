@@ -22,6 +22,8 @@ import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.core.security.sign.SignTypeEnum;
 import com.acooly.openapi.framework.core.service.base.ApiService;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;
 import com.google.common.io.CharStreams;
@@ -109,13 +111,12 @@ public class ApiContext {
   public void init(ApiService apiService) {
     this.setOpenApiService(apiService.getClass().getAnnotation(OpenApiService.class));
     this.apiService = apiService;
-    this.appClient = Boolean.valueOf(requestData.get("appClient"));
   }
 
   public void initRequestParam() {
     // sign
     Map<String, String> queryStringMap = getQueryStringMap();
-    this.sign = (notBlankParam(queryStringMap, ApiConstants.SIGN));
+    this.sign = notBlankParam(queryStringMap, ApiConstants.SIGN);
     // signType
     String signType = notBlankParam(queryStringMap, ApiConstants.SIGN_TYPE);
     try {
@@ -123,32 +124,34 @@ public class ApiContext {
     } catch (IllegalArgumentException e) {
       throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, "不支持的签名类型:" + signType);
     }
-
-    // protocol
-    String protocol = queryStringMap.get(ApiConstants.PROTOCOL);
-    if (Strings.isBlank(protocol)) {
-      protocol = orignalRequest.getHeader(ApiConstants.PROTOCOL);
-      if (!Strings.isBlank(protocol)) {
-        this.setProtocol(ApiProtocol.find(protocol));
-      }
-    }
-
+    String body;
     // body
     try {
-      this.setRequestBody(
+      body =
           CharStreams.toString(
-              new InputStreamReader(orignalRequest.getInputStream(), Charsets.UTF_8)));
+              new InputStreamReader(orignalRequest.getInputStream(), Charsets.UTF_8));
     } catch (IOException e) {
       throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e);
     }
+    throwIfBlank(body, "报文内容为空");
+    this.setRequestBody(body.trim());
+    if (this.requestBody.startsWith("<")) {
+      protocol = ApiProtocol.XML;
+      throw new UnsupportedOperationException("");
+    } else if (this.requestBody.startsWith("{")) {
+      protocol = ApiProtocol.JSON;
+      JSONObject jsonObject = (JSONObject) JSON.parse(body);
+      serviceName = (String) jsonObject.get(ApiConstants.SERVICE);
+      throwIfBlank(serviceName, ApiConstants.SERVICE + "不能为空");
 
-    // service
-    this.serviceName = notBlankParam(queryStringMap, ApiConstants.SERVICE);
-    // version
-    this.serviceVersion = notBlankParam(queryStringMap, ApiConstants.VERSION);
-    // partnerId
-    this.partnerId = notBlankParam(queryStringMap, ApiConstants.PARTNER_ID);
+      serviceVersion = (String) jsonObject.get(ApiConstants.VERSION);
+      throwIfBlank(serviceVersion, ApiConstants.VERSION + "不能为空");
 
+      partnerId = (String) jsonObject.get(ApiConstants.PARTNER_ID);
+      throwIfBlank(partnerId, ApiConstants.PARTNER_ID + "不能为空");
+    } else {
+      throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, "报文内容格式为xml或者json");
+    }
     this.userAgent = orignalRequest.getHeader("User-Agent");
   }
 
@@ -156,11 +159,15 @@ public class ApiContext {
     String value = queryStringMap.get(param);
     if (Strings.isBlank(value)) {
       value = orignalRequest.getHeader(param);
-      if (Strings.isBlank(value)) {
-        throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, param + " 是必填项");
-      }
+      throwIfBlank(value, param + " 是必填项");
     }
     return value;
+  }
+
+  private void throwIfBlank(String value, String detail) {
+    if (Strings.isBlank(value)) {
+      throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, detail);
+    }
   }
 
   private Map<String, String> getQueryStringMap() {

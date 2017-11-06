@@ -1,14 +1,10 @@
 package com.acooly.openapi.framework.core.security.sign;
 
-import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.core.exception.impl.ApiServiceAuthenticationException;
 import com.acooly.openapi.framework.core.executer.ApiContext;
 import com.acooly.openapi.framework.core.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
-import java.util.TreeMap;
 
 /** Created by zhangpu on 2015/1/23. */
 public abstract class AbstractSigner implements Signer<ApiContext> {
@@ -38,32 +34,14 @@ public abstract class AbstractSigner implements Signer<ApiContext> {
   }
 
   protected String doStringToSign(ApiContext apiContext, boolean isRequest) {
-    Map<String, String> sortedMap = new TreeMap<>();
-    sortedMap.put(ApiConstants.SIGN_TYPE, apiContext.getSignType().name());
-    sortedMap.put(ApiConstants.PROTOCOL, apiContext.getProtocol().name());
-    sortedMap.put(ApiConstants.SERVICE, apiContext.getServiceName());
-    sortedMap.put(ApiConstants.VERSION, apiContext.getServiceVersion());
-    sortedMap.put(ApiConstants.PARTNER_ID, apiContext.getPartnerId());
     String body;
     if (isRequest) {
       body = apiContext.getRequestBody();
     } else {
       body = apiContext.getResponseBody();
     }
-    String waitToSignStr = null;
-    StringBuilder stringToSign = new StringBuilder();
-    if (sortedMap.size() > 0) {
-      for (Map.Entry<String, String> entry : sortedMap.entrySet()) {
-        if (entry.getValue() != null) {
-          stringToSign.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
-        }
-      }
-      stringToSign.deleteCharAt(stringToSign.length() - 1);
-      stringToSign.append(body);
-      waitToSignStr = stringToSign.toString();
-      logger.debug("代签名字符串:{}", waitToSignStr);
-    }
-    return waitToSignStr;
+    logger.debug("代签名字符串:{}", body);
+    return body;
   }
 
   protected abstract String doSign(String waitToSignStr, String key);

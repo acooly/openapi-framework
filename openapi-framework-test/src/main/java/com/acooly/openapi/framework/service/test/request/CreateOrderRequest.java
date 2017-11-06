@@ -3,7 +3,6 @@ package com.acooly.openapi.framework.service.test.request;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.validate.jsr303.CertNo;
 import com.acooly.core.utils.validate.jsr303.MobileNo;
-import com.acooly.core.utils.validate.jsr303.MoneyConstraint;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.annotation.OpenApiFieldCondition;
 import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
@@ -30,7 +29,7 @@ public class CreateOrderRequest extends ApiRequest {
   @OpenApiField(desc = "标题", demo = "特色牛肉干")
   private String title;
 
-  @MoneyConstraint(min = 100, max = 1000000)
+//  @MoneyConstraint(min = 100, max = 1000000)
   @OpenApiField(desc = "金额", constraint = "单笔金额最小1元，最大10000元", demo = "120.00")
   private Money amount;
 

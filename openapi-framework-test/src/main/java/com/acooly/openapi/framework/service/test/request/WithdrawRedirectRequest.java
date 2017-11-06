@@ -1,11 +1,11 @@
 package com.acooly.openapi.framework.service.test.request;
 
+import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
 import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
-import com.acooly.openapi.framework.common.exception.OrderCheckException;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;

@@ -10,8 +10,6 @@ package com.acooly.openapi.framework.core.executer;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.validate.Validators;
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.common.annotation.OpenApiDependence;
-import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiRequest;
@@ -29,7 +27,6 @@ import com.acooly.openapi.framework.core.listener.event.ServiceExceptionEvent;
 import com.acooly.openapi.framework.core.listener.multicaster.EventPublisher;
 import com.acooly.openapi.framework.core.log.OpenApiLoggerHandler;
 import com.acooly.openapi.framework.core.marshall.ApiMarshallFactory;
-import com.acooly.openapi.framework.core.security.sign.SignTypeEnum;
 import com.acooly.openapi.framework.core.service.base.AbstractApiService;
 import com.acooly.openapi.framework.core.service.base.ApiService;
 import com.acooly.openapi.framework.core.service.factory.ApiServiceFactory;
@@ -140,28 +137,30 @@ public class HttpApiServiceExecuter
     ApiContext apiContext = getApiContext();
     String service = apiContext.getServiceName();
     String version = apiContext.getServiceVersion();
-    String partnerId = apiContext.getRequestData().get(ApiConstants.PARTNER_ID);
-    String requestNo = ApiUtils.getRequestNo(apiContext.getRequestData());
-    String orderNo = apiContext.getRequestData().get(ApiConstants.MERCH_ORDER_NO);
-    if (StringUtils.isBlank(orderNo)) {
-      orderNo = requestNo;
-    }
-    String tradeGid = orderInfoService.findGidByTrade(partnerId, service, version, orderNo);
-    if (StringUtils.isBlank(tradeGid)) {
-      // 查找依赖关系的服务
-      OpenApiDependence openApiDependence =
-          apiContext.getApiService().getClass().getAnnotation(OpenApiDependence.class);
-      if (openApiDependence != null && StringUtils.isNotBlank(openApiDependence.value())) {
-        tradeGid =
-            orderInfoService.findGidByTrade(partnerId, openApiDependence.value(), version, orderNo);
-      }
-    }
-    if (StringUtils.isBlank(tradeGid)) {
-      apiContext.initGid();
-    } else {
-      apiContext.setGid(tradeGid);
-    }
+    String partnerId = apiContext.getPartnerId();
+    //    String requestNo = ApiUtils.getRequestNo(apiContext.getRequestData());
+    //    String orderNo = apiContext.getRequestData().get(ApiConstants.MERCH_ORDER_NO);
+    //    if (StringUtils.isBlank(orderNo)) {
+    //      orderNo = requestNo;
+    //    }
+    //    String tradeGid = orderInfoService.findGidByTrade(partnerId, service, version, orderNo);
+    //    if (StringUtils.isBlank(tradeGid)) {
+    //      // 查找依赖关系的服务
+    //      OpenApiDependence openApiDependence =
+    //          apiContext.getApiService().getClass().getAnnotation(OpenApiDependence.class);
+    //      if (openApiDependence != null && StringUtils.isNotBlank(openApiDependence.value())) {
+    //        tradeGid =
+    //            orderInfoService.findGidByTrade(partnerId, openApiDependence.value(), version,
+    // orderNo);
+    //      }
+    //    }
+    //    if (StringUtils.isBlank(tradeGid)) {
+    //      apiContext.initGid();
+    //    } else {
+    //      apiContext.setGid(tradeGid);
+    //    }
     // 生成性的OID
+    apiContext.initGid();
     apiContext.setOid(Ids.oid());
     MDC.put(ApiConstants.GID, apiContext.getGid());
   }
@@ -192,18 +191,6 @@ public class HttpApiServiceExecuter
     apiResponse.setPartnerId(requestData.get(ApiConstants.PARTNER_ID));
     apiResponse.setService(requestData.get(ApiConstants.SERVICE));
     apiResponse.setContext(requestData.get(ApiConstants.CONTEXT));
-    apiResponse.setSignType(
-        StringUtils.isNotBlank(requestData.get(ApiConstants.SIGN_TYPE))
-            ? requestData.get(ApiConstants.SIGN_TYPE)
-            : SignTypeEnum.MD5.name());
-    apiResponse.setVersion(
-        StringUtils.isNotBlank(requestData.get(ApiConstants.VERSION))
-            ? requestData.get(ApiConstants.VERSION)
-            : ApiConstants.VERSION_DEFAULT);
-    apiResponse.setProtocol(
-        StringUtils.isNotBlank(requestData.get(ApiConstants.PROTOCOL))
-            ? requestData.get(ApiConstants.PROTOCOL)
-            : ApiProtocol.JSON.code());
   }
 
   protected void doResponse(ApiContext apiContext, HttpServletResponse response) {

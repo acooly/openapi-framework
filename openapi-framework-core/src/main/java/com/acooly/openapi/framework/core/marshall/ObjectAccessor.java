@@ -1,5 +1,6 @@
 package com.acooly.openapi.framework.core.marshall;
 
+import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.openapi.framework.common.annotation.OpenApiAlias;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.convert.ApiServiceConversionService;
@@ -13,6 +14,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.reflect.TypeToken;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -34,8 +37,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class ObjectAccessor<T> {
   private static final Logger logger = LoggerFactory.getLogger(ObjectAccessor.class);
-  private static final ConcurrentMap<Class<?>, Map<String, Field>> classMap =
-      Maps.newConcurrentMap();
+  private static final ConcurrentMap<Class<?>, ClassMeta> classMap = Maps.newConcurrentMap();
   /** 忽略transient字段 */
   private static final Predicate<Field> transientDenyPredicate =
       new Predicate<Field>() {
@@ -50,17 +52,27 @@ public class ObjectAccessor<T> {
       };
   /** 忽略transient字段 */
   private static final Predicate<Field> allAcceptPredicate = input -> true;
+
   private static ConversionService conversionService = ApiServiceConversionService.INSTANCE;
   private static JsonMarshallor jsonMarshallor = JsonMarshallor.INSTANCE;
   private final T target;
-  private Map<String, Field> fieldMap;
+  private ClassMeta classMeta;
+
+  @Data
+  @AllArgsConstructor
+  public static class ClassMeta {
+    private Map<String, Field> fieldMap;
+    private Map<String, Field> securityfieldMap;
+  }
 
   private ObjectAccessor(T target) {
     Assert.notNull(target, "Target object must not be null");
     this.target = target;
-    Map<String, Field> fieldMap = classMap.get(target.getClass());
-    if (fieldMap == null) {
-      final Map<String, Field> tmpMap = Maps.newHashMap();
+    ClassMeta classMeta = classMap.get(target.getClass());
+    if (classMeta == null) {
+      final Map<String, Field> filedMap = Maps.newHashMap();
+      final Map<String, Field> securityfieldMap = Maps.newHashMap();
+
       ReflectionUtils.doWithFields(
           this.target.getClass(),
           field -> {
@@ -69,18 +81,32 @@ public class ObjectAccessor<T> {
               logger.warn("发现没有标注OpenApiField的字段{}", field);
               return;
             }
-            if (!tmpMap.containsKey(field.getName())) {
-              tmpMap.put(field.getName(), field);
+            if (!filedMap.containsKey(field.getName())) {
+              filedMap.put(field.getName(), field);
+              if(openApiField.security()){
+                if(String.class.isAssignableFrom(field.getType())){
+                  securityfieldMap.put(field.getName(), field);
+                }else{
+                  throw new AppConfigException(field+"标注了需要加密，字段类型必须为String");
+                }
+              }
             }
           });
-      classMap.put(target.getClass(), tmpMap);
-      fieldMap = tmpMap;
+      classMap.put(target.getClass(), new ClassMeta(filedMap, securityfieldMap));
     }
-    this.fieldMap = fieldMap;
+    this.classMeta = classMeta;
   }
 
   public static <T> ObjectAccessor<T> of(T target) {
     return new ObjectAccessor<T>(target);
+  }
+
+  public ClassMeta getClassMeta() {
+    return classMeta;
+  }
+
+  public void setClassMeta(ClassMeta classMeta) {
+    this.classMeta = classMeta;
   }
 
   /**
@@ -90,7 +116,7 @@ public class ObjectAccessor<T> {
    * @return
    */
   public boolean isSecurityField(String property) {
-    Field field = this.fieldMap.get(property);
+    Field field = this.classMeta.fieldMap.get(property);
     if (field == null) {
       return false;
     }
@@ -99,7 +125,7 @@ public class ObjectAccessor<T> {
   }
 
   public String getFieldAlias(String property) {
-    Field field = this.fieldMap.get(property);
+    Field field = this.classMeta.fieldMap.get(property);
     if (field == null) {
       return property;
     }
@@ -115,7 +141,7 @@ public class ObjectAccessor<T> {
    * @return
    */
   public Set<String> propertySet() {
-    return this.fieldMap.keySet();
+    return this.classMeta.fieldMap.keySet();
   }
 
   /**
@@ -125,7 +151,7 @@ public class ObjectAccessor<T> {
    */
   public Set<String> propertySetExcludeTransient() {
     Set<String> fieldSet = Sets.newHashSet();
-    for (Map.Entry<String, Field> entry : fieldMap.entrySet()) {
+    for (Map.Entry<String, Field> entry : classMeta.fieldMap.entrySet()) {
       if (!Modifier.isTransient(entry.getValue().getModifiers())) {
         fieldSet.add(entry.getKey());
       }
@@ -141,7 +167,7 @@ public class ObjectAccessor<T> {
    * @throws org.springframework.beans.BeansException
    */
   public String getPropertyValue(String propertyName) throws BeansException {
-    Field field = this.fieldMap.get(propertyName);
+    Field field = this.classMeta.fieldMap.get(propertyName);
     if (field == null) {
       return null;
     }
@@ -177,7 +203,7 @@ public class ObjectAccessor<T> {
    * @param newValue
    */
   public void setPropertyValue(String propertyName, Object newValue) {
-    Field field = this.fieldMap.get(propertyName);
+    Field field = this.classMeta.fieldMap.get(propertyName);
     if (field == null || newValue == null) {
       return;
     }
@@ -252,7 +278,7 @@ public class ObjectAccessor<T> {
   public Map<String, Object> getMarshallData() {
     Assert.notNull(target, "predicate must not be null");
     Map<String, Object> dataMap = Maps.newTreeMap();
-    for (Map.Entry<String, Field> entry : fieldMap.entrySet()) {
+    for (Map.Entry<String, Field> entry : classMeta.fieldMap.entrySet()) {
       if (!transientDenyPredicate.apply(entry.getValue())) {
         continue;
       }
@@ -265,7 +291,7 @@ public class ObjectAccessor<T> {
   }
 
   public Object getMarshallValue(String propertyName) throws BeansException {
-    Field field = this.fieldMap.get(propertyName);
+    Field field = this.classMeta.fieldMap.get(propertyName);
     if (field == null) {
       return null;
     }
@@ -304,7 +330,7 @@ public class ObjectAccessor<T> {
   public Map<String, String> getAllData(Predicate<Field> predicate) {
     Assert.notNull(target, "predicate must not be null");
     Map<String, String> dataMap = Maps.newTreeMap();
-    for (Map.Entry<String, Field> entry : fieldMap.entrySet()) {
+    for (Map.Entry<String, Field> entry : classMeta.fieldMap.entrySet()) {
       if (!predicate.apply(entry.getValue())) {
         continue;
       }
@@ -329,7 +355,7 @@ public class ObjectAccessor<T> {
   public Map<String, Object> getAllDataForJsonProcess(Predicate<Field> predicate) {
     Assert.notNull(target, "predicate must not be null");
     Map<String, Object> dataMap = Maps.newHashMap();
-    for (Map.Entry<String, Field> entry : fieldMap.entrySet()) {
+    for (Map.Entry<String, Field> entry : classMeta.fieldMap.entrySet()) {
       if (!predicate.apply(entry.getValue())) {
         continue;
       }

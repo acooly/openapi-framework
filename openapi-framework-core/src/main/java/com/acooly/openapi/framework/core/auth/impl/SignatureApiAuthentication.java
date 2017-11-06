@@ -82,6 +82,23 @@ public class SignatureApiAuthentication implements ApiAuthentication {
     }
   }
 
+  @Override
+  public String signature(String body, String partnerId, String signType) {
+    try {
+      String sign =
+          signerFactory
+              .getSigner(SignTypeEnum.valueOf(signType))
+              .sign(
+                  ApiContextHolder.getApiContext(), authInfoRealm.getAuthenticationInfo(partnerId));
+      return sign;
+    } catch (ApiServiceException asae) {
+      throw asae;
+    } catch (Exception e) {
+      logger.warn("签名异常", e);
+      throw new ApiServiceAuthenticationException("签名错误");
+    }
+  }
+
   public static class NotSupport implements Messageable {
 
     @Override

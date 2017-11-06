@@ -8,17 +8,12 @@
 package com.acooly.openapi.framework.core.marshall.formjson;
 
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.common.utils.Servlets;
 import com.acooly.openapi.framework.core.marshall.ApiRedirectMarshall;
-import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 @Component
-public class HttpFormJsonRedirectMarshall
-    extends AbstractHttpFormJsonResponseMarshall<String, ApiResponse>
+public class HttpFormJsonRedirectMarshall extends AbstractResponseMarshall<String, ApiResponse>
     implements ApiRedirectMarshall<String, ApiResponse> {
 
   protected String getLogLabel(ApiResponse apiResponse) {
@@ -30,16 +25,18 @@ public class HttpFormJsonRedirectMarshall
   }
 
   @Override
-  protected String doMarshall(Map<String, Object> responseData) {
-    Map<String, String> data =
-        Maps.transformEntries(
-            responseData,
-            new Maps.EntryTransformer<String, Object, String>() {
-              @Override
-              public String transformEntry(String key, Object value) {
-                return String.valueOf(value);
-              }
-            });
-    return Servlets.buildQueryString(data);
+  protected String doMarshall(ApiResponse apiResponse) {
+    //    Map<String, String> data =
+    //        Maps.transformEntries(
+    //                apiResponse,
+    //            new Maps.EntryTransformer<String, Object, String>() {
+    //              @Override
+    //              public String transformEntry(String key, Object value) {
+    //                return String.valueOf(value);
+    //              }
+    //            });
+    //    return Servlets.buildQueryString(data);
+
+    throw new UnsupportedOperationException();
   }
 }

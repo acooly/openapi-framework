@@ -11,9 +11,7 @@ import com.acooly.openapi.framework.common.utils.Encodes;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.core.OpenApiConstants;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
-import com.acooly.openapi.framework.core.security.sign.Md5Signer;
 import com.acooly.openapi.framework.core.security.sign.SignTypeEnum;
-import com.acooly.openapi.framework.core.security.sign.Signer;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -43,7 +41,7 @@ public abstract class AbstractApiServieTests {
   protected String notifyUrl = "";
   protected String returnUrl = "";
 
-  protected Signer<Map<String, String>> signer = new Md5Signer();
+  //  protected Signer<Map<String, String>> signer = new Md5Signer();
 
   protected static Map<String, String> marshall(ApiMessage message) {
     return ObjectAccessor.of(message).getAllDataExcludeTransient();
@@ -108,14 +106,6 @@ public abstract class AbstractApiServieTests {
       message.setRequestNo(DigestUtils.md5Hex(new Date().toString()));
     }
 
-    if (Strings.isNullOrEmpty(message.getSignType())) {
-      message.setSignType(this.signType);
-    }
-
-    if (Strings.isNullOrEmpty(message.getProtocol())) {
-      message.setProtocol(this.protocal);
-    }
-
     if (Strings.isNullOrEmpty(message.getService())) {
       message.setService(this.service);
     }
@@ -145,7 +135,7 @@ public abstract class AbstractApiServieTests {
 
   protected HttpResult send(Map<String, String> requestData) {
     if (Strings.isNullOrEmpty(requestData.get(ApiConstants.SIGN))) {
-      requestData.put("sign", signer.sign(requestData, key));
+      //      requestData.put("sign", signer.sign(requestData, key));
     }
     logger.info("请求报文: {}", requestData);
     HttpResult result = Https.getInstance().post(gatewayUrl, requestData, ENCODING);

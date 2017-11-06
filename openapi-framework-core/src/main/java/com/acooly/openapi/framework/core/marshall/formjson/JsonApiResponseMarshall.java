@@ -12,20 +12,17 @@ import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.core.marshall.ApiResponseMarshall;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 /**
  * 响应报文组装
  *
  * @author zhangpu
  */
 @Component
-public class HttpFormJsonApiResponseMarshall
-    extends AbstractHttpFormJsonResponseMarshall<String, ApiResponse>
+public class JsonApiResponseMarshall extends AbstractResponseMarshall<String, ApiResponse>
     implements ApiResponseMarshall<String, ApiResponse> {
 
   @Override
-  protected String doMarshall(Map<String, Object> responseData) {
-    return JsonMarshallor.INSTANCE.marshall(responseData);
+  protected String doMarshall(ApiResponse response) {
+    return JsonMarshallor.INSTANCE.marshall(response);
   }
 }

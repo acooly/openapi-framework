@@ -23,7 +23,7 @@ public class Main {
   @Bean
   public ServletRegistrationBean openAPIServlet() {
     ServletRegistrationBean bean = new ServletRegistrationBean();
-    bean.setUrlMappings(Lists.newArrayList("/gateway.html", "/gateway", "/gateway.do"));
+    bean.setUrlMappings(Lists.newArrayList("/gateway.do"));
     OpenAPIDispatchServlet openAPIDispatchServlet = new OpenAPIDispatchServlet();
     bean.setServlet(openAPIDispatchServlet);
     return bean;
