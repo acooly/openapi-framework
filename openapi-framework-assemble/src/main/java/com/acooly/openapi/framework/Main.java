@@ -26,6 +26,7 @@ public class Main {
     bean.setUrlMappings(Lists.newArrayList("/gateway.do"));
     OpenAPIDispatchServlet openAPIDispatchServlet = new OpenAPIDispatchServlet();
     bean.setServlet(openAPIDispatchServlet);
+    bean.setLoadOnStartup(1);
     return bean;
   }
 

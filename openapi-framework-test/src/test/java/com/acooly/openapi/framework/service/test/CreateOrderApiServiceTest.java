@@ -5,7 +5,6 @@ import com.acooly.openapi.framework.service.test.request.CreateOrderRequest;
 import com.alibaba.fastjson.JSON;
 import com.github.kevinsawicki.http.HttpRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
 
 import java.util.UUID;
@@ -40,7 +39,5 @@ public class CreateOrderApiServiceTest extends AbstractApiServieTests {
     log.info("{}", responseBody);
   }
 
-  public String sign(String body) {
-    return DigestUtils.md5Hex(body + key);
-  }
+
 }

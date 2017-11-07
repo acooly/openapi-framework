@@ -37,7 +37,7 @@ public class DefaultHttpApiServiceExecuter extends HttpApiServiceExecuter {
       ApiResponse apiResponse = apiService.getResponseBean();
       apiContext.setRequest(apiRequest);
       apiContext.setResponse(apiResponse);
-      prepareResponse(apiResponse, apiContext);
+      prepareResponse(apiContext);
     } finally {
       logRequestData(apiContext);
     }

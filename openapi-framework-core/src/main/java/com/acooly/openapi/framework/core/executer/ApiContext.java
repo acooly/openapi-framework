@@ -118,18 +118,17 @@ public class ApiContext {
   }
 
   public void init() {
-    this.stopWatch = new Slf4JStopWatch(serviceName, perlogger);
     this.oid = Ids.oid();
     this.gid = Ids.gid();
     MDC.put(ApiConstants.GID, gid);
 
-    // sign
     Map<String, String> queryStringMap = getQueryStringMap();
-
+    // sign
     parseSign(queryStringMap);
     // signType
     parseSignType(queryStringMap);
     parseBody();
+    this.stopWatch = new Slf4JStopWatch(serviceName, perlogger);
     this.userAgent = orignalRequest.getHeader("User-Agent");
   }
 
@@ -162,19 +161,18 @@ public class ApiContext {
   }
 
   private void parseBaseRequestParams(String body) {
-    if (this.requestBody.startsWith("<")) {
-      protocol = ApiProtocol.XML;
-      parseXml();
-      return;
-    } else if (this.requestBody.startsWith("{")) {
+    if (this.requestBody.startsWith("{")) {
       protocol = ApiProtocol.JSON;
       parseJson(body);
+    } else if (this.requestBody.startsWith("<")) {
+      protocol = ApiProtocol.XML;
+      parseXml();
     } else {
       throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, "报文内容格式为xml或者json");
     }
+    throwIfBlank(partnerId, ApiConstants.PARTNER_ID + "不能为空");
     throwIfBlank(serviceName, ApiConstants.SERVICE + "不能为空");
     throwIfBlank(serviceVersion, ApiConstants.VERSION + "不能为空");
-    throwIfBlank(partnerId, ApiConstants.PARTNER_ID + "不能为空");
   }
 
   private void parseXml() {

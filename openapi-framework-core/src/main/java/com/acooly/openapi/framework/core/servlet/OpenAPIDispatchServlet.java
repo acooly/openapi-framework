@@ -26,8 +26,7 @@ public class OpenAPIDispatchServlet extends AbstractSpringServlet {
 
   @Override
   protected void doInit() {
-    httpapiServiceExecuter =
-        (HttpApiServiceExecuter) getWebApplicationContext().getBean("httpApiServiceExecuter");
+    httpapiServiceExecuter = getWebApplicationContext().getBean(HttpApiServiceExecuter.class);
   }
 
   @Override

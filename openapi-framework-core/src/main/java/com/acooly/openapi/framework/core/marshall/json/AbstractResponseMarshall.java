@@ -19,6 +19,7 @@ import com.acooly.openapi.framework.core.log.OpenApiLoggerHandler;
 import com.acooly.openapi.framework.core.marshall.ApiMarshall;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
 import com.acooly.openapi.framework.core.marshall.crypt.ApiMarshallCryptService;
+import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Resource;
@@ -51,13 +52,15 @@ public abstract class AbstractResponseMarshall<T, S extends ApiResponse>
     T result = doMarshall(response);
     doLogger(response, result);
     apiContext.setResponseBody((String) result);
-    String sign =
-        apiAuthentication.signature(
-            (String) result, apiContext.getPartnerId(), apiContext.getSignType().name());
-    apiContext
-        .getOrignalResponse()
-        .setHeader(ApiConstants.SIGN_TYPE, apiContext.getSignType().name());
-    apiContext.getOrignalResponse().setHeader(ApiConstants.SIGN, sign);
+    if (!Strings.isNullOrEmpty(apiContext.getPartnerId())) {
+      String sign =
+          apiAuthentication.signature(
+              (String) result, apiContext.getPartnerId(), apiContext.getSignType().name());
+      apiContext
+          .getOrignalResponse()
+          .setHeader(ApiConstants.SIGN_TYPE, apiContext.getSignType().name());
+      apiContext.getOrignalResponse().setHeader(ApiConstants.SIGN, sign);
+    }
     return result;
   }
 

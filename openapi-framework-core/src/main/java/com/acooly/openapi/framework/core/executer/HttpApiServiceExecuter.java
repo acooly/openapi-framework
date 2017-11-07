@@ -21,7 +21,6 @@ import com.acooly.openapi.framework.core.marshall.ApiMarshallFactory;
 import com.acooly.openapi.framework.core.service.base.AbstractApiService;
 import com.acooly.openapi.framework.core.service.base.ApiService;
 import com.acooly.openapi.framework.core.service.factory.ApiServiceFactory;
-import com.acooly.openapi.framework.service.OrderInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,9 +65,9 @@ public abstract class HttpApiServiceExecuter
     }
   }
 
-  private void doFinally(ApiContext apiContext) {
+  protected void doFinally(ApiContext apiContext) {
     try {
-      doResponse(apiContext, apiContext.getOrignalResponse());
+      doResponse(apiContext);
     } catch (Exception e) {
       logger.warn("响应处理失败:", e);
     } finally {
@@ -84,6 +83,8 @@ public abstract class HttpApiServiceExecuter
     doAuthorize(apiContext);
     // 解码
     doUnmarshal(apiContext);
+    prepareResponse(apiContext);
+
     // 参数校验
     doValidateParameter(apiContext.getRequest());
   }
@@ -104,20 +105,27 @@ public abstract class HttpApiServiceExecuter
   @SuppressWarnings({"rawtypes", "unchecked"})
   protected abstract void doExceute(ApiContext apiContext);
 
-  protected void prepareResponse(ApiResponse apiResponse, ApiContext apiContext) {
-    if (apiResponse == null) {
+  protected void prepareResponse(ApiContext apiContext) {
+    ApiResponse apiResponse = apiContext.getResponse();
+    if (apiContext.getResponse() == null) {
       return;
     }
-    apiResponse.setRequestNo(apiContext.getRequest().getRequestNo());
-    apiResponse.setMerchOrderNo(apiContext.getRequest().getMerchOrderNo());
-    apiResponse.setPartnerId(apiContext.getRequest().getPartnerId());
-    apiResponse.setService(apiContext.getRequest().getService());
-    apiResponse.setContext(apiContext.getRequest().getContext());
+    ApiRequest apiRequest = apiContext.getRequest();
+    if (apiRequest == null) {
+      return;
+    }
+    apiResponse.setRequestNo(apiRequest.getRequestNo());
+    apiResponse.setMerchOrderNo(apiRequest.getMerchOrderNo());
+    apiResponse.setPartnerId(apiRequest.getPartnerId());
+    apiResponse.setService(apiRequest.getService());
+    apiResponse.setVersion(apiRequest.getVersion());
+    apiResponse.setContext(apiRequest.getContext());
   }
 
-  protected void doResponse(ApiContext apiContext, HttpServletResponse response) {
+  protected void doResponse(ApiContext apiContext) {
     ApiService service = apiContext.getApiService();
     ApiResponse apiResponse = apiContext.getResponse();
+    HttpServletResponse response = apiContext.getOrignalResponse();
     boolean redirect = apiContext.isRedirect();
     String redirectUrl = getRedirectUrl(service, apiResponse, apiContext);
     String marshallStr = null;
@@ -140,7 +148,7 @@ public abstract class HttpApiServiceExecuter
    */
   protected void doUnmarshal(ApiContext apiContext) {
     ApiRequest apiRequest =
-        apiMarshallFactory.getRequestMarshall(getApiContext().getProtocol()).marshall(apiContext);
+        apiMarshallFactory.getRequestMarshall(apiContext.getProtocol()).marshall(apiContext);
     getApiContext().setRequest(apiRequest);
   }
 
@@ -172,8 +180,6 @@ public abstract class HttpApiServiceExecuter
     apiContext.destory();
     ApiContextHolder.clear();
   }
-
-
 
   /** 公共Api参数合法性检查 */
   protected void doValidateParameter(ApiRequest apiRequest) {
@@ -212,16 +218,12 @@ public abstract class HttpApiServiceExecuter
    */
   protected void doException(ApiContext apiContext, Throwable e) {
     if (apiContext.getResponse() == null) {
-      apiContext.setResponse(createResponse(apiContext));
+      ApiResponse response = new ApiResponse();
+      apiContext.setResponse(response);
+      prepareResponse(apiContext);
     }
     apiServiceExceptionHander.handleApiServiceException(
         apiContext.getRequest(), apiContext.getResponse(), e);
-  }
-
-  private ApiResponse createResponse(ApiContext apiContext) {
-    ApiResponse response = new ApiResponse();
-    prepareResponse(response, apiContext);
-    return response;
   }
 
   private String getRedirectUrl(

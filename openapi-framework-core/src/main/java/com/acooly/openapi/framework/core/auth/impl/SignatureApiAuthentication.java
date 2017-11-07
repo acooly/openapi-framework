@@ -85,6 +85,9 @@ public class SignatureApiAuthentication implements ApiAuthentication {
   @Override
   public String signature(String body, String partnerId, String signType) {
     try {
+      if(partnerId==null){
+        return "";
+      }
       String sign =
           signerFactory
               .getSigner(SignTypeEnum.valueOf(signType))

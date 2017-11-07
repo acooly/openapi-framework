@@ -7,7 +7,6 @@ package com.acooly.openapi.framework.service.test;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.net.HttpResult;
 import com.acooly.core.utils.net.Https;
-import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
@@ -26,9 +25,9 @@ import java.util.UUID;
 /** @author zhangpu */
 public class OrderPayApiServiceTest extends AbstractApiServieTests {
   {
-    gatewayUrl = "http://localhost:8089/gateway.html";
+    gatewayUrl = "http://localhost:8089/gateway.do";
     key = "c9cef22553af973d4b04a012f9cb8ea8";
-    partnerId = "20140411020055684571";
+    partnerId = "test";
     notifyUrl = "http://127.0.0.1:8090/notify/receiver";
     version = null;
     signType = null;
@@ -63,19 +62,7 @@ public class OrderPayApiServiceTest extends AbstractApiServieTests {
       goodInfos.add(g);
     }
     request.setGoodsInfos(goodInfos);
-    request(
-        request,
-        CreateOrderResponse.class,
-        new ApiTestHandler() {
-          @Override
-          public Map<String, String> afterMarshall(Map<String, String> requestData) {
-            requestData.remove(ApiConstants.SIGN_TYPE);
-            requestData.remove(ApiConstants.VERSION);
-            requestData.remove(ApiConstants.PROTOCOL);
-            logger.info("ApiTestHandler:{}", requestData);
-            return requestData;
-          }
-        });
+    request(request, CreateOrderResponse.class);
   }
 
   @Test
@@ -89,7 +76,8 @@ public class OrderPayApiServiceTest extends AbstractApiServieTests {
     request.setPayerUserId("09876543211234567890");
     request.setContext("这是客户端参数:{userName:1,\"password\":\"12121\"}");
     request.setNotifyUrl(notifyUrl);
-    request(request, PayOrderResponse.class);
+    PayOrderResponse orderResponse = request(request, PayOrderResponse.class);
+    logger.info("{}", orderResponse);
   }
 
   @Test

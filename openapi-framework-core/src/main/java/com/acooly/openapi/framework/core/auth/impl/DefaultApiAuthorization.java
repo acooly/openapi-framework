@@ -36,8 +36,8 @@ public class DefaultApiAuthorization implements ApiAuthorization {
     try {
       List<Permission> permissionList =
           (List<Permission>)
-              authInfoRealm.getAuthorizationInfo(apiContext.getRequest().getPartnerId());
-      apiAuthorizer.authorize(apiContext.getRequest().getService(), permissionList);
+              authInfoRealm.getAuthorizationInfo(apiContext.getPartnerId());
+      apiAuthorizer.authorize(apiContext.getServiceName(), permissionList);
     } catch (ApiServiceException asae) {
       throw asae;
     } catch (Exception e) {
