@@ -20,6 +20,7 @@ import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.core.OpenApiConstants;
 import com.acooly.openapi.framework.core.security.sign.SignTypeEnum;
 import com.acooly.openapi.framework.core.service.base.ApiService;
 import com.alibaba.fastjson.JSON;
@@ -28,6 +29,11 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;
 import com.google.common.io.CharStreams;
 import lombok.Data;
+import org.perf4j.StopWatch;
+import org.perf4j.slf4j.Slf4JStopWatch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,8 +45,8 @@ import java.util.Map;
 /** @author qiubo@qq.com */
 @Data
 public class ApiContext {
-
-  Map<String, String> requestData;
+  private static final Logger perlogger =
+      LoggerFactory.getLogger(OpenApiConstants.PERFORMANCE_LOGGER);
   private HttpServletRequest orignalRequest;
   private HttpServletResponse orignalResponse;
   /** 是否已认证通过 */
@@ -83,9 +89,7 @@ public class ApiContext {
 
   private String partnerId;
 
-  public void initGid() {
-    gid = Ids.gid();
-  }
+  private StopWatch stopWatch;
 
   public OpenApiService getOpenApiService() {
     return openApiService;
@@ -108,22 +112,28 @@ public class ApiContext {
     return openApiService.responseType() == ResponseType.REDIRECT;
   }
 
-  public void init(ApiService apiService) {
+  public void setApiService(ApiService apiService) {
     this.setOpenApiService(apiService.getClass().getAnnotation(OpenApiService.class));
     this.apiService = apiService;
   }
 
-  public void initRequestParam() {
+  public void init() {
+    this.stopWatch = new Slf4JStopWatch(serviceName, perlogger);
+    this.oid = Ids.oid();
+    this.gid = Ids.gid();
+    MDC.put(ApiConstants.GID, gid);
+
     // sign
     Map<String, String> queryStringMap = getQueryStringMap();
-    this.sign = notBlankParam(queryStringMap, ApiConstants.SIGN);
+
+    parseSign(queryStringMap);
     // signType
-    String signType = notBlankParam(queryStringMap, ApiConstants.SIGN_TYPE);
-    try {
-      this.signType = SignTypeEnum.valueOf(signType);
-    } catch (IllegalArgumentException e) {
-      throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, "不支持的签名类型:" + signType);
-    }
+    parseSignType(queryStringMap);
+    parseBody();
+    this.userAgent = orignalRequest.getHeader("User-Agent");
+  }
+
+  private void parseBody() {
     String body;
     // body
     try {
@@ -134,25 +144,48 @@ public class ApiContext {
       throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e);
     }
     throwIfBlank(body, "报文内容为空");
-    this.setRequestBody(body.trim());
+    this.requestBody = body.trim();
+    parseBaseRequestParams(body);
+  }
+
+  private void parseSignType(Map<String, String> queryStringMap) {
+    String signType = notBlankParam(queryStringMap, ApiConstants.SIGN_TYPE);
+    try {
+      this.signType = SignTypeEnum.valueOf(signType);
+    } catch (IllegalArgumentException e) {
+      throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, "不支持的签名类型:" + signType);
+    }
+  }
+
+  private void parseSign(Map<String, String> queryStringMap) {
+    this.sign = notBlankParam(queryStringMap, ApiConstants.SIGN);
+  }
+
+  private void parseBaseRequestParams(String body) {
     if (this.requestBody.startsWith("<")) {
       protocol = ApiProtocol.XML;
-      throw new UnsupportedOperationException("");
+      parseXml();
+      return;
     } else if (this.requestBody.startsWith("{")) {
       protocol = ApiProtocol.JSON;
-      JSONObject jsonObject = (JSONObject) JSON.parse(body);
-      serviceName = (String) jsonObject.get(ApiConstants.SERVICE);
-      throwIfBlank(serviceName, ApiConstants.SERVICE + "不能为空");
-
-      serviceVersion = (String) jsonObject.get(ApiConstants.VERSION);
-      throwIfBlank(serviceVersion, ApiConstants.VERSION + "不能为空");
-
-      partnerId = (String) jsonObject.get(ApiConstants.PARTNER_ID);
-      throwIfBlank(partnerId, ApiConstants.PARTNER_ID + "不能为空");
+      parseJson(body);
     } else {
       throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, "报文内容格式为xml或者json");
     }
-    this.userAgent = orignalRequest.getHeader("User-Agent");
+    throwIfBlank(serviceName, ApiConstants.SERVICE + "不能为空");
+    throwIfBlank(serviceVersion, ApiConstants.VERSION + "不能为空");
+    throwIfBlank(partnerId, ApiConstants.PARTNER_ID + "不能为空");
+  }
+
+  private void parseXml() {
+    throw new UnsupportedOperationException("");
+  }
+
+  private void parseJson(String body) {
+    JSONObject jsonObject = (JSONObject) JSON.parse(body);
+    serviceName = (String) jsonObject.get(ApiConstants.SERVICE);
+    serviceVersion = (String) jsonObject.get(ApiConstants.VERSION);
+    partnerId = (String) jsonObject.get(ApiConstants.PARTNER_ID);
   }
 
   private String notBlankParam(Map<String, String> queryStringMap, String param) {
@@ -178,5 +211,11 @@ public class ApiContext {
     Map<String, String> queryStringMap =
         Splitter.on("&").withKeyValueSeparator("=").split(queryString);
     return queryStringMap;
+  }
+
+  public void destory() {
+    if (stopWatch != null) {
+      stopWatch.stop();
+    }
   }
 }

@@ -4,7 +4,7 @@
  */
 package com.acooly.openapi.framework.core.auth;
 
-import com.acooly.openapi.framework.common.message.ApiRequest;
+import com.acooly.openapi.framework.core.executer.ApiContext;
 
 /**
  * API Service 授权接口
@@ -14,5 +14,5 @@ import com.acooly.openapi.framework.common.message.ApiRequest;
  */
 public interface ApiAuthorization {
 
-  void authorize(ApiRequest apiRequest);
+  void authorize(ApiContext apiContext);
 }

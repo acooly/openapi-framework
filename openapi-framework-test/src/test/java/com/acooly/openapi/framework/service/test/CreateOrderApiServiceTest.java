@@ -23,7 +23,7 @@ public class CreateOrderApiServiceTest extends AbstractApiServieTests {
     request.setPayeeUserId("12345678900987654321");
     request.setPayerUserId("09876543211234567890");
     request.setBuyerUserId("09876543211234567890");
-    request.setBuyeryEmail("zhangpu@163.com");
+    request.setBuyeryEmail("qiuboboy@qq.com");
     request.setBuyeryMobileNo("13898765453");
     request.setBuyerCertNo("330702194706165014");
     request.setPassword(encrypt("12312312"));

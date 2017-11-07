@@ -7,24 +7,15 @@
  */
 package com.acooly.openapi.framework.core.executer;
 
-import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.validate.Validators;
-import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.common.utils.ApiUtils;
 import com.acooly.openapi.framework.common.utils.Servlets;
-import com.acooly.openapi.framework.core.OpenApiConstants;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
 import com.acooly.openapi.framework.core.auth.ApiAuthorization;
 import com.acooly.openapi.framework.core.exception.ApiServiceExceptionHander;
-import com.acooly.openapi.framework.core.listener.event.AfterServiceExecuteEvent;
-import com.acooly.openapi.framework.core.listener.event.BeforeServiceExecuteEvent;
-import com.acooly.openapi.framework.core.listener.event.RequestReceivedEvent;
-import com.acooly.openapi.framework.core.listener.event.ServiceExceptionEvent;
-import com.acooly.openapi.framework.core.listener.multicaster.EventPublisher;
 import com.acooly.openapi.framework.core.log.OpenApiLoggerHandler;
 import com.acooly.openapi.framework.core.marshall.ApiMarshallFactory;
 import com.acooly.openapi.framework.core.service.base.AbstractApiService;
@@ -32,99 +23,75 @@ import com.acooly.openapi.framework.core.service.base.ApiService;
 import com.acooly.openapi.framework.core.service.factory.ApiServiceFactory;
 import com.acooly.openapi.framework.service.OrderInfoService;
 import org.apache.commons.lang3.StringUtils;
-import org.perf4j.StopWatch;
-import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 /**
  * 服务执行HTTP实现
  *
  * @author zhangpu
  */
-@Component
-public class HttpApiServiceExecuter
+public abstract class HttpApiServiceExecuter
     implements ApiServiceExecuter<HttpServletRequest, HttpServletResponse> {
 
   protected static final Logger logger = LoggerFactory.getLogger(HttpApiServiceExecuter.class);
-  private static final Logger perlogger =
-      LoggerFactory.getLogger(OpenApiConstants.PERFORMANCE_LOGGER);
+
   @Resource protected OpenApiLoggerHandler openApiLoggerHandler;
   @Resource protected ApiAuthentication apiAuthentication;
   @Resource protected ApiAuthorization apiAuthorization;
   @Resource protected ApiServiceFactory apiServiceFactory;
   @Resource protected ApiMarshallFactory apiMarshallFactory;
-  @Resource private OrderInfoService orderInfoService;
-  @Resource private EventPublisher eventPublisher;
   @Autowired private ApiServiceExceptionHander apiServiceExceptionHander;
 
   @SuppressWarnings("rawtypes")
   @Override
   public void execute(HttpServletRequest request, HttpServletResponse response) {
     ApiContext apiContext = getApiContext();
-    StopWatch stopWatch = null;
     try {
       // 初始化ApiContext
-      doInitApiContext(request, response);
-      // 性能日志埋点
-      stopWatch = initPerfLog(apiContext);
-      // 序列化及前后验证
-      doUnmarshallBeforeVerify(apiContext, request);
-      doUnmarshal(apiContext);
-      doUnmarshallAfterVerify(apiContext, request);
+      doInitApiContext(apiContext, request, response);
+      doVerify(apiContext);
       // 执行服务
       doExceute(apiContext);
     } catch (Throwable ex) {
-      handleException(apiContext, ex);
+      doException(apiContext, ex);
     } finally {
-      try {
-        doResponse(apiContext, response);
-      } catch (Exception e) {
-        logger.warn("响应处理失败:", e);
-      } finally {
-        MDC.clear();
-        destoryApiContext();
-        if (stopWatch != null) {
-          stopWatch.stop();
-        }
-      }
+      doFinally(apiContext);
     }
   }
 
-  protected ApiContext doInitApiContext(
-      HttpServletRequest orignalRequest, HttpServletResponse orignalResponse) {
-    ApiContext apiContext = getApiContext();
-    apiContext.setOrignalRequest(orignalRequest);
-    apiContext.setOrignalResponse(orignalResponse);
-    apiContext.initRequestParam();
+  private void doFinally(ApiContext apiContext) {
     try {
-      ApiService apiService =
-          apiServiceFactory.getApiService(
-              apiContext.getServiceName(), apiContext.getServiceVersion());
-      apiContext.init(apiService);
-
-      ApiRequest apiRequest = apiService.getRequestBean();
-      ApiResponse apiResponse = apiService.getResponseBean();
-      prepareResponse(apiResponse, apiContext.getRequestData());
-      apiContext.setRequest(apiRequest);
-      apiContext.setResponse(apiResponse);
-      initGid();
-      apiContext.getOpenApiService().responseType().validate(apiContext.getRequestData());
-
+      doResponse(apiContext, apiContext.getOrignalResponse());
+    } catch (Exception e) {
+      logger.warn("响应处理失败:", e);
     } finally {
-      // todo
-      //      logRequestData(requestData);
+      MDC.clear();
+      destoryApiContext(apiContext);
     }
-    return apiContext;
   }
+
+  protected void doVerify(ApiContext apiContext) {
+    // 认证
+    doAuthenticate(apiContext);
+    // 授权
+    doAuthorize(apiContext);
+    // 解码
+    doUnmarshal(apiContext);
+    // 参数校验
+    doValidateParameter(apiContext.getRequest());
+  }
+
+  protected abstract void doInitApiContext(
+      ApiContext apiContext,
+      HttpServletRequest orignalRequest,
+      HttpServletResponse orignalResponse);
 
   protected ApiContext getApiContext() {
     if (!ApiContextHolder.isInited()) {
@@ -133,64 +100,19 @@ public class HttpApiServiceExecuter
     return ApiContextHolder.getApiContext();
   }
 
-  protected void initGid() {
-    ApiContext apiContext = getApiContext();
-    String service = apiContext.getServiceName();
-    String version = apiContext.getServiceVersion();
-    String partnerId = apiContext.getPartnerId();
-    //    String requestNo = ApiUtils.getRequestNo(apiContext.getRequestData());
-    //    String orderNo = apiContext.getRequestData().get(ApiConstants.MERCH_ORDER_NO);
-    //    if (StringUtils.isBlank(orderNo)) {
-    //      orderNo = requestNo;
-    //    }
-    //    String tradeGid = orderInfoService.findGidByTrade(partnerId, service, version, orderNo);
-    //    if (StringUtils.isBlank(tradeGid)) {
-    //      // 查找依赖关系的服务
-    //      OpenApiDependence openApiDependence =
-    //          apiContext.getApiService().getClass().getAnnotation(OpenApiDependence.class);
-    //      if (openApiDependence != null && StringUtils.isNotBlank(openApiDependence.value())) {
-    //        tradeGid =
-    //            orderInfoService.findGidByTrade(partnerId, openApiDependence.value(), version,
-    // orderNo);
-    //      }
-    //    }
-    //    if (StringUtils.isBlank(tradeGid)) {
-    //      apiContext.initGid();
-    //    } else {
-    //      apiContext.setGid(tradeGid);
-    //    }
-    // 生成性的OID
-    apiContext.initGid();
-    apiContext.setOid(Ids.oid());
-    MDC.put(ApiConstants.GID, apiContext.getGid());
-  }
-
   /** @param apiContext */
   @SuppressWarnings({"rawtypes", "unchecked"})
-  protected void doExceute(ApiContext apiContext) {
-    ApiService apiService = apiContext.getApiService();
-    ApiRequest apiRequest = apiContext.getRequest();
-    ApiResponse apiResponse = apiContext.getResponse();
-    try {
-      publishBeforeServiceExecuteEvent(apiContext);
-      apiService.service(apiRequest, apiResponse);
-    } catch (Throwable ex) {
-      publishServiceExceptionEvent(apiResponse, apiRequest, apiService, ex);
-      throw ex;
-    } finally {
-      publishAfterServiceExecuteEvent(apiResponse, apiRequest, apiService);
-    }
-  }
+  protected abstract void doExceute(ApiContext apiContext);
 
-  protected void prepareResponse(ApiResponse apiResponse, Map<String, String> requestData) {
-    if (apiResponse == null || requestData == null) {
+  protected void prepareResponse(ApiResponse apiResponse, ApiContext apiContext) {
+    if (apiResponse == null) {
       return;
     }
-    apiResponse.setRequestNo(ApiUtils.getRequestNo(requestData));
-    apiResponse.setMerchOrderNo(requestData.get(ApiConstants.MERCH_ORDER_NO));
-    apiResponse.setPartnerId(requestData.get(ApiConstants.PARTNER_ID));
-    apiResponse.setService(requestData.get(ApiConstants.SERVICE));
-    apiResponse.setContext(requestData.get(ApiConstants.CONTEXT));
+    apiResponse.setRequestNo(apiContext.getRequest().getRequestNo());
+    apiResponse.setMerchOrderNo(apiContext.getRequest().getMerchOrderNo());
+    apiResponse.setPartnerId(apiContext.getRequest().getPartnerId());
+    apiResponse.setService(apiContext.getRequest().getService());
+    apiResponse.setContext(apiContext.getRequest().getContext());
   }
 
   protected void doResponse(ApiContext apiContext, HttpServletResponse response) {
@@ -217,9 +139,8 @@ public class HttpApiServiceExecuter
    * @return
    */
   protected void doUnmarshal(ApiContext apiContext) {
-    Map<String, String> requestData = apiContext.getRequestData();
     ApiRequest apiRequest =
-        apiMarshallFactory.getRequestMarshall(getApiContext().getProtocol()).marshall(requestData);
+        apiMarshallFactory.getRequestMarshall(getApiContext().getProtocol()).marshall(apiContext);
     getApiContext().setRequest(apiRequest);
   }
 
@@ -242,45 +163,17 @@ public class HttpApiServiceExecuter
     }
   }
 
-  /** 销毁释放线程绑定ApiContext */
-  protected void destoryApiContext() {
+  /**
+   * 销毁释放线程绑定ApiContext
+   *
+   * @param apiContext
+   */
+  protected void destoryApiContext(ApiContext apiContext) {
+    apiContext.destory();
     ApiContextHolder.clear();
   }
 
-  /**
-   * marshall 前check
-   *
-   * @param apiContext
-   * @param request
-   */
-  protected void doUnmarshallBeforeVerify(ApiContext apiContext, HttpServletRequest request) {
-    // 认证
-    doAuthenticate(apiContext);
-  }
 
-  /**
-   * marshall 后 服务验证
-   *
-   * @param request
-   * @param apiContext
-   */
-  protected void doUnmarshallAfterVerify(ApiContext apiContext, HttpServletRequest request) {
-    // 校验业务参数
-    doValidateParameter(apiContext.getRequest());
-    // 校验请求唯一
-    doVerifyIdempotence(apiContext.getRequest());
-    // 授权
-    doAuthorize(apiContext.getRequest());
-  }
-
-  /**
-   * 幂等性校验
-   *
-   * @param apiRequest
-   */
-  protected void doVerifyIdempotence(ApiRequest apiRequest) {
-    orderInfoService.checkUnique(apiRequest.getPartnerId(), apiRequest.getRequestNo());
-  }
 
   /** 公共Api参数合法性检查 */
   protected void doValidateParameter(ApiRequest apiRequest) {
@@ -307,8 +200,8 @@ public class HttpApiServiceExecuter
     apiContext.setAuthenticated(true);
   }
 
-  protected void doAuthorize(ApiRequest apiRequest) {
-    apiAuthorization.authorize(apiRequest);
+  protected void doAuthorize(ApiContext apiContext) {
+    apiAuthorization.authorize(apiContext);
   }
 
   /**
@@ -317,59 +210,17 @@ public class HttpApiServiceExecuter
    * @param apiContext
    * @param e
    */
-  protected void handleException(ApiContext apiContext, Throwable e) {
+  protected void doException(ApiContext apiContext, Throwable e) {
     if (apiContext.getResponse() == null) {
-      apiContext.setResponse(createResponse(apiContext.getRequestData()));
+      apiContext.setResponse(createResponse(apiContext));
     }
     apiServiceExceptionHander.handleApiServiceException(
         apiContext.getRequest(), apiContext.getResponse(), e);
   }
 
-  private void publishBeforeServiceExecuteEvent(ApiContext apiContext) {
-    if (eventPublisher.canPublishEvent(apiContext.getApiService())) {
-      eventPublisher.publishEvent(
-          new BeforeServiceExecuteEvent(apiContext.getRequest(), apiContext.getResponse()),
-          apiContext.getApiService());
-    }
-  }
-
-  private void publishServiceExceptionEvent(
-      ApiResponse apiResponse, ApiRequest apiRequest, ApiService apiService, Throwable throwable) {
-    if (eventPublisher.canPublishEvent(apiService)) {
-      eventPublisher.publishEvent(
-          new ServiceExceptionEvent(apiRequest, apiResponse, throwable), apiService);
-    }
-  }
-
-  private void publishAfterServiceExecuteEvent(
-      ApiResponse apiResponse, ApiRequest apiRequest, ApiService apiService) {
-    if (eventPublisher.canPublishEvent(apiService)) {
-      eventPublisher.publishEvent(
-          new AfterServiceExecuteEvent(apiRequest, apiResponse), apiService);
-    }
-  }
-
-  private void publishRequestReceivedEvent(Map<String, String> requestData) {
-    if (eventPublisher.canPublishGlobalEvent()) {
-      eventPublisher.publishEvent(new RequestReceivedEvent(requestData));
-    }
-  }
-
-  private StopWatch initPerfLog(ApiContext apiContext) {
-    return new Slf4JStopWatch(apiContext.getServiceName(), perlogger);
-  }
-
-  private void logRequestData(Map<String, String> requestData) {
-    // changed by zhangpu for 'request log security filtering(mask or
-    // ignore)' on 2015-10-16
-    String serviceName = requestData.get(ApiConstants.SERVICE);
-    String labelPostfix = (StringUtils.isNotBlank(serviceName) ? "[" + serviceName + "]:" : ":");
-    openApiLoggerHandler.log("服务请求" + labelPostfix, requestData);
-  }
-
-  private ApiResponse createResponse(Map<String, String> requestData) {
+  private ApiResponse createResponse(ApiContext apiContext) {
     ApiResponse response = new ApiResponse();
-    prepareResponse(response, requestData);
+    prepareResponse(response, apiContext);
     return response;
   }
 
@@ -387,7 +238,8 @@ public class HttpApiServiceExecuter
         && !apiResponse.isSuccess()
         && StringUtils.isBlank(redirectUrl)) {
       // 已通过签名认证，确定了身份合法，非恶意攻击
-      redirectUrl = apiContext.getRequestData().get(ApiConstants.RETURN_URL);
+      // fixme
+      //      redirectUrl = apiContext.getRequestData().get(ApiConstants.RETURN_URL);
     }
 
     return redirectUrl;

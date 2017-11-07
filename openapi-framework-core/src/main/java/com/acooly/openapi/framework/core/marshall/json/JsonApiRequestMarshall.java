@@ -5,13 +5,12 @@
  * date:2016年3月17日
  *
  */
-package com.acooly.openapi.framework.core.marshall.formjson;
+package com.acooly.openapi.framework.core.marshall.json;
 
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.core.executer.ApiContext;
-import com.acooly.openapi.framework.core.executer.ApiContextHolder;
 import com.acooly.openapi.framework.core.marshall.ApiRequestMarshall;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
 import com.acooly.openapi.framework.core.marshall.crypt.ApiMarshallCryptService;
@@ -27,15 +26,14 @@ import java.util.Map;
  * @author zhangpu 重构接口抽象框架
  */
 @Component
-public class JsonApiRequestMarshall implements ApiRequestMarshall<ApiRequest, Map<String, String>> {
+public class JsonApiRequestMarshall implements ApiRequestMarshall<ApiRequest, ApiContext> {
 
   private static JsonMarshallor jsonMarshallor = JsonMarshallor.INSTANCE;
 
   @Autowired private ApiMarshallCryptService apiMarshallCryptService;
 
   @Override
-  public ApiRequest marshall(Map<String, String> source) {
-    ApiContext apiContext = ApiContextHolder.getApiContext();
+  public ApiRequest marshall(ApiContext apiContext) {
     String requestBody = apiContext.getRequestBody();
     ApiRequest parse = jsonMarshallor.parse(requestBody, apiContext.getRequest().getClass());
     ObjectAccessor objectAccessor = ObjectAccessor.of(parse);

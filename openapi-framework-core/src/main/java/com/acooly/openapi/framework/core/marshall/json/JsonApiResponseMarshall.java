@@ -5,7 +5,7 @@
  * date:2016年3月17日
  *
  */
-package com.acooly.openapi.framework.core.marshall.formjson;
+package com.acooly.openapi.framework.core.marshall.json;
 
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
