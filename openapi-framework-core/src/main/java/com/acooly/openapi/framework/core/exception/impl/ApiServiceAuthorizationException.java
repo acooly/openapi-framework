@@ -21,8 +21,8 @@ public class ApiServiceAuthorizationException extends ApiServiceException {
 
   public ApiServiceAuthorizationException(String detail) {
     super(
-        ApiServiceResultCode.UN_AUTHORIZED_ERROR.getCode(),
-        ApiServiceResultCode.UN_AUTHORIZED_ERROR.getMessage(),
+        ApiServiceResultCode.UNAUTHORIZED_ERROR.getCode(),
+        ApiServiceResultCode.UNAUTHORIZED_ERROR.getMessage(),
         detail);
   }
 }

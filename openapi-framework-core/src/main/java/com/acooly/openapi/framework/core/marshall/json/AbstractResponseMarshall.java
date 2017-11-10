@@ -11,7 +11,6 @@ import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.common.message.ApiReturn;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
 import com.acooly.openapi.framework.core.executer.ApiContext;
 import com.acooly.openapi.framework.core.executer.ApiContextHolder;
@@ -88,8 +87,6 @@ public abstract class AbstractResponseMarshall<T, S extends ApiResponse>
             : ":");
     if (ApiNotify.class.isAssignableFrom(apiResponse.getClass())) {
       return "异步通知" + labelPostfix;
-    } else if (ApiReturn.class.isAssignableFrom(apiResponse.getClass())) {
-      return "服务跳转" + labelPostfix;
     } else {
       return "服务响应" + labelPostfix;
     }

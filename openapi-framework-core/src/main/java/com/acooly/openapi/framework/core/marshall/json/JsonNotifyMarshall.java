@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-public class HttpFormJsonNotifyMarshall
+public class JsonNotifyMarshall
     extends AbstractResponseMarshall<Map<String, String>, ApiNotify>
     implements ApiNotifyMarshall<Map<String, String>, ApiNotify> {
 

@@ -39,7 +39,6 @@ public class OrderPayApiServiceTest extends AbstractApiServieTests {
     Money amount = Money.amout("1000.00");
     CreateOrderRequest request = new CreateOrderRequest();
     request.setRequestNo(UUID.randomUUID().toString());
-    request.setMerchOrderNo("1234567890=-09876543");
     request.setTitle("同步请求创建订单");
     request.setAmount(amount);
     request.setPayeeUserId("12345678900987654321");
@@ -71,11 +70,9 @@ public class OrderPayApiServiceTest extends AbstractApiServieTests {
     Money amount = Money.amout("1000.00");
     PayOrderRequest request = new PayOrderRequest();
     request.setRequestNo(UUID.randomUUID().toString());
-    request.setMerchOrderNo("1234567890=-09876543");
     request.setAmount(amount);
     request.setPayerUserId("09876543211234567890");
     request.setContext("这是客户端参数:{userName:1,\"password\":\"12121\"}");
-    request.setNotifyUrl(notifyUrl);
     PayOrderResponse orderResponse = request(request, PayOrderResponse.class);
     logger.info("{}", orderResponse);
   }

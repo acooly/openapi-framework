@@ -7,7 +7,6 @@ import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
 import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiRequest;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -35,10 +34,6 @@ public class WithdrawRedirectRequest extends ApiRequest {
 
   /** 参数校验,校验失败请抛出OrderCheckException */
   public void check() throws OrderCheckException {
-    String orderNo = getMerchOrderNo();
-    if (StringUtils.isBlank(orderNo)) {
-      throw new ApiServiceException("TRADE_ORDER_CREATE_ERROR", "orderNo:交易订单号不能为空");
-    }
     long amongCent = getAmount().getCent();
     if (amongCent <= 0) {
       throw new ApiServiceException("PARAMETER_ERROR", "交易金额必须大于0");

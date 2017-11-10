@@ -17,7 +17,9 @@ import com.acooly.openapi.framework.core.auth.ApiAuthentication;
 import com.acooly.openapi.framework.core.auth.ApiAuthorization;
 import com.acooly.openapi.framework.core.exception.ApiServiceExceptionHander;
 import com.acooly.openapi.framework.core.log.OpenApiLoggerHandler;
-import com.acooly.openapi.framework.core.marshall.ApiMarshallFactory;
+import com.acooly.openapi.framework.core.marshall.ApiRedirectMarshall;
+import com.acooly.openapi.framework.core.marshall.ApiRequestMarshall;
+import com.acooly.openapi.framework.core.marshall.ApiResponseMarshall;
 import com.acooly.openapi.framework.core.service.base.AbstractApiService;
 import com.acooly.openapi.framework.core.service.base.ApiService;
 import com.acooly.openapi.framework.core.service.factory.ApiServiceFactory;
@@ -45,8 +47,10 @@ public abstract class HttpApiServiceExecuter
   @Resource protected ApiAuthentication apiAuthentication;
   @Resource protected ApiAuthorization apiAuthorization;
   @Resource protected ApiServiceFactory apiServiceFactory;
-  @Resource protected ApiMarshallFactory apiMarshallFactory;
   @Autowired private ApiServiceExceptionHander apiServiceExceptionHander;
+  @Autowired private ApiRequestMarshall apiRequestMarshall;
+  @Autowired private ApiResponseMarshall apiResponseMarshall;
+  @Autowired private ApiRedirectMarshall apiRedirectMarshall;
 
   @SuppressWarnings("rawtypes")
   @Override
@@ -83,6 +87,7 @@ public abstract class HttpApiServiceExecuter
     doAuthorize(apiContext);
     // 解码
     doUnmarshal(apiContext);
+
     prepareResponse(apiContext);
 
     // 参数校验
@@ -115,7 +120,6 @@ public abstract class HttpApiServiceExecuter
       return;
     }
     apiResponse.setRequestNo(apiRequest.getRequestNo());
-    apiResponse.setMerchOrderNo(apiRequest.getMerchOrderNo());
     apiResponse.setPartnerId(apiRequest.getPartnerId());
     apiResponse.setService(apiRequest.getService());
     apiResponse.setVersion(apiRequest.getVersion());
@@ -147,8 +151,7 @@ public abstract class HttpApiServiceExecuter
    * @return
    */
   protected void doUnmarshal(ApiContext apiContext) {
-    ApiRequest apiRequest =
-        apiMarshallFactory.getRequestMarshall(apiContext.getProtocol()).marshall(apiContext);
+    ApiRequest apiRequest = apiRequestMarshall.marshall(apiContext);
     getApiContext().setRequest(apiRequest);
   }
 
@@ -159,15 +162,9 @@ public abstract class HttpApiServiceExecuter
    */
   protected String doResponseMarshal(ApiResponse apiResponse, boolean isRedirect) {
     if (isRedirect) {
-      return (String)
-          apiMarshallFactory
-              .getRedirectMarshall(getApiContext().getProtocol())
-              .marshall(apiResponse);
+      return (String) apiRedirectMarshall.marshall(apiResponse);
     } else {
-      return (String)
-          apiMarshallFactory
-              .getResponseMarshall(getApiContext().getProtocol())
-              .marshall(apiResponse);
+      return (String) apiResponseMarshall.marshall(apiResponse);
     }
   }
 

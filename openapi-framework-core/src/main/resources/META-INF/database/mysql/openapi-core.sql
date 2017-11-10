@@ -21,7 +21,7 @@ CREATE TABLE `api_order_info` (
   `raw_add_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `raw_update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_PARTNER_REQUEST` (`partner_id`,`request_no`) USING BTREE,
+  UNIQUE KEY `UK_PARTNER_REQUEST` (`request_no`) USING BTREE,
   KEY `IDX_ORDER_GID` (`gid`) USING BTREE,
   KEY `IDX_PARTNER_ORDER` (`partner_id`,`order_no`,`service`,`version`) USING BTREE,
   KEY `IDX_ADD_TIME` (`raw_add_time`) USING BTREE

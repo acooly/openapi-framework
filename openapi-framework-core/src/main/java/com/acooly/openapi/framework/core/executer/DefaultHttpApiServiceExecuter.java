@@ -46,16 +46,6 @@ public class DefaultHttpApiServiceExecuter extends HttpApiServiceExecuter {
   @Override
   protected void doVerify(ApiContext apiContext) {
     super.doVerify(apiContext);
-    // 校验请求唯一
-    doVerifyIdempotence(apiContext.getRequest());
-  }
-  /**
-   * 幂等性校验
-   *
-   * @param apiRequest
-   */
-  private void doVerifyIdempotence(ApiRequest apiRequest) {
-    orderInfoService.checkUnique(apiRequest.getPartnerId(), apiRequest.getRequestNo());
   }
 
   private void logRequestData(ApiContext apiContext) {

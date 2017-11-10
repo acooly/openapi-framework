@@ -14,7 +14,6 @@ import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
-import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
@@ -62,6 +61,7 @@ public class ApiContext {
   private ApiService apiService;
 
   private ApiRequest request;
+
   private ApiResponse response;
 
   private String redirectUrl;
@@ -70,8 +70,6 @@ public class ApiContext {
   private String serviceName;
   /** 服务版本 */
   private String serviceVersion;
-  /** 访问协议 */
-  private ApiProtocol protocol = ApiProtocol.JSON;
 
   private String userAgent;
 
@@ -127,9 +125,15 @@ public class ApiContext {
     parseSign(queryStringMap);
     // signType
     parseSignType(queryStringMap);
+    // signType
+    parseParternId(queryStringMap);
     parseBody();
     this.stopWatch = new Slf4JStopWatch(serviceName, perlogger);
     this.userAgent = orignalRequest.getHeader("User-Agent");
+  }
+
+  private void parseParternId(Map<String, String> queryStringMap) {
+    this.partnerId = notBlankParam(queryStringMap, ApiConstants.PARTNER_ID);
   }
 
   private void parseBody() {
@@ -161,29 +165,15 @@ public class ApiContext {
   }
 
   private void parseBaseRequestParams(String body) {
-    if (this.requestBody.startsWith("{")) {
-      protocol = ApiProtocol.JSON;
-      parseJson(body);
-    } else if (this.requestBody.startsWith("<")) {
-      protocol = ApiProtocol.XML;
-      parseXml();
-    } else {
-      throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, "报文内容格式为xml或者json");
-    }
-    throwIfBlank(partnerId, ApiConstants.PARTNER_ID + "不能为空");
+    parseJson(body);
     throwIfBlank(serviceName, ApiConstants.SERVICE + "不能为空");
     throwIfBlank(serviceVersion, ApiConstants.VERSION + "不能为空");
-  }
-
-  private void parseXml() {
-    throw new UnsupportedOperationException("");
   }
 
   private void parseJson(String body) {
     JSONObject jsonObject = (JSONObject) JSON.parse(body);
     serviceName = (String) jsonObject.get(ApiConstants.SERVICE);
     serviceVersion = (String) jsonObject.get(ApiConstants.VERSION);
-    partnerId = (String) jsonObject.get(ApiConstants.PARTNER_ID);
   }
 
   private String notBlankParam(Map<String, String> queryStringMap, String param) {

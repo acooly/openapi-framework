@@ -2,7 +2,6 @@ package com.acooly.openapi.framework.common.message;
 
 import com.acooly.core.utils.ToString;
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.common.annotation.OpenApiAlias;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,9 +19,8 @@ import javax.validation.constraints.Size;
 public abstract class ApiMessage {
 
   @NotEmpty
-  @Size(min = 16, max = 40)
-  @OpenApiField(desc = "请求流水号", constraint = "商户请求唯一性")
-  @OpenApiAlias("orderNo")
+  @Size(min = 8, max = 64)
+  @OpenApiField(desc = "请求流水号", constraint = "商户请求号，全局唯一。建议规则为：商户前缀+唯一标识")
   private String requestNo;
 
   @NotEmpty
@@ -39,13 +37,6 @@ public abstract class ApiMessage {
   @Size(max = 128)
   @OpenApiField(desc = "会话参数", constraint = "调用端的API调用会话参数，请求参数任何合法值，在响应时会回传给调用端")
   private String context;
-
-  @Size(min = 10, max = 40)
-  @OpenApiField(desc = "交易订单号", constraint = "在有交易的场景必须填写。具有交易唯一性")
-  private String merchOrderNo;
-
-  @OpenApiField(desc = "是否为移动客户端访问", constraint = "非必填")
-  private boolean appClient = false;
 
   @Override
   public String toString() {

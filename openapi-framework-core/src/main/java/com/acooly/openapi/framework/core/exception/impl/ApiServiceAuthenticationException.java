@@ -20,8 +20,8 @@ public class ApiServiceAuthenticationException extends ApiServiceException {
 
   public ApiServiceAuthenticationException(String detail) {
     super(
-        ApiServiceResultCode.UN_AUTHENTICATED_ERROR.getCode(),
-        ApiServiceResultCode.UN_AUTHENTICATED_ERROR.getMessage(),
+        ApiServiceResultCode.UNAUTHENTICATED_ERROR.getCode(),
+        ApiServiceResultCode.UNAUTHENTICATED_ERROR.getMessage(),
         detail);
   }
 }

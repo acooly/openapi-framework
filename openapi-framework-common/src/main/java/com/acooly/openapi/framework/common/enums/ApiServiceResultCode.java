@@ -8,38 +8,30 @@ import java.util.List;
 import java.util.Map;
 
 public enum ApiServiceResultCode implements Messageable {
-  SUCCESS("EXECUTE_SUCCESS", "成功"),
-
-  PROCESSING("EXECUTE_PROCESSING", "处理中"),
-
+  SUCCESS("SUCCESS", "成功"),
+  PROCESSING("PROCESSING", "处理中"),
   INTERNAL_ERROR("INTERNAL_ERROR", "内部错误"),
-
   PARAMETER_ERROR("PARAMETER_ERROR", "参数错误"),
-
-  UN_AUTHENTICATED_ERROR("UNAUTHENTICATED", "认证(签名)错误"),
-
+  FAILURE("FAILURE", "执行失败"),
+  UNAUTHENTICATED_ERROR("UNAUTHENTICATED_ERROR", "认证(签名)错误"),
   PARAM_FORMAT_ERROR("PARAM_FORMAT_ERROR", "参数格式错误"),
+  REQUEST_NO_NOT_UNIQUE("REQUEST_NO_NOT_UNIQUE", "请求号重复"),
+  FIELD_NOT_UNIQUE("FIELD_NOT_UNIQUE", "对象字段重复"),
+
+  REQUEST_GID_NOT_EXSIT("REQUEST_GID_NOT_EXSIT", "gid不存在"),
 
   SERVICE_NOT_FOUND_ERROR("SERVICE_NOT_FOUND_ERROR", "服务不存在"),
 
-  UN_AUTHORIZED_ERROR("UNAUTHORIZED", "未授权的服务"),
-
-  REQUEST_NO_NOT_UNIQUE("REQUEST_NO_NOT_UNIQUE", "请求号重复"),
-
-  FIELD_NOT_UNIQUE("FIELD_NOT_UNIQUE", "对象字段重复"),
+  UNAUTHORIZED_ERROR("UNAUTHORIZED_ERROR", "未授权的服务"),
 
   REDIRECT_URL_NOT_EXIST("REDIRECT_URL_NOT_EXIST", "跳转服务需设置redirectUrl"),
   /** 合作伙伴id没有在openapi中注册 */
   PARTNER_NOT_REGISTER("PARTNER_NOT_REGISTER", "商户没有注册"),
   /** 合作伙伴id没有产品 */
   PARTNER_NOT_PRODUCT("PARTNER_NOT_PRODUCT", "商户没有配置产品"),
-
-  UNSUPPORTED_SECHEME("UNSUPPORTED_SECHEME", "不支持的请求协议"),
-
+  // TODO:delete
+  APP_CLIENT_NOT_SUPPORT("APP_CLIENT_NOT_SUPPORT", "//TODO"),
   NOTIFY_ERROR("NOTIFY_ERROR", "异步通知失败"),
-
-  REQUEST_GID_NOT_EXSIT("REQUEST_GID_NOT_EXSIT", "gid不存在"),
-  APP_CLIENT_NOT_SUPPORT("APP_CLIENT_NOT_SUPPORT", "不支持移动端访问"),
   ;
   private final String code;
   private final String message;

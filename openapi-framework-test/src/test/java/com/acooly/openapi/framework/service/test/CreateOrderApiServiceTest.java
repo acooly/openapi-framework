@@ -1,5 +1,6 @@
 package com.acooly.openapi.framework.service.test;
 
+import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.service.test.request.CreateOrderRequest;
 import com.alibaba.fastjson.JSON;
@@ -17,7 +18,6 @@ public class CreateOrderApiServiceTest extends AbstractApiServieTests {
     String url = "http://127.0.0.1:8089/gateway.do";
     CreateOrderRequest request = new CreateOrderRequest();
     request.setRequestNo(UUID.randomUUID().toString());
-    request.setMerchOrderNo("1234567890=-09876543");
     request.setTitle("同步请求创建订单");
     request.setPayeeUserId("12345678900987654321");
     request.setPayerUserId("09876543211234567890");
@@ -32,12 +32,11 @@ public class CreateOrderApiServiceTest extends AbstractApiServieTests {
     String body = JSON.toJSONString(request);
     String responseBody =
         HttpRequest.post(url)
-            .header("signType", "MD5")
-            .header("sign", sign(body))
+            .header(ApiConstants.SIGN_TYPE, "MD5")
+            .header(ApiConstants.SIGN, sign(body))
+            .header(ApiConstants.PARTNER_ID, "XX")
             .send(body)
             .body();
     log.info("{}", responseBody);
   }
-
-
 }

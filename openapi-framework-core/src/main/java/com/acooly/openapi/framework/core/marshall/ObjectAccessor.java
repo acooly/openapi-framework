@@ -1,7 +1,6 @@
 package com.acooly.openapi.framework.core.marshall;
 
 import com.acooly.core.common.exception.AppConfigException;
-import com.acooly.openapi.framework.common.annotation.OpenApiAlias;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.convert.ApiServiceConversionService;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
@@ -83,11 +82,11 @@ public class ObjectAccessor<T> {
             }
             if (!filedMap.containsKey(field.getName())) {
               filedMap.put(field.getName(), field);
-              if(openApiField.security()){
-                if(String.class.isAssignableFrom(field.getType())){
+              if (openApiField.security()) {
+                if (String.class.isAssignableFrom(field.getType())) {
                   securityfieldMap.put(field.getName(), field);
-                }else{
-                  throw new AppConfigException(field+"标注了需要加密，字段类型必须为String");
+                } else {
+                  throw new AppConfigException(field + "标注了需要加密，字段类型必须为String");
                 }
               }
             }
@@ -122,17 +121,6 @@ public class ObjectAccessor<T> {
     }
     OpenApiField openApiField = field.getAnnotation(OpenApiField.class);
     return openApiField != null && openApiField.security();
-  }
-
-  public String getFieldAlias(String property) {
-    Field field = this.classMeta.fieldMap.get(property);
-    if (field == null) {
-      return property;
-    }
-    OpenApiAlias openApiAlias = field.getAnnotation(OpenApiAlias.class);
-    return (openApiAlias != null && Strings.isNullOrEmpty(openApiAlias.value()))
-        ? openApiAlias.value()
-        : property;
   }
 
   /**

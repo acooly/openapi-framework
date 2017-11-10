@@ -6,6 +6,7 @@ package com.acooly.openapi.framework.core.service.base;
 
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
+import com.acooly.openapi.framework.common.message.ApiAsyncRequest;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
@@ -56,7 +57,6 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
       objectAccessor.setPropertyValue(entry.getKey(), entry.getValue());
     }
     // 对数据库的orderNo特别处理
-    apiNotify.setMerchOrderNo(orderInfo.getOrderNo());
     customizeApiNotify(orderInfo, apiNotifyOrder, apiNotify);
     return apiNotify;
   }
@@ -118,14 +118,14 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
       OrderInfo orderInfo = new OrderInfo();
       orderInfo.setRequestNo(request.getRequestNo());
       orderInfo.setGid(gid);
-      orderInfo.setNotifyUrl(request.getNotifyUrl());
-      orderInfo.setReturnUrl(request.getReturnUrl());
+      if (request instanceof ApiAsyncRequest) {
+        orderInfo.setNotifyUrl(((ApiAsyncRequest) request).getNotifyUrl());
+        orderInfo.setReturnUrl(((ApiAsyncRequest) request).getReturnUrl());
+      }
       orderInfo.setPartnerId(request.getPartnerId());
-      orderInfo.setOrderNo(request.getMerchOrderNo());
       orderInfo.setService(request.getService());
       orderInfo.setVersion(request.getVersion());
       orderInfo.setSignType(ApiContextHolder.getApiContext().getSignType().name());
-      orderInfo.setProtocol(ApiContextHolder.getApiContext().getProtocol());
       orderInfo.setContext(request.getContext());
       orderInfoService.insert(orderInfo);
     } catch (Exception e) {

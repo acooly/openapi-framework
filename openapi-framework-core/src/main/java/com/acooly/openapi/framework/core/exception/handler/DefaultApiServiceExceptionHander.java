@@ -43,9 +43,9 @@ public class DefaultApiServiceExceptionHander implements ApiServiceExceptionHand
   }
 
   protected void handleMessageable(ApiResponse apiResponse, Messageable ex) {
-    apiResponse.setResultCode(ex.code());
-    apiResponse.setResultMessage(ex.message());
-    apiResponse.setResultDetail(ex.message());
+    apiResponse.setCode(ex.code());
+    apiResponse.setMessage(ex.message());
+    apiResponse.setDetail(ex.message());
   }
   /**
    * 服务异常处理
@@ -54,9 +54,9 @@ public class DefaultApiServiceExceptionHander implements ApiServiceExceptionHand
    * @param ase
    */
   protected void handleApiServiceException(ApiResponse apiResponse, ApiServiceException ase) {
-    apiResponse.setResultCode(ase.getResultCode());
-    apiResponse.setResultMessage(ase.getResultMessage());
-    apiResponse.setResultDetail(ase.getDetail());
+    apiResponse.setCode(ase.getResultCode());
+    apiResponse.setMessage(ase.getResultMessage());
+    apiResponse.setDetail(ase.getDetail());
   }
 
   /**
@@ -65,7 +65,7 @@ public class DefaultApiServiceExceptionHander implements ApiServiceExceptionHand
    * @param apiResponse
    */
   protected void handleInternalException(ApiResponse apiResponse) {
-    apiResponse.setResultCode(ApiServiceResultCode.INTERNAL_ERROR.code());
-    apiResponse.setResultMessage(ApiServiceResultCode.INTERNAL_ERROR.message());
+    apiResponse.setCode(ApiServiceResultCode.INTERNAL_ERROR.code());
+    apiResponse.setMessage(ApiServiceResultCode.INTERNAL_ERROR.message());
   }
 }

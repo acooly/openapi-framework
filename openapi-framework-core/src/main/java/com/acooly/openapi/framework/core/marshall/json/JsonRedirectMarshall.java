@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class HttpFormJsonRedirectMarshall extends AbstractResponseMarshall<String, ApiResponse>
+public class JsonRedirectMarshall extends AbstractResponseMarshall<String, ApiResponse>
     implements ApiRedirectMarshall<String, ApiResponse> {
 
   protected String getLogLabel(ApiResponse apiResponse) {

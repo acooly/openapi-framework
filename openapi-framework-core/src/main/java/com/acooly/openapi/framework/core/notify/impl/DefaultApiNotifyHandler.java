@@ -16,7 +16,7 @@ import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.core.executer.ApiContextHolder;
-import com.acooly.openapi.framework.core.marshall.ApiMarshallFactory;
+import com.acooly.openapi.framework.core.marshall.ApiNotifyMarshall;
 import com.acooly.openapi.framework.core.notify.ApiNotifyHandler;
 import com.acooly.openapi.framework.core.notify.ApiNotifySender;
 import com.acooly.openapi.framework.core.notify.domain.NotifySendMessage;
@@ -47,7 +47,7 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
 
   @Autowired protected OrderInfoService orderInfoService;
   @Autowired protected ApiServiceFactory apiServiceFactory;
-  @Resource protected ApiMarshallFactory apiMarshallFactory;
+  @Resource protected ApiNotifyMarshall apiNotifyMarshall;
   @Resource protected ApiNotifySender apiNotifySender;
   @Autowired protected AuthInfoRealm authInfoRealm;
 
@@ -76,9 +76,7 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
       ApiContextHolder.getApiContext().setApiService(apiService);
       ApiContextHolder.getApiContext().setResponse(apiNotify);
       // 组装报文
-      Map<String, String> notifyMap =
-          (Map<String, String>)
-              apiMarshallFactory.getNotifyMarshall(orderInfo.getProtocol()).marshall(apiNotify);
+      Map<String, String> notifyMap = (Map<String, String>) apiNotifyMarshall.marshall(apiNotify);
       // 删除框架的签名，交给CS系统发送时签名
       String callerNotifyUrl = apiNotifyOrder.getParameter(ApiConstants.NOTIFY_URL);
       String notifyUrl =
@@ -90,7 +88,6 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
       notifySendMessage.setService(apiNotify.getService());
       notifySendMessage.setVersion(apiNotify.getVersion());
       notifySendMessage.setUrl(notifyUrl);
-      notifySendMessage.setMerchOrderNo(apiNotify.getMerchOrderNo());
       notifySendMessage.setRequestNo(apiNotify.getRequestNo());
       notifySendMessage.setParameters(notifyMap);
       apiNotifySender.send(notifySendMessage);
@@ -145,9 +142,7 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
       ApiContextHolder.getApiContext().setApiService(apiService);
       ApiContextHolder.getApiContext().setResponse(apiNotify);
       // 组装报文
-      Map<String, String> notifyMap =
-          (Map<String, String>)
-              apiMarshallFactory.getNotifyMarshall(orderInfo.getProtocol()).marshall(apiNotify);
+      Map<String, String> notifyMap = (Map<String, String>) apiNotifyMarshall.marshall(apiNotify);
       // 交给CS系统发送
       NotifySendMessage notifySendMessage = new NotifySendMessage();
       notifySendMessage.setGid(apiNotifyOrder.getGid());
@@ -155,7 +150,6 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
       notifySendMessage.setService(apiNotify.getService());
       notifySendMessage.setVersion(apiNotify.getVersion());
       notifySendMessage.setUrl(orderInfo.getNotifyUrl());
-      notifySendMessage.setMerchOrderNo(apiNotify.getMerchOrderNo());
       notifySendMessage.setRequestNo(apiNotify.getRequestNo());
       notifySendMessage.setParameters(notifyMap);
       apiNotifySender.send(notifySendMessage);

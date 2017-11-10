@@ -5,7 +5,7 @@
 package com.acooly.openapi.framework.common.message;
 
 /**
- * API异步通知基类
+ * API通知基类
  *
  * @author zhangpu
  * @date 2014年7月27日
