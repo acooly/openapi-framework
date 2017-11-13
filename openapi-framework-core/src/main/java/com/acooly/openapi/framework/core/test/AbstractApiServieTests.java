@@ -2,7 +2,9 @@ package com.acooly.openapi.framework.core.test;
 
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
+import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
+import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiMessage;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.utils.Cryptos;
@@ -13,6 +15,8 @@ import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
 import com.acooly.openapi.framework.core.security.sign.Md5Signer;
 import com.acooly.openapi.framework.core.security.sign.Signer;
 import com.github.kevinsawicki.http.HttpRequest;
+import com.google.common.base.Charsets;
+import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
@@ -74,24 +80,50 @@ public abstract class AbstractApiServieTests {
     if (showLog) {
       log.info("请求-> header:{} body:{}", requestHeader, body);
     }
-    HttpRequest httpRequest = HttpRequest.post(gatewayUrl).headers(requestHeader).send(body);
+    HttpRequest httpRequest =
+        HttpRequest.post(gatewayUrl).headers(requestHeader).followRedirects(false).send(body);
     Map<String, List<String>> responseHeader = httpRequest.headers();
-    String responseBody = httpRequest.body();
+    String sign = null;
+    String signType;
+    String responseBody;
 
-    if (showLog) {
+    if (httpRequest.code() == 302) {
       Map<String, List<String>> logHeader = Maps.newLinkedHashMap();
-      logHeader.put(ApiConstants.SIGN_TYPE, responseHeader.get(ApiConstants.SIGN_TYPE));
-      logHeader.put(ApiConstants.SIGN, responseHeader.get(ApiConstants.SIGN));
-      log.info("响应-> header:{}, body:{}", logHeader, responseBody);
-    }
-
-    List<String> signList = responseHeader.get(ApiConstants.SIGN);
-    if (signList != null) {
-      String sign = signList.get(0);
-      String signType = responseHeader.get(ApiConstants.SIGN_TYPE).get(0);
-      if (!sign(responseBody).equals(sign)) {
-        throw new RuntimeException("验证失败");
+      logHeader.put("Location",responseHeader.get("Location"));
+      String location = responseHeader.get("Location").get(0);
+      if (showLog) {
+        log.info("响应-> header:{}", logHeader);
       }
+      Map<String, String> queryStringMap =
+          Splitter.on("&")
+              .withKeyValueSeparator("=")
+              .split(location.substring(location.indexOf('?') + 1));
+      sign = queryStringMap.get(ApiConstants.SIGN);
+      signType = queryStringMap.get(ApiConstants.SIGN);
+      try {
+        responseBody =
+            URLDecoder.decode(
+                queryStringMap.get(ApiConstants.REDIRECT_DATA_KEY), Charsets.UTF_8.name());
+      } catch (UnsupportedEncodingException e) {
+        throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e);
+      }
+    } else {
+      responseBody = httpRequest.body();
+      if (showLog) {
+        Map<String, List<String>> logHeader = Maps.newLinkedHashMap();
+        logHeader.put(ApiConstants.SIGN_TYPE, responseHeader.get(ApiConstants.SIGN_TYPE));
+        logHeader.put(ApiConstants.SIGN, responseHeader.get(ApiConstants.SIGN));
+        log.info("响应-> header:{}, body:{}", logHeader, responseBody);
+      }
+
+      List<String> signList = responseHeader.get(ApiConstants.SIGN);
+      if (signList != null) {
+        sign = signList.get(0);
+        signType = responseHeader.get(ApiConstants.SIGN_TYPE).get(0);
+      }
+    }
+    if (!sign(responseBody).equals(sign)) {
+      throw new RuntimeException("验证失败");
     }
     return JsonMarshallor.INSTANCE.parse(responseBody, clazz);
   }

@@ -8,6 +8,7 @@
 package com.acooly.openapi.framework.core.marshall.json;
 
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.core.marshall.ApiRedirectMarshall;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -26,17 +27,6 @@ public class JsonRedirectMarshall extends AbstractResponseMarshall<String, ApiRe
 
   @Override
   protected String doMarshall(ApiResponse apiResponse) {
-    //    Map<String, String> data =
-    //        Maps.transformEntries(
-    //                apiResponse,
-    //            new Maps.EntryTransformer<String, Object, String>() {
-    //              @Override
-    //              public String transformEntry(String key, Object value) {
-    //                return String.valueOf(value);
-    //              }
-    //            });
-    //    return Servlets.buildQueryString(data);
-
-    throw new UnsupportedOperationException();
+    return JsonMarshallor.INSTANCE.marshall(apiResponse);
   }
 }

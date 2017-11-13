@@ -6,8 +6,10 @@ import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
 import com.acooly.openapi.framework.service.test.request.CreateOrderRequest;
+import com.acooly.openapi.framework.service.test.request.PayOrderRequest;
 import com.acooly.openapi.framework.service.test.request.WithdrawRequest;
 import com.acooly.openapi.framework.service.test.response.CreateOrderResponse;
+import com.acooly.openapi.framework.service.test.response.PayOrderResponse;
 import com.acooly.openapi.framework.service.test.response.WithdrawResponse;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -69,5 +71,20 @@ public class OpenApiTest extends AbstractApiServieTests {
     response = request(request, WithdrawResponse.class);
     assertThat(response).isNotNull();
     assertThat(response.isSuccess()).isTrue();
+  }
+
+  @Test
+  public void testNotify() throws Exception {
+    PayOrderRequest request = new PayOrderRequest();
+    request.setRequestNo(UUID.randomUUID().toString());
+    request.setService("payOrder");
+    request.setAmount(new Money("100"));
+    request.setPayerUserId("xxxxxx");
+    request.setNotifyUrl("http://www.baidu.com");
+    PayOrderResponse response = request(request, PayOrderResponse.class);
+    log.info("{}", response);
+    assertThat(response).isNotNull();
+    assertThat(response.isSuccess()).isTrue();
+    assertThat(response.getCode()).isEqualTo(ApiServiceResultCode.PROCESSING.code());
   }
 }

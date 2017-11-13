@@ -8,10 +8,13 @@
 package com.acooly.openapi.framework.core.executer;
 
 import com.acooly.core.utils.validate.Validators;
+import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
+import com.acooly.openapi.framework.common.executor.ApiService;
+import com.acooly.openapi.framework.common.message.ApiAsyncRequest;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.common.utils.Servlets;
@@ -22,10 +25,9 @@ import com.acooly.openapi.framework.core.log.OpenApiLoggerHandler;
 import com.acooly.openapi.framework.core.marshall.ApiRedirectMarshall;
 import com.acooly.openapi.framework.core.marshall.ApiRequestMarshall;
 import com.acooly.openapi.framework.core.marshall.ApiResponseMarshall;
-import com.acooly.openapi.framework.core.service.base.AbstractApiService;
-import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.core.service.factory.ApiServiceFactory;
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.base.Charsets;
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -34,6 +36,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * 服务执行HTTP实现
@@ -131,14 +135,19 @@ public abstract class HttpApiServiceExecuter
     ApiService service = apiContext.getApiService();
     ApiResponse apiResponse = apiContext.getResponse();
     HttpServletResponse response = apiContext.getOrignalResponse();
-    boolean redirect = apiContext.isRedirect();
-    String redirectUrl = getRedirectUrl(service, apiResponse, apiContext);
     String marshallStr = null;
-    if (redirect && StringUtils.isNotBlank(redirectUrl)) {
+    if (apiContext.isRedirect()) {
+      String returnUrl = ((ApiAsyncRequest) (apiContext.getRequest())).getReturnUrl();
       marshallStr = doResponseMarshal(apiResponse, true);
-      String location = buildRedirctLocation(redirectUrl, marshallStr);
-      openApiLoggerHandler.log("服务跳转[url]:", redirectUrl);
-      Servlets.redirect(response, location);
+      if (Strings.isNullOrEmpty(returnUrl)) {
+        Servlets.writeResponse(response, marshallStr);
+      } else {
+        String signType = apiContext.getOrignalResponse().getHeader(ApiConstants.SIGN_TYPE);
+        String sign = apiContext.getOrignalResponse().getHeader(ApiConstants.SIGN);
+        String location = buildRedirctLocation(returnUrl, marshallStr, signType, sign);
+        openApiLoggerHandler.log("服务跳转[url]:", returnUrl);
+        Servlets.redirect(response, location);
+      }
     } else {
       marshallStr = doResponseMarshal(apiResponse, false);
       Servlets.writeResponse(response, marshallStr);
@@ -229,37 +238,27 @@ public abstract class HttpApiServiceExecuter
         apiContext.getRequest(), apiContext.getResponse(), e);
   }
 
-  private String getRedirectUrl(
-      ApiService service, ApiResponse apiResponse, ApiContext apiContext) {
-    String redirectUrl = apiContext.getRedirectUrl();
-    // 如果没有设置，则使用程序员设置的服务默认跳转URL到下层服务
-    if (StringUtils.isBlank(redirectUrl)) {
-      if (service instanceof AbstractApiService) {
-        redirectUrl = ((AbstractApiService) service).getDefaultRedirectUrl();
-      }
+  private String buildRedirctLocation(
+      String returnUrl, String marshallStr, String signType, String sign) {
+    StringBuilder sb = null;
+    try {
+      sb =
+          new StringBuilder(returnUrl)
+              .append("?")
+              .append(ApiConstants.SIGN_TYPE)
+              .append("=")
+              .append(signType)
+              .append("&")
+              .append(ApiConstants.SIGN)
+              .append("=")
+              .append(sign)
+              .append("&")
+              .append(ApiConstants.REDIRECT_DATA_KEY)
+              .append("=")
+              .append(URLEncoder.encode(marshallStr, Charsets.UTF_8.name()));
+    } catch (UnsupportedEncodingException e) {
+      throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e);
     }
-    // 如果任然没有没有设置,如果通过认证并设置了returnUrl,则使用用户的returnUrl跳转返回错误。
-    if (apiContext.isAuthenticated()
-        && !apiResponse.isSuccess()
-        && StringUtils.isBlank(redirectUrl)) {
-      // 已通过签名认证，确定了身份合法，非恶意攻击
-      // fixme
-      //      redirectUrl = apiContext.getRequestData().get(ApiConstants.RETURN_URL);
-    }
-
-    return redirectUrl;
-  }
-
-  private String buildRedirctLocation(String redirectUrl, String marshallStr) {
-    if (redirectUrl == null) {
-      throw new ApiServiceException(ApiServiceResultCode.REDIRECT_URL_NOT_EXIST);
-      // ?是否考虑使用openApi提供一个URL显示这种特别的错误情况？或则这种问题应该在调试阶段解决？ by zhangpu on
-      // 20140821
-    }
-    if (redirectUrl.contains("?")) {
-      return redirectUrl + "&" + marshallStr;
-    } else {
-      return redirectUrl + "?" + marshallStr;
-    }
+    return sb.toString();
   }
 }

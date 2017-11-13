@@ -47,6 +47,9 @@ public final class ApiUtils {
   }
 
   public static void checkOpenAPIUrl(String str, String name) {
+    if (Strings.isBlank(str)) {
+      throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, name + "不能为空");
+    }
     if (isHttpUrl(str)) {
       if (str.contains("?")) {
         throw new ApiServiceException(
