@@ -10,7 +10,7 @@
  */
 package com.acooly.openapi.framework.core.listener;
 
-import com.acooly.openapi.framework.core.listener.event.OpenApiEvent;
+import com.acooly.openapi.framework.common.event.dto.OpenApiEvent;
 
 import java.util.EventListener;
 

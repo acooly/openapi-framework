@@ -8,17 +8,11 @@ import com.acooly.core.utils.Money;
 import com.acooly.core.utils.net.HttpResult;
 import com.acooly.core.utils.net.Https;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
-import com.acooly.openapi.framework.service.test.dto.GoodInfo;
-import com.acooly.openapi.framework.service.test.enums.GoodType;
-import com.acooly.openapi.framework.service.test.request.CreateOrderRequest;
 import com.acooly.openapi.framework.service.test.request.PayOrderRequest;
-import com.acooly.openapi.framework.service.test.response.CreateOrderResponse;
 import com.acooly.openapi.framework.service.test.response.PayOrderResponse;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.junit.Test;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -33,36 +27,6 @@ public class OrderPayApiServiceTest extends AbstractApiServieTests {
     signType = null;
   }
 
-  @Test
-  public void testCreateOrder() throws Exception {
-    service = "createOrder";
-    Money amount = Money.amout("1000.00");
-    CreateOrderRequest request = new CreateOrderRequest();
-    request.setRequestNo(UUID.randomUUID().toString());
-    request.setTitle("同步请求创建订单");
-    request.setAmount(amount);
-    request.setPayeeUserId("12345678900987654321");
-    request.setPayerUserId("09876543211234567890");
-    request.setBuyerUserId("09876543211234567890");
-    request.setBuyeryEmail("zhangpu@163.com");
-    request.setBuyeryMobileNo("13898765453");
-    request.setBuyerCertNo("330702194706165014");
-    request.setPassword(encrypt("12312312"));
-    request.setContext("这是客户端参数:{userName:1,\"password\":\"12121\"}");
-    List<GoodInfo> goodInfos = Lists.newArrayList();
-    GoodInfo g = null;
-    for (int i = 1; i <= 2; i++) {
-      g = new GoodInfo();
-      g.setGoodType(GoodType.actual);
-      g.setName("天子精品" + i);
-      g.setPrice(Money.amout("400.00"));
-      g.setQuantity(1);
-      g.setReferUrl("http://acooly.cn/tianzi");
-      goodInfos.add(g);
-    }
-    request.setGoodsInfos(goodInfos);
-    request(request, CreateOrderResponse.class);
-  }
 
   @Test
   public void testPayOrder() throws Exception {

@@ -15,7 +15,7 @@ import org.apache.commons.codec.digest.DigestUtils;
  * @author zhangpu
  * @date 2014年7月29日
  */
-@OpenApiService(name = "withdraw", desc = "提现", responseType = ResponseType.SYN)
+@OpenApiService(name = "withdraw", desc = "提现", responseType = ResponseType.REDIRECT)
 public class WithdrawApiService extends BaseApiService<WithdrawRequest, WithdrawResponse> {
 
   @Override

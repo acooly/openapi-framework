@@ -1,6 +1,8 @@
 package com.acooly.openapi.framework.core.test;
 
+import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
+import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.message.ApiMessage;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.utils.Cryptos;
@@ -9,10 +11,11 @@ import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.core.OpenApiConstants;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
 import com.acooly.openapi.framework.core.security.sign.Md5Signer;
-import com.acooly.openapi.framework.core.security.sign.SignTypeEnum;
 import com.acooly.openapi.framework.core.security.sign.Signer;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,19 +30,22 @@ import java.util.Map;
  * @author zhangpu
  * @author qiubo@qq.com
  */
+@Slf4j
 public abstract class AbstractApiServieTests {
 
   protected static final String ENCODING = "utf-8";
   protected Logger logger = LoggerFactory.getLogger(this.getClass());
   protected String signType = SignTypeEnum.MD5.toString();
   protected String protocal = ApiProtocol.JSON.code();
-  protected String gatewayUrl = "http://127.0.0.1:8080/gateway.do";
+  protected String gatewayUrl = "http://127.0.0.1:8089/gateway.do";
   protected String key = OpenApiConstants.DEF_SECRETKEY;
-  protected String partnerId = "zhangpu";
+  protected String partnerId = "test";
   protected String service = "";
   protected String version = "1.0";
   protected String notifyUrl = "";
   protected String returnUrl = "";
+
+  protected boolean showLog = true;
 
   protected Signer signer = new Md5Signer();
 
@@ -60,19 +66,29 @@ public abstract class AbstractApiServieTests {
       request.setService(service);
     }
     Assert.hasText(request.getService());
-
     String body = JsonMarshallor.INSTANCE.marshall(request);
-    HttpRequest httpRequest =
-        HttpRequest.post(gatewayUrl)
-            .header("signType", "MD5")
-            .header("sign", sign(body))
-            .send(body);
-    Map<String, List<String>> headers = httpRequest.headers();
+    Map<String, String> requestHeader = Maps.newHashMap();
+    requestHeader.put(ApiConstants.SIGN_TYPE, "MD5");
+    requestHeader.put(ApiConstants.SIGN, sign(body));
+    requestHeader.put(ApiConstants.PARTNER_ID, partnerId);
+    if (showLog) {
+      log.info("请求-> header:{} body:{}", requestHeader, body);
+    }
+    HttpRequest httpRequest = HttpRequest.post(gatewayUrl).headers(requestHeader).send(body);
+    Map<String, List<String>> responseHeader = httpRequest.headers();
     String responseBody = httpRequest.body();
-    List<String> signList = headers.get("sign");
+
+    if (showLog) {
+      Map<String, List<String>> logHeader = Maps.newLinkedHashMap();
+      logHeader.put(ApiConstants.SIGN_TYPE, responseHeader.get(ApiConstants.SIGN_TYPE));
+      logHeader.put(ApiConstants.SIGN, responseHeader.get(ApiConstants.SIGN));
+      log.info("响应-> header:{}, body:{}", logHeader, responseBody);
+    }
+
+    List<String> signList = responseHeader.get(ApiConstants.SIGN);
     if (signList != null) {
       String sign = signList.get(0);
-      String signType = headers.get("signType").get(0);
+      String signType = responseHeader.get(ApiConstants.SIGN_TYPE).get(0);
       if (!sign(responseBody).equals(sign)) {
         throw new RuntimeException("验证失败");
       }

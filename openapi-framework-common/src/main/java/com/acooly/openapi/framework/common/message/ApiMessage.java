@@ -1,6 +1,6 @@
 package com.acooly.openapi.framework.common.message;
 
-import com.acooly.core.utils.ToString;
+import com.acooly.core.common.facade.InfoBase;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
  */
 @Getter
 @Setter
-public abstract class ApiMessage {
+public abstract class ApiMessage extends InfoBase {
 
   @NotEmpty
   @Size(min = 8, max = 64)
@@ -37,9 +37,4 @@ public abstract class ApiMessage {
   @Size(max = 128)
   @OpenApiField(desc = "会话参数", constraint = "调用端的API调用会话参数，请求参数任何合法值，在响应时会回传给调用端")
   private String context;
-
-  @Override
-  public String toString() {
-    return ToString.toString(this);
-  }
 }

@@ -12,7 +12,7 @@ package com.acooly.openapi.framework.core.service.route;
 
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.core.exception.impl.ApiServiceRouteException;
-import com.acooly.openapi.framework.core.service.base.ApiService;
+import com.acooly.openapi.framework.common.executor.ApiService;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -10,7 +10,7 @@
  */
 package com.acooly.openapi.framework.core.listener;
 
-import com.acooly.openapi.framework.core.listener.event.OpenApiEvent;
+import com.acooly.openapi.framework.common.event.dto.OpenApiEvent;
 
 /** @author qiubo@qq.com */
 public interface SmartListenter<E extends OpenApiEvent> extends ApiListener<E> {

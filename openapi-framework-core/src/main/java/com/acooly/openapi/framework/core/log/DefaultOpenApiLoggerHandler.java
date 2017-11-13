@@ -8,8 +8,8 @@
 package com.acooly.openapi.framework.core.log;
 
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
-import com.acooly.openapi.framework.core.executer.ApiContext;
-import com.acooly.openapi.framework.core.executer.ApiContextHolder;
+import com.acooly.openapi.framework.common.context.ApiContext;
+import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;

@@ -10,7 +10,7 @@
  */
 package com.acooly.openapi.framework.core.listener;
 
-import com.acooly.openapi.framework.core.listener.event.OpenApiEvent;
+import com.acooly.openapi.framework.common.event.dto.OpenApiEvent;
 import com.acooly.openapi.framework.core.util.GenericsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -8,7 +8,7 @@
  * qiubo@qq.com 2017-08-02 02:57 创建
  *
  */
-package com.acooly.openapi.framework.core.executer;
+package com.acooly.openapi.framework.common.context;
 
 import com.acooly.openapi.framework.common.annotation.ArchOnly;
 

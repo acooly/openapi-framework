@@ -8,7 +8,7 @@
  * qiubo@qq.com 2017-07-31 12:11 创建
  *
  */
-package com.acooly.openapi.framework.core.listener.event;
+package com.acooly.openapi.framework.common.event.dto;
 
 /** @author qiubo@qq.com */
 public class OpenApiEvent {}

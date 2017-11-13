@@ -8,7 +8,7 @@ package com.acooly.openapi.framework.core.auth.realm.impl;
 
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
-import com.acooly.openapi.framework.core.executer.ApiContextHolder;
+import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;

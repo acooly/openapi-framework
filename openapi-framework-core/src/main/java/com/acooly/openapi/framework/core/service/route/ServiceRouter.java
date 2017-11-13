@@ -10,7 +10,7 @@
  */
 package com.acooly.openapi.framework.core.service.route;
 
-import com.acooly.openapi.framework.core.service.base.ApiService;
+import com.acooly.openapi.framework.common.executor.ApiService;
 
 import java.util.Collection;
 

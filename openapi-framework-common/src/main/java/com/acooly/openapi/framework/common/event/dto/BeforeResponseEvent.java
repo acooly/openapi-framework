@@ -8,7 +8,7 @@
  * qiubo@qq.com 2017-07-31 18:00 创建
  *
  */
-package com.acooly.openapi.framework.core.listener.event;
+package com.acooly.openapi.framework.common.event.dto;
 
 import java.util.Map;
 

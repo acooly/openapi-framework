@@ -8,9 +8,9 @@
  * qiubo@qq.com 2017-07-31 12:14 创建
  *
  */
-package com.acooly.openapi.framework.core.listener;
+package com.acooly.openapi.framework.common.event;
 
-import com.acooly.openapi.framework.core.listener.event.OpenApiEvent;
+import com.acooly.openapi.framework.common.event.dto.OpenApiEvent;
 
 /** @author qiubo@qq.com */
 public interface OpenApiEventPublisher<E extends OpenApiEvent> {

@@ -2,7 +2,7 @@ package com.acooly.openapi.framework.manage.web;
 
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
-import com.acooly.openapi.framework.domain.OrderInfo;
+import com.acooly.openapi.framework.common.dto.OrderDto;
 import com.acooly.openapi.framework.service.OrderInfoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +23,7 @@ public class OrderInfoManagerController extends AbstractJQueryEntityController {
   }
 
   @Override
-  protected PageInfo<OrderInfo> doList(
+  protected PageInfo<OrderDto> doList(
       HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
     return orderInfoService.query(
         getPageInfo(request), getSearchParams(request), getSortMap(request));

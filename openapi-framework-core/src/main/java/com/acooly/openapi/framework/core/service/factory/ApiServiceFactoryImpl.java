@@ -13,11 +13,12 @@ package com.acooly.openapi.framework.core.service.factory;
 import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.enums.ApiMessageType;
+import com.acooly.openapi.framework.common.executor.ApiService;
+import com.acooly.openapi.framework.common.message.ApiAsyncRequest;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
-import com.acooly.openapi.framework.core.service.base.ApiService;
 import com.acooly.openapi.framework.core.service.route.ServiceRouter;
 import com.acooly.openapi.framework.core.util.GenericsUtils;
 import com.google.common.collect.HashMultimap;
@@ -37,6 +38,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import static com.acooly.openapi.framework.common.enums.ResponseType.ASNY;
+import static com.acooly.openapi.framework.common.enums.ResponseType.SYN;
 
 /**
  * 服务工厂
@@ -130,6 +132,12 @@ public class ApiServiceFactoryImpl
       Assert.isTrue(
           annotation.type() == ApiMessageType.Notify,
           String.format(msg, apiNotifyBean.getClass()) + "，且type=ApiMessageType.Notify");
+    }
+    if (apiServiceAnnotation.responseType() != SYN) {
+      Assert.isAssignable(
+          ApiAsyncRequest.class,
+          requestClazz,
+          "异步服务" + curApiService + "请求对象必须为ApiAsyncRequest及其子类");
     }
   }
 

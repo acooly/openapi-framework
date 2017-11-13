@@ -11,8 +11,8 @@
 package com.acooly.openapi.framework.core.common.threadpool;
 
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.core.executer.ApiContext;
-import com.acooly.openapi.framework.core.executer.ApiContextHolder;
+import com.acooly.openapi.framework.common.context.ApiContext;
+import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import org.apache.log4j.MDC;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 

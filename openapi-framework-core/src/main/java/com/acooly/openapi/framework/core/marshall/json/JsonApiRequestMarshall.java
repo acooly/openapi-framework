@@ -10,7 +10,7 @@ package com.acooly.openapi.framework.core.marshall.json;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
-import com.acooly.openapi.framework.core.executer.ApiContext;
+import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.core.marshall.ApiRequestMarshall;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
 import com.acooly.openapi.framework.core.marshall.crypt.ApiMarshallCryptService;
@@ -35,15 +35,16 @@ public class JsonApiRequestMarshall implements ApiRequestMarshall<ApiRequest, Ap
   @Override
   public ApiRequest marshall(ApiContext apiContext) {
     String requestBody = apiContext.getRequestBody();
-    ApiRequest parse = jsonMarshallor.parse(requestBody, apiContext.getRequest().getClass());
-    ObjectAccessor objectAccessor = ObjectAccessor.of(parse);
+    ApiRequest parsed = jsonMarshallor.parse(requestBody, apiContext.getRequest().getClass());
+    ObjectAccessor objectAccessor = ObjectAccessor.of(parsed);
     for (Map.Entry<String, Field> entry :
         objectAccessor.getClassMeta().getSecurityfieldMap().entrySet()) {
       String value = objectAccessor.getPropertyValue(entry.getKey());
       value = apiMarshallCryptService.decrypt(entry.getKey(), value, apiContext.getPartnerId());
       objectAccessor.setPropertyValue(entry.getKey(), value);
     }
-    return parse;
+    parsed.setPartnerId(apiContext.getPartnerId());
+    return parsed;
   }
 
   @Override

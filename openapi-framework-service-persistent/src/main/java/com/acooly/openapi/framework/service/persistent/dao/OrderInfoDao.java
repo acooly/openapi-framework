@@ -9,7 +9,7 @@ package com.acooly.openapi.framework.service.persistent.dao;
  */
 
 import com.acooly.core.common.dao.DynamicPagedQueryDao;
-import com.acooly.openapi.framework.domain.OrderInfo;
+import com.acooly.openapi.framework.common.dto.OrderDto;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author zhangpu
  */
-public interface OrderInfoDao extends DynamicPagedQueryDao<OrderInfo> {
+public interface OrderInfoDao extends DynamicPagedQueryDao<OrderDto> {
 
   /**
    * 插入新订单
@@ -26,14 +26,14 @@ public interface OrderInfoDao extends DynamicPagedQueryDao<OrderInfo> {
    * @param orderInfo
    * @return
    */
-  void insert(OrderInfo orderInfo);
+  void insert(OrderDto orderInfo);
 
   /**
    * 更新订单
    *
    * @param orderInfo
    */
-  void update(OrderInfo orderInfo);
+  void update(OrderDto orderInfo);
 
   /**
    * 根据合作商ID和订单号获取唯一的订单信息
@@ -42,7 +42,7 @@ public interface OrderInfoDao extends DynamicPagedQueryDao<OrderInfo> {
    * @param orderNo
    * @return
    */
-  OrderInfo findByPartnerIdAndOrderNo(String partnerId, String requestNo);
+  OrderDto findByPartnerIdAndOrderNo(String partnerId, String requestNo);
 
   /**
    * 根据合作商ID和订单号获取订单条数
@@ -60,7 +60,7 @@ public interface OrderInfoDao extends DynamicPagedQueryDao<OrderInfo> {
    * @return
    */
   @Deprecated
-  OrderInfo findByGid(String gid);
+  OrderDto findByGid(String gid);
 
   /**
    * 根据GID获取对应的所有请求
@@ -68,7 +68,7 @@ public interface OrderInfoDao extends DynamicPagedQueryDao<OrderInfo> {
    * @param gid
    * @return
    */
-  List<OrderInfo> findByGid(String partnerId, String gid);
+  List<OrderDto> findByGid(String partnerId, String gid);
 
-  List<OrderInfo> findGidByTrade(String partnerId, String service, String version, String orderNo);
+  List<OrderDto> findGidByTrade(String partnerId, String service, String version, String orderNo);
 }

@@ -1,12 +1,13 @@
 package com.acooly.openapi.framework.core.executer;
 
+import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.core.listener.event.AfterServiceExecuteEvent;
-import com.acooly.openapi.framework.core.listener.event.BeforeServiceExecuteEvent;
-import com.acooly.openapi.framework.core.listener.event.ServiceExceptionEvent;
+import com.acooly.openapi.framework.common.event.dto.AfterServiceExecuteEvent;
+import com.acooly.openapi.framework.common.event.dto.BeforeServiceExecuteEvent;
+import com.acooly.openapi.framework.common.event.dto.ServiceExceptionEvent;
 import com.acooly.openapi.framework.core.listener.multicaster.EventPublisher;
-import com.acooly.openapi.framework.core.service.base.ApiService;
+import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.service.OrderInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -43,10 +44,6 @@ public class DefaultHttpApiServiceExecuter extends HttpApiServiceExecuter {
     }
   }
 
-  @Override
-  protected void doVerify(ApiContext apiContext) {
-    super.doVerify(apiContext);
-  }
 
   private void logRequestData(ApiContext apiContext) {
     String serviceName = apiContext.getServiceName();
@@ -62,7 +59,7 @@ public class DefaultHttpApiServiceExecuter extends HttpApiServiceExecuter {
     ApiResponse apiResponse = apiContext.getResponse();
     try {
       publishBeforeServiceExecuteEvent(apiContext);
-      apiService.service(apiRequest, apiResponse);
+      apiService.service(apiContext);
     } catch (Throwable ex) {
       publishServiceExceptionEvent(apiResponse, apiRequest, apiService, ex);
       throw ex;

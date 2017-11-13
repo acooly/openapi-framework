@@ -15,8 +15,8 @@ import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
 import com.acooly.openapi.framework.core.notify.ApiNotifyHandler;
-import com.acooly.openapi.framework.core.security.sign.SignTypeEnum;
-import com.acooly.openapi.framework.domain.OrderInfo;
+import com.acooly.openapi.framework.common.enums.SignTypeEnum;
+import com.acooly.openapi.framework.common.dto.OrderDto;
 import com.acooly.openapi.framework.facade.api.OpenApiRemoteService;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import com.acooly.openapi.framework.facade.order.ApiQueryOrder;
@@ -91,7 +91,7 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
     ApiNotifyResult result = new ApiNotifyResult();
     try {
       apiNotifyOrder.check();
-      OrderInfo orderInfo = getOrderInfo(apiNotifyOrder.getGid(), apiNotifyOrder.getPartnerId());
+      OrderDto orderInfo = getOrderInfo(apiNotifyOrder.getGid(), apiNotifyOrder.getPartnerId());
       Map<String, String> signedMap = getSignMap(orderInfo, apiNotifyOrder);
       apiAuthentication.signature(signedMap);
       Map<String, Object> parameters =
@@ -152,7 +152,7 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
     return result;
   }
 
-  protected Map<String, String> getSignMap(OrderInfo orderInfo, ApiNotifyOrder apiNotifyOrder) {
+  protected Map<String, String> getSignMap(OrderDto orderInfo, ApiNotifyOrder apiNotifyOrder) {
     Map<String, String> signedMap = Maps.newLinkedHashMap();
     // 设置基础和默认参数
     signedMap.put(ApiConstants.REQUEST_NO, orderInfo.getRequestNo());
@@ -177,7 +177,7 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
     return signedMap;
   }
 
-  private String getNotifyUrl(ApiNotifyOrder apiNotifyOrder, OrderInfo orderInfo) {
+  private String getNotifyUrl(ApiNotifyOrder apiNotifyOrder, OrderDto orderInfo) {
     String callerNotifyUrl = apiNotifyOrder.getParameter(ApiConstants.NOTIFY_URL);
     if (StringUtils.isNotBlank(callerNotifyUrl)) {
       return callerNotifyUrl;
@@ -186,7 +186,7 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
     }
   }
 
-  private String getReturnUrl(ApiNotifyOrder apiNotifyOrder, OrderInfo orderInfo) {
+  private String getReturnUrl(ApiNotifyOrder apiNotifyOrder, OrderDto orderInfo) {
     String callerReturnUrl = apiNotifyOrder.getParameter(ApiConstants.RETURN_URL);
     if (StringUtils.isNotBlank(callerReturnUrl)) {
       return callerReturnUrl;
@@ -201,8 +201,8 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
    * @param gid
    * @return
    */
-  private OrderInfo getOrderInfo(String gid, String partnerId) {
-    OrderInfo orderInfo = orderInfoService.findByGid(gid, partnerId);
+  private OrderDto getOrderInfo(String gid, String partnerId) {
+    OrderDto orderInfo = orderInfoService.findByGid(gid, partnerId);
     if (orderInfo == null) {
       throw new ApiServiceException(ApiServiceResultCode.REQUEST_GID_NOT_EXSIT, "gid对应的订单不存在");
     }

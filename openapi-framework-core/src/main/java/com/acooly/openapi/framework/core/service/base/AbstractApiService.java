@@ -10,10 +10,11 @@ import com.acooly.openapi.framework.common.message.ApiAsyncRequest;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.core.executer.ApiContext;
-import com.acooly.openapi.framework.core.executer.ApiContextHolder;
+import com.acooly.openapi.framework.core.OpenApiConstants;
+import com.acooly.openapi.framework.common.context.ApiContext;
+import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
-import com.acooly.openapi.framework.domain.OrderInfo;
+import com.acooly.openapi.framework.common.dto.OrderDto;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import com.acooly.openapi.framework.service.OrderInfoService;
 import org.slf4j.Logger;
@@ -35,8 +36,6 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractApiService.class);
 
-  /** 默认重定向地址 */
-  private String defaultRedirectUrl;
   /** 订单持久化服务 */
   @Resource private OrderInfoService orderInfoService;
 
@@ -48,7 +47,7 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
    * @return
    */
   @Override
-  public final ApiNotify handleNotify(OrderInfo orderInfo, Object data) {
+  public final ApiNotify handleNotify(OrderDto orderInfo, Object data) {
     ApiNotifyOrder apiNotifyOrder = (ApiNotifyOrder) data;
     ApiNotify apiNotify = getApiNotifyBean();
     BeanCopier.copy(orderInfo, apiNotify, "notifyUrl", "returnUrl");
@@ -62,13 +61,14 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
   }
 
   @Override
-  public final void service(O request, R response) {
-    ApiContext apiContext = ApiContextHolder.getApiContext();
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public final void service(ApiContext apiContext) {
     try {
-      if (apiContext.getOpenApiService().busiType() != ApiBusiType.Query) {
-        saveOrder(request, apiContext.getGid());
+      if (apiContext.getOpenApiService().busiType() != ApiBusiType.Query
+          && OpenApiConstants.saveOrder) {
+        saveOrder(apiContext);
       }
-      doService(request, response);
+      doService((O)apiContext.getRequest(),(R) apiContext.getResponse());
     } catch (Exception e) {
       throw e;
     }
@@ -96,7 +96,7 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
    * @param apiNotify 准备发给cs的推送内容对象
    */
   protected void customizeApiNotify(
-      OrderInfo orderInfo, ApiNotifyOrder apiNotifyOrder, ApiNotify apiNotify) {}
+          OrderDto orderInfo, ApiNotifyOrder apiNotifyOrder, ApiNotify apiNotify) {}
 
   /**
    * 异步通知entity默认使用基类，API业务服务可以根据需求定义ApiNotify子类，然后在ApiService中覆写该方法返回子类的类型，
@@ -113,44 +113,24 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
     return ApiContextHolder.getApiContext().getGid();
   }
 
-  public final void saveOrder(O request, String gid) {
+  public final void saveOrder(ApiContext apiContext) {
     try {
-      OrderInfo orderInfo = new OrderInfo();
+      ApiRequest request = apiContext.getRequest();
+      OrderDto orderInfo = new OrderDto();
       orderInfo.setRequestNo(request.getRequestNo());
-      orderInfo.setGid(gid);
-      if (request instanceof ApiAsyncRequest) {
+      orderInfo.setGid(apiContext.getGid());
+      if (apiContext.getRequest() instanceof ApiAsyncRequest) {
         orderInfo.setNotifyUrl(((ApiAsyncRequest) request).getNotifyUrl());
         orderInfo.setReturnUrl(((ApiAsyncRequest) request).getReturnUrl());
       }
       orderInfo.setPartnerId(request.getPartnerId());
       orderInfo.setService(request.getService());
       orderInfo.setVersion(request.getVersion());
-      orderInfo.setSignType(ApiContextHolder.getApiContext().getSignType().name());
+      orderInfo.setSignType(apiContext.getSignType().name());
       orderInfo.setContext(request.getContext());
       orderInfoService.insert(orderInfo);
     } catch (Exception e) {
       logger.warn("订单写入失败，忽略错误，继续执行服务:" + e.getMessage());
     }
-  }
-
-  /**
-   * 设置重定向url地址
-   *
-   * <p>如果在服务初始化时设置的是默认重定向地址.在服务执行过程中设置的是本次请求的重定向地址.
-   *
-   * <p>本次请求的重定向地址优先被使用
-   *
-   * @param redirectUrl
-   */
-  public final void setRedirectUrl(String redirectUrl) {
-    if (!ApiContextHolder.isInited()) {
-      this.defaultRedirectUrl = redirectUrl;
-    } else {
-      ApiContextHolder.getApiContext().setRedirectUrl(redirectUrl);
-    }
-  }
-
-  public final String getDefaultRedirectUrl() {
-    return defaultRedirectUrl;
   }
 }

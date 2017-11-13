@@ -7,19 +7,23 @@
  */
 package com.acooly.openapi.framework.service.test.dto;
 
+import com.acooly.core.common.facade.InfoBase;
 import com.acooly.core.utils.Money;
-import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.validate.jsr303.HttpUrl;
 import com.acooly.core.utils.validate.jsr303.MoneyConstraint;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /** @author zhangpu */
-public class GoodInfo {
+@Getter
+@Setter
+public class GoodInfo extends InfoBase {
 
   @NotEmpty
   @Size(max = 63)
@@ -41,49 +45,4 @@ public class GoodInfo {
   @HttpUrl(blankable = true)
   @OpenApiField(desc = "介绍网址", demo = "http://www.merchant.com/goods.html")
   private String referUrl;
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public GoodType getGoodType() {
-    return goodType;
-  }
-
-  public void setGoodType(GoodType goodType) {
-    this.goodType = goodType;
-  }
-
-  public int getQuantity() {
-    return quantity;
-  }
-
-  public void setQuantity(int quantity) {
-    this.quantity = quantity;
-  }
-
-  public Money getPrice() {
-    return price;
-  }
-
-  public void setPrice(Money price) {
-    this.price = price;
-  }
-
-  public String getReferUrl() {
-    return referUrl;
-  }
-
-  public void setReferUrl(String referUrl) {
-    this.referUrl = referUrl;
-  }
-
-  @Override
-  public String toString() {
-    return ToString.toString(this);
-  }
 }

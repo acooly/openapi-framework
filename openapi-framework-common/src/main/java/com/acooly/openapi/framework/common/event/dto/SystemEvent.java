@@ -8,7 +8,7 @@
  * qiubo@qq.com 2017-07-31 12:29 创建
  *
  */
-package com.acooly.openapi.framework.core.listener.event;
+package com.acooly.openapi.framework.common.event.dto;
 
 /**
  * 框架级别的事件,仅框架监听器可以接受处理此事件

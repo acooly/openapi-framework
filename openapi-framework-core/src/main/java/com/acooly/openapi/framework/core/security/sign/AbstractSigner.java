@@ -1,7 +1,7 @@
 package com.acooly.openapi.framework.core.security.sign;
 
 import com.acooly.openapi.framework.core.exception.impl.ApiServiceAuthenticationException;
-import com.acooly.openapi.framework.core.executer.ApiContext;
+import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.core.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

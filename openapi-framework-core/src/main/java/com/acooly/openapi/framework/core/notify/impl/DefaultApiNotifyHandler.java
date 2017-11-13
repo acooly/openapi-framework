@@ -15,14 +15,14 @@ import com.acooly.openapi.framework.common.enums.SignType;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
-import com.acooly.openapi.framework.core.executer.ApiContextHolder;
+import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.core.marshall.ApiNotifyMarshall;
 import com.acooly.openapi.framework.core.notify.ApiNotifyHandler;
 import com.acooly.openapi.framework.core.notify.ApiNotifySender;
 import com.acooly.openapi.framework.core.notify.domain.NotifySendMessage;
-import com.acooly.openapi.framework.core.service.base.ApiService;
+import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.core.service.factory.ApiServiceFactory;
-import com.acooly.openapi.framework.domain.OrderInfo;
+import com.acooly.openapi.framework.common.dto.OrderDto;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import com.acooly.openapi.framework.service.OrderInfoService;
 import org.apache.commons.lang3.StringUtils;
@@ -58,7 +58,7 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
     try {
       // 获取订单信息
       apiNotifyOrder.check();
-      OrderInfo orderInfo = getOrderInfo(apiNotifyOrder.getGid(), apiNotifyOrder.getPartnerId());
+      OrderDto orderInfo = getOrderInfo(apiNotifyOrder.getGid(), apiNotifyOrder.getPartnerId());
       if (orderInfo == null) {
         throw new ApiServiceException(ApiServiceResultCode.NOTIFY_ERROR, "GID对应的原始请求订单不存在");
       }
@@ -108,7 +108,7 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
     try {
       // 获取订单信息
       apiNotifyOrder.check();
-      OrderInfo orderInfo = new OrderInfo();
+      OrderDto orderInfo = new OrderDto();
       orderInfo.setGid(apiNotifyOrder.getGid());
       orderInfo.setPartnerId(apiNotifyOrder.getPartnerId());
       orderInfo.setNotifyUrl(apiNotifyOrder.getParameter(ApiConstants.NOTIFY_URL));
@@ -170,8 +170,8 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
    * @param gid
    * @return
    */
-  private OrderInfo getOrderInfo(String gid, String partnerId) {
-    OrderInfo orderInfo = orderInfoService.findByGid(gid, partnerId);
+  private OrderDto getOrderInfo(String gid, String partnerId) {
+    OrderDto orderInfo = orderInfoService.findByGid(gid, partnerId);
     if (orderInfo == null) {
       throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, "请求的原始订单不存在");
     }

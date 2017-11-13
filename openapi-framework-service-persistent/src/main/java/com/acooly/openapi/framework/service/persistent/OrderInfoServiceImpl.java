@@ -10,7 +10,7 @@ package com.acooly.openapi.framework.service.persistent;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
-import com.acooly.openapi.framework.domain.OrderInfo;
+import com.acooly.openapi.framework.common.dto.OrderDto;
 import com.acooly.openapi.framework.service.OrderInfoService;
 import com.acooly.openapi.framework.service.persistent.dao.OrderInfoDao;
 import org.apache.commons.lang3.StringUtils;
@@ -30,14 +30,14 @@ public class OrderInfoServiceImpl implements OrderInfoService {
   @Autowired private OrderInfoDao orderInfoDao;
 
   @Override
-  public PageInfo<OrderInfo> query(
-      PageInfo<OrderInfo> pageInfo, Map<String, Object> map, Map<String, Boolean> orderMap) {
+  public PageInfo<OrderDto> query(
+          PageInfo<OrderDto> pageInfo, Map<String, Object> map, Map<String, Boolean> orderMap) {
     return orderInfoDao.query(pageInfo, map, orderMap);
   }
 
   @Transactional
   @Override
-  public void insert(OrderInfo orderInfo) {
+  public void insert(OrderDto orderInfo) {
     try {
       orderInfoDao.insert(orderInfo);
     } catch (Exception e) {
@@ -55,9 +55,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
   }
 
   @Override
-  public OrderInfo findByGid(String gid, String partnerId) {
+  public OrderDto findByGid(String gid, String partnerId) {
     try {
-      List<OrderInfo> orderInfos = orderInfoDao.findByGid(partnerId, gid);
+      List<OrderDto> orderInfos = orderInfoDao.findByGid(partnerId, gid);
       if (orderInfos == null || orderInfos.size() == 0) {
         return null;
       }
@@ -65,7 +65,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return orderInfos.iterator().next();
       }
 
-      for (OrderInfo orderInfo : orderInfos) {
+      for (OrderDto orderInfo : orderInfos) {
         if (StringUtils.isNotBlank(orderInfo.getNotifyUrl())) {
           return orderInfo;
         }
@@ -81,7 +81,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
   public String findGidByTrade(
       String partnerId, String service, String version, String merchOrderNo) {
     try {
-      List<OrderInfo> orderInfos =
+      List<OrderDto> orderInfos =
           orderInfoDao.findGidByTrade(partnerId, service, version, merchOrderNo);
       if (orderInfos == null || orderInfos.size() == 0) {
         return null;

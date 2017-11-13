@@ -4,6 +4,8 @@
  */
 package com.acooly.openapi.framework.core.security.sign;
 
+import com.acooly.openapi.framework.common.enums.SignTypeEnum;
+
 /**
  * 签名对象工厂
  *

@@ -8,7 +8,7 @@
  * qiubo@qq.com 2017-07-26 15:54 创建
  *
  */
-package com.acooly.openapi.framework.core.executer;
+package com.acooly.openapi.framework.common.context;
 
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
@@ -16,12 +16,11 @@ import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.enums.ResponseType;
+import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
+import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.core.OpenApiConstants;
-import com.acooly.openapi.framework.core.security.sign.SignTypeEnum;
-import com.acooly.openapi.framework.core.service.base.ApiService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Charsets;
@@ -45,7 +44,7 @@ import java.util.Map;
 @Data
 public class ApiContext {
   private static final Logger perlogger =
-      LoggerFactory.getLogger(OpenApiConstants.PERFORMANCE_LOGGER);
+      LoggerFactory.getLogger(ApiConstants.PERFORMANCE_LOGGER);
   private HttpServletRequest orignalRequest;
   private HttpServletResponse orignalResponse;
   /** 是否已认证通过 */

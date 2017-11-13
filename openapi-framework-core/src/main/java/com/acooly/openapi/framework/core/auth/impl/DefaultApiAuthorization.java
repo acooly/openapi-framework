@@ -12,7 +12,7 @@ import com.acooly.openapi.framework.core.auth.ApiAuthorizer;
 import com.acooly.openapi.framework.core.auth.permission.Permission;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.core.exception.impl.ApiServiceAuthorizationException;
-import com.acooly.openapi.framework.core.executer.ApiContext;
+import com.acooly.openapi.framework.common.context.ApiContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

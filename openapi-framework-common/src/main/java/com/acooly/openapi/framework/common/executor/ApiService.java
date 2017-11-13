@@ -2,14 +2,15 @@
  * acooly.com Inc.
  * Copyright (c) 2014 All Rights Reserved
  */
-package com.acooly.openapi.framework.core.service.base;
+package com.acooly.openapi.framework.common.executor;
 
+import com.acooly.openapi.framework.common.context.ApiContext;
+import com.acooly.openapi.framework.common.dto.OrderDto;
+import com.acooly.openapi.framework.common.event.OpenApiEventPublisher;
+import com.acooly.openapi.framework.common.event.dto.ServiceEvent;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.core.listener.OpenApiEventPublisher;
-import com.acooly.openapi.framework.core.listener.event.ServiceEvent;
-import com.acooly.openapi.framework.domain.OrderInfo;
 
 /**
  * ApiService 服务处理框架接口
@@ -23,9 +24,9 @@ import com.acooly.openapi.framework.domain.OrderInfo;
 public interface ApiService<O extends ApiRequest, R extends ApiResponse>
     extends OpenApiEventPublisher<ServiceEvent> {
 
-  void service(O request, R response);
+  void service(ApiContext apiContext);
 
-  ApiNotify handleNotify(OrderInfo orderInfo, Object data);
+  ApiNotify handleNotify(OrderDto orderInfo, Object data);
 
   O getRequestBean();
 

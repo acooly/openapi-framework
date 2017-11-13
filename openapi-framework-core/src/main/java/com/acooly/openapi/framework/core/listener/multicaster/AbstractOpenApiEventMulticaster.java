@@ -15,7 +15,7 @@ import com.acooly.openapi.framework.core.common.threadpool.OpenApiThreadPoolTask
 import com.acooly.openapi.framework.core.listener.ApiListener;
 import com.acooly.openapi.framework.core.listener.OpenApiEventMulticaster;
 import com.acooly.openapi.framework.core.listener.SmartListenter;
-import com.acooly.openapi.framework.core.listener.event.OpenApiEvent;
+import com.acooly.openapi.framework.common.event.dto.OpenApiEvent;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -2,7 +2,7 @@
  * acooly.com Inc.
  * Copyright (c) 2014 All Rights Reserved
  */
-package com.acooly.openapi.framework.core.security.sign;
+package com.acooly.openapi.framework.common.enums;
 
 /**
  * 支持的签名类型

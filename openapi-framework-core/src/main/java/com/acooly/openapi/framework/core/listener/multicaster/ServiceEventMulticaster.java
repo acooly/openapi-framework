@@ -10,7 +10,7 @@
  */
 package com.acooly.openapi.framework.core.listener.multicaster;
 
-import com.acooly.openapi.framework.core.listener.event.ServiceEvent;
+import com.acooly.openapi.framework.common.event.dto.ServiceEvent;
 
 /**
  * 只处理服务级的事件

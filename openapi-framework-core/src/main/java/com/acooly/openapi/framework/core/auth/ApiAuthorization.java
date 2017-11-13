@@ -4,7 +4,7 @@
  */
 package com.acooly.openapi.framework.core.auth;
 
-import com.acooly.openapi.framework.core.executer.ApiContext;
+import com.acooly.openapi.framework.common.context.ApiContext;
 
 /**
  * API Service 授权接口

@@ -4,6 +4,7 @@
  */
 package com.acooly.openapi.framework.core.security.sign;
 
+import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Component;
 

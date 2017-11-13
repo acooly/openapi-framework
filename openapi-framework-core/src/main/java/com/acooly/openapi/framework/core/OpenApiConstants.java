@@ -20,4 +20,6 @@ public class OpenApiConstants {
 
   /** 是否启用app支持 */
   public static final String APP_CLIENT_ENABLE = "openapi.appClient";
+
+  public static final boolean saveOrder=true;
 }

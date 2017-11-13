@@ -8,6 +8,8 @@
 package com.acooly.openapi.framework.core.executer;
 
 import com.acooly.core.utils.validate.Validators;
+import com.acooly.openapi.framework.common.context.ApiContext;
+import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiRequest;
@@ -21,7 +23,7 @@ import com.acooly.openapi.framework.core.marshall.ApiRedirectMarshall;
 import com.acooly.openapi.framework.core.marshall.ApiRequestMarshall;
 import com.acooly.openapi.framework.core.marshall.ApiResponseMarshall;
 import com.acooly.openapi.framework.core.service.base.AbstractApiService;
-import com.acooly.openapi.framework.core.service.base.ApiService;
+import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.core.service.factory.ApiServiceFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -89,9 +91,8 @@ public abstract class HttpApiServiceExecuter
     doUnmarshal(apiContext);
 
     prepareResponse(apiContext);
-
     // 参数校验
-    doValidateParameter(apiContext.getRequest());
+    doValidateParameter(apiContext);
   }
 
   protected abstract void doInitApiContext(
@@ -178,11 +179,16 @@ public abstract class HttpApiServiceExecuter
     ApiContextHolder.clear();
   }
 
-  /** 公共Api参数合法性检查 */
-  protected void doValidateParameter(ApiRequest apiRequest) {
+  /**
+   * 公共Api参数合法性检查
+   *
+   * @param apiRequest
+   */
+  protected void doValidateParameter(ApiContext apiContext) {
     try {
-      Validators.assertJSR303(apiRequest);
-      apiRequest.check();
+      apiContext.getOpenApiService().responseType().accept(apiContext);
+      Validators.assertJSR303(apiContext.getRequest());
+      apiContext.getRequest().check();
     } catch (IllegalArgumentException iae) {
       throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, iae.getMessage());
     } catch (ApiServiceException ae) {
