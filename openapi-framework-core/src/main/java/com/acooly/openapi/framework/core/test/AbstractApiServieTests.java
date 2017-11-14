@@ -103,7 +103,7 @@ public abstract class AbstractApiServieTests {
       try {
         responseBody =
             URLDecoder.decode(
-                queryStringMap.get(ApiConstants.REDIRECT_DATA_KEY), Charsets.UTF_8.name());
+                queryStringMap.get(ApiConstants.BODY), Charsets.UTF_8.name());
       } catch (UnsupportedEncodingException e) {
         throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e);
       }

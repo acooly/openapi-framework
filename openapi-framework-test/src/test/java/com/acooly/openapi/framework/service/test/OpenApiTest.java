@@ -1,6 +1,7 @@
 package com.acooly.openapi.framework.service.test;
 
 import com.acooly.core.utils.Money;
+import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
@@ -11,10 +12,18 @@ import com.acooly.openapi.framework.service.test.request.WithdrawRequest;
 import com.acooly.openapi.framework.service.test.response.CreateOrderResponse;
 import com.acooly.openapi.framework.service.test.response.PayOrderResponse;
 import com.acooly.openapi.framework.service.test.response.WithdrawResponse;
+import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
+import com.google.common.io.ByteStreams;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.UUID;
 
@@ -75,16 +84,39 @@ public class OpenApiTest extends AbstractApiServieTests {
 
   @Test
   public void testNotify() throws Exception {
+    int port = 10090;
+    HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
+    server.createContext("/", new TestHandler());
+    server.setExecutor(null); // creates a default executor
+    server.start();
+
     PayOrderRequest request = new PayOrderRequest();
     request.setRequestNo(UUID.randomUUID().toString());
     request.setService("payOrder");
     request.setAmount(new Money("100"));
     request.setPayerUserId("xxxxxx");
-    request.setNotifyUrl("http://www.baidu.com");
+    request.setNotifyUrl("http://127.0.0.1:" + port + "/");
     PayOrderResponse response = request(request, PayOrderResponse.class);
     log.info("{}", response);
     assertThat(response).isNotNull();
     assertThat(response.isSuccess()).isTrue();
     assertThat(response.getCode()).isEqualTo(ApiServiceResultCode.PROCESSING.code());
+  }
+
+  static class TestHandler implements HttpHandler {
+    @Override
+    public void handle(HttpExchange t) throws IOException {
+      String requestBody = new String(ByteStreams.toByteArray(t.getRequestBody()), Charsets.UTF_8);
+      log.info("requestBody:\n{}", requestBody);
+      assertThat(t.getRequestHeaders().get(ApiConstants.PARTNER_ID).get(0)).isEqualTo("test");
+      assertThat(t.getRequestHeaders().get(ApiConstants.SIGN))
+          .isNotEmpty();
+      assertThat(t.getRequestHeaders().get(ApiConstants.SIGN_TYPE).get(0)).isEqualTo("MD5");
+      String response = "ok";
+      t.sendResponseHeaders(200, response.length());
+      OutputStream os = t.getResponseBody();
+      os.write(response.getBytes(Charsets.UTF_8));
+      os.close();
+    }
   }
 }

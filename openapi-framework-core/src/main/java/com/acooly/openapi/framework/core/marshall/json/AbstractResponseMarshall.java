@@ -8,12 +8,12 @@
 package com.acooly.openapi.framework.core.marshall.json;
 
 import com.acooly.openapi.framework.common.ApiConstants;
+import com.acooly.openapi.framework.common.context.ApiContext;
+import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
-import com.acooly.openapi.framework.common.context.ApiContext;
-import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.core.log.OpenApiLoggerHandler;
 import com.acooly.openapi.framework.core.marshall.ApiMarshall;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
@@ -55,10 +55,13 @@ public abstract class AbstractResponseMarshall<T, S extends ApiResponse>
       String sign =
           apiAuthentication.signature(
               (String) result, apiContext.getPartnerId(), apiContext.getSignType().name());
-      apiContext
-          .getOrignalResponse()
-          .setHeader(ApiConstants.SIGN_TYPE, apiContext.getSignType().name());
-      apiContext.getOrignalResponse().setHeader(ApiConstants.SIGN, sign);
+      if (apiContext.getOrignalResponse() != null) {
+        apiContext
+            .getOrignalResponse()
+            .setHeader(ApiConstants.SIGN_TYPE, apiContext.getSignType().name());
+        apiContext.getOrignalResponse().setHeader(ApiConstants.SIGN, sign);
+      }
+      apiContext.setResponseSign(sign);
     }
     return result;
   }

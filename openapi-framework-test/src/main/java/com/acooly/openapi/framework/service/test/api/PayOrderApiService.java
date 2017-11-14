@@ -33,20 +33,25 @@ public class PayOrderApiService extends BaseApiService<PayOrderRequest, PayOrder
   @Override
   protected void doService(PayOrderRequest request, PayOrderResponse response) {
     response.setResult(ApiServiceResultCode.PROCESSING);
+    String gid = ApiContextHolder.getApiContext().getGid();
     // OK mock 处理了。
-    ApiNotifyOrder apiNotifyOrder = new ApiNotifyOrder();
-    PayOrderNotify payOrderNotify = new PayOrderNotify();
-    payOrderNotify.setAmount(new Money("1000"));
-    payOrderNotify.setTradeNo("xdf");
-    payOrderNotify.setOutOrderNo(request.getRequestNo());
-    apiNotifyOrder.setPartnerId(request.getPartnerId());
-    apiNotifyOrder.setGid(ApiContextHolder.getApiContext().getGid());
-    try {
-      apiNotifyOrder.setParameters(BeanUtils.describe(payOrderNotify));
-    } catch (Exception e) {
-      throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e);
-    }
-    openApiRemoteService.asyncNotify(apiNotifyOrder);
+    new Thread(
+            () -> {
+              ApiNotifyOrder apiNotifyOrder = new ApiNotifyOrder();
+              PayOrderNotify payOrderNotify = new PayOrderNotify();
+              payOrderNotify.setAmount(new Money("1000"));
+              payOrderNotify.setTradeNo("xdf");
+              payOrderNotify.setOutOrderNo(request.getRequestNo());
+              apiNotifyOrder.setPartnerId(request.getPartnerId());
+              apiNotifyOrder.setGid(gid);
+              try {
+                apiNotifyOrder.setParameters(BeanUtils.describe(payOrderNotify));
+              } catch (Exception e) {
+                throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e);
+              }
+              openApiRemoteService.asyncNotify(apiNotifyOrder);
+            })
+        .start();
   }
 
   @Override

@@ -30,7 +30,6 @@ public class NmsApiNotifySenderImpl implements ApiNotifySender {
 
   @Override
   public void send(NotifySendMessage notifySendMessage) {
-    logger.info("ApiNotifySender nms 实现");
     NotifyMessage notifyMessage = new NotifyMessage();
     BeanCopier.copy(
         notifySendMessage,

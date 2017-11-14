@@ -9,20 +9,21 @@ package com.acooly.openapi.framework.core.notify.impl;
 
 import com.acooly.core.utils.Ids;
 import com.acooly.openapi.framework.common.ApiConstants;
+import com.acooly.openapi.framework.common.context.ApiContextHolder;
+import com.acooly.openapi.framework.common.dto.OrderDto;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.enums.SignType;
+import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
+import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
-import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.core.marshall.ApiNotifyMarshall;
 import com.acooly.openapi.framework.core.notify.ApiNotifyHandler;
 import com.acooly.openapi.framework.core.notify.ApiNotifySender;
 import com.acooly.openapi.framework.core.notify.domain.NotifySendMessage;
-import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.core.service.factory.ApiServiceFactory;
-import com.acooly.openapi.framework.common.dto.OrderDto;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import com.acooly.openapi.framework.service.OrderInfoService;
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +34,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * 框架异步通知处理 默认实现
@@ -68,6 +68,8 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
 
       ApiContextHolder.init();
       ApiContextHolder.getApiContext().setGid(apiNotifyOrder.getGid());
+      ApiContextHolder.getApiContext().setPartnerId(apiNotifyOrder.getPartnerId());
+      ApiContextHolder.getApiContext().setSignType(SignTypeEnum.valueOf(orderInfo.getSignType()));
 
       // 查找对应服务并调用异步业务处理
       ApiService apiService =
@@ -76,7 +78,7 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
       ApiContextHolder.getApiContext().setApiService(apiService);
       ApiContextHolder.getApiContext().setResponse(apiNotify);
       // 组装报文
-      Map<String, String> notifyMap = (Map<String, String>) apiNotifyMarshall.marshall(apiNotify);
+      String notifyBody = (String) apiNotifyMarshall.marshall(apiNotify);
       // 删除框架的签名，交给CS系统发送时签名
       String callerNotifyUrl = apiNotifyOrder.getParameter(ApiConstants.NOTIFY_URL);
       String notifyUrl =
@@ -89,7 +91,11 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
       notifySendMessage.setVersion(apiNotify.getVersion());
       notifySendMessage.setUrl(notifyUrl);
       notifySendMessage.setRequestNo(apiNotify.getRequestNo());
-      notifySendMessage.setParameters(notifyMap);
+      notifySendMessage.setParameter(ApiConstants.BODY, notifyBody);
+      notifySendMessage.setParameter(
+          ApiConstants.SIGN, ApiContextHolder.getApiContext().getResponseSign());
+      notifySendMessage.setParameter(ApiConstants.PARTNER_ID, orderInfo.getPartnerId());
+      notifySendMessage.setParameter(ApiConstants.SIGN_TYPE, orderInfo.getSignType());
       apiNotifySender.send(notifySendMessage);
     } catch (ApiServiceException ase) {
       logger.warn("异步通知 失败:", ase);
@@ -134,6 +140,8 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
       }
       ApiContextHolder.init();
       ApiContextHolder.getApiContext().setGid(apiNotifyOrder.getGid());
+      ApiContextHolder.getApiContext().setPartnerId(apiNotifyOrder.getPartnerId());
+      ApiContextHolder.getApiContext().setSignType(SignTypeEnum.valueOf(orderInfo.getSignType()));
 
       // 查找对应服务并调用异步业务处理
       ApiService apiService =
@@ -142,7 +150,7 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
       ApiContextHolder.getApiContext().setApiService(apiService);
       ApiContextHolder.getApiContext().setResponse(apiNotify);
       // 组装报文
-      Map<String, String> notifyMap = (Map<String, String>) apiNotifyMarshall.marshall(apiNotify);
+      String notifyBody = (String) apiNotifyMarshall.marshall(apiNotify);
       // 交给CS系统发送
       NotifySendMessage notifySendMessage = new NotifySendMessage();
       notifySendMessage.setGid(apiNotifyOrder.getGid());
@@ -151,7 +159,11 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
       notifySendMessage.setVersion(apiNotify.getVersion());
       notifySendMessage.setUrl(orderInfo.getNotifyUrl());
       notifySendMessage.setRequestNo(apiNotify.getRequestNo());
-      notifySendMessage.setParameters(notifyMap);
+      notifySendMessage.setParameter(ApiConstants.BODY, notifyBody);
+      notifySendMessage.setParameter(
+          ApiConstants.SIGN, ApiContextHolder.getApiContext().getResponseSign());
+      notifySendMessage.setParameter(ApiConstants.PARTNER_ID, orderInfo.getPartnerId());
+      notifySendMessage.setParameter(ApiConstants.SIGN_TYPE, orderInfo.getSignType());
       apiNotifySender.send(notifySendMessage);
     } catch (ApiServiceException ase) {
       logger.warn("异步通知 失败:", ase);

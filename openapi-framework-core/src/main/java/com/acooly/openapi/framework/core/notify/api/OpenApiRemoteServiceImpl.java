@@ -11,12 +11,12 @@ import com.acooly.core.common.facade.ResultBase;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.openapi.framework.common.ApiConstants;
+import com.acooly.openapi.framework.common.dto.OrderDto;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
+import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
 import com.acooly.openapi.framework.core.notify.ApiNotifyHandler;
-import com.acooly.openapi.framework.common.enums.SignTypeEnum;
-import com.acooly.openapi.framework.common.dto.OrderDto;
 import com.acooly.openapi.framework.facade.api.OpenApiRemoteService;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import com.acooly.openapi.framework.facade.order.ApiQueryOrder;
@@ -48,25 +48,6 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
   @Resource private ApiAuthentication apiAuthentication;
 
   @Resource private ApiPartnerService apiPartnerService;
-
-  public static void main(String[] args) {
-
-    Map<String, String> signedMap = Maps.newLinkedHashMap();
-    signedMap.put("requestNo", "11111111");
-    signedMap.put("partnerId", "12341234234");
-
-    Map<String, Object> parameters =
-        Maps.transformEntries(
-            signedMap,
-            new EntryTransformer<String, String, Object>() {
-              @Override
-              public Object transformEntry(String key, String value) {
-                return value;
-              }
-            });
-
-    System.out.println(parameters);
-  }
 
   /** 异步通知处理 */
   @Override

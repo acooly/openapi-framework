@@ -9,26 +9,16 @@ package com.acooly.openapi.framework.core.marshall.json;
 
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.core.marshall.ApiNotifyMarshall;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 @Component
-public class JsonNotifyMarshall
-    extends AbstractResponseMarshall<Map<String, String>, ApiNotify>
-    implements ApiNotifyMarshall<Map<String, String>, ApiNotify> {
+public class JsonNotifyMarshall extends AbstractResponseMarshall<String, ApiNotify>
+    implements ApiNotifyMarshall<String, ApiNotify> {
 
   @Override
-  protected Map<String, String> doMarshall(ApiResponse apiResponse) {
-    //    return Maps.transformEntries(
-    //        responseData,
-    //        new Maps.EntryTransformer<String, Object, String>() {
-    //          @Override
-    //          public String transformEntry(String key, Object value) {
-    //            return String.valueOf(value);
-    //          }
-    //        });
-    throw new UnsupportedOperationException();
+  protected String doMarshall(ApiResponse apiResponse) {
+    return JsonMarshallor.INSTANCE.marshall(apiResponse);
   }
 }

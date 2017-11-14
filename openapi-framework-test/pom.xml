@@ -1,37 +1,59 @@
 <?xml version="1.0"?>
 <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.acooly</groupId>
-		<artifactId>openapi-framework</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
-	</parent>
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.acooly</groupId>
+        <artifactId>openapi-framework</artifactId>
+        <version>5.0.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>openapi-framework-test</artifactId>
-	<name>openapi-framework-test</name>
+    <artifactId>openapi-framework-test</artifactId>
+    <name>openapi-framework-test</name>
 
-	<properties>
-		<deploy.skip>true</deploy.skip>
-	</properties>
+    <properties>
+        <deploy.skip>true</deploy.skip>
+    </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.acooly</groupId>
-			<artifactId>openapi-framework-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.dreamhead</groupId>
+            <artifactId>moco-core</artifactId>
+            <version>0.11.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mock-server</groupId>
+            <artifactId>mockserver-netty</artifactId>
+            <version>3.11</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.kristofa</groupId>
+            <artifactId>mock-http-server</artifactId>
+            <version>4.1</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
 
 
 </project>

@@ -8,8 +8,7 @@
 package com.acooly.openapi.framework.nms.handle.impl;
 
 import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.net.HttpResult;
-import com.acooly.core.utils.net.Https;
+import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.MessageType;
 import com.acooly.openapi.framework.common.enums.TaskExecuteStatus;
 import com.acooly.openapi.framework.common.enums.TaskStatus;
@@ -17,6 +16,8 @@ import com.acooly.openapi.framework.core.notify.impl.DefaultApiNotifySender;
 import com.acooly.openapi.framework.domain.NotifyMessage;
 import com.acooly.openapi.framework.nms.handle.NotifyMessageSendHandler;
 import com.acooly.openapi.framework.service.NotifyMessageService;
+import com.github.kevinsawicki.http.HttpRequest;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -31,6 +32,9 @@ import javax.annotation.Resource;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Map;
+
+import static com.github.kevinsawicki.http.HttpRequest.CONTENT_TYPE_JSON;
 
 /** @author zhangpu */
 @Component
@@ -44,6 +48,7 @@ public class HttpNotifyMessageSendHandler
   };
   /** 失败后通知总次数 */
   private static int notifyCount = notifyTime.length;
+
   @Resource private NotifyMessageService notifyMessageService;
   @Resource private TaskExecutor notifyTaskExecutor;
   private ApplicationContext applicationContext;
@@ -90,14 +95,25 @@ public class HttpNotifyMessageSendHandler
     String result = null;
     String respInfo = null;
     try {
-      HttpResult httpResult =
-          Https.getCustomInstance(connectionTimeout, socketTimeout)
-              .post(notifyMessage.getUrl(), notifyMessage.getParameters());
-      result = httpResult.getBody();
+      Map<String, String> requestHeader = Maps.newHashMap();
+      requestHeader.put(ApiConstants.SIGN_TYPE, notifyMessage.getParameter(ApiConstants.SIGN_TYPE));
+      requestHeader.put(ApiConstants.SIGN, notifyMessage.getParameter(ApiConstants.SIGN));
+      requestHeader.put(
+          ApiConstants.PARTNER_ID, notifyMessage.getParameter(ApiConstants.PARTNER_ID));
+      HttpRequest httpRequest =
+          HttpRequest.post(notifyMessage.getUrl())
+              .connectTimeout(10 * 1000)
+              .readTimeout(10 * 1000)
+              .trustAllCerts()
+              .trustAllHosts()
+              .headers(requestHeader)
+              .followRedirects(false)
+              .contentType(CONTENT_TYPE_JSON)
+              .send(notifyMessage.getParameter("body"));
+      result = httpRequest.body();
       logger.info("通知地址:{}", notifyMessage.getUrl());
       logger.info("通知内容:{}", notifyMessage.getParameters());
-      logger.info("通知结果:{}", httpResult);
-      respInfo = httpResult.getStatus() + ":" + httpResult.getBody();
+      respInfo = httpRequest.code() + ":" + result;
     } catch (Exception e) {
       respInfo = e.getMessage();
       logger.error("第{}次通知 失败，原因:{}", notifyMessage.getSendCount(), e.getMessage());

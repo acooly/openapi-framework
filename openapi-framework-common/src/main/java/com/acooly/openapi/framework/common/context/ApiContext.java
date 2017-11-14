@@ -82,6 +82,8 @@ public class ApiContext {
 
   private String responseBody;
 
+  private String responseSign;
+
   private String requestNo;
 
   private String partnerId;

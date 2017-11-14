@@ -33,7 +33,7 @@ public final class ApiConstants {
 
   public static final String DATA_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-  public static final String REDIRECT_DATA_KEY = "body";
+  public static final String BODY = "body";
 
 
   private ApiConstants() {

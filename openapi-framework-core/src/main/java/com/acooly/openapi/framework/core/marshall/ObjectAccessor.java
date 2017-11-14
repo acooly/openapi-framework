@@ -39,15 +39,11 @@ public class ObjectAccessor<T> {
   private static final ConcurrentMap<Class<?>, ClassMeta> classMap = Maps.newConcurrentMap();
   /** 忽略transient字段 */
   private static final Predicate<Field> transientDenyPredicate =
-      new Predicate<Field>() {
-        @Override
-        public boolean apply(Field input) {
-          if (input == null) {
-            return false;
-          }
-
-          return !Modifier.isTransient(input.getModifiers());
+      input -> {
+        if (input == null) {
+          return false;
         }
+        return !Modifier.isTransient(input.getModifiers());
       };
   /** 忽略transient字段 */
   private static final Predicate<Field> allAcceptPredicate = input -> true;
@@ -91,7 +87,8 @@ public class ObjectAccessor<T> {
               }
             }
           });
-      classMap.put(target.getClass(), new ClassMeta(filedMap, securityfieldMap));
+      classMeta = new ClassMeta(filedMap, securityfieldMap);
+      classMap.put(target.getClass(), classMeta);
     }
     this.classMeta = classMeta;
   }
@@ -102,10 +99,6 @@ public class ObjectAccessor<T> {
 
   public ClassMeta getClassMeta() {
     return classMeta;
-  }
-
-  public void setClassMeta(ClassMeta classMeta) {
-    this.classMeta = classMeta;
   }
 
   /**

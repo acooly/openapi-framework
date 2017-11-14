@@ -253,7 +253,7 @@ public abstract class HttpApiServiceExecuter
               .append("=")
               .append(sign)
               .append("&")
-              .append(ApiConstants.REDIRECT_DATA_KEY)
+              .append(ApiConstants.BODY)
               .append("=")
               .append(URLEncoder.encode(marshallStr, Charsets.UTF_8.name()));
     } catch (UnsupportedEncodingException e) {
