@@ -144,7 +144,6 @@
         <module>openapi-framework-domain</module>
         <module>openapi-framework-service</module>
         <module>openapi-framework-service-persistent</module>
-        <module>openapi-framework-facade-provider</module>
         <module>openapi-framework-trafficlimiter</module>
 
     </modules>
