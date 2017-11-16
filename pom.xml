@@ -145,6 +145,7 @@
         <module>openapi-framework-service</module>
         <module>openapi-framework-service-persistent</module>
         <module>openapi-framework-trafficlimiter</module>
+        <module>openapi-framework-app</module>
 
     </modules>
 
