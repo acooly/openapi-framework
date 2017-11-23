@@ -3,13 +3,13 @@ package com.acooly.openapi.framework.core;
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
-import com.acooly.openapi.framework.common.login.AppApiLoginService;
 import com.acooly.openapi.framework.core.auth.ApiAuthorization;
 import com.acooly.openapi.framework.core.auth.impl.DefaultApiAuthorization;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.core.auth.realm.impl.DefaultAuthInfoRealm;
 import com.acooly.openapi.framework.core.service.support.login.DefaultAppApiLoginService;
 import com.acooly.openapi.framework.core.servlet.OpenAPIDispatchServlet;
+import com.acooly.openapi.framework.service.AppApiLoginService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -86,28 +86,6 @@ public class OpenApiConfiguration {
           return Lists.newArrayList("META-INF/database/mysql/openapi-core.sql");
         } else {
           return Lists.newArrayList("META-INF/database/oracle/openapi-core.sql");
-        }
-      }
-    };
-  }
-
-  @Bean
-  public AbstractDatabaseScriptIniter openapiManageScriptIniter() {
-    return new AbstractDatabaseScriptIniter() {
-      @Override
-      public String getEvaluateSql(DatabaseType databaseType) {
-        return "SELECT count(*) FROM api_partner";
-      }
-
-      @Override
-      public List<String> getInitSqlFile(DatabaseType databaseType) {
-        if (databaseType == DatabaseType.mysql) {
-          return Lists.newArrayList(
-              "META-INF/database/mysql/openapi-manage.sql",
-              "META-INF/database/mysql/openapi-initTest.sql",
-              "META-INF/database/mysql/openapi-manage-urls.sql");
-        } else {
-          throw new UnsupportedOperationException("还不支持oracle");
         }
       }
     };

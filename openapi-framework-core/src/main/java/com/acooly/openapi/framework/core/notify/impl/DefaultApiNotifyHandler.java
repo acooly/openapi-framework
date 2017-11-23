@@ -139,6 +139,7 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
       ApiContextHolder.init();
       ApiContextHolder.getApiContext().setGid(apiNotifyOrder.getGid());
       ApiContextHolder.getApiContext().setPartnerId(apiNotifyOrder.getPartnerId());
+      ApiContextHolder.getApiContext().setAccessKey(orderInfo.getAccessKey());
       ApiContextHolder.getApiContext().setSignType(SignTypeEnum.valueOf(orderInfo.getSignType()));
 
       // 查找对应服务并调用异步业务处理

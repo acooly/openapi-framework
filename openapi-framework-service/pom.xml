@@ -10,11 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>openapi-framework-service</artifactId>
-    
+
     <dependencies>
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-domain</artifactId>
+            <artifactId>openapi-framework-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

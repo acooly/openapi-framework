@@ -2,9 +2,9 @@
 package com.acooly.openapi.framework.core.service.support.login;
 
 import com.acooly.openapi.framework.common.context.ApiContext;
-import com.acooly.openapi.framework.common.login.AppApiLoginService;
-import com.acooly.openapi.framework.common.login.LoginDto;
-import com.acooly.openapi.framework.common.login.LoginRequest;
+import com.acooly.openapi.framework.service.AppApiLoginService;
+import com.acooly.openapi.framework.domain.LoginDto;
+import com.acooly.openapi.framework.domain.LoginRequest;
 
 /**
  * @author zhangpu

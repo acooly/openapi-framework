@@ -22,25 +22,20 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-nms</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-test</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-manage</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-service-persistent</artifactId>
+            <artifactId>openapi-framework-service-impl</artifactId>
+            <version>${project.version}</version>
+
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
