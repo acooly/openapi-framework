@@ -8,12 +8,13 @@ import com.acooly.openapi.framework.domain.ApiPartnerService;
 import com.acooly.openapi.framework.service.AuthInfoRealmManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 /**
  * @author qiuboboy@qq.com
  * @date 2017-11-23 14:35
  */
-public class DefaultAuthInfoRealmManageService extends DefaultAuthInfoRealmService
-    implements AuthInfoRealmManageService {
+public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageService {
   @Autowired ApiPartnerServiceImpl apiPartnerService;
   @Autowired ApiPartnerServiceServiceImpl apiPartnerServiceService;
 
@@ -47,5 +48,15 @@ public class DefaultAuthInfoRealmManageService extends DefaultAuthInfoRealmServi
     ApiPartner apiPartner = apiPartnerService.queryByPartnerId(accessKey);
     apiPartner.setSecretKey(sercretKey);
     apiPartnerService.save(apiPartner);
+  }
+
+  @Override
+  public String getSercretKey(String accessKey) {
+    return apiPartnerService.getPartnerSercretKey(accessKey);
+  }
+
+  @Override
+  public List<String> getAuthorizationInfo(String accessKey) {
+    return apiPartnerServiceService.getAuthorizedServices(accessKey);
   }
 }
