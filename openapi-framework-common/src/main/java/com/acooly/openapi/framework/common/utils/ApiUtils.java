@@ -10,7 +10,6 @@
 package com.acooly.openapi.framework.common.utils;
 
 import com.acooly.core.utils.Strings;
-import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import org.apache.commons.validator.routines.UrlValidator;
@@ -32,14 +31,6 @@ public final class ApiUtils {
   }
 
   private ApiUtils() {}
-
-  public static String getRequestNo(Map<String, String> requestData) {
-    String requestNo = getParameter(requestData, ApiConstants.REQUEST_NO);
-    if (Strings.isBlank(requestNo)) {
-      requestNo = getParameter(requestData, ApiConstants.ORDER_NO);
-    }
-    return requestNo;
-  }
 
   public static boolean isHttpUrl(String str) {
 

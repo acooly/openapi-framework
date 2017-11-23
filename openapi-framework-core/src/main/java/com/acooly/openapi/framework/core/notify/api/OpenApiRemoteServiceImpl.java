@@ -24,7 +24,6 @@ import com.acooly.openapi.framework.facade.result.ApiNotifyResult;
 import com.acooly.openapi.framework.service.ApiPartnerService;
 import com.acooly.openapi.framework.service.OrderInfoService;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Maps.EntryTransformer;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,12 +77,7 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
       Map<String, Object> parameters =
           Maps.transformEntries(
               signedMap,
-              new EntryTransformer<String, String, Object>() {
-                @Override
-                public Object transformEntry(String key, String value) {
-                  return value;
-                }
-              });
+                  (key, value) -> value);
       result.setParameters(parameters);
       result.setSign(signedMap.get(ApiConstants.SIGN));
       result.setNotifyUrl(signedMap.get(ApiConstants.NOTIFY_URL));

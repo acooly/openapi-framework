@@ -20,7 +20,6 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.List;
@@ -91,8 +90,4 @@ public class OpenApiConfiguration {
     };
   }
 
-  @Configuration
-  @ConditionalOnProperty({"dubbo.provider.enable"})
-  @ImportResource("classpath:spring/openapi/openapi-facade-dubbo-provider.xml")
-  public static class OpenApiRemoteServiceConfig {}
 }
