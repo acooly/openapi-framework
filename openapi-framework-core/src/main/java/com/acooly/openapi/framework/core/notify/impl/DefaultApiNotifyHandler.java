@@ -68,6 +68,7 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
 
       ApiContextHolder.init();
       ApiContextHolder.getApiContext().setGid(apiNotifyOrder.getGid());
+      ApiContextHolder.getApiContext().setAccessKey(orderInfo.getAccessKey());
       ApiContextHolder.getApiContext().setPartnerId(apiNotifyOrder.getPartnerId());
       ApiContextHolder.getApiContext().setSignType(SignTypeEnum.valueOf(orderInfo.getSignType()));
 
@@ -94,7 +95,8 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
       notifySendMessage.setParameter(ApiConstants.BODY, notifyBody);
       notifySendMessage.setParameter(
           ApiConstants.SIGN, ApiContextHolder.getApiContext().getResponseSign());
-      notifySendMessage.setParameter(ApiConstants.PARTNER_ID, orderInfo.getPartnerId());
+      //fixme
+//      notifySendMessage.setParameter(ApiConstants.PARTNER_ID, orderInfo.getPartnerId());
       notifySendMessage.setParameter(ApiConstants.SIGN_TYPE, orderInfo.getSignType());
       apiNotifySender.send(notifySendMessage);
     } catch (ApiServiceException ase) {
@@ -120,13 +122,9 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
       orderInfo.setNotifyUrl(apiNotifyOrder.getParameter(ApiConstants.NOTIFY_URL));
       orderInfo.setProtocol(ApiProtocol.JSON);
       orderInfo.setRequestNo(Ids.oid());
-      orderInfo.setOid(Ids.oid());
       orderInfo.setService(apiNotifyOrder.getParameter(ApiConstants.SERVICE));
       orderInfo.setVersion(apiNotifyOrder.getParameter(ApiConstants.VERSION));
       orderInfo.setSignType(SignType.MD5.code());
-      if (StringUtils.isNotBlank(apiNotifyOrder.getParameter(ApiConstants.MERCH_ORDER_NO))) {
-        orderInfo.setOrderNo(apiNotifyOrder.getParameter(ApiConstants.MERCH_ORDER_NO));
-      }
       if (StringUtils.isBlank(orderInfo.getNotifyUrl())) {
         throw new ApiServiceException(ApiServiceResultCode.NOTIFY_ERROR, "notifyUrl为空，不发送通知。");
       }
@@ -162,7 +160,8 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
       notifySendMessage.setParameter(ApiConstants.BODY, notifyBody);
       notifySendMessage.setParameter(
           ApiConstants.SIGN, ApiContextHolder.getApiContext().getResponseSign());
-      notifySendMessage.setParameter(ApiConstants.PARTNER_ID, orderInfo.getPartnerId());
+      //fixme
+//      notifySendMessage.setParameter(ApiConstants.PARTNER_ID, orderInfo.getPartnerId());
       notifySendMessage.setParameter(ApiConstants.SIGN_TYPE, orderInfo.getSignType());
       apiNotifySender.send(notifySendMessage);
     } catch (ApiServiceException ase) {

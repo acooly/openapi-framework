@@ -1,14 +1,13 @@
 package com.acooly.openapi.framework.core.executer;
 
 import com.acooly.openapi.framework.common.context.ApiContext;
-import com.acooly.openapi.framework.common.message.ApiRequest;
-import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.common.event.dto.AfterServiceExecuteEvent;
 import com.acooly.openapi.framework.common.event.dto.BeforeServiceExecuteEvent;
 import com.acooly.openapi.framework.common.event.dto.ServiceExceptionEvent;
-import com.acooly.openapi.framework.core.listener.multicaster.EventPublisher;
 import com.acooly.openapi.framework.common.executor.ApiService;
-import com.acooly.openapi.framework.service.OrderInfoService;
+import com.acooly.openapi.framework.common.message.ApiRequest;
+import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.core.listener.multicaster.EventPublisher;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class DefaultHttpApiServiceExecuter extends HttpApiServiceExecuter {
   @Resource private EventPublisher eventPublisher;
-  @Resource private OrderInfoService orderInfoService;
 
   protected void doInitApiContext(
       ApiContext apiContext,
@@ -43,7 +41,6 @@ public class DefaultHttpApiServiceExecuter extends HttpApiServiceExecuter {
       logRequestData(apiContext);
     }
   }
-
 
   private void logRequestData(ApiContext apiContext) {
     String serviceName = apiContext.getServiceName();

@@ -19,6 +19,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.Map;
 
+import static com.acooly.openapi.framework.common.ApiConstants.TEST_ACCESS_KEY;
+
 /**
  * 签名认证实现
  *
@@ -36,15 +38,15 @@ public class SignatureApiAuthentication implements ApiAuthentication {
   public void authenticate(ApiContext apiContext) {
     try {
       String requestSign = apiContext.getSign();
-      String partnerId = apiContext.getPartnerId();
-      if ("test".equals(partnerId)) {
+      String accessKey = apiContext.getAccessKey();
+      if (TEST_ACCESS_KEY.equals(accessKey)) {
         if (Env.isOnline()) {
           throw new ApiServiceException(notSupport);
         }
       }
       Signer<ApiContext> signer = signerFactory.getSigner(apiContext.getSignType());
       signer.verify(
-          requestSign, (String) authInfoRealm.getAuthenticationInfo(partnerId), apiContext);
+          requestSign, (String) authInfoRealm.getAuthenticationInfo(accessKey), apiContext);
     } catch (ApiServiceException asae) {
       throw asae;
     } catch (Exception e) {
@@ -61,8 +63,10 @@ public class SignatureApiAuthentication implements ApiAuthentication {
   @Override
   public String signature(Map<String, String> response) {
     String signType = response.get(ApiConstants.SIGN_TYPE);
-    String partnerId = response.get(ApiConstants.PARTNER_ID);
-    return signature(response, partnerId, signType);
+    //fixme
+//    String partnerId = response.get(ApiConstants.PARTNER_ID);
+//    return signature(response, partnerId, signType);
+    return null;
   }
 
   @Override
@@ -83,16 +87,16 @@ public class SignatureApiAuthentication implements ApiAuthentication {
   }
 
   @Override
-  public String signature(String body, String partnerId, String signType) {
+  public String signature(String body, String accessKey, String signType) {
     try {
-      if(partnerId==null){
+      if(accessKey==null){
         return "";
       }
       String sign =
           signerFactory
               .getSigner(SignTypeEnum.valueOf(signType))
               .sign(
-                  ApiContextHolder.getApiContext(), authInfoRealm.getAuthenticationInfo(partnerId));
+                  ApiContextHolder.getApiContext(), authInfoRealm.getAuthenticationInfo(accessKey));
       return sign;
     } catch (ApiServiceException asae) {
       throw asae;

@@ -10,7 +10,7 @@
  */
 package com.acooly.openapi.framework.core.auth.permission;
 
-import com.acooly.openapi.framework.core.OpenApiConstants;
+import com.acooly.openapi.framework.common.ApiConstants;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,7 +23,7 @@ public class DefaultPermissionResolver implements PermissionResolver {
 
   @Override
   public Permission resolvePermission(String permissionString) {
-    if (OpenApiConstants.WILDCARD_TOKEN.equals(permissionString)) {
+    if (ApiConstants.ALL_WILDCARD_TOKEN.equals(permissionString)) {
       return new AllPermission();
     }
     return new DefaultPermission(permissionString);

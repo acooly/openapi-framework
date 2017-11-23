@@ -10,7 +10,6 @@ import com.acooly.core.utils.Profiles;
 import com.acooly.openapi.framework.core.auth.permission.Permission;
 import com.acooly.openapi.framework.core.auth.permission.PermissionResolver;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
-import com.acooly.openapi.framework.core.auth.realm.SimpleAuthInfoRealm;
 import com.acooly.openapi.framework.core.common.cache.CacheManager;
 import com.acooly.openapi.framework.core.common.cache.impl.NOOPCacheManager;
 import com.acooly.openapi.framework.core.exception.impl.ApiServiceAuthenticationException;
@@ -29,14 +28,15 @@ import java.util.List;
  * @author zhangpu
  * @author Bohr.Qiu <qiubo@qq.com>
  */
-public abstract class CacheableAuthInfoRealm
-    implements AuthInfoRealm, SimpleAuthInfoRealm, InitializingBean {
+public abstract class CacheableAuthInfoRealm implements AuthInfoRealm, InitializingBean {
 
   protected static final String AUTHC_CACHE_KEY_POSTFIX = "authc";
   protected static final String AUTHZ_CACHE_KEY_POSTFIX = "authz";
   protected Logger logger = LoggerFactory.getLogger(this.getClass());
+
   @Resource(name = "simpleMemeryCacheManager")
   CacheManager cacheManager;
+
   @Resource PermissionResolver permissionResolver;
 
   @Override
@@ -56,14 +56,14 @@ public abstract class CacheableAuthInfoRealm
   }
 
   @Override
-  public Object getAuthenticationInfo(String partnerId) {
-    String key = partnerId + AUTHC_CACHE_KEY_POSTFIX;
+  public Object getAuthenticationInfo(String accessKey) {
+    String key = accessKey + AUTHC_CACHE_KEY_POSTFIX;
     Object value = cacheManager.get(key);
     if (value == null) {
       synchronized (key) {
         value = cacheManager.get(key);
         if (value == null) {
-          value = getSecretKey(partnerId);
+          value = getSecretKey(accessKey);
           if (value != null) {
             cacheManager.add(key, value);
           } else {
@@ -77,14 +77,14 @@ public abstract class CacheableAuthInfoRealm
 
   @SuppressWarnings("unchecked")
   @Override
-  public Object getAuthorizationInfo(String partnerId) {
-    String key = partnerId + AUTHZ_CACHE_KEY_POSTFIX;
+  public Object getAuthorizationInfo(String accessKey) {
+    String key = accessKey + AUTHZ_CACHE_KEY_POSTFIX;
     List<Permission> value = (List<Permission>) cacheManager.get(key);
     if (value == null) {
       synchronized (key) {
         value = (List<Permission>) cacheManager.get(key);
         if (value == null) {
-          List<String> permStrList = getAuthorizedServices(partnerId);
+          List<String> permStrList = getAuthorizedServices(accessKey);
           // 如果没有查询到权限信息,不设置缓存,有可能是网络或者权限系统内部错误
           if (permStrList == null || permStrList.isEmpty()) {
             return null;
@@ -103,14 +103,13 @@ public abstract class CacheableAuthInfoRealm
     return value;
   }
 
-  @Override
   public abstract String getSecretKey(String accessKey);
 
   /**
    * 获取产品名称列表
    *
-   * @param partnerId
+   * @param accessKey
    * @return
    */
-  public abstract List<String> getAuthorizedServices(String partnerId);
+  public abstract List<String> getAuthorizedServices(String accessKey);
 }

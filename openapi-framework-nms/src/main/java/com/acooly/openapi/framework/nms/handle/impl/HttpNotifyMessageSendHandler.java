@@ -98,8 +98,8 @@ public class HttpNotifyMessageSendHandler
       Map<String, String> requestHeader = Maps.newHashMap();
       requestHeader.put(ApiConstants.SIGN_TYPE, notifyMessage.getParameter(ApiConstants.SIGN_TYPE));
       requestHeader.put(ApiConstants.SIGN, notifyMessage.getParameter(ApiConstants.SIGN));
-      requestHeader.put(
-          ApiConstants.PARTNER_ID, notifyMessage.getParameter(ApiConstants.PARTNER_ID));
+//      requestHeader.put(
+//          ApiConstants.PARTNER_ID, notifyMessage.getParameter(ApiConstants.PARTNER_ID));
       HttpRequest httpRequest =
           HttpRequest.post(notifyMessage.getUrl())
               .connectTimeout(10 * 1000)
@@ -151,14 +151,14 @@ public class HttpNotifyMessageSendHandler
       return false;
     }
     result = result.toLowerCase();
-    if ("success".equals(result)) {
+    if (ApiConstants.NOTIFY_SUCCESS_CONTENT.equalsIgnoreCase(result)) {
       return true;
     }
     result = result.replaceAll("\\s*", "");
-    if ("success".equals(result)) {
+    if (ApiConstants.NOTIFY_SUCCESS_CONTENT.equalsIgnoreCase(result)) {
       return true;
     }
-    return result.length() < 50 && result.contains("success");
+    return result.length() < 50 && result.contains(ApiConstants.NOTIFY_SUCCESS_CONTENT);
   }
 
   @Override

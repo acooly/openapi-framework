@@ -7,16 +7,17 @@
  */
 package com.acooly.openapi.framework.core.log;
 
-import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
+import com.acooly.openapi.framework.common.enums.ApiBusiType;
+import com.acooly.openapi.framework.core.OpenAPIProperties;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +30,7 @@ import java.util.Set;
  * @author zhangpu
  */
 @Component
-public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler, InitializingBean {
+public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
 
   public static final String DEF_MASK_KEYS = "cardNo,idcard,mobileNo,userName";
   public static final String DEF_IGNORE_KEYS = "password,pass,passwd";
@@ -48,7 +49,9 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler, Initia
   private Set<String> masks;
   private Set<String> ignores;
 
-  private Boolean queryLogSeparation;
+  @Autowired
+  private OpenAPIProperties openAPIProperties;
+
 
   @Override
   public void log(String label, String msg) {
@@ -92,7 +95,7 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler, Initia
   }
 
   private boolean isSep() {
-    if (!queryLogSeparation) {
+    if (!openAPIProperties.getQueryLogSeparationEnable()) {
       return false;
     }
     ApiContext apiContext = ApiContextHolder.getApiContext();
@@ -177,9 +180,4 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler, Initia
     this.ignoreKeys = ignoreKeys;
   }
 
-  @Override
-  public void afterPropertiesSet() throws Exception {
-    String property = System.getProperty("openapi.queryLogSeparationEnable");
-    queryLogSeparation = Boolean.parseBoolean(property);
-  }
 }

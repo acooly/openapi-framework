@@ -39,7 +39,7 @@ public interface OrderInfoDao extends DynamicPagedQueryDao<OrderDto> {
    * 根据合作商ID和订单号获取唯一的订单信息
    *
    * @param partnerId
-   * @param orderNo
+   * @param requestNo
    * @return
    */
   OrderDto findByPartnerIdAndOrderNo(String partnerId, String requestNo);
@@ -48,7 +48,7 @@ public interface OrderInfoDao extends DynamicPagedQueryDao<OrderDto> {
    * 根据合作商ID和订单号获取订单条数
    *
    * @param partnerId
-   * @param orderNo
+   * @param requestNo
    * @return
    */
   int countByPartnerIdAndOrderNo(String partnerId, String requestNo);

@@ -20,7 +20,7 @@ public interface ApiAuthentication {
 
   String signature(Map<String, String> response);
 
-  String signature(Map<String, String> responseData, String partnerId, String signType);
+  String signature(Map<String, String> responseData, String accessKey, String signType);
 
-  String signature(String body, String partnerId, String signType);
+  String signature(String body, String accessKey, String signType);
 }

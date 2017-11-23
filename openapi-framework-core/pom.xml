@@ -24,7 +24,12 @@
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-service-persistent</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-jpa</artifactId>
+            <version>${acooly.framework.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-facade</artifactId>

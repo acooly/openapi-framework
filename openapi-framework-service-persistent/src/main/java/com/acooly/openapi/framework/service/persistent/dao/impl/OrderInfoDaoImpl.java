@@ -10,9 +10,9 @@ package com.acooly.openapi.framework.service.persistent.dao.impl;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.ds.AbstractJdbcTemplateDao;
+import com.acooly.openapi.framework.common.dto.OrderDto;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.utils.Dates;
-import com.acooly.openapi.framework.common.dto.OrderDto;
 import com.acooly.openapi.framework.service.persistent.dao.OrderInfoDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -39,42 +38,35 @@ public class OrderInfoDaoImpl extends AbstractJdbcTemplateDao implements OrderIn
   private static final Logger logger = LoggerFactory.getLogger(OrderInfoDaoImpl.class);
 
   private static final String SELECT_FIELDS =
-      "id,gid,order_no as orderNo,partner_id as partnerId,service,version,raw_add_time as rawAddTime,"
-          + "raw_update_time as rawUpdateTime,charset,protocol as protocol,notify_url as notifyUrl,return_url as returnUrl,business_info as businessInfo,"
-          + "sign_type as signType, request_no as requestNo, oid as oid,context";
+      "id,gid,partner_id as partnerId,service,version,raw_add_time as rawAddTime,"
+          + "raw_update_time as rawUpdateTime,protocol as protocol,notify_url as notifyUrl,return_url as returnUrl,business_info as businessInfo,"
+          + "sign_type as signType, request_no as requestNo,context,access_key as accessKey";
   private RowMapper<OrderDto> rowMapper =
-      new RowMapper<OrderDto>() {
-        @Override
-        public OrderDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-          OrderDto orderInfo = new OrderDto();
-          orderInfo.setId(rs.getLong(1));
-          orderInfo.setGid(rs.getString(2));
-          orderInfo.setOrderNo(rs.getString(3));
-          orderInfo.setPartnerId(rs.getString(4));
-          orderInfo.setService(rs.getString(5));
-          orderInfo.setVersion(rs.getString(6));
-          orderInfo.setRawAddTime(rs.getTimestamp(7));
-          orderInfo.setRawUpdateTime(rs.getTimestamp(8));
-          orderInfo.setCharset(rs.getString(9));
-          String protocol = rs.getString(10);
-          orderInfo.setProtocol(
-              Strings.isNotBlank(protocol)
-                  ? ApiProtocol.valueOf(protocol)
-                  : ApiProtocol.JSON);
-          orderInfo.setNotifyUrl(rs.getString(11));
-          orderInfo.setReturnUrl(rs.getString(12));
-          orderInfo.setBusinessInfo(rs.getString(13));
-          orderInfo.setSignType(rs.getString(14));
-          orderInfo.setRequestNo(rs.getString(15));
-          orderInfo.setOid(rs.getString(16));
-          orderInfo.setContext(rs.getString(17));
-          return orderInfo;
-        }
+      (rs, rowNum) -> {
+        OrderDto orderInfo = new OrderDto();
+        orderInfo.setId(rs.getLong(1));
+        orderInfo.setGid(rs.getString(2));
+        orderInfo.setPartnerId(rs.getString(3));
+        orderInfo.setService(rs.getString(4));
+        orderInfo.setVersion(rs.getString(5));
+        orderInfo.setRawAddTime(rs.getTimestamp(6));
+        orderInfo.setRawUpdateTime(rs.getTimestamp(7));
+        String protocol = rs.getString(8);
+        orderInfo.setProtocol(
+            Strings.isNotBlank(protocol) ? ApiProtocol.valueOf(protocol) : ApiProtocol.JSON);
+        orderInfo.setNotifyUrl(rs.getString(9));
+        orderInfo.setReturnUrl(rs.getString(10));
+        orderInfo.setBusinessInfo(rs.getString(11));
+        orderInfo.setSignType(rs.getString(12));
+        orderInfo.setRequestNo(rs.getString(13));
+        orderInfo.setContext(rs.getString(14));
+        orderInfo.setAccessKey(rs.getString(15));
+        return orderInfo;
       };
 
   @Override
   public PageInfo<OrderDto> query(
-          PageInfo<OrderDto> pageInfo, Map<String, Object> map, Map<String, Boolean> orderMap) {
+      PageInfo<OrderDto> pageInfo, Map<String, Object> map, Map<String, Boolean> orderMap) {
 
     StringBuilder sqlBuilder = new StringBuilder();
     sqlBuilder
@@ -149,30 +141,28 @@ public class OrderInfoDaoImpl extends AbstractJdbcTemplateDao implements OrderIn
             + getTable(orderInfo.getPartnerId())
             + "("
             + (getDbType() == DbType.oracle ? "id," : "")
-            + "gid,order_no,partner_id,service,version,charset,notify_url,return_url,business_info,raw_add_time,raw_update_time,sign_type,request_no,oid,context) "
+            + "gid,access_key,partner_id,service,version,notify_url,return_url,business_info,raw_add_time,raw_update_time,sign_type,request_no,context) "
             + " values("
             + (getDbType() == DbType.oracle ? "seq_api_order_info.nextval," : "")
-            + "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            + "?,?,?,?,?,?,?,?,?,?,?,?,?)";
     jdbcTemplate.update(
         sql,
         new PreparedStatementSetter() {
           @Override
           public void setValues(PreparedStatement ps) throws SQLException {
             ps.setString(1, orderInfo.getGid());
-            ps.setString(2, orderInfo.getOrderNo());
+            ps.setString(2, orderInfo.getAccessKey());
             ps.setString(3, orderInfo.getPartnerId());
             ps.setString(4, orderInfo.getService());
             ps.setString(5, orderInfo.getVersion());
-            ps.setString(6, orderInfo.getCharset());
-            ps.setString(7, orderInfo.getNotifyUrl());
-            ps.setString(8, orderInfo.getReturnUrl());
-            ps.setString(9, orderInfo.getBusinessInfo());
+            ps.setString(6, orderInfo.getNotifyUrl());
+            ps.setString(7, orderInfo.getReturnUrl());
+            ps.setString(8, orderInfo.getBusinessInfo());
+            ps.setTimestamp(9, new Timestamp(new Date().getTime()));
             ps.setTimestamp(10, new Timestamp(new Date().getTime()));
-            ps.setTimestamp(11, new Timestamp(new Date().getTime()));
-            ps.setString(12, orderInfo.getSignType());
-            ps.setString(13, orderInfo.getRequestNo());
-            ps.setString(14, orderInfo.getOid());
-            ps.setString(15, orderInfo.getContext());
+            ps.setString(11, orderInfo.getSignType());
+            ps.setString(12, orderInfo.getRequestNo());
+            ps.setString(13, orderInfo.getContext());
           }
         });
   }

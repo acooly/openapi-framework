@@ -43,16 +43,13 @@ import java.util.Map;
 /** @author qiubo@qq.com */
 @Data
 public class ApiContext {
-  private static final Logger perlogger =
-      LoggerFactory.getLogger(ApiConstants.PERFORMANCE_LOGGER);
+  private static final Logger perlogger = LoggerFactory.getLogger(ApiConstants.PERFORMANCE_LOGGER);
   private HttpServletRequest orignalRequest;
   private HttpServletResponse orignalResponse;
   /** 是否已认证通过 */
   private boolean authenticated = false;
   /** 交易级内部ID */
   private String gid;
-  /** 请求及内部ID */
-  private String oid;
 
   private OpenApiService openApiService;
 
@@ -77,6 +74,8 @@ public class ApiContext {
   private String sign;
 
   private SignTypeEnum signType;
+
+  private String accessKey;
 
   private String requestBody;
 
@@ -117,7 +116,6 @@ public class ApiContext {
   }
 
   public void init() {
-    this.oid = Ids.oid();
     this.gid = Ids.gid();
     MDC.put(ApiConstants.GID, gid);
 
@@ -126,15 +124,17 @@ public class ApiContext {
     parseSign(queryStringMap);
     // signType
     parseSignType(queryStringMap);
-    // signType
-    parseParternId(queryStringMap);
+    // accesskey
+    parseAccessKey(queryStringMap);
+
     parseBody();
+    MDC.put("oid", requestNo);
     this.stopWatch = new Slf4JStopWatch(serviceName, perlogger);
     this.userAgent = orignalRequest.getHeader("User-Agent");
   }
 
-  private void parseParternId(Map<String, String> queryStringMap) {
-    this.partnerId = notBlankParam(queryStringMap, ApiConstants.PARTNER_ID);
+  private void parseAccessKey(Map<String, String> queryStringMap) {
+    this.accessKey = notBlankParam(queryStringMap, ApiConstants.ACCESS_KEY);
   }
 
   private void parseBody() {
@@ -169,12 +169,15 @@ public class ApiContext {
     parseJson(body);
     throwIfBlank(serviceName, ApiConstants.SERVICE + "不能为空");
     throwIfBlank(serviceVersion, ApiConstants.VERSION + "不能为空");
+    throwIfBlank(requestNo, ApiConstants.REQUEST_NO + "不能为空");
   }
 
   private void parseJson(String body) {
     JSONObject jsonObject = (JSONObject) JSON.parse(body);
     serviceName = (String) jsonObject.get(ApiConstants.SERVICE);
     serviceVersion = (String) jsonObject.get(ApiConstants.VERSION);
+    requestNo = (String) jsonObject.get(ApiConstants.REQUEST_NO);
+    partnerId=(String) jsonObject.get(ApiConstants.PARTNER_ID);
   }
 
   private String notBlankParam(Map<String, String> queryStringMap, String param) {

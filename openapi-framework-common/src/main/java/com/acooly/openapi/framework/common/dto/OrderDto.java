@@ -23,11 +23,10 @@ import java.util.Date;
 @Setter
 public class OrderDto extends InfoBase {
   private Long id;
+
   private String gid;
-  private String oid;
+
   private String requestNo;
-  /** 商户订单号:merchOrderNo */
-  private String orderNo;
 
   private String partnerId;
   private String service;
@@ -35,11 +34,11 @@ public class OrderDto extends InfoBase {
   private String signType;
   private String returnUrl;
   private String notifyUrl;
-  private String charset;
   private ApiProtocol protocol;
   private String businessInfo;
   private Date rawAddTime;
   private Date rawUpdateTime;
 
+  private String accessKey;
   private String context;
 }

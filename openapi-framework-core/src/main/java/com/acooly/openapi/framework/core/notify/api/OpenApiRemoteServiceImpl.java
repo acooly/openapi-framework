@@ -137,8 +137,8 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
     Map<String, String> signedMap = Maps.newLinkedHashMap();
     // 设置基础和默认参数
     signedMap.put(ApiConstants.REQUEST_NO, orderInfo.getRequestNo());
-    signedMap.put(ApiConstants.MERCH_ORDER_NO, orderInfo.getOrderNo());
-    signedMap.put(ApiConstants.PARTNER_ID, orderInfo.getPartnerId());
+    //fixme
+//    signedMap.put(ApiConstants.PARTNER_ID, orderInfo.getPartnerId());
     signedMap.put(ApiConstants.SERVICE, orderInfo.getService());
     signedMap.put(ApiConstants.VERSION, orderInfo.getVersion());
     signedMap.put(ApiConstants.PROTOCOL, orderInfo.getProtocol().code());

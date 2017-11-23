@@ -6,6 +6,7 @@
  */
 package com.acooly.openapi.framework.core.auth.impl;
 
+import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.core.auth.ApiAuthorizer;
 import com.acooly.openapi.framework.core.auth.permission.Permission;
 import com.acooly.openapi.framework.core.exception.impl.ApiServiceAuthorizationException;
@@ -23,15 +24,15 @@ import java.util.List;
 public class DefaultApiAuthorizer implements ApiAuthorizer {
 
   @Override
-  public void authorize(String serviceName, List<Permission> permissionList) {
+  public void authorize(ApiContext apiContext, List<Permission> permissionList) {
+    String resource=apiContext.getPartnerId() + ":" + apiContext.getServiceName();
     if (permissionList != null) {
       for (Permission perm : permissionList) {
-        if (perm.implies(serviceName)) {
+        if (perm.implies(resource)) {
           return;
         }
       }
     }
-
-    throw new ApiServiceAuthorizationException("服务[" + serviceName + "]未授权");
+    throw new ApiServiceAuthorizationException("服务[" + apiContext.getServiceName() + "]未授权");
   }
 }

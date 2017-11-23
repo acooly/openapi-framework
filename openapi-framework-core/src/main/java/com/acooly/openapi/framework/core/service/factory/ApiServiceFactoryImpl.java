@@ -10,6 +10,7 @@
  */
 package com.acooly.openapi.framework.core.service.factory;
 
+import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.enums.ApiMessageType;
@@ -18,6 +19,7 @@ import com.acooly.openapi.framework.common.message.ApiAsyncRequest;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.core.OpenAPIProperties;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
 import com.acooly.openapi.framework.core.service.route.ServiceRouter;
 import com.acooly.openapi.framework.core.util.GenericsUtils;
@@ -27,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -61,6 +64,8 @@ public class ApiServiceFactoryImpl
   @Resource(name = "serviceRouter")
   private ServiceRouter serviceRouter;
 
+  @Autowired private OpenAPIProperties openAPIProperties;
+
   @Override
   public void afterPropertiesSet() throws Exception {
     servicesMap = HashMultimap.create();
@@ -82,6 +87,11 @@ public class ApiServiceFactoryImpl
           "openapi服务"
               + curApiService.getClass()
               + "必须要标记com.acooly.openapi.framework.core.meta.OpenApiService注解");
+    }
+    if (!openAPIProperties.getLogin().isEnable()) {
+      if (openApiService.name().equals(ApiConstants.LOGIN_SERVICE_NAME)) {
+        return;
+      }
     }
     checkApiService(curApiService);
     if (servicesMap.containsKey(openApiService.name())) {

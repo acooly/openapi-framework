@@ -10,7 +10,6 @@ import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.utils.Cryptos;
 import com.acooly.openapi.framework.common.utils.Encodes;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
-import com.acooly.openapi.framework.core.OpenApiConstants;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
 import com.acooly.openapi.framework.core.security.sign.Md5Signer;
 import com.acooly.openapi.framework.core.security.sign.Signer;
@@ -30,6 +29,9 @@ import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
+import static com.acooly.openapi.framework.common.ApiConstants.TEST_ACCESS_KEY;
+import static com.acooly.openapi.framework.common.ApiConstants.TEST_SECRET_KEY;
+
 /**
  * ApiService Test base
  *
@@ -44,8 +46,9 @@ public abstract class AbstractApiServieTests {
   protected String signType = SignTypeEnum.MD5.toString();
   protected String protocal = ApiProtocol.JSON.code();
   protected String gatewayUrl = "http://127.0.0.1:8089/gateway.do";
-  protected String key = OpenApiConstants.DEF_SECRETKEY;
-  protected String partnerId = "test";
+  protected String accessKey = TEST_ACCESS_KEY;
+  protected String secretKey = TEST_SECRET_KEY;
+  protected String partnerId = "xfinpay.com";
   protected String service = "";
   protected String version = "1.0";
   protected String notifyUrl = "";
@@ -63,7 +66,6 @@ public abstract class AbstractApiServieTests {
     if (Strings.isNullOrEmpty(request.getPartnerId())) {
       request.setPartnerId(partnerId);
     }
-    Assert.hasText(request.getPartnerId());
     if (Strings.isNullOrEmpty(request.getVersion())) {
       request.setVersion(version);
     }
@@ -73,10 +75,10 @@ public abstract class AbstractApiServieTests {
     }
     Assert.hasText(request.getService());
     String body = JsonMarshallor.INSTANCE.marshall(request);
-    Map<String, String> requestHeader = Maps.newHashMap();
+    Map<String, String> requestHeader = Maps.newTreeMap();
+    requestHeader.put(ApiConstants.ACCESS_KEY, accessKey);
     requestHeader.put(ApiConstants.SIGN_TYPE, "MD5");
     requestHeader.put(ApiConstants.SIGN, sign(body));
-    requestHeader.put(ApiConstants.PARTNER_ID, partnerId);
     if (showLog) {
       log.info("请求-> header:{} body:{}", requestHeader, body);
     }
@@ -89,7 +91,7 @@ public abstract class AbstractApiServieTests {
 
     if (httpRequest.code() == 302) {
       Map<String, List<String>> logHeader = Maps.newLinkedHashMap();
-      logHeader.put("Location",responseHeader.get("Location"));
+      logHeader.put("Location", responseHeader.get("Location"));
       String location = responseHeader.get("Location").get(0);
       if (showLog) {
         log.info("响应-> header:{}", logHeader);
@@ -102,8 +104,7 @@ public abstract class AbstractApiServieTests {
       signType = queryStringMap.get(ApiConstants.SIGN);
       try {
         responseBody =
-            URLDecoder.decode(
-                queryStringMap.get(ApiConstants.BODY), Charsets.UTF_8.name());
+            URLDecoder.decode(queryStringMap.get(ApiConstants.BODY), Charsets.UTF_8.name());
       } catch (UnsupportedEncodingException e) {
         throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e);
       }
@@ -129,11 +130,11 @@ public abstract class AbstractApiServieTests {
   }
 
   public String sign(String body) {
-    return DigestUtils.md5Hex(body + key);
+    return DigestUtils.md5Hex(body + secretKey);
   }
 
   protected String encrypt(String text) {
-    byte[] securityKey = key.substring(0, 16).getBytes();
+    byte[] securityKey = secretKey.substring(0, 16).getBytes();
     byte[] encrypt = Cryptos.aesEncrypt(text.getBytes(), securityKey);
     return Encodes.encodeBase64(encrypt);
   }

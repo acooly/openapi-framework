@@ -3,6 +3,8 @@ package com.acooly.openapi.framework.service.test;
 import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
+import com.acooly.openapi.framework.common.login.LoginRequest;
+import com.acooly.openapi.framework.common.login.LoginResponse;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
@@ -26,6 +28,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -83,10 +86,23 @@ public class OpenApiTest extends AbstractApiServieTests {
   }
 
   @Test
+  public void testLogin() throws Exception {
+    LoginRequest request = new LoginRequest();
+    request.setRequestNo(UUID.randomUUID().toString());
+    request.setService("login");
+    request.setUsername("qiubo");
+    request.setPassword(encrypt("passwd"));
+    LoginResponse response = request(request, LoginResponse.class);
+    log.info("{}", response);
+  }
+
+  @Test
   public void testNotify() throws Exception {
+    CountDownLatch doneSignal = new CountDownLatch(1);
+
     int port = 10090;
     HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-    server.createContext("/", new TestHandler());
+    server.createContext("/", new TestHandler(doneSignal));
     server.setExecutor(null); // creates a default executor
     server.start();
 
@@ -101,22 +117,30 @@ public class OpenApiTest extends AbstractApiServieTests {
     assertThat(response).isNotNull();
     assertThat(response.isSuccess()).isTrue();
     assertThat(response.getCode()).isEqualTo(ApiServiceResultCode.PROCESSING.code());
+    doneSignal.await();
   }
 
   static class TestHandler implements HttpHandler {
+    private CountDownLatch countDownLatch;
+
+    public TestHandler(CountDownLatch countDownLatch) {
+      this.countDownLatch = countDownLatch;
+    }
+
     @Override
     public void handle(HttpExchange t) throws IOException {
       String requestBody = new String(ByteStreams.toByteArray(t.getRequestBody()), Charsets.UTF_8);
-      log.info("requestBody:\n{}", requestBody);
-      assertThat(t.getRequestHeaders().get(ApiConstants.PARTNER_ID).get(0)).isEqualTo("test");
-      assertThat(t.getRequestHeaders().get(ApiConstants.SIGN))
-          .isNotEmpty();
+      log.info("notify requestBody:\n{}", requestBody);
+      //
+      // assertThat(t.getRequestHeaders().get(ApiConstants.PARTNER_ID).get(0)).isEqualTo("test");
+      assertThat(t.getRequestHeaders().get(ApiConstants.SIGN)).isNotEmpty();
       assertThat(t.getRequestHeaders().get(ApiConstants.SIGN_TYPE).get(0)).isEqualTo("MD5");
-      String response = "ok";
+      String response = ApiConstants.NOTIFY_SUCCESS_CONTENT;
       t.sendResponseHeaders(200, response.length());
       OutputStream os = t.getResponseBody();
       os.write(response.getBytes(Charsets.UTF_8));
       os.close();
+      countDownLatch.countDown();
     }
   }
 }

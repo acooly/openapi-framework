@@ -45,16 +45,16 @@ public abstract class AbstractResponseMarshall<T, S extends ApiResponse>
         objectAccessor.getClassMeta().getSecurityfieldMap().entrySet()) {
       String value = objectAccessor.getPropertyValue(entry.getKey());
       String encrypt =
-          apiMarshallCryptService.encrypt(entry.getKey(), value, apiContext.getPartnerId());
+          apiMarshallCryptService.encrypt(entry.getKey(), value, apiContext.getAccessKey());
       objectAccessor.setPropertyValue(entry.getKey(), encrypt);
     }
     T result = doMarshall(response);
     doLogger(response, result);
     apiContext.setResponseBody((String) result);
-    if (!Strings.isNullOrEmpty(apiContext.getPartnerId())) {
+    if (!Strings.isNullOrEmpty(apiContext.getAccessKey())) {
       String sign =
           apiAuthentication.signature(
-              (String) result, apiContext.getPartnerId(), apiContext.getSignType().name());
+              (String) result, apiContext.getAccessKey(), apiContext.getSignType().name());
       if (apiContext.getOrignalResponse() != null) {
         apiContext
             .getOrignalResponse()

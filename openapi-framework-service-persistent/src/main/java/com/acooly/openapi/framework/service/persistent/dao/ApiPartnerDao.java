@@ -18,11 +18,14 @@ import org.springframework.data.jpa.repository.Query;
  *
  * @author Acooly Code Generator
  */
-public interface ApiPartnerDao extends EntityJpaDao<ApiPartner, Long>, ApiPartnerCustomDao {
+public interface ApiPartnerDao extends EntityJpaDao<ApiPartner, Long>{
 
   @Query(value = "FROM ApiPartner WHERE partnerId=?1")
   ApiPartner queryByPartnerId(String partnerId);
 
   @Query(value = "FROM ApiPartner WHERE id != ?1 AND partnerId=?2")
   ApiPartner queryExceptIdByPartnerId(Long id, String partnerId);
+
+  @Query("select secretKey from ApiPartner  where partnerId =?1 ")
+  String getPartnerSercretKey(String partnerId);
 }

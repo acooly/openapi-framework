@@ -5,20 +5,21 @@
 package com.acooly.openapi.framework.core.service.base;
 
 import com.acooly.core.utils.mapper.BeanCopier;
+import com.acooly.openapi.framework.common.context.ApiContext;
+import com.acooly.openapi.framework.common.context.ApiContextHolder;
+import com.acooly.openapi.framework.common.dto.OrderDto;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.message.ApiAsyncRequest;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.core.OpenApiConstants;
-import com.acooly.openapi.framework.common.context.ApiContext;
-import com.acooly.openapi.framework.common.context.ApiContextHolder;
+import com.acooly.openapi.framework.core.OpenAPIProperties;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
-import com.acooly.openapi.framework.common.dto.OrderDto;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import com.acooly.openapi.framework.service.OrderInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -39,6 +40,7 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
   /** 订单持久化服务 */
   @Resource private OrderInfoService orderInfoService;
 
+  @Autowired private OpenAPIProperties openAPIProperties;
   /**
    * 默认异步处理方法.用于构造异步响应对象.此方法会把外部请求对象中所有的参数填充到ApiNotify
    *
@@ -65,10 +67,10 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
   public final void service(ApiContext apiContext) {
     try {
       if (apiContext.getOpenApiService().busiType() != ApiBusiType.Query
-          && OpenApiConstants.saveOrder) {
+          && openAPIProperties.getSaveOrder()) {
         saveOrder(apiContext);
       }
-      doService((O)apiContext.getRequest(),(R) apiContext.getResponse());
+      doService((O) apiContext.getRequest(), (R) apiContext.getResponse());
     } catch (Exception e) {
       throw e;
     }
@@ -96,7 +98,7 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
    * @param apiNotify 准备发给cs的推送内容对象
    */
   protected void customizeApiNotify(
-          OrderDto orderInfo, ApiNotifyOrder apiNotifyOrder, ApiNotify apiNotify) {}
+      OrderDto orderInfo, ApiNotifyOrder apiNotifyOrder, ApiNotify apiNotify) {}
 
   /**
    * 异步通知entity默认使用基类，API业务服务可以根据需求定义ApiNotify子类，然后在ApiService中覆写该方法返回子类的类型，
@@ -128,6 +130,7 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
       orderInfo.setVersion(request.getVersion());
       orderInfo.setSignType(apiContext.getSignType().name());
       orderInfo.setContext(request.getContext());
+      orderInfo.setAccessKey(apiContext.getAccessKey());
       orderInfoService.insert(orderInfo);
     } catch (Exception e) {
       logger.warn("订单写入失败，忽略错误，继续执行服务:" + e.getMessage());

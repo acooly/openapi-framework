@@ -40,10 +40,9 @@ public class JsonApiRequestMarshall implements ApiRequestMarshall<ApiRequest, Ap
     for (Map.Entry<String, Field> entry :
         objectAccessor.getClassMeta().getSecurityfieldMap().entrySet()) {
       String value = objectAccessor.getPropertyValue(entry.getKey());
-      value = apiMarshallCryptService.decrypt(entry.getKey(), value, apiContext.getPartnerId());
+      value = apiMarshallCryptService.decrypt(entry.getKey(), value, apiContext.getAccessKey());
       objectAccessor.setPropertyValue(entry.getKey(), value);
     }
-    parsed.setPartnerId(apiContext.getPartnerId());
     return parsed;
   }
 

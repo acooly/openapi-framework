@@ -9,9 +9,7 @@ package com.acooly.openapi.framework.core.auth.realm;
  * @date 2014年6月27日
  */
 public interface AuthInfoRealm {
-  String APP_CLIENT_REALM = "appClientAuthInfoRealm";
+  Object getAuthenticationInfo(String accessKey);
 
-  Object getAuthenticationInfo(String partnerId);
-
-  Object getAuthorizationInfo(String partnerId);
+  Object getAuthorizationInfo(String accessKey);
 }
