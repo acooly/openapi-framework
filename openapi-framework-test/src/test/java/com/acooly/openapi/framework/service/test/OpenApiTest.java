@@ -6,6 +6,8 @@ import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.login.LoginRequest;
 import com.acooly.openapi.framework.common.login.LoginResponse;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
+import com.acooly.openapi.framework.service.test.api.LoginAssertApiService.LoginAssertRequest;
+import com.acooly.openapi.framework.service.test.api.LoginAssertApiService.LoginAssertResponse;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
 import com.acooly.openapi.framework.service.test.request.CreateOrderRequest;
@@ -30,6 +32,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
+import static com.acooly.openapi.framework.common.ApiConstants.ANONYMOUS_ACCESS_KEY;
+import static com.acooly.openapi.framework.common.ApiConstants.ANONYMOUS_SECRET_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /** @author qiubo@yiji.com */
@@ -87,6 +91,10 @@ public class OpenApiTest extends AbstractApiServieTests {
 
   @Test
   public void testLogin() throws Exception {
+
+    //1. 使用匿名认证信息登录
+    accessKey = ANONYMOUS_ACCESS_KEY;
+    secretKey = ANONYMOUS_SECRET_KEY;
     LoginRequest request = new LoginRequest();
     request.setRequestNo(UUID.randomUUID().toString());
     request.setService("login");
@@ -94,6 +102,18 @@ public class OpenApiTest extends AbstractApiServieTests {
     request.setPassword(encrypt("passwd"));
     LoginResponse response = request(request, LoginResponse.class);
     log.info("{}", response);
+
+    //登录成功后，使用下发的认证信息访问服务
+    accessKey = response.getAccessKey();
+    secretKey = response.getSecretKey();
+    LoginAssertRequest loginAssertRequest = new LoginAssertRequest();
+    loginAssertRequest.setRequestNo(UUID.randomUUID().toString());
+    loginAssertRequest.setService("loginAssert");
+    LoginAssertResponse loginAssertResponse =
+        request(loginAssertRequest, LoginAssertResponse.class);
+    assertThat(loginAssertResponse).isNotNull();
+    assertThat(loginAssertResponse.isSuccess()).isTrue();
+    assertThat(loginAssertResponse.getAccessKey()).isEqualTo(accessKey);
   }
 
   @Test

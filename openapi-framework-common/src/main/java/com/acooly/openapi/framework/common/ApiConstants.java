@@ -1,5 +1,7 @@
 package com.acooly.openapi.framework.common;
 
+import java.util.regex.Pattern;
+
 /**
  * Api 公共协议字段常量
  *
@@ -43,6 +45,11 @@ public final class ApiConstants {
   public static final String TEST_ACCESS_KEY = "test";
   public static final String TEST_SECRET_KEY = "c9cef22553af973d4b04a012f9cb8ea8";
 
+  public static final String ANONYMOUS_ACCESS_KEY = "anonymous";
+
+  public static final String ANONYMOUS_SECRET_KEY = "anonymouanonymou";
+
+  public static Pattern PERM_PATTERN = Pattern.compile("\\S+:\\S+");
 
   private ApiConstants() {
     super();

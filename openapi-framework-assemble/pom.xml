@@ -38,7 +38,10 @@
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-manage</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-service-persistent</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-taglibs</artifactId>

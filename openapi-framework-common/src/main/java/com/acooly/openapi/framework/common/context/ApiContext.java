@@ -25,6 +25,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Maps;
 import com.google.common.io.CharStreams;
 import lombok.Data;
 import org.perf4j.StopWatch;
@@ -88,6 +89,16 @@ public class ApiContext {
   private String partnerId;
 
   private StopWatch stopWatch;
+
+  private Map<String, Object> ext = Maps.newHashMap();
+
+  public void ext(String key, Object value) {
+    this.ext.put(key, value);
+  }
+
+  public Object ext(String key){
+    return this.ext.get(key);
+  }
 
   public OpenApiService getOpenApiService() {
     return openApiService;
@@ -177,7 +188,7 @@ public class ApiContext {
     serviceName = (String) jsonObject.get(ApiConstants.SERVICE);
     serviceVersion = (String) jsonObject.get(ApiConstants.VERSION);
     requestNo = (String) jsonObject.get(ApiConstants.REQUEST_NO);
-    partnerId=(String) jsonObject.get(ApiConstants.PARTNER_ID);
+    partnerId = (String) jsonObject.get(ApiConstants.PARTNER_ID);
   }
 
   private String notBlankParam(Map<String, String> queryStringMap, String param) {

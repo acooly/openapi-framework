@@ -22,7 +22,7 @@
 
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-service-persistent</artifactId>
+            <artifactId>openapi-framework-service</artifactId>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>

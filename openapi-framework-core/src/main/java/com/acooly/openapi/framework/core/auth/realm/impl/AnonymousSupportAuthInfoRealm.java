@@ -25,7 +25,7 @@ public abstract class AnonymousSupportAuthInfoRealm extends CacheableAuthInfoRea
   public List<String> getAuthorizedServices(String accessKey) {
     if (openAPIProperties.getAnonymous().isEnable()) {
       if (accessKey.equals(openAPIProperties.getAnonymous().getAccessKey())) {
-        return openAPIProperties.getAnonymous().getServices();
+        return openAPIProperties.getAnonymous().getPermissions();
       }
     }
     return doGetAuthorizedServices(accessKey);

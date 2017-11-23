@@ -10,6 +10,7 @@
 package com.acooly.openapi.framework.core;
 
 import com.acooly.core.utils.validate.Validators;
+import com.acooly.openapi.framework.core.auth.permission.Permission;
 import com.google.common.collect.Lists;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,8 @@ import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+import static com.acooly.openapi.framework.common.ApiConstants.ANONYMOUS_ACCESS_KEY;
+import static com.acooly.openapi.framework.common.ApiConstants.ANONYMOUS_SECRET_KEY;
 import static com.acooly.openapi.framework.core.OpenAPIProperties.PREFIX;
 
 /** @author qiubo@yiji.com */
@@ -45,11 +48,8 @@ public class OpenAPIProperties {
 
   @PostConstruct
   public void init() {
-    this.getAnonymous().getServices().add("login");
-    this.getAnonymous().getServices().add("bannerList");
-    this.getAnonymous().getServices().add("appLatestVersion");
-    this.getAnonymous().getServices().add("appCrashReport");
-    this.getAnonymous().getServices().add("welcomeInfo");
+    this.getAnonymous().getPermissions().add("*:login");
+    this.getAnonymous().getPermissions().forEach(Permission::permMatch);
     log.info("匿名访问服务配置:{}", this.getAnonymous());
     Validators.assertJSR303(anonymous);
   }
@@ -59,20 +59,18 @@ public class OpenAPIProperties {
 
     private boolean enable = true;
     /** 匿名accessKey */
-    @NotBlank private String accessKey = "anonymous";
+    @NotBlank private String accessKey = ANONYMOUS_ACCESS_KEY;
     /** 匿名secretKey */
     @NotBlank
     @Length(min = 16)
-    private String secretKey = "anonymouanonymou";
-    /** 匿名services */
-    @NotNull private List<String> services = Lists.newArrayList();
+    private String secretKey = ANONYMOUS_SECRET_KEY;
+    /** 匿名权限信息 */
+    @NotNull private List<String> permissions = Lists.newArrayList();
   }
 
   @Data
   public static class Login {
     boolean enable = false;
-    /** 设备绑定验证 */
-    private boolean deviceIdCheck = false;
     /** 每次登陆动态生成秘钥，false表示登录后生成用户秘钥后不再改变 */
     private boolean secretKeyDynamic = false;
   }

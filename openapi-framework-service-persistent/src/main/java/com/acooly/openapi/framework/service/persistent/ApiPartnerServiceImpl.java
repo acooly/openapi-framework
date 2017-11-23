@@ -47,6 +47,10 @@ public class ApiPartnerServiceImpl extends EntityServiceImpl<ApiPartner, ApiPart
     super.save(o);
   }
 
+  public ApiPartner queryByPartnerId(String partnerId) {
+    return this.getEntityDao().queryByPartnerId(partnerId);
+  }
+
   @Override
   public String generatePartnerid() {
     return Ids.getDid();

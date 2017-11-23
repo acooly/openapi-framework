@@ -23,7 +23,7 @@ public class DefaultPermissionResolver implements PermissionResolver {
 
   @Override
   public Permission resolvePermission(String permissionString) {
-    if (ApiConstants.ALL_WILDCARD_TOKEN.equals(permissionString)) {
+    if (ApiConstants.WILDCARD_TOKEN.equals(permissionString)) {
       return new AllPermission();
     }
     return new DefaultPermission(permissionString);

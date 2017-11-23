@@ -48,7 +48,7 @@ public abstract class AbstractApiServieTests {
   protected String gatewayUrl = "http://127.0.0.1:8089/gateway.do";
   protected String accessKey = TEST_ACCESS_KEY;
   protected String secretKey = TEST_SECRET_KEY;
-  protected String partnerId = "xfinpay.com";
+  protected String partnerId = "test";
   protected String service = "";
   protected String version = "1.0";
   protected String notifyUrl = "";

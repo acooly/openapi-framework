@@ -12,17 +12,17 @@ package com.acooly.openapi.framework.core.auth.permission;
 
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.google.common.base.Splitter;
-import org.springframework.util.Assert;
 
 import java.util.Iterator;
-import java.util.regex.Pattern;
+
+import static com.acooly.openapi.framework.common.ApiConstants.WILDCARD_TOKEN;
 
 /**
  * 权限字符串格式为：partnerId:serviceName
  *
  * <p>这两部分可以用*号匹配
  *
- * <p>比如:配置*:*,代表拥有所有权限.
+ * <p>比如:配置*,代表拥有所有权限.
  *
  * <p>配置123:*,代表可以访问partnerId=123的所有服务
  *
@@ -32,8 +32,6 @@ import java.util.regex.Pattern;
  */
 public class DefaultPermission implements Permission {
 
-  private static Pattern permPattern = Pattern.compile("\\S+:\\S+");
-
   /** 权限字符串 */
   private String perm;
 
@@ -41,8 +39,10 @@ public class DefaultPermission implements Permission {
   private String servicePerm;
 
   public DefaultPermission(String perm) {
-    Assert.state(
-        permPattern.matcher(perm).matches(), "权限字符串的格式应该为partnerId:serviceName,可以支持*,匹配所有为*:*");
+    if (perm.equals(WILDCARD_TOKEN)) {
+      return;
+    }
+    Permission.permMatch(perm);
     this.perm = perm;
     Iterator<String> iterator = Splitter.on(":").split(perm).iterator();
     partnerIdPerm = iterator.next();
@@ -51,7 +51,7 @@ public class DefaultPermission implements Permission {
 
   @Override
   public boolean implies(String resource) {
-    if (resource.equals(perm) || resource.equals(ApiConstants.ALL_WILDCARD_TOKEN)) {
+    if (resource.equals(perm) || perm.equals(ApiConstants.WILDCARD_TOKEN)) {
       return true;
     }
     Iterator<String> iterator = Splitter.on(":").split(resource).iterator();
@@ -61,10 +61,10 @@ public class DefaultPermission implements Permission {
   }
 
   private boolean match(String res, String perm) {
-    if (ApiConstants.WILDCARD_TOKEN.equals(perm)||res.equals(perm)) {
+    if (WILDCARD_TOKEN.equals(perm) || res.equals(perm)) {
       return true;
     }
-    int idx = perm.indexOf(ApiConstants.WILDCARD_TOKEN);
+    int idx = perm.indexOf(WILDCARD_TOKEN);
     if (idx < 0) {
       return false;
     } else {

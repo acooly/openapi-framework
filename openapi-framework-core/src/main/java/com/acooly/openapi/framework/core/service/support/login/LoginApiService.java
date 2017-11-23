@@ -1,18 +1,20 @@
 package com.acooly.openapi.framework.core.service.support.login;
 
-import com.acooly.core.common.boot.Env;
-import com.acooly.core.common.enums.EntityStatus;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
-import com.acooly.openapi.framework.common.login.*;
+import com.acooly.openapi.framework.common.login.AppApiLoginService;
+import com.acooly.openapi.framework.common.login.LoginDto;
+import com.acooly.openapi.framework.common.login.LoginRequest;
+import com.acooly.openapi.framework.common.login.LoginResponse;
 import com.acooly.openapi.framework.core.OpenAPIProperties;
 import com.acooly.openapi.framework.core.service.base.BaseApiService;
+import com.acooly.openapi.framework.service.AuthInfoRealmManageService;
+import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *     <p>用户登录服务需要目标项目根据需求实现ApiLoginService接口
  */
 @OpenApiService(
-  name =  ApiConstants.LOGIN_SERVICE_NAME,
+  name = ApiConstants.LOGIN_SERVICE_NAME,
   desc = "用户登录",
   responseType = ResponseType.SYN,
   owner = "公共"
@@ -38,7 +40,7 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
   private AppApiLoginService appApiLoginService;
 
   @Autowired(required = false)
-  private AppCustomerService appCustomerService;
+  private AuthInfoRealmManageService authInfoRealmManageService;
 
   @Override
   protected void doService(LoginRequest request, LoginResponse response) {
@@ -46,31 +48,21 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
       LoginDto dto = appApiLoginService.login(request, ApiContextHolder.getApiContext());
       response.setCustomerId(dto.getCustomerId());
       String accessKey = request.getPartnerId() + "#" + request.getUsername();
-      AppCustomerDto appCustomer =
-          appCustomerService.loadAppCustomer(accessKey, EntityStatus.enable);
-      if (appCustomer == null) {
-        appCustomer = new AppCustomerDto();
-        appCustomer.setUserName(request.getUsername());
-        appCustomer.setAccessKey(accessKey);
-        appCustomer.setDeviceId(request.getDeviceId());
-        appCustomer.setDeviceType(request.getDeviceType());
-        appCustomer.setDeviceModel(request.getDeviceModel());
-        appCustomer.setSecretKey(RandomStringUtils.randomAlphanumeric(32));
-        appCustomer = appCustomerService.createAppCustomer(appCustomer);
+      String sercretKey = authInfoRealmManageService.getSercretKey(accessKey);
+      if (Strings.isNullOrEmpty(sercretKey)) {
+        sercretKey = RandomStringUtils.randomAlphanumeric(32);
+        authInfoRealmManageService.createAuthenticationInfo(accessKey, sercretKey);
+        String defaultAuthorizationInfo = request.getPartnerId() + ":*";
+        authInfoRealmManageService.createAuthorizationInfo(accessKey, defaultAuthorizationInfo);
       } else {
-        if (Env.isOnline()
-            && openAPIProperties.getLogin().isDeviceIdCheck()
-            && !StringUtils.equals(request.getDeviceId(), appCustomer.getDeviceId())) {
-          throw new RuntimeException("设备ID与绑定的设备ID不符");
-        }
         if (openAPIProperties.getLogin().isSecretKeyDynamic()) {
-          appCustomer.setSecretKey(RandomStringUtils.randomAlphanumeric(32));
-          appCustomer = appCustomerService.updateSecretKey(appCustomer);
+          sercretKey = RandomStringUtils.randomAlphanumeric(32);
+          authInfoRealmManageService.updateAuthenticationInfo(accessKey, sercretKey);
         }
       }
       response.setCustomerId(dto.getCustomerId());
-      response.setAccessKey(appCustomer.getAccessKey());
-      response.setSecretKey(appCustomer.getSecretKey());
+      response.setAccessKey(accessKey);
+      response.setSecretKey(sercretKey);
       response.setExtJson(dto.getExtJson());
     } catch (Exception e) {
       throw new ApiServiceException("LOGIN_FAIL", e.getMessage());

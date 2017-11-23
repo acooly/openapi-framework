@@ -3,14 +3,12 @@ package com.acooly.openapi.framework.core;
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
+import com.acooly.openapi.framework.common.login.AppApiLoginService;
 import com.acooly.openapi.framework.core.auth.ApiAuthorization;
 import com.acooly.openapi.framework.core.auth.impl.DefaultApiAuthorization;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.core.auth.realm.impl.DefaultAuthInfoRealm;
-import com.acooly.openapi.framework.common.login.AppApiLoginService;
-import com.acooly.openapi.framework.common.login.AppCustomerService;
 import com.acooly.openapi.framework.core.service.support.login.DefaultAppApiLoginService;
-import com.acooly.openapi.framework.core.service.support.login.DefaultAppCustomerService;
 import com.acooly.openapi.framework.core.servlet.OpenAPIDispatchServlet;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,12 +69,6 @@ public class OpenApiConfiguration {
     @Bean
     public AppApiLoginService defaultAppApiLoginService() {
       return new DefaultAppApiLoginService();
-    }
-
-    @ConditionalOnMissingBean(AppCustomerService.class)
-    @Bean
-    public AppCustomerService defaultAppCustomerService() {
-      return new DefaultAppCustomerService();
     }
   }
 
