@@ -5,7 +5,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Component;
 
 /**
- * Sha256Hex 签名和验签
+ * SHA256HEX 签名和验签
  *
  * <p>Created by zhangpu on 2015/1/23.
  */
@@ -19,6 +19,6 @@ public class Sha256Signer extends AbstractSigner {
 
   @Override
   public SignTypeEnum getSinType() {
-    return SignTypeEnum.Sha256Hex;
+    return SignTypeEnum.SHA256HEX;
   }
 }

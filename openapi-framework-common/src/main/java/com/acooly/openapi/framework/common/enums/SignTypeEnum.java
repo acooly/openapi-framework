@@ -12,7 +12,7 @@ package com.acooly.openapi.framework.common.enums;
  */
 public enum SignTypeEnum {
   MD5,
-  Sha1Hex,
-  Sha256Hex,
-  HmacSha1Hex;
+  SHA1HEX,
+  SHA256HEX,
+  HMACSHA1HEX
 }

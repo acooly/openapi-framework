@@ -166,7 +166,7 @@ public class ApiContext {
   private void parseSignType(Map<String, String> queryStringMap) {
     String signType = notBlankParam(queryStringMap, ApiConstants.SIGN_TYPE);
     try {
-      this.signType = SignTypeEnum.valueOf(signType);
+      this.signType = SignTypeEnum.valueOf(signType.toUpperCase());
     } catch (IllegalArgumentException e) {
       throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, "不支持的签名类型:" + signType);
     }

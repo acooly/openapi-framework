@@ -55,13 +55,15 @@ public abstract class AbstractResponseMarshall<T, S extends ApiResponse>
       String sign =
           apiAuthentication.signature(
               (String) result, apiContext.getAccessKey(), apiContext.getSignType().name());
-      if (apiContext.getOrignalResponse() != null) {
-        apiContext
-            .getOrignalResponse()
-            .setHeader(ApiConstants.SIGN_TYPE, apiContext.getSignType().name());
-        apiContext.getOrignalResponse().setHeader(ApiConstants.SIGN, sign);
+      if(!Strings.isNullOrEmpty(sign)){
+        if (apiContext.getOrignalResponse() != null ) {
+          apiContext
+                  .getOrignalResponse()
+                  .setHeader(ApiConstants.SIGN_TYPE, apiContext.getSignType().name());
+          apiContext.getOrignalResponse().setHeader(ApiConstants.SIGN, sign);
+        }
+        apiContext.setResponseSign(sign);
       }
-      apiContext.setResponseSign(sign);
     }
     return result;
   }

@@ -19,6 +19,6 @@ public class HmacSha1Signer extends AbstractSigner {
 
   @Override
   public SignTypeEnum getSinType() {
-    return SignTypeEnum.HmacSha1Hex;
+    return SignTypeEnum.HMACSHA1HEX;
   }
 }
