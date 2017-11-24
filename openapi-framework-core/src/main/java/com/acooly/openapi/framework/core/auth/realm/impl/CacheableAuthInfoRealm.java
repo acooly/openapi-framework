@@ -57,7 +57,7 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm, Initializ
 
   @Override
   public Object getAuthenticationInfo(String accessKey) {
-    String key = accessKey + AUTHC_CACHE_KEY_POSTFIX;
+    String key = authenticationKey(accessKey);
     Object value = cacheManager.get(key);
     if (value == null) {
       synchronized (key) {
@@ -75,10 +75,14 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm, Initializ
     return value;
   }
 
+  private String authenticationKey(String accessKey) {
+    return accessKey + AUTHC_CACHE_KEY_POSTFIX;
+  }
+
   @SuppressWarnings("unchecked")
   @Override
   public Object getAuthorizationInfo(String accessKey) {
-    String key = accessKey + AUTHZ_CACHE_KEY_POSTFIX;
+    String key = authorizationKey(accessKey);
     List<Permission> value = (List<Permission>) cacheManager.get(key);
     if (value == null) {
       synchronized (key) {
@@ -101,6 +105,15 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm, Initializ
       }
     }
     return value;
+  }
+
+  private String authorizationKey(String accessKey) {
+    return accessKey + AUTHZ_CACHE_KEY_POSTFIX;
+  }
+
+  public void removeCache(String accessKey) {
+    cacheManager.cleanup(authenticationKey(accessKey));
+    cacheManager.cleanup(authorizationKey(accessKey));
   }
 
   public abstract String getSecretKey(String accessKey);

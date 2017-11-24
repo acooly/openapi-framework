@@ -3,6 +3,8 @@ package com.acooly.openapi.framework.serviceimpl.persistent;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.SecretType;
 import com.acooly.openapi.framework.common.enums.SignType;
+import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
+import com.acooly.openapi.framework.core.auth.realm.impl.CacheableAuthInfoRealm;
 import com.acooly.openapi.framework.domain.ApiPartner;
 import com.acooly.openapi.framework.domain.ApiPartnerService;
 import com.acooly.openapi.framework.service.AuthInfoRealmManageService;
@@ -17,6 +19,9 @@ import java.util.List;
 public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageService {
   @Autowired ApiPartnerServiceImpl apiPartnerService;
   @Autowired ApiPartnerServiceServiceImpl apiPartnerServiceService;
+
+  @Autowired(required = false)
+  AuthInfoRealm authInfoRealm;
 
   @Override
   public void createAuthenticationInfo(String accessKey, String secretKey) {
@@ -48,6 +53,9 @@ public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageSer
     ApiPartner apiPartner = apiPartnerService.queryByPartnerId(accessKey);
     apiPartner.setSecretKey(sercretKey);
     apiPartnerService.save(apiPartner);
+    if (authInfoRealm instanceof CacheableAuthInfoRealm) {
+      ((CacheableAuthInfoRealm) authInfoRealm).removeCache(accessKey);
+    }
   }
 
   @Override

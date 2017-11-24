@@ -37,7 +37,12 @@
             <artifactId>openapi-framework-facade</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-configuration-processor</artifactId>
+            <version>${acooly.framework.version}</version>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
 
