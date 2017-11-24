@@ -48,8 +48,4 @@ public class LoginRequest extends ApiRequest {
   @Size(max = 64)
   @OpenApiField(desc = "设备标识")
   private String deviceId;
-
-  @Size(max = 512)
-  @OpenApiField(desc = "请求扩展字段,Json格式")
-  private String extJson;
 }

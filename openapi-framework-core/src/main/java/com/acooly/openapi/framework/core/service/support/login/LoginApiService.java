@@ -5,12 +5,12 @@ import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
-import com.acooly.openapi.framework.service.AppApiLoginService;
+import com.acooly.openapi.framework.core.OpenAPIProperties;
+import com.acooly.openapi.framework.core.service.base.BaseApiService;
 import com.acooly.openapi.framework.domain.LoginDto;
 import com.acooly.openapi.framework.domain.LoginRequest;
 import com.acooly.openapi.framework.domain.LoginResponse;
-import com.acooly.openapi.framework.core.OpenAPIProperties;
-import com.acooly.openapi.framework.core.service.base.BaseApiService;
+import com.acooly.openapi.framework.service.AppApiLoginService;
 import com.acooly.openapi.framework.service.AuthInfoRealmManageService;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
@@ -60,10 +60,10 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
           authInfoRealmManageService.updateAuthenticationInfo(accessKey, sercretKey);
         }
       }
+      response.getExt().putAll(dto.getExt());
       response.setCustomerId(dto.getCustomerId());
       response.setAccessKey(accessKey);
       response.setSecretKey(sercretKey);
-      response.setExtJson(dto.getExtJson());
     } catch (Exception e) {
       throw new ApiServiceException("LOGIN_FAIL", e.getMessage());
     }

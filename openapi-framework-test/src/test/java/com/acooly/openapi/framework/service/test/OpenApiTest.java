@@ -3,9 +3,9 @@ package com.acooly.openapi.framework.service.test;
 import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
+import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.domain.LoginRequest;
 import com.acooly.openapi.framework.domain.LoginResponse;
-import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.service.test.api.LoginAssertApiService.LoginAssertRequest;
 import com.acooly.openapi.framework.service.test.api.LoginAssertApiService.LoginAssertResponse;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
@@ -64,6 +64,7 @@ public class OpenApiTest extends AbstractApiServieTests {
       goodInfos.add(goodInfo);
     }
     request.setGoodsInfos(goodInfos);
+    request.ext("xx", "oo");
     CreateOrderResponse response = request(request, CreateOrderResponse.class);
     log.info("{}", response);
     assertThat(response).isNotNull();
@@ -92,7 +93,7 @@ public class OpenApiTest extends AbstractApiServieTests {
   @Test
   public void testLogin() throws Exception {
 
-    //1. 使用匿名认证信息登录
+    // 1. 使用匿名认证信息登录
     accessKey = ANONYMOUS_ACCESS_KEY;
     secretKey = ANONYMOUS_SECRET_KEY;
     LoginRequest request = new LoginRequest();
@@ -103,7 +104,7 @@ public class OpenApiTest extends AbstractApiServieTests {
     LoginResponse response = request(request, LoginResponse.class);
     log.info("{}", response);
 
-    //登录成功后，使用下发的认证信息访问服务
+    // 登录成功后，使用下发的认证信息访问服务
     accessKey = response.getAccessKey();
     secretKey = response.getSecretKey();
     LoginAssertRequest loginAssertRequest = new LoginAssertRequest();

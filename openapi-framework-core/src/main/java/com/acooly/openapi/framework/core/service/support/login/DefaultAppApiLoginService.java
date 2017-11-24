@@ -16,7 +16,7 @@ public class DefaultAppApiLoginService implements AppApiLoginService {
   public LoginDto login(LoginRequest loginRequest, ApiContext apiContext) {
     LoginDto loginDto = new LoginDto();
     loginDto.setCustomerId("0");
-    loginDto.setExtJson(loginRequest.getExtJson());
+    loginDto.ext("x","o");
     return loginDto;
   }
 }
