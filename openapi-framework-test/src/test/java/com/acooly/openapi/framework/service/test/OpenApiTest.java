@@ -3,6 +3,7 @@ package com.acooly.openapi.framework.service.test;
 import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
+import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.domain.LoginRequest;
 import com.acooly.openapi.framework.domain.LoginResponse;
@@ -10,6 +11,7 @@ import com.acooly.openapi.framework.service.test.api.LoginAssertApiService.Login
 import com.acooly.openapi.framework.service.test.api.LoginAssertApiService.LoginAssertResponse;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
+import com.acooly.openapi.framework.service.test.notify.PayOrderNotify;
 import com.acooly.openapi.framework.service.test.request.CreateOrderRequest;
 import com.acooly.openapi.framework.service.test.request.PayOrderRequest;
 import com.acooly.openapi.framework.service.test.request.WithdrawRequest;
@@ -39,6 +41,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 /** @author qiubo@yiji.com */
 @Slf4j
 public class OpenApiTest extends AbstractApiServieTests {
+
+  static String content = UUID.randomUUID().toString();
+
   @Test
   public void testSync() throws Exception {
     CreateOrderRequest request = new CreateOrderRequest();
@@ -52,7 +57,7 @@ public class OpenApiTest extends AbstractApiServieTests {
     request.setBuyeryMobileNo("13898765453");
     request.setBuyerCertNo("330702194706165014");
     request.setPassword(encrypt("12312312"));
-    request.setContext("123");
+    request.setContext(content);
     List<GoodInfo> goodInfos = Lists.newArrayList();
     for (int i = 1; i <= 2; i++) {
       GoodInfo goodInfo = new GoodInfo();
@@ -69,6 +74,7 @@ public class OpenApiTest extends AbstractApiServieTests {
     log.info("{}", response);
     assertThat(response).isNotNull();
     assertThat(response.isSuccess()).isTrue();
+    assertThat(response.getContext()).isEqualTo(content);
   }
 
   @Test
@@ -77,6 +83,7 @@ public class OpenApiTest extends AbstractApiServieTests {
     request.setRequestNo(UUID.randomUUID().toString());
     request.setService("withdraw");
     request.setAmount(new Money("100"));
+    request.setContext(content);
     WithdrawResponse response = request(request, WithdrawResponse.class);
     log.info("{}", response);
     assertThat(response).isNotNull();
@@ -88,6 +95,7 @@ public class OpenApiTest extends AbstractApiServieTests {
     response = request(request, WithdrawResponse.class);
     assertThat(response).isNotNull();
     assertThat(response.isSuccess()).isTrue();
+    assertThat(response.getContext()).isEqualTo(content);
   }
 
   @Test
@@ -133,6 +141,7 @@ public class OpenApiTest extends AbstractApiServieTests {
     request.setAmount(new Money("100"));
     request.setPayerUserId("xxxxxx");
     request.setNotifyUrl("http://127.0.0.1:" + port + "/");
+    request.setContext(content);
     PayOrderResponse response = request(request, PayOrderResponse.class);
     log.info("{}", response);
     assertThat(response).isNotNull();
@@ -151,9 +160,11 @@ public class OpenApiTest extends AbstractApiServieTests {
     @Override
     public void handle(HttpExchange t) throws IOException {
       String requestBody = new String(ByteStreams.toByteArray(t.getRequestBody()), Charsets.UTF_8);
-      log.info("notify requestBody:\n{}", requestBody);
-      //
-      // assertThat(t.getRequestHeaders().get(ApiConstants.PARTNER_ID).get(0)).isEqualTo("test");
+      PayOrderNotify payOrderNotify =
+          JsonMarshallor.INSTANCE.parse(requestBody, PayOrderNotify.class);
+      log.info("notify requestBody:\n{}", payOrderNotify);
+      assertThat(payOrderNotify.getContext()).isEqualTo(content);
+
       assertThat(t.getRequestHeaders().get(ApiConstants.SIGN)).isNotEmpty();
       assertThat(t.getRequestHeaders().get(ApiConstants.SIGN_TYPE).get(0)).isEqualTo("MD5");
       String response = ApiConstants.NOTIFY_SUCCESS_CONTENT;
