@@ -1,7 +1,6 @@
 package com.acooly.openapi.framework.core.test;
 
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
@@ -11,8 +10,6 @@ import com.acooly.openapi.framework.common.utils.Cryptos;
 import com.acooly.openapi.framework.common.utils.Encodes;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
-import com.acooly.openapi.framework.core.security.sign.Md5Signer;
-import com.acooly.openapi.framework.core.security.sign.Signer;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;
@@ -41,10 +38,8 @@ import static com.acooly.openapi.framework.common.ApiConstants.TEST_SECRET_KEY;
 @Slf4j
 public abstract class AbstractApiServieTests {
 
-  protected static final String ENCODING = "utf-8";
   protected Logger logger = LoggerFactory.getLogger(this.getClass());
   protected String signType = SignTypeEnum.MD5.toString();
-  protected String protocal = ApiProtocol.JSON.code();
   protected String gatewayUrl = "http://127.0.0.1:8089/gateway.do";
   protected String accessKey = TEST_ACCESS_KEY;
   protected String secretKey = TEST_SECRET_KEY;
@@ -55,8 +50,6 @@ public abstract class AbstractApiServieTests {
   protected String returnUrl = "";
 
   protected boolean showLog = true;
-
-  protected Signer signer = new Md5Signer();
 
   protected static Map<String, String> marshall(ApiMessage message) {
     return ObjectAccessor.of(message).getAllDataExcludeTransient();
