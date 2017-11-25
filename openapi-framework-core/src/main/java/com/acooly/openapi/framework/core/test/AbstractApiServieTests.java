@@ -114,6 +114,7 @@ public abstract class AbstractApiServieTests {
       if (signList != null) {
         sign = signList.get(0);
         signType = responseHeader.get(ApiConstants.SIGN_TYPE).get(0);
+        Assert.notNull(signType);
       }
     }
     if (!sign(responseBody).equals(sign)) {
