@@ -25,6 +25,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -34,8 +35,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
-import static com.acooly.openapi.framework.common.ApiConstants.ANONYMOUS_ACCESS_KEY;
-import static com.acooly.openapi.framework.common.ApiConstants.ANONYMOUS_SECRET_KEY;
+import static com.acooly.openapi.framework.common.ApiConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /** @author qiubo@yiji.com */
@@ -164,9 +164,12 @@ public class OpenApiTest extends AbstractApiServieTests {
           JsonMarshallor.INSTANCE.parse(requestBody, PayOrderNotify.class);
       log.info("notify requestBody:\n{}", payOrderNotify);
       assertThat(payOrderNotify.getContext()).isEqualTo(content);
-
-      assertThat(t.getRequestHeaders().get(ApiConstants.SIGN)).isNotEmpty();
+      String sign = t.getRequestHeaders().get(ApiConstants.SIGN).get(0);
+      assertThat(sign).isNotEmpty();
       assertThat(t.getRequestHeaders().get(ApiConstants.SIGN_TYPE).get(0)).isEqualTo("MD5");
+      if (!DigestUtils.md5Hex(requestBody + TEST_SECRET_KEY).equals(sign)) {
+        throw new RuntimeException("验证失败");
+      }
       String response = ApiConstants.NOTIFY_SUCCESS_CONTENT;
       t.sendResponseHeaders(200, response.length());
       OutputStream os = t.getResponseBody();
