@@ -1,9 +1,6 @@
 package com.acooly.openapi.framework.domain;
 
-import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +15,6 @@ import javax.validation.constraints.Size;
  */
 @Setter
 @Getter
-@OpenApiMessage(service =  ApiConstants.LOGIN_SERVICE_NAME, type = ApiMessageType.Response)
 public class LoginResponse extends ApiResponse {
 
   @NotEmpty
