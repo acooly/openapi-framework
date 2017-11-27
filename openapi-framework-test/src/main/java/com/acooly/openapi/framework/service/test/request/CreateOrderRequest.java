@@ -5,8 +5,6 @@ import com.acooly.core.utils.validate.jsr303.CertNo;
 import com.acooly.core.utils.validate.jsr303.MobileNo;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.annotation.OpenApiFieldCondition;
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import org.hibernate.validator.constraints.Email;
@@ -21,7 +19,6 @@ import java.util.List;
  *
  * <p>Created by zhangpu on 2016/2/12.
  */
-@OpenApiMessage(service = "createOrder", type = ApiMessageType.Request)
 public class CreateOrderRequest extends ApiRequest {
 
   @NotEmpty

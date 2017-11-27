@@ -3,8 +3,6 @@ package com.acooly.openapi.framework.service.test.request;
 import com.acooly.core.common.exception.OrderCheckException;
 import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import org.hibernate.validator.constraints.Length;
@@ -17,7 +15,6 @@ import javax.validation.constraints.NotNull;
  *
  * @author cuifuqiang
  */
-@OpenApiMessage(service = "redirectWithdraw", type = ApiMessageType.Request)
 public class WithdrawRedirectRequest extends ApiRequest {
 
   @NotEmpty

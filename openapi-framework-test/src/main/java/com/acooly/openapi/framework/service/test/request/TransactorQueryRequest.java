@@ -1,8 +1,6 @@
 package com.acooly.openapi.framework.service.test.request;
 
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.service.test.enums.TransactorType;
 import org.hibernate.validator.constraints.Length;
@@ -13,7 +11,6 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  * @author faZheng
  */
-@OpenApiMessage(service = "transactorQuery", type = ApiMessageType.Request)
 public class TransactorQueryRequest extends ApiRequest {
 
   /** 所属企业用户ID */
