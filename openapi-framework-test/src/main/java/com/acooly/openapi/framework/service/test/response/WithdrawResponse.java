@@ -5,8 +5,6 @@
 package com.acooly.openapi.framework.service.test.response;
 
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import org.hibernate.validator.constraints.Length;
 
@@ -14,7 +12,6 @@ import org.hibernate.validator.constraints.Length;
  * @author zhangpu
  * @date 2014年7月29日
  */
-@OpenApiMessage(service = "withdraw", type = ApiMessageType.Response)
 public class WithdrawResponse extends ApiResponse {
 
   /** 提现交易号 */

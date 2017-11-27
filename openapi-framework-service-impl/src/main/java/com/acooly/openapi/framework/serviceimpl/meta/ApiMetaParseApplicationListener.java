@@ -8,6 +8,7 @@ import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.serviceimpl.meta.dao.ApiMetaServiceEntityDao;
 import com.acooly.openapi.framework.serviceimpl.meta.entity.ApiMetaServiceEntity;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -21,6 +22,7 @@ import java.util.List;
  * @date 2017-11-27 23:44
  */
 @Component
+@Slf4j
 public class ApiMetaParseApplicationListener implements ApplicationListener<ApplicationReadyEvent> {
   @Autowired ApiMetaServiceEntityDao apiMetaServiceEntityDao;
 
@@ -67,6 +69,7 @@ public class ApiMetaParseApplicationListener implements ApplicationListener<Appl
                   .getApplicationContext()
                   .publishEvent(
                       new ApiMetaParseFinish(event.getSpringApplication(), event.getArgs()));
+              log.info("api服务元数据解析完毕");
             })
         .start();
   }

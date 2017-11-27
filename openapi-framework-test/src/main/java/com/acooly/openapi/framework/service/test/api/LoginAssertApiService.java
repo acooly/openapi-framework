@@ -1,11 +1,9 @@
 package com.acooly.openapi.framework.service.test.api;
 
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
@@ -37,12 +35,10 @@ public class LoginAssertApiService
 
   @Getter
   @Setter
-  @OpenApiMessage(service = "loginAssert", type = ApiMessageType.Request)
   public static class LoginAssertRequest extends ApiRequest {}
 
   @Getter
   @Setter
-  @OpenApiMessage(service = "loginAssert", type = ApiMessageType.Response)
   public static class LoginAssertResponse extends ApiResponse {
     @NotNull
     @OpenApiField(desc = "金额")

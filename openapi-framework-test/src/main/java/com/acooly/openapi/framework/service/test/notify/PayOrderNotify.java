@@ -3,14 +3,11 @@ package com.acooly.openapi.framework.service.test.notify;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.validate.jsr303.MoneyConstraint;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 
 import javax.validation.constraints.Size;
 
 /** Created by zhangpu on 2016/2/12. */
-@OpenApiMessage(service = "payOrder", type = ApiMessageType.Notify)
 public class PayOrderNotify extends ApiNotify {
 
   @Size(min = 16, max = 64)

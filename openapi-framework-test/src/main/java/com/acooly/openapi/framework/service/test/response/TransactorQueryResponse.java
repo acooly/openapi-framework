@@ -11,8 +11,6 @@
 package com.acooly.openapi.framework.service.test.response;
 
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.service.test.dto.TransactorInfo;
 
@@ -23,7 +21,6 @@ import java.util.List;
  *
  * @author faZheng
  */
-@OpenApiMessage(service = "transactorQuery", type = ApiMessageType.Response)
 public class TransactorQueryResponse extends ApiResponse {
 
   @OpenApiField(desc = "经营人信息列表", constraint = "经营人信息列表")
