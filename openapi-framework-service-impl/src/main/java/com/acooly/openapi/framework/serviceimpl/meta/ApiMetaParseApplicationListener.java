@@ -42,11 +42,12 @@ public class ApiMetaParseApplicationListener implements ApplicationListener<Appl
                         OpenApiNote apiNote = apiService.getClass().getAnnotation(OpenApiNote.class);
 
                         ApiMetaService entity = new ApiMetaService();
+
                         entity.setServiceName(openApiService.name());
                         entity.setVersion(openApiService.version());
-                        entity.setBusiType(openApiService.busiType().toString());
+                        entity.setBusiType(openApiService.busiType());
                         entity.setServiceDesc(openApiService.desc());
-                        entity.setResponseType(openApiService.responseType().toString());
+                        entity.setResponseType(openApiService.responseType());
                         entity.setOwner(openApiService.owner());
                         entity.setServiceClass(apiService.getClass().getName());
                         entity.setRequestClass(apiService.getRequestBean().getClass().getName());
