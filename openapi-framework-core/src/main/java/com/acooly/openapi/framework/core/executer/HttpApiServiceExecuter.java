@@ -159,14 +159,14 @@ public class HttpApiServiceExecuter implements ApiServiceExecuter<HttpServletReq
             orderNo = requestNo;
         }
         String tradeGid = orderInfoService.findGidByTrade(partnerId, service, version, orderNo);
-        if (StringUtils.isBlank(tradeGid)) {
-            // 查找依赖关系的服务
-            OpenApiDependence openApiDependence = apiContext.getApiService().getClass()
-                    .getAnnotation(OpenApiDependence.class);
-            if (openApiDependence != null && StringUtils.isNotBlank(openApiDependence.value())) {
-                tradeGid = orderInfoService.findGidByTrade(partnerId, openApiDependence.value(), version, orderNo);
-            }
+        //if (StringUtils.isBlank(tradeGid)) {
+        // 查找依赖关系的服务 tradeGid和OpenApiDependence同时不为空 使用OpenApiDependence gid
+        OpenApiDependence openApiDependence = apiContext.getApiService().getClass()
+                .getAnnotation(OpenApiDependence.class);
+        if (openApiDependence != null && StringUtils.isNotBlank(openApiDependence.value())) {
+            tradeGid = orderInfoService.findGidByTrade(partnerId, openApiDependence.value(), version, orderNo);
         }
+        // }
         if (StringUtils.isBlank(tradeGid)) {
             apiContext.initGid();
         } else {
