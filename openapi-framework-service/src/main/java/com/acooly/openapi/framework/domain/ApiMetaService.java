@@ -4,7 +4,7 @@
  * create by shuijing
  * date:2017-11-27
  */
-package com.acooly.openapi.framework.serviceimpl.meta.entity;
+package com.acooly.openapi.framework.domain;
 
 import com.acooly.core.common.domain.AbstractEntity;
 import lombok.Getter;
@@ -20,7 +20,7 @@ import javax.validation.constraints.Size;
 @Setter
 @Entity
 @Table(name = "api_meta_service")
-public class ApiMetaServiceEntity extends AbstractEntity {
+public class ApiMetaService extends AbstractEntity {
   /** 服务名称 */
   @NotEmpty
   @Size(max = 128)
