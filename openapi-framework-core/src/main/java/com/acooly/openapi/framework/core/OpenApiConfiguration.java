@@ -8,10 +8,12 @@ import com.acooly.openapi.framework.core.auth.impl.DefaultApiAuthorization;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.core.auth.realm.impl.DefaultAuthInfoRealm;
 import com.acooly.openapi.framework.core.notify.ApiNotifySender;
+import com.acooly.openapi.framework.core.notify.api.OpenApiRemoteServiceImpl;
 import com.acooly.openapi.framework.core.service.support.NothingToDoOrderInfoService;
 import com.acooly.openapi.framework.core.service.support.UnsupportApiNotifySender;
 import com.acooly.openapi.framework.core.service.support.login.DefaultAppApiLoginService;
 import com.acooly.openapi.framework.core.servlet.OpenAPIDispatchServlet;
+import com.acooly.openapi.framework.facade.api.OpenApiRemoteService;
 import com.acooly.openapi.framework.service.AppApiLoginService;
 import com.acooly.openapi.framework.service.OrderInfoService;
 import com.google.common.collect.Lists;
@@ -25,7 +27,9 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.List;
 
@@ -73,13 +77,30 @@ public class OpenApiConfiguration {
     return new NothingToDoOrderInfoService();
   }
 
+  @Configuration
+  public static class NotifyConfig {
+    @Configuration
+    @ConditionalOnProperty({"dubbo.provider.enable", "acooly.openapi.notify.enable"})
+    @ImportResource("classpath:spring/openapi/openapi-facade-dubbo-provider.xml")
+    @EnableScheduling
+    public static class Enable {
+      @Bean
+      public OpenApiRemoteService openApiRemoteService() {
+        return new OpenApiRemoteServiceImpl();
+      }
+    }
 
-  @Bean
-  @ConditionalOnMissingClass
-  @ConditionalOnProperty(name = "acooly.openapi.notify.enable", havingValue = "false")
-  public ApiNotifySender unsupportApiNotifySender() {
-    return new UnsupportApiNotifySender();
+    @Configuration
+    @ConditionalOnProperty(name = "acooly.openapi.notify.enable", havingValue = "false")
+    public static class Disable {
+      @Bean
+      @ConditionalOnMissingClass
+      public ApiNotifySender unsupportApiNotifySender() {
+        return new UnsupportApiNotifySender();
+      }
+    }
   }
+
   @Configuration
   @ConditionalOnProperty("acooly.openapi.login.enable")
   public static class ApiLoginConfiguration {
