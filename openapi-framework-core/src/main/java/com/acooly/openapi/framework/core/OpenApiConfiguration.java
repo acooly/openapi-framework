@@ -7,7 +7,9 @@ import com.acooly.openapi.framework.core.auth.ApiAuthorization;
 import com.acooly.openapi.framework.core.auth.impl.DefaultApiAuthorization;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.core.auth.realm.impl.DefaultAuthInfoRealm;
+import com.acooly.openapi.framework.core.notify.ApiNotifySender;
 import com.acooly.openapi.framework.core.service.support.NothingToDoOrderInfoService;
+import com.acooly.openapi.framework.core.service.support.UnsupportApiNotifySender;
 import com.acooly.openapi.framework.core.service.support.login.DefaultAppApiLoginService;
 import com.acooly.openapi.framework.core.servlet.OpenAPIDispatchServlet;
 import com.acooly.openapi.framework.service.AppApiLoginService;
@@ -15,6 +17,7 @@ import com.acooly.openapi.framework.service.OrderInfoService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -64,11 +67,19 @@ public class OpenApiConfiguration {
   }
 
   @Bean
+  @ConditionalOnMissingClass
   @ConditionalOnProperty(name = "acooly.openapi.saveOrder", havingValue = "false")
-  public OrderInfoService orderInfoService() {
+  public OrderInfoService nothingToDoOrderInfoService() {
     return new NothingToDoOrderInfoService();
   }
 
+
+  @Bean
+  @ConditionalOnMissingClass
+  @ConditionalOnProperty(name = "acooly.openapi.notify.enable", havingValue = "false")
+  public ApiNotifySender unsupportApiNotifySender() {
+    return new UnsupportApiNotifySender();
+  }
   @Configuration
   @ConditionalOnProperty("acooly.openapi.login.enable")
   public static class ApiLoginConfiguration {
