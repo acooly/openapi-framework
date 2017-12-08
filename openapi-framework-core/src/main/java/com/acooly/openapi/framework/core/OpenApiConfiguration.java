@@ -70,11 +70,34 @@ public class OpenApiConfiguration {
     return bean;
   }
 
-  @Bean
-  @ConditionalOnMissingClass
-  @ConditionalOnProperty(name = "acooly.openapi.saveOrder", havingValue = "false")
-  public OrderInfoService nothingToDoOrderInfoService() {
-    return new NothingToDoOrderInfoService();
+  @Configuration
+  public static class SaveOrderConfig {
+    @Bean
+    @ConditionalOnMissingClass
+    @ConditionalOnProperty(name = "acooly.openapi.saveOrder", havingValue = "false")
+    public OrderInfoService nothingToDoOrderInfoService() {
+      return new NothingToDoOrderInfoService();
+    }
+
+    @ConditionalOnProperty(name = "acooly.openapi.saveOrder", matchIfMissing = true)
+    @Bean
+    public AbstractDatabaseScriptIniter openapiOrderInfoScriptIniter() {
+      return new AbstractDatabaseScriptIniter() {
+        @Override
+        public String getEvaluateSql(DatabaseType databaseType) {
+          return "SELECT count(*) FROM api_order_info";
+        }
+
+        @Override
+        public List<String> getInitSqlFile(DatabaseType databaseType) {
+          if (databaseType == DatabaseType.mysql) {
+            return Lists.newArrayList("META-INF/database/mysql/openapi-order.sql");
+          } else {
+            return Lists.newArrayList("META-INF/database/oracle/openapi-order.sql");
+          }
+        }
+      };
+    }
   }
 
   @Configuration
@@ -87,6 +110,25 @@ public class OpenApiConfiguration {
       @Bean
       public OpenApiRemoteService openApiRemoteService() {
         return new OpenApiRemoteServiceImpl();
+      }
+
+      @Bean
+      public AbstractDatabaseScriptIniter openapiNotifyScriptIniter() {
+        return new AbstractDatabaseScriptIniter() {
+          @Override
+          public String getEvaluateSql(DatabaseType databaseType) {
+            return "SELECT count(*) FROM api_notify_message";
+          }
+
+          @Override
+          public List<String> getInitSqlFile(DatabaseType databaseType) {
+            if (databaseType == DatabaseType.mysql) {
+              return Lists.newArrayList("META-INF/database/mysql/openapi-notify.sql");
+            } else {
+              return Lists.newArrayList("META-INF/database/oracle/openapi-notify.sql");
+            }
+          }
+        };
       }
     }
 
@@ -109,24 +151,5 @@ public class OpenApiConfiguration {
     public AppApiLoginService defaultAppApiLoginService() {
       return new DefaultAppApiLoginService();
     }
-  }
-
-  @Bean
-  public AbstractDatabaseScriptIniter openapiCoreScriptIniter() {
-    return new AbstractDatabaseScriptIniter() {
-      @Override
-      public String getEvaluateSql(DatabaseType databaseType) {
-        return "SELECT count(*) FROM api_order_info";
-      }
-
-      @Override
-      public List<String> getInitSqlFile(DatabaseType databaseType) {
-        if (databaseType == DatabaseType.mysql) {
-          return Lists.newArrayList("META-INF/database/mysql/openapi-core.sql");
-        } else {
-          return Lists.newArrayList("META-INF/database/oracle/openapi-core.sql");
-        }
-      }
-    };
   }
 }
