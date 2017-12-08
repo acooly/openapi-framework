@@ -7,9 +7,11 @@ import com.acooly.openapi.framework.core.auth.ApiAuthorization;
 import com.acooly.openapi.framework.core.auth.impl.DefaultApiAuthorization;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.core.auth.realm.impl.DefaultAuthInfoRealm;
+import com.acooly.openapi.framework.core.service.support.NothingToDoOrderInfoService;
 import com.acooly.openapi.framework.core.service.support.login.DefaultAppApiLoginService;
 import com.acooly.openapi.framework.core.servlet.OpenAPIDispatchServlet;
 import com.acooly.openapi.framework.service.AppApiLoginService;
+import com.acooly.openapi.framework.service.OrderInfoService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -61,6 +63,12 @@ public class OpenApiConfiguration {
     return bean;
   }
 
+  @Bean
+  @ConditionalOnProperty(name = "acooly.openapi.saveOrder", havingValue = "false")
+  public OrderInfoService orderInfoService() {
+    return new NothingToDoOrderInfoService();
+  }
+
   @Configuration
   @ConditionalOnProperty("acooly.openapi.login.enable")
   public static class ApiLoginConfiguration {
@@ -89,5 +97,4 @@ public class OpenApiConfiguration {
       }
     };
   }
-
 }
