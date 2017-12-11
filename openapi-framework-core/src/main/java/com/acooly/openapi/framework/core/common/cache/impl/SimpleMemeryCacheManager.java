@@ -24,7 +24,7 @@ public class SimpleMemeryCacheManager implements CacheManager {
   private static Logger logger = LoggerFactory.getLogger(SimpleMemeryCacheManager.class);
 
   /** 默认有效期（秒）1小时 */
-  protected int DEFAILT_HOLD_SECOND = 15 * 60;
+  protected int DEFAILT_HOLD_SECOND = 5 * 60;
 
   /** 成员总数操作阈值，则清理过期数据 */
   protected int CLEAN_THRESHOLD_SIZE = 1000;
