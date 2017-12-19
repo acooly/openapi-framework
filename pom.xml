@@ -58,6 +58,7 @@
         <module>openapi-framework-service</module>
         <module>openapi-framework-service-impl</module>
         <module>openapi-framework-trafficlimiter</module>
+        <module>openap-iframework-apidoc</module>
     </modules>
 
 </project>
