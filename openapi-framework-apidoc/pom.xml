@@ -17,6 +17,7 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-core</artifactId>
+            <version>${acooly.framework.version}</version>
         </dependency>
 
         <dependency>
