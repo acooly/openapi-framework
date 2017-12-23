@@ -15,12 +15,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * 报文字段 Entity
@@ -126,6 +124,8 @@ public class ApiDocItem extends AbstractEntity {
     @Size(max = 128)
     private String signatrue;
 
+    @Transient
+    private List<ApiDocItem> children;
 
     public ApiDocItem() {
     }

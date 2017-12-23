@@ -136,6 +136,15 @@ public class ApiDataTypeUtils {
         return Money.class.isAssignableFrom(field.getType());
     }
 
+
+    public static boolean isObject(Field field){
+        if(isNumber(field) || isString(field) || isMoney(field)){
+            return false;
+        }
+        return true;
+    }
+
+
     /**
      * @param field
      * @return

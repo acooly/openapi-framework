@@ -201,6 +201,17 @@ public class ApiDocParserImpl implements ApiDocParser {
                 }
                 ApiDocItem item = null;
                 item = doParseItem(field);
+
+                Class subItemType = null;
+                if(ApiDataTypeUtils.isObject(field)){
+                    // 对象
+                    subItemType = field.getClass();
+                }else if(ApiDataTypeUtils.isCollection(field)){
+                    // 集合或数组
+                    Class<?> genericClass = ApiDocPrivateUtils.getParameterGenericType(clazz, field);
+
+                }
+
                 // 忽略的属性
                 if (StringUtils.isNotBlank(igornFieldNames) && igornFieldNames.contains(field.getName())) {
                     apiItems.add(item);
@@ -301,7 +312,6 @@ public class ApiDocParserImpl implements ApiDocParser {
 
         // 数据长度
         ApiDataSize apiDataSize = ApiDataTypeUtils.getApiDataSize(field);
-
 
         return new ApiDocItem(field.getName(), title, constraint, apiDataSize.getMin(), apiDataSize.getMax(),
                 dataType, demo, fieldStatus, apiEncryptstatus);
