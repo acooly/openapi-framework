@@ -11,7 +11,4 @@
 		interface="com.acooly.openapi.framework.facade.api.OpenApiRemoteService"
 		ref="openApiRemoteService" version="1.0" />
 
-	<bean id="openApiRemoteService"
-		class="com.acooly.openapi.framework.core.notify.api.OpenApiRemoteServiceImpl" />
-
 </beans>

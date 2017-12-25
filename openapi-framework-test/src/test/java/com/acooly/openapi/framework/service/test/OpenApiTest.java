@@ -18,8 +18,10 @@ import com.acooly.openapi.framework.service.test.request.WithdrawRequest;
 import com.acooly.openapi.framework.service.test.response.CreateOrderResponse;
 import com.acooly.openapi.framework.service.test.response.PayOrderResponse;
 import com.acooly.openapi.framework.service.test.response.WithdrawResponse;
+import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.io.ByteStreams;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -32,6 +34,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
@@ -123,6 +126,37 @@ public class OpenApiTest extends AbstractApiServieTests {
     assertThat(loginAssertResponse).isNotNull();
     assertThat(loginAssertResponse.isSuccess()).isTrue();
     assertThat(loginAssertResponse.getAccessKey()).isEqualTo(accessKey);
+  }
+
+  @Test
+  public void testForm() throws Exception {
+    CreateOrderRequest request = new CreateOrderRequest();
+    request.setRequestNo(UUID.randomUUID().toString());
+    request.setService("createOrder");
+    request.setTitle("同步请求创建订单");
+    request.setPayeeUserId("12345678900987654321");
+    request.setPayerUserId("09876543211234567890");
+    request.setBuyerUserId("09876543211234567890");
+    request.setBuyeryEmail("qiuboboy@qq.com");
+    request.setBuyeryMobileNo("13898765453");
+    request.setBuyerCertNo("330702194706165014");
+    request.setPassword(encrypt("12312312"));
+    request.setContext(content);
+    request.setPartnerId(partnerId);
+    request.ext("xx", "oo");
+    String body = JsonMarshallor.INSTANCE.marshall(request);
+    Map<String, String> requestHeader = Maps.newTreeMap();
+    requestHeader.put(ApiConstants.ACCESS_KEY, accessKey);
+    requestHeader.put(ApiConstants.SIGN_TYPE, "MD5");
+    requestHeader.put(ApiConstants.SIGN, sign(body));
+    if (showLog) {
+      log.info("请求-> header:{} body:{}", requestHeader, body);
+    }
+    Map<String, String> params = Maps.newTreeMap();
+    params.put(BODY,body);
+    HttpRequest httpRequest =
+        HttpRequest.post(gatewayUrl).headers(requestHeader).followRedirects(false).form(params);
+    System.out.println(httpRequest.body());
   }
 
   @Test

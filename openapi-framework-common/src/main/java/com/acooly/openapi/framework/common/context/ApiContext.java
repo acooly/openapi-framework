@@ -33,6 +33,7 @@ import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +41,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.Map;
+
+import static com.acooly.openapi.framework.common.ApiConstants.BODY;
 
 /** @author qiubo@qq.com */
 @Data
@@ -96,7 +99,7 @@ public class ApiContext {
     this.ext.put(key, value);
   }
 
-  public Object ext(String key){
+  public Object ext(String key) {
     return this.ext.get(key);
   }
 
@@ -149,14 +152,36 @@ public class ApiContext {
   }
 
   private void parseBody() {
+    String mediaType = null;
+    String contentType = orignalRequest.getContentType();
+    if (Strings.isNotBlank(contentType)) {
+      if (contentType.equalsIgnoreCase(MediaType.APPLICATION_JSON_VALUE)
+          || contentType.equalsIgnoreCase(MediaType.APPLICATION_JSON_UTF8_VALUE)) {
+        mediaType = MediaType.APPLICATION_JSON_VALUE;
+      } else if (contentType.contains(MediaType.APPLICATION_FORM_URLENCODED_VALUE)) {
+        mediaType = MediaType.APPLICATION_FORM_URLENCODED_VALUE;
+      }
+    } else {
+      mediaType = MediaType.APPLICATION_JSON_VALUE;
+    }
+
+    if (mediaType == null) {
+      throw new ApiServiceException(
+          ApiServiceResultCode.PARAMETER_ERROR,
+          "http请求报文头Content-Type支持三种：1.空(默认为json)，2.application/json，3.application/x-www-form-urlencoded");
+    }
     String body;
     // body
-    try {
-      body =
-          CharStreams.toString(
-              new InputStreamReader(orignalRequest.getInputStream(), Charsets.UTF_8));
-    } catch (IOException e) {
-      throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e);
+    if (mediaType.equals(MediaType.APPLICATION_JSON_VALUE)) {
+      try {
+        body =
+            CharStreams.toString(
+                new InputStreamReader(orignalRequest.getInputStream(), Charsets.UTF_8));
+      } catch (IOException e) {
+        throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e);
+      }
+    } else {
+      body = orignalRequest.getParameter(BODY);
     }
     throwIfBlank(body, "报文内容为空");
     this.requestBody = body.trim();

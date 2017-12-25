@@ -103,16 +103,22 @@ public class OpenApiConfiguration {
   @Configuration
   public static class NotifyConfig {
     @Configuration
-    @ConditionalOnProperty({"dubbo.provider.enable", "acooly.openapi.notify.enable"})
-    @ImportResource("classpath:spring/openapi/openapi-facade-dubbo-provider.xml")
+
     @EnableScheduling
     public static class Enable {
-      @Bean
+      @ConditionalOnProperty(value = {"dubbo.provider.enable"})
+      @ImportResource("classpath:spring/openapi/openapi-facade-dubbo-provider.xml")
+      public static class IfDubboEnable{
+
+      }
+      @Bean(name = "openApiRemoteService")
+      @ConditionalOnProperty(value = "acooly.openapi.notify.enable", matchIfMissing = true)
       public OpenApiRemoteService openApiRemoteService() {
         return new OpenApiRemoteServiceImpl();
       }
 
       @Bean
+      @ConditionalOnProperty(value = "acooly.openapi.notify.enable", matchIfMissing = true)
       public AbstractDatabaseScriptIniter openapiNotifyScriptIniter() {
         return new AbstractDatabaseScriptIniter() {
           @Override
