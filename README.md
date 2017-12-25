@@ -149,6 +149,25 @@ public interface ApiNotifySender {
 2. 账户信息校验成功后，下发新的accessKey\secretKey
 3. 后续请求使用新的accessKey\secretKey
 
+#### 4. 扩展点
+
+1. 认证授权扩展点
+
+    实现`com.acooly.openapi.framework.service.AuthInfoRealmService`
+
+2. 用户登录扩展点
+
+    实现`AppApiLoginService`
+    
+3. 用户登录自动下发新认证信息扩展点
+
+    实现`com.acooly.openapi.framework.service.AuthInfoRealmManageService`
+    
+    此接口继承`AuthInfoRealmService`接口
+    
+4. 自定义文档生成扩展点
+
+    监听spring事件`ApiMetaParseFinish`
 
 ### v1.3.2
 
