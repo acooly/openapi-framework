@@ -129,6 +129,27 @@ public interface ApiNotifySender {
 
 ## 版本说明
 
+### v5.0.0-SNAPSHOT
+
+#### 1. 请求
+
+1. 支持请求参数序列化为json，放在http body中传输
+2. 支持Content-Type=application/x-www-form-urlencoded，请求数据放在form表单body参数中
+3. 安全校验相关参数支持放在http header或者url中
+
+#### 2. 响应
+
+1. 同步响应：响应安全校验信息放在http header中，响应体为json
+2. 跳转响应：服务端响应http code=302，响应相关信息在http header的Location参数中，其中body参数为响应体json
+3. 通知响应：异步响应遵循同步响应规范
+
+#### 3. 匿名登录请求
+
+1. 使用匿名账户登录
+2. 账户信息校验成功后，下发新的accessKey\secretKey
+3. 后续请求使用新的accessKey\secretKey
+
+
 ### v1.3.2
 
 * 2016-11-24 - 修复openapi boss 后台bug 1、修复通知记录查询页面，保存通知响应时将响应报文HtmlUtils.htmlEscape，转移特殊字符 2、修复订单查询页面，修复跳转查询按request_No和merchOrderNo查询异常，将服务名拆分为服务码和版本和查询条件统一 3、修复接入管理页面，查看详情异常 - [志客] efb9ed1 

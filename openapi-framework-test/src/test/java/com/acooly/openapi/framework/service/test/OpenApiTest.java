@@ -47,6 +47,14 @@ public class OpenApiTest extends AbstractApiServieTests {
 
   static String content = UUID.randomUUID().toString();
 
+  /**
+   * 同步请求
+   *
+   * 1. 请求参数序列化为json，放在http body中传输
+   * 2. 安全校验相关参数支持放在http header或者url中
+   * 3. 响应安全校验信息放在http header中
+   * 4. 响应体为json
+   */
   @Test
   public void testSync() throws Exception {
     CreateOrderRequest request = new CreateOrderRequest();
@@ -80,6 +88,15 @@ public class OpenApiTest extends AbstractApiServieTests {
     assertThat(response.getContext()).isEqualTo(content);
   }
 
+  /**
+   * 跳转请求
+   *
+   * 1. 请求参数序列化为json，放在http body中传输
+   * 2. 安全校验相关参数支持放在http header或者url中
+   * 3. 服务端响应302
+   * 3. 响应安全校验信息存储在http header中Location参数中
+   * 5. 响应内容为Location url中的body参数
+   */
   @Test
   public void testRedirect() throws Exception {
     WithdrawRequest request = new WithdrawRequest();
@@ -101,6 +118,13 @@ public class OpenApiTest extends AbstractApiServieTests {
     assertThat(response.getContext()).isEqualTo(content);
   }
 
+  /**
+   * 登录请求
+   *
+   * 1. 使用匿名账户登录
+   * 2. 账户信息校验成功后，下发新的accessKey\secretKey
+   * 3. 后续请求使用新的accessKey\secretKey
+   */
   @Test
   public void testLogin() throws Exception {
 
@@ -128,6 +152,13 @@ public class OpenApiTest extends AbstractApiServieTests {
     assertThat(loginAssertResponse.getAccessKey()).isEqualTo(accessKey);
   }
 
+  /**
+   *
+   * 支持Content-Type=application/x-www-form-urlencoded
+   *
+   * 1. 请求数据放在form表单中的body参数中
+   * 2. 安全校验相关参数支持放在http header或者url中
+   */
   @Test
   public void testForm() throws Exception {
     CreateOrderRequest request = new CreateOrderRequest();
