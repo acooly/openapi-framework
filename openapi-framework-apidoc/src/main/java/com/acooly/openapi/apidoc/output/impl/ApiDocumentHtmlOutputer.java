@@ -6,8 +6,8 @@
 package com.acooly.openapi.apidoc.output.impl;
 
 import com.acooly.openapi.apidoc.ApiDocContext;
-import com.acooly.openapi.apidoc.output.ApiDocumentOutputer;
-import com.acooly.openapi.apidoc.output.ApiOutputerEnum;
+import com.acooly.openapi.apidoc.output.ApiDocOutputer;
+import com.acooly.openapi.apidoc.output.ApiOutputerTypeEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.google.common.collect.Maps;
 import freemarker.template.Configuration;
@@ -32,7 +32,7 @@ import java.util.TreeMap;
  * Created by zhangpu on 2015/1/27.
  */
 @Service("apiDocumentHtmlOutputer")
-public class ApiDocumentHtmlOutputer implements ApiDocumentOutputer<File> {
+public class ApiDocumentHtmlOutputer implements ApiDocOutputer<File> {
 
     private static final Logger logger = LoggerFactory.getLogger(ApiDocumentHtmlOutputer.class);
 
@@ -258,7 +258,7 @@ public class ApiDocumentHtmlOutputer implements ApiDocumentOutputer<File> {
 
     @Override
     public String getName() {
-        return ApiOutputerEnum.Html.name();
+        return ApiOutputerTypeEnum.Html.name();
     }
 
     public String getTemplatePath() {

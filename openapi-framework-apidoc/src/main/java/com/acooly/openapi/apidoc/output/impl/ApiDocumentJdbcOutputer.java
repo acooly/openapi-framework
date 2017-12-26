@@ -6,8 +6,8 @@
 package com.acooly.openapi.apidoc.output.impl;
 
 import com.acooly.openapi.apidoc.ApiDocContext;
-import com.acooly.openapi.apidoc.output.ApiDocumentOutputer;
-import com.acooly.openapi.apidoc.output.ApiOutputerEnum;
+import com.acooly.openapi.apidoc.output.ApiDocOutputer;
+import com.acooly.openapi.apidoc.output.ApiOutputerTypeEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ import java.util.List;
  * Created by zhangpu on 2015/2/26.
  */
 @Service("ApiDocumentJdbcOutputer")
-public class ApiDocumentJdbcOutputer implements ApiDocumentOutputer<Boolean> {
+public class ApiDocumentJdbcOutputer implements ApiDocOutputer<Boolean> {
     private static final Logger logger = LoggerFactory.getLogger(ApiDocumentJdbcOutputer.class);
 
     @Resource
@@ -42,6 +42,6 @@ public class ApiDocumentJdbcOutputer implements ApiDocumentOutputer<Boolean> {
 
     @Override
     public String getName() {
-        return ApiOutputerEnum.Jdbc.name();
+        return ApiOutputerTypeEnum.Jdbc.name();
     }
 }

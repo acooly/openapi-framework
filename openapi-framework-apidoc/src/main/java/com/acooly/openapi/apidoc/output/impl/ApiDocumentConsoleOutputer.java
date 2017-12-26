@@ -7,9 +7,9 @@ package com.acooly.openapi.apidoc.output.impl;
 
 import java.util.List;
 
-import com.acooly.openapi.apidoc.output.ApiDocumentOutputer;
+import com.acooly.openapi.apidoc.output.ApiDocOutputer;
 import com.acooly.openapi.apidoc.ApiDocContext;
-import com.acooly.openapi.apidoc.output.ApiOutputerEnum;
+import com.acooly.openapi.apidoc.output.ApiOutputerTypeEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ import com.alibaba.fastjson.JSON;
  * <p/>
  * Created by zhangpu on 2015/2/26.
  */
-public class ApiDocumentConsoleOutputer implements ApiDocumentOutputer<String> {
+public class ApiDocumentConsoleOutputer implements ApiDocOutputer<String> {
 	private static final Logger logger = LoggerFactory.getLogger(ApiDocumentConsoleOutputer.class);
 
 	@Override
@@ -33,6 +33,6 @@ public class ApiDocumentConsoleOutputer implements ApiDocumentOutputer<String> {
 
 	@Override
 	public String getName() {
-		return ApiOutputerEnum.Console.name();
+		return ApiOutputerTypeEnum.Console.name();
 	}
 }

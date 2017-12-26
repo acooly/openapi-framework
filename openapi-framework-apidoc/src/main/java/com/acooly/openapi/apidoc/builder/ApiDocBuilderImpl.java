@@ -5,17 +5,14 @@
 
 package com.acooly.openapi.apidoc.builder;
 
-import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.ApiDocContext;
 import com.acooly.openapi.apidoc.ApiDocProperties;
-import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
-import com.acooly.openapi.apidoc.output.ApiDocumentOutputer;
+import com.acooly.openapi.apidoc.output.ApiDocOutputer;
 import com.acooly.openapi.apidoc.output.ApiDocumentOutputerFactory;
-import com.acooly.openapi.apidoc.output.ApiOutputerEnum;
+import com.acooly.openapi.apidoc.output.ApiOutputerTypeEnum;
 import com.acooly.openapi.apidoc.output.impl.ApiDocumentJdbcOutputer;
 import com.acooly.openapi.apidoc.parser.ApiDocParser;
-import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
@@ -60,7 +57,7 @@ public class ApiDocBuilderImpl implements ApiDocBuilder {
     public void JdbcBuilder(String packagePartern) {
         List<ApiDocService> docs = getApiDocs(packagePartern);
         ApiDocumentJdbcOutputer outputer = (ApiDocumentJdbcOutputer) apiDocumentOutputerFactory
-                .getOutputer(ApiOutputerEnum.Jdbc);
+                .getOutputer(ApiOutputerTypeEnum.Jdbc);
         doOutput(outputer, docs, null);
         //将服务放入默认解决方案中
         if (apiDocProperties.isIntoCommon()) {
@@ -170,7 +167,7 @@ public class ApiDocBuilderImpl implements ApiDocBuilder {
         return path;
     }
 
-    private void doOutput(ApiDocumentOutputer outputer, List<ApiDocService> docs, ApiDocContext apidocContext) {
+    private void doOutput(ApiDocOutputer outputer, List<ApiDocService> docs, ApiDocContext apidocContext) {
         try {
             outputer.output(docs, apidocContext);
         } catch (Exception e) {

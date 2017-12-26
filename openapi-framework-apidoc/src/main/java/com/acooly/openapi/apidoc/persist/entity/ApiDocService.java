@@ -8,6 +8,7 @@ package com.acooly.openapi.apidoc.persist.entity;
 
 
 import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.enums.ResponseType;
@@ -116,4 +117,12 @@ public class ApiDocService extends AbstractEntity {
     @Transient
     private List<ApiDocMessage> apiDocMessages;
 
+
+    @Override
+    public int hashCode() {
+        if(Strings.isNoneBlank(getServiceNo())){
+            return getServiceNo().hashCode();
+        }
+        return super.hashCode();
+    }
 }

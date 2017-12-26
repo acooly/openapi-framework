@@ -5,18 +5,18 @@
 
 package com.acooly.openapi.apidoc.output;
 
-import java.util.List;
-
 import com.acooly.openapi.apidoc.ApiDocContext;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
+
+import java.util.List;
 
 /**
  * API文档输出接口 Created by zhangpu on 2015/1/27.
  */
-public interface ApiDocumentOutputer<T> {
+public interface ApiDocOutputer<T> {
 
-	T output(List<ApiDocService> apiServiceDocs, ApiDocContext apidocContext);
+    T output(List<ApiDocService> apiServiceDocs, ApiDocContext apidocContext);
 
-	String getName();
+    ApiOutputerTypeEnum getType();
 
 }

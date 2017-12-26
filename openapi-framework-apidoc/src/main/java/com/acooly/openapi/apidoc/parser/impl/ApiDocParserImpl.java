@@ -27,6 +27,7 @@ import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.domain.ApiMetaService;
 import com.acooly.openapi.framework.service.ApiMetaServiceService;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.NotBlank;
@@ -34,15 +35,16 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
-@Service("apiDocumentParser")
+@Component
 public class ApiDocParserImpl implements ApiDocParser {
 
     private static final Logger logger = LoggerFactory.getLogger(ApiDocParserImpl.class);
@@ -54,14 +56,11 @@ public class ApiDocParserImpl implements ApiDocParser {
     @Override
     public List<ApiDocService> parse() {
         List<ApiMetaService> metas = doQueryMetas();
-        List<ApiDocService> docs = Lists.newArrayList();
+        Set<ApiDocService> docs = Sets.newHashSet();
         for (ApiMetaService meta : metas) {
-            ApiDocService doc = doParseService(meta);
-            if (removeRepeat(docs, doc)) {
-                docs.add(doc);
-            }
+            docs.add(doParseService(meta));
         }
-        return docs;
+        return Lists.newArrayList(docs);
     }
 
 
@@ -97,36 +96,23 @@ public class ApiDocParserImpl implements ApiDocParser {
      */
     protected ApiDocService doParseService(ApiMetaService meta) {
         try {
-            ApiDocService apiDocService = doFullApiDocService(meta);
+            ApiDocService apiDocService = doFillApiDocService(meta);
             //获取服务对应的实体
             Class<?> requestClass = Class.forName(meta.getRequestClass());
             Class<?> responseClass = Class.forName(meta.getResponseClass());
             Class<?> notifyClass = Class.forName(meta.getNotifyClass());
 
             List<ApiDocMessage> mds = Lists.newArrayList();
-            mds.add(doParseMessage(requestClass));
-            if (apiDocService.getServiceType() == ResponseType.SYN) {
-
+            mds.add(doParseMessage(apiDocService, requestClass));
+            ResponseType responseType = apiDocService.getServiceType();
+            if (responseType == ResponseType.SYN || responseType == ResponseType.ASNY) {
+                mds.add(doParseMessage(apiDocService, responseClass));
             }
 
-//            if (!ResponseType.REDIRECT.equals(openApiService.responseType())) {
-//                mds.add(doParseMessage(responseClass));
-//            } else {
-//                //增加跳转类型messageDoc
-//                ApiDocMessage redirectApiMessageDoc = new ApiDocMessage();
-//                redirectApiMessageDoc.setApiItems(parseMessage(redirect.getClass(), null));
-////                redirectApiMessageDoc.setMessageType(MessageType.Redirect);
-//                mds.add(redirectApiMessageDoc);
-//            }
-//            if (openApiService.responseType() == ResponseType.ASNY
-//                    || openApiService.responseType() == ResponseType.REDIRECT) {
-//                if (!notifyClass.isAssignableFrom(ApiNotify.class)) {
-//                    mds.add(doParseMessage(notifyClass));
-//                }
-//            }
+            if (responseType == ResponseType.REDIRECT || responseType == ResponseType.ASNY) {
+                mds.add(doParseMessage(apiDocService, notifyClass));
+            }
             apiDocService.setApiDocMessages(mds);
-//            doParseServiceDepend(meta, doc);
-//            logger.info("Parse service success:{}", meta);
             return apiDocService;
         } catch (Exception e) {
             logger.warn("parse service fail: {}", meta.getServiceName(), e);
@@ -134,8 +120,7 @@ public class ApiDocParserImpl implements ApiDocParser {
         return null;
     }
 
-    private ApiDocService doFullApiDocService(ApiMetaService meta) {
-
+    private ApiDocService doFillApiDocService(ApiMetaService meta) {
         ApiDocService apiDocService = new ApiDocService();
         apiDocService.setName(meta.getServiceName());
         apiDocService.setVersion(meta.getVersion());
@@ -145,47 +130,20 @@ public class ApiDocParserImpl implements ApiDocParser {
         apiDocService.setTitle(meta.getServiceDesc());
         apiDocService.setServiceType(meta.getResponseType());
         apiDocService.setOwner(meta.getOwner());
-
         return apiDocService;
-
     }
 
 
-    protected ApiDocTypeEnum getApiDocType(OpenApiService openApiService) {
-        String code = openApiService.busiType().name();
-        ApiDocTypeEnum apiDocTypeEnum = ApiDocTypeEnum.find(code);
-        if (apiDocTypeEnum == null) {
-            apiDocTypeEnum = ApiDocTypeEnum.Trade;
-        }
-        return apiDocTypeEnum;
-    }
-
-
-    private boolean isSubClass(Class subClass, Class clazz) {
-        if (subClass == null) {
-            return false;
-        }
-        return clazz.isAssignableFrom(subClass);
-    }
-
-    protected ApiDocMessage doParseMessage(final Class<?> clazz) {
+    protected ApiDocMessage doParseMessage(ApiDocService apiDocService, final Class<?> clazz) {
         ApiDocMessage messageDoc = new ApiDocMessage();
-        messageDoc.setApiDocItems(doParseMessageItem(clazz, null));
-        MessageTypeEnum messageType = null;
-        if (ApiRequest.class.isAssignableFrom(clazz)) {
-            messageType = MessageTypeEnum.Request;
-        } else if (ApiNotify.class.isAssignableFrom(clazz)) {
-            messageType = MessageTypeEnum.Notify;
-        } else if (ApiResponse.class.isAssignableFrom(clazz)) {
-            messageType = MessageTypeEnum.Response;
-        } else {
-            throw new IllegalArgumentException("Class " + clazz.getName() + "not a supported " + "messageDoc type.");
-        }
-//        messageDoc.setMessageType(messageType);
+        messageDoc.setServiceNo(apiDocService.getServiceNo());
+        messageDoc.setApiDocItems(doParseMessageItem(clazz));
+        messageDoc.setMessageType(doParseMessageType(clazz));
+        messageDoc.setMessageNo(messageDoc.getServiceNo() + messageDoc.getMessageType().code());
         return messageDoc;
     }
 
-    protected List<ApiDocItem> doParseMessageItem(final Class<?> clazz, String igornFieldNames) {
+    protected List<ApiDocItem> doParseMessageItem(final Class<?> clazz) {
         List<ApiDocItem> apiItems = Lists.newArrayList();
         Class<?> cc = clazz;
         do {
@@ -202,75 +160,28 @@ public class ApiDocParserImpl implements ApiDocParser {
                 ApiDocItem item = null;
                 item = doParseItem(field);
 
-                Class subItemType = null;
-                if(ApiDataTypeUtils.isObject(field)){
+                Class<?> subItemType = null;
+                if (ApiDataTypeUtils.isObject(field)) {
                     // 对象
                     subItemType = field.getClass();
-                }else if(ApiDataTypeUtils.isCollection(field)){
+                } else if (ApiDataTypeUtils.isCollection(field)) {
                     // 集合或数组
                     Class<?> genericClass = ApiDocPrivateUtils.getParameterGenericType(clazz, field);
-
+                    if (genericClass != null && !ApiDataTypeUtils.isSimpleType(genericClass)) {
+                        subItemType = genericClass;
+                    }
                 }
 
-                // 忽略的属性
-                if (StringUtils.isNotBlank(igornFieldNames) && igornFieldNames.contains(field.getName())) {
-                    apiItems.add(item);
-                    continue;
+                if (subItemType != null) {
+                    item.setChildren(doParseMessageItem(subItemType));
                 }
+                apiItems.add(item);
             }
             cc = cc.getSuperclass();
         }
         while (cc != null && cc != ApiRequest.class && cc != ApiResponse.class && cc != ApiNotify.class && cc != Object.class);
         return apiItems;
     }
-
-//    private String jsonItem(ApiDocItem itemDoc) {
-//        StringBuilder jsonBuilder = new StringBuilder();
-//        String json = "";
-//
-//        if (ApiDataTypeEnum.O.equals(itemDoc.getDataType())) {
-//            if (!Collections3.isEmpty(itemDoc.getChildren())) {
-//                for (ApiDocItem item : itemDoc.getChildren()) {
-//                    String childJson = jsonItem(item);
-//                    jsonBuilder.append(childJson);
-//                    if (StringUtils.isNotBlank(childJson)) {
-//                        jsonBuilder.append(",");
-//                    }
-//                }
-//                json = jsonBuilder.toString();
-//                json = "{" + json.substring(0, json.length() - 1) + "}";
-//            }
-//            json = "\"" + itemDoc.getName() + "\"" + ":" + json;
-//        } else if (ApiDataTypeEnum.A.equals(itemDoc.getDataType())) {
-//            if (!Collections3.isEmpty(itemDoc.getChildren())) {
-//                for (ApiDocItem item : itemDoc.getChildren()) {
-//                    String childJson = jsonItem(item);
-//                    jsonBuilder.append(childJson);
-//                    if (StringUtils.isNotBlank(childJson)) {
-//                        jsonBuilder.append(",");
-//                    }
-//                }
-//                json = jsonBuilder.toString();
-//                json = "[{" + json.substring(0, json.length() - 1) + "}]";
-//            }
-//            json = "\"" + itemDoc.getName() + "\"" + ":" + json;
-//        } else {
-//            json += "\"" + itemDoc.getName() + "\":\"" + itemDoc.getDemo() + "\"";
-//        }
-//
-//        return json;
-//    }
-
-    private String checkRecursionField(Class<?> clazz) {
-        Field[] fs = clazz.getDeclaredFields();
-        for (Field f : fs) {
-            if (clazz.equals(f.getType()) || clazz.equals(ApiDocPrivateUtils.getParameterGenericType(clazz, f))) {
-                return f.getName();
-            }
-        }
-        return null;
-    }
-
 
     /**
      * 解析属性
@@ -338,5 +249,28 @@ public class ApiDocParserImpl implements ApiDocParser {
         return status;
     }
 
+
+    private MessageTypeEnum doParseMessageType(Class<?> clazz) {
+        MessageTypeEnum messageType = null;
+        if (ApiRequest.class.isAssignableFrom(clazz)) {
+            messageType = MessageTypeEnum.Request;
+        } else if (ApiNotify.class.isAssignableFrom(clazz)) {
+            messageType = MessageTypeEnum.Notify;
+        } else if (ApiResponse.class.isAssignableFrom(clazz)) {
+            messageType = MessageTypeEnum.Response;
+        } else {
+            throw new IllegalArgumentException("Class " + clazz.getName() + "not a supported " + "messageDoc type.");
+        }
+        return messageType;
+    }
+
+    private ApiDocTypeEnum getApiDocType(OpenApiService openApiService) {
+        String code = openApiService.busiType().name();
+        ApiDocTypeEnum apiDocTypeEnum = ApiDocTypeEnum.find(code);
+        if (apiDocTypeEnum == null) {
+            apiDocTypeEnum = ApiDocTypeEnum.Trade;
+        }
+        return apiDocTypeEnum;
+    }
 
 }

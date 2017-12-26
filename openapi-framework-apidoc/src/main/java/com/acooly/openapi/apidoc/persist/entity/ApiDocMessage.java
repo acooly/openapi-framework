@@ -46,7 +46,7 @@ public class ApiDocMessage extends AbstractEntity {
      * 服务ID
      */
     @NotNull
-    private Long serviceId;
+    private String serviceNo;
 
     /**
      * 消息类型

@@ -8,7 +8,9 @@ package com.acooly.openapi.apidoc.output;
 /**
  * Created by zhangpu on 2015/2/26.
  */
-public enum ApiOutputerEnum {
+public enum ApiOutputerTypeEnum {
 
-	Html, Jdbc, Word, Pdf, Console
+    Html, Jdbc, Word, Pdf, Console
+
+
 }
