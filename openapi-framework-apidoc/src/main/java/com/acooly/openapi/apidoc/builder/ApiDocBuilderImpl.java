@@ -171,7 +171,7 @@ public class ApiDocBuilderImpl implements ApiDocBuilder {
         try {
             outputer.output(docs, apidocContext);
         } catch (Exception e) {
-            logger.error("ApiOutpuer处理异常: outpuer:{},message:{}", outputer.getName(), e.getMessage());
+            logger.error("ApiOutpuer处理异常: outpuer:{},message:{}", outputer.getType(), e.getMessage());
         }
     }
 
