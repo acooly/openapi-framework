@@ -12,19 +12,19 @@ import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * JDBC输出实现
+ * 数据库输出实现
  * <p/>
  * Created by zhangpu on 2015/2/26.
  */
-@Service("ApiDocumentJdbcOutputer")
-public class ApiDocumentJdbcOutputer implements ApiDocOutputer<Boolean> {
-    private static final Logger logger = LoggerFactory.getLogger(ApiDocumentJdbcOutputer.class);
+@Component("databaseApiDocOutputer")
+public class DatabaseApiDocOutputer implements ApiDocOutputer<Boolean> {
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseApiDocOutputer.class);
 
     @Resource
     private ApiDocServiceService apiDocServiceService;
@@ -41,7 +41,7 @@ public class ApiDocumentJdbcOutputer implements ApiDocOutputer<Boolean> {
     }
 
     @Override
-    public String getName() {
-        return ApiOutputerTypeEnum.Jdbc.name();
+    public ApiOutputerTypeEnum getType() {
+        return ApiOutputerTypeEnum.database;
     }
 }

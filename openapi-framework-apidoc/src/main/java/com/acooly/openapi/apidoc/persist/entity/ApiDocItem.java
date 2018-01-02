@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.annotation.Signed;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -52,12 +53,14 @@ public class ApiDocItem extends AbstractEntity {
     /**
      * 唯一编号
      */
+    @Signed
     @Size(max = 255)
     private String itemNo;
 
     /**
      * 字段名称
      */
+    @Signed
     @NotEmpty
     @Size(max = 128)
     private String name;
@@ -65,18 +68,20 @@ public class ApiDocItem extends AbstractEntity {
     /**
      * 字段标题
      */
+    @Signed
     @NotEmpty
     @Size(max = 128)
     private String title;
 
-
+    @Signed
     private Integer min;
-
+    @Signed
     private Integer max;
 
     /**
      * 数据类型
      */
+    @Signed
     @NotNull
     @Size(max = 16)
     private ApiDataTypeEnum dataType = ApiDataTypeEnum.S;
@@ -84,18 +89,21 @@ public class ApiDocItem extends AbstractEntity {
     /**
      * 字段描述
      */
+    @Signed
     @Size(max = 512)
     private String descn;
 
     /**
      * 字段示例
      */
+    @Signed
     @Size(max = 512)
     private String demo;
 
     /**
      * 可选状态
      */
+    @Signed
     @NotNull
     @Enumerated(EnumType.STRING)
     private FieldStatus status;
@@ -103,6 +111,7 @@ public class ApiDocItem extends AbstractEntity {
     /**
      * 是否加密
      */
+    @Signed
     @Enumerated(EnumType.STRING)
     private ApiEncryptstatusEnum encryptstatus = ApiEncryptstatusEnum.no;
 

@@ -14,6 +14,8 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -51,6 +53,7 @@ public class ApiMetaService extends AbstractEntity {
      * 服务响应类型
      */
     @Size(max = 16)
+    @Enumerated(EnumType.STRING)
     private ResponseType responseType;
 
     /**
@@ -63,6 +66,7 @@ public class ApiMetaService extends AbstractEntity {
      * 服务名称
      */
     @Size(max = 16)
+    @Enumerated(EnumType.STRING)
     private ApiBusiType busiType;
 
     /**

@@ -9,6 +9,7 @@
  */
 package com.acooly.openapi.apidoc;
 
+import com.google.common.collect.Lists;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.NotBlank;
@@ -17,6 +18,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.PostConstruct;
+
+import java.util.List;
 
 import static com.acooly.openapi.apidoc.ApiDocProperties.PREFIX;
 
@@ -64,6 +67,8 @@ public class ApiDocProperties {
     @NotBlank
     private String testGateway = "http://localhost:8090/gateway.html";
 
+
+    private List<String> outputTypes = Lists.newArrayList("console");
 
     @PostConstruct
     public void init() {

@@ -15,14 +15,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
+import org.springframework.stereotype.Component;
 
 /**
- * JDBC输出实现
+ * 控制台输出实现
  * <p/>
  * Created by zhangpu on 2015/2/26.
  */
-public class ApiDocumentConsoleOutputer implements ApiDocOutputer<String> {
-	private static final Logger logger = LoggerFactory.getLogger(ApiDocumentConsoleOutputer.class);
+@Component("consoleApiDocOutputer")
+public class ConsoleApiDocOutputer implements ApiDocOutputer<String> {
+	private static final Logger logger = LoggerFactory.getLogger(ConsoleApiDocOutputer.class);
 
 	@Override
 	public String output(List<ApiDocService> apiServiceDocs, ApiDocContext apidocContext) {
@@ -31,8 +33,9 @@ public class ApiDocumentConsoleOutputer implements ApiDocOutputer<String> {
 		return console;
 	}
 
+
 	@Override
-	public String getName() {
-		return ApiOutputerTypeEnum.Console.name();
+	public ApiOutputerTypeEnum getType() {
+		return ApiOutputerTypeEnum.console;
 	}
 }

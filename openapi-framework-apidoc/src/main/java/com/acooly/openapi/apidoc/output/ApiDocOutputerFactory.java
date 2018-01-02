@@ -21,7 +21,7 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-public class ApiDocumentOutputerFactory implements ApplicationContextAware, InitializingBean {
+public class ApiDocOutputerFactory implements ApplicationContextAware, InitializingBean {
 
     private ApplicationContext applicationContext;
 

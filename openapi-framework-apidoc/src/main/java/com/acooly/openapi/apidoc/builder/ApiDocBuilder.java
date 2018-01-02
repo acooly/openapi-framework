@@ -7,9 +7,14 @@ package com.acooly.openapi.apidoc.builder;
 
 
 /**
- * Created by zhangpu on 2015/1/29.
+ * Apidoc生成器接口
+ *
+ * @author zhangpu 2015/1/29.
  */
 public interface ApiDocBuilder {
 
-	void JdbcBuilder(String packagePartern);
+	/**
+	 * 生成Apidoc文档
+	 */
+	void build();
 }

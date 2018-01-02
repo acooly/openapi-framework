@@ -99,19 +99,25 @@ public class ApiDocParserImpl implements ApiDocParser {
             ApiDocService apiDocService = doFillApiDocService(meta);
             //获取服务对应的实体
             Class<?> requestClass = Class.forName(meta.getRequestClass());
-            Class<?> responseClass = Class.forName(meta.getResponseClass());
-            Class<?> notifyClass = Class.forName(meta.getNotifyClass());
+            Class<?> responseClass = Strings.isNotBlank(meta.getResponseClass()) ? Class.forName(meta.getResponseClass()) : null;
+            Class<?> notifyClass = Strings.isNotBlank(meta.getNotifyClass()) ? Class.forName(meta.getNotifyClass()) : null;
 
             List<ApiDocMessage> mds = Lists.newArrayList();
             mds.add(doParseMessage(apiDocService, requestClass));
+
             ResponseType responseType = apiDocService.getServiceType();
-            if (responseType == ResponseType.SYN || responseType == ResponseType.ASNY) {
-                mds.add(doParseMessage(apiDocService, responseClass));
+            if (responseClass != null) {
+                if (responseType == ResponseType.SYN || responseType == ResponseType.ASNY) {
+                    mds.add(doParseMessage(apiDocService, responseClass));
+                }
             }
 
-            if (responseType == ResponseType.REDIRECT || responseType == ResponseType.ASNY) {
-                mds.add(doParseMessage(apiDocService, notifyClass));
+            if (notifyClass != null) {
+                if (responseType == ResponseType.REDIRECT || responseType == ResponseType.ASNY) {
+                    mds.add(doParseMessage(apiDocService, notifyClass));
+                }
             }
+
             apiDocService.setApiDocMessages(mds);
             return apiDocService;
         } catch (Exception e) {
@@ -161,15 +167,15 @@ public class ApiDocParserImpl implements ApiDocParser {
                 item = doParseItem(field);
 
                 Class<?> subItemType = null;
-                if (ApiDataTypeUtils.isObject(field)) {
-                    // 对象
-                    subItemType = field.getClass();
-                } else if (ApiDataTypeUtils.isCollection(field)) {
+                if (ApiDataTypeUtils.isCollection(field)) {
                     // 集合或数组
                     Class<?> genericClass = ApiDocPrivateUtils.getParameterGenericType(clazz, field);
                     if (genericClass != null && !ApiDataTypeUtils.isSimpleType(genericClass)) {
                         subItemType = genericClass;
                     }
+                } else if (ApiDataTypeUtils.isObject(field)) {
+                    // 对象
+                    subItemType = field.getClass();
                 }
 
                 if (subItemType != null) {

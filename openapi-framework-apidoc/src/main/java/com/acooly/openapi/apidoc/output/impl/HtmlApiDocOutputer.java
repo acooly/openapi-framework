@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.LinkedList;
@@ -31,10 +30,9 @@ import java.util.TreeMap;
 /**
  * Created by zhangpu on 2015/1/27.
  */
-@Service("apiDocumentHtmlOutputer")
-public class ApiDocumentHtmlOutputer implements ApiDocOutputer<File> {
+public class HtmlApiDocOutputer implements ApiDocOutputer<File> {
 
-    private static final Logger logger = LoggerFactory.getLogger(ApiDocumentHtmlOutputer.class);
+    private static final Logger logger = LoggerFactory.getLogger(HtmlApiDocOutputer.class);
 
     private String templatePath = "classpath:template/sample";
 
@@ -257,8 +255,8 @@ public class ApiDocumentHtmlOutputer implements ApiDocOutputer<File> {
     }
 
     @Override
-    public String getName() {
-        return ApiOutputerTypeEnum.Html.name();
+    public ApiOutputerTypeEnum getType() {
+        return ApiOutputerTypeEnum.html;
     }
 
     public String getTemplatePath() {
