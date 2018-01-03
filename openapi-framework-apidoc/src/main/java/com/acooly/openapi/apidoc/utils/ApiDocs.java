@@ -10,6 +10,7 @@
 package com.acooly.openapi.apidoc.utils;
 
 import com.acooly.core.utils.BeanUtils;
+import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocItem;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +36,8 @@ public class ApiDocs {
     public static String signApiDocItem(ApiDocItem apiDocItem){
 
         StringBuilder waitToSign = new StringBuilder();
-
-
-
+        waitToSign.append(Strings.trimToEmpty(apiDocItem.getItemNo()))
+                .append(Strings.trimToEmpty(apiDocItem.getName()));
 
 
 
@@ -63,25 +63,5 @@ public class ApiDocs {
     }
 
 
-    private static List<Field> getDeclaredProperty(Object bean, Class annotationClazz){
-        List<Field> list = new ArrayList<Field>();
-        Field[] fields = bean.getClass().getDeclaredFields();
-
-        try {
-            Object value = null;
-            for (Field field : fields) {
-                if (field.getAnnotation(annotationClazz) == null) {
-                    continue;
-                }
-
-                value = BeanUtils.getDeclaredProperty(bean,field);
-                list.add(field);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("对象数据签名解析失败："+e.getMessage());
-        }
-
-        return list;
-    }
 
 }
