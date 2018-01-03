@@ -5,6 +5,7 @@
 
 package com.acooly.openapi.apidoc.enums;
 
+import com.acooly.core.utils.enums.Messageable;
 import com.google.common.collect.Maps;
 
 import java.util.Map;
@@ -14,7 +15,7 @@ import java.util.Map;
  * <p/>
  * Created by zhangpu on 2015/4/10.
  */
-public enum FieldStatus {
+public enum FieldStatus implements Messageable {
 
     /**
      * 必选
@@ -46,11 +47,25 @@ public enum FieldStatus {
         return message;
     }
 
+
+
+
+
     public static Map<String, String> mapping() {
         Map<String, String> map = Maps.newLinkedHashMap();
         for (FieldStatus type : values()) {
             map.put(type.key, type.message);
         }
         return map;
+    }
+
+    @Override
+    public String code() {
+        return this.key;
+    }
+
+    @Override
+    public String message() {
+        return this.message;
     }
 }

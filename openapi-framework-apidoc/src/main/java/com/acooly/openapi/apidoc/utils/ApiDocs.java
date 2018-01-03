@@ -37,10 +37,14 @@ public class ApiDocs {
 
         StringBuilder waitToSign = new StringBuilder();
         waitToSign.append(Strings.trimToEmpty(apiDocItem.getItemNo()))
-                .append(Strings.trimToEmpty(apiDocItem.getName()));
-
-
-
+                .append(Strings.trimToEmpty(apiDocItem.getName()))
+                .append(Strings.trimToEmpty(apiDocItem.getTitle()))
+                .append(String.valueOf(apiDocItem.getMin()))
+                .append(String.valueOf(apiDocItem.getMax()))
+                .append(apiDocItem.getDataType().code())
+                .append(Strings.trimToEmpty(apiDocItem.getDemo()))
+                .append(apiDocItem.getStatus().code())
+                .append(apiDocItem.getEncryptstatus().code());
         return null;
 
 

@@ -43,9 +43,11 @@ public enum SchemeTypeEnum implements Messageable {
         return message;
     }
 
+    @Override
     public String code() {
         return code;
     }
+
 
     public String message() {
         return message;

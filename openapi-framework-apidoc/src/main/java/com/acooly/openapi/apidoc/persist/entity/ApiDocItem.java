@@ -106,7 +106,7 @@ public class ApiDocItem extends AbstractEntity {
     @Signed
     @NotNull
     @Enumerated(EnumType.STRING)
-    private FieldStatus status;
+    private FieldStatus status = FieldStatus.O;
 
     /**
      * 是否加密

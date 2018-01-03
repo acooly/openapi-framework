@@ -5,6 +5,7 @@
 
 package com.acooly.openapi.apidoc.enums;
 
+import com.acooly.core.utils.enums.Messageable;
 import com.google.common.collect.Maps;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public enum MessageTypeEnum {
+public enum MessageTypeEnum implements Messageable {
 
     Request("Request", "请求报文"),
 
@@ -54,9 +55,7 @@ public enum MessageTypeEnum {
         return message;
     }
 
-    /**
-     * @return Returns the code.
-     */
+    @Override
     public String code() {
         return code;
     }
@@ -64,6 +63,7 @@ public enum MessageTypeEnum {
     /**
      * @return Returns the message.
      */
+    @Override
     public String message() {
         return message;
     }
