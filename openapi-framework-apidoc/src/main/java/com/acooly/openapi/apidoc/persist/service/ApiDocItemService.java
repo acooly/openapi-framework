@@ -12,11 +12,14 @@ import com.acooly.openapi.apidoc.persist.entity.ApiDocItem;
 
 /**
  * 报文字段 Service接口
- *
+ * <p>
  * Date: 2017-12-05 12:34:39
- * @author acooly
  *
+ * @author acooly
  */
 public interface ApiDocItemService extends EntityService<ApiDocItem> {
+
+    void mergeSave(ApiDocItem apiDocItem);
+
 
 }

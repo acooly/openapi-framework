@@ -9,14 +9,13 @@
  */
 package com.acooly.openapi.apidoc.utils;
 
-import com.acooly.core.utils.BeanUtils;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocItem;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
+import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 
-import javax.annotation.Signed;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,38 @@ public class ApiDocs {
         return serviceName + API_DOC_COMMON_SPLIT_CHAR + serviceVersion;
     }
 
-    public static String signApiDocItem(ApiDocItem apiDocItem){
+
+    public static boolean equelsApiDocService(ApiDocService entity1, ApiDocService entity2) {
+        return Strings.equals(ApiDocs.signApiDocService(entity1), ApiDocs.signApiDocService(entity2));
+    }
+
+    public static boolean equelsApiDocMessage(ApiDocMessage entity1, ApiDocMessage entity2) {
+        return Strings.equals(ApiDocs.signApiDocMessage(entity1), ApiDocs.signApiDocMessage(entity2));
+    }
+
+    public static boolean equelsApiDocItem(ApiDocItem entity1, ApiDocItem entity2) {
+        return Strings.equals(ApiDocs.signApiDocItem(entity1), ApiDocs.signApiDocItem(entity2));
+    }
+
+    public static String signApiDocService(ApiDocService entity) {
+        StringBuilder waitToSign = new StringBuilder();
+        waitToSign.append(Strings.trimToEmpty(entity.getServiceNo()))
+                .append(Strings.trimToEmpty(entity.getTitle()))
+                .append(Strings.trimToEmpty(entity.getNote()))
+                .append(Strings.trimToEmpty(entity.getServiceType() == null ? null : entity.getServiceType().name()))
+                .append(Strings.trimToEmpty(entity.getBusiType() == null ? null : entity.getBusiType().name()));
+        return DigestUtils.md5Hex(waitToSign.toString().getBytes());
+    }
+
+    public static String signApiDocMessage(ApiDocMessage entity) {
+        StringBuilder waitToSign = new StringBuilder();
+        waitToSign.append(Strings.trimToEmpty(entity.getServiceNo()))
+                .append(Strings.trimToEmpty(entity.getMessageType() == null ? null : entity.getMessageType().name()));
+        return DigestUtils.md5Hex(waitToSign.toString().getBytes());
+    }
+
+
+    public static String signApiDocItem(ApiDocItem apiDocItem) {
 
         StringBuilder waitToSign = new StringBuilder();
         waitToSign.append(Strings.trimToEmpty(apiDocItem.getItemNo()))
@@ -45,16 +75,11 @@ public class ApiDocs {
                 .append(Strings.trimToEmpty(apiDocItem.getDemo()))
                 .append(apiDocItem.getStatus().code())
                 .append(apiDocItem.getEncryptstatus().code());
-        return null;
-
-
+        return DigestUtils.md5Hex(waitToSign.toString().getBytes());
     }
 
 
-
-
-
-    private static List<Field> getDeclaredFileds(Class<?> clazz, Class annotationClazz){
+    private static List<Field> getDeclaredFileds(Class<?> clazz, Class annotationClazz) {
         List<Field> list = new ArrayList<Field>();
         Field[] fields = clazz.getDeclaredFields();
 
@@ -65,7 +90,6 @@ public class ApiDocs {
         }
         return list;
     }
-
 
 
 }
