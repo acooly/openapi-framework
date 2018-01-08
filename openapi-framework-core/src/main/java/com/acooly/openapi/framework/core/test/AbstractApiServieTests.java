@@ -76,7 +76,7 @@ public abstract class AbstractApiServieTests {
       log.info("请求-> header:{} body:{}", requestHeader, body);
     }
     HttpRequest httpRequest =
-        HttpRequest.post(gatewayUrl).headers(requestHeader).followRedirects(false).send(body);
+        HttpRequest.post(gatewayUrl).headers(requestHeader).contentType("application/json").followRedirects(false).send(body);
     Map<String, List<String>> responseHeader = httpRequest.headers();
     String sign = null;
     String signType;
