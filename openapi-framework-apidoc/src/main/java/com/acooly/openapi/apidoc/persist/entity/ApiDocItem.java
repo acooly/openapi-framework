@@ -45,10 +45,18 @@ public class ApiDocItem extends AbstractEntity {
 
 
     /**
-     * 报文ID
+     * 报文编码
      */
-    @NotNull
-    private Long messageId;
+    @Signed
+    @NotEmpty
+    private String messageNo;
+
+    /**
+     * 唯一编号
+     */
+    @Signed
+    @Size(max = 255)
+    private String parentNo;
 
     /**
      * 唯一编号

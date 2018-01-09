@@ -32,7 +32,7 @@ public class DatabaseApiDocOutputer implements ApiDocOutputer<Boolean> {
     @Override
     public Boolean output(List<ApiDocService> apiServiceDocs, ApiDocContext apidocContext) {
         try {
-            //apiServiceDocService.reset(apiServiceDocs);
+            apiDocServiceService.merge(apiServiceDocs);
         } catch (Exception e) {
             logger.error("输出到数据库失败,", e);
             return false;

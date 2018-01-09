@@ -66,7 +66,8 @@ public class ApiDocs {
     public static String signApiDocItem(ApiDocItem apiDocItem) {
 
         StringBuilder waitToSign = new StringBuilder();
-        waitToSign.append(Strings.trimToEmpty(apiDocItem.getItemNo()))
+        waitToSign.append(Strings.trimToEmpty(apiDocItem.getParentNo()))
+                .append(Strings.trimToEmpty(apiDocItem.getItemNo()))
                 .append(Strings.trimToEmpty(apiDocItem.getName()))
                 .append(Strings.trimToEmpty(apiDocItem.getTitle()))
                 .append(String.valueOf(apiDocItem.getMin()))

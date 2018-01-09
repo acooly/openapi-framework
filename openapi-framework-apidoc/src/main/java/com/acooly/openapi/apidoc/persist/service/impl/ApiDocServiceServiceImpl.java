@@ -6,17 +6,18 @@
  */
 package com.acooly.openapi.apidoc.persist.service.impl;
 
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.persist.dao.ApiDocServiceDao;
-import com.acooly.openapi.apidoc.persist.entity.ApiDocItem;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocItemService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocMessageService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
 import com.acooly.openapi.apidoc.utils.ApiDocs;
+import com.esotericsoftware.minlog.Log;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,7 @@ public class ApiDocServiceServiceImpl extends EntityServiceImpl<ApiDocService, A
                 continue;
             }
         }
-
+        Log.info("合并删除的服务：{}", needRemoves.toString());
         for (ApiDocService entity : apiDocServices) {
             mergeOne(entity);
         }
@@ -62,29 +63,27 @@ public class ApiDocServiceServiceImpl extends EntityServiceImpl<ApiDocService, A
         // do remove
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void mergeOne(ApiDocService apiDocService) {
-        mergeSave(apiDocService);
+        try {
+            mergeSave(apiDocService);
 
-        List<ApiDocMessage> apiDocMessages = apiDocService.getApiDocMessages();
-        if (Collections3.isEmpty(apiDocMessages)) {
-            return;
-        }
-
-        for (ApiDocMessage apiDocMessage : apiDocMessages) {
-            apiDocMessageService.mergeSave(apiDocMessage);
-
-            if (Collections3.isEmpty(apiDocMessage.getApiDocItems())) {
-                continue;
+            List<ApiDocMessage> apiDocMessages = apiDocService.getApiDocMessages();
+            if (Collections3.isEmpty(apiDocMessages)) {
+                return;
             }
 
-            for (ApiDocItem apiDocItem : apiDocMessage.getApiDocItems()) {
-                apiDocItemService.mergeSave(apiDocItem);
-                // 简化设计和逻辑：只支持两层报文
-                if(Collections3.isNotEmpty(apiDocItem.getChildren())){
+            for (ApiDocMessage apiDocMessage : apiDocMessages) {
+                apiDocMessageService.mergeSave(apiDocMessage);
 
+                if (Collections3.isEmpty(apiDocMessage.getApiDocItems())) {
+                    continue;
                 }
+
+                apiDocItemService.mergeSaves(apiDocMessage.getApiDocItems());
             }
+        } catch (Exception e) {
+            throw new BusinessException("合并Apidoc失败：" + apiDocService.getServiceNo());
         }
     }
 

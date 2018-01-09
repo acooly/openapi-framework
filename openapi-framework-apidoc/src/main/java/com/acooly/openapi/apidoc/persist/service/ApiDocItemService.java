@@ -10,6 +10,8 @@ package com.acooly.openapi.apidoc.persist.service;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocItem;
 
+import java.util.List;
+
 /**
  * 报文字段 Service接口
  * <p>
@@ -19,7 +21,12 @@ import com.acooly.openapi.apidoc.persist.entity.ApiDocItem;
  */
 public interface ApiDocItemService extends EntityService<ApiDocItem> {
 
-    void mergeSave(ApiDocItem apiDocItem);
+    /**
+     * 合并保存报文字段列表
+     *
+     * @param apiDocItems
+     */
+    void mergeSaves(List<ApiDocItem> apiDocItems);
 
 
 }
