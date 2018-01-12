@@ -60,6 +60,7 @@ public class ApiDocItem extends AbstractEntity {
 
     /**
      * 唯一编号
+     * md5(message_no+parent_no+name)
      */
     @Signed
     @Size(max = 255)

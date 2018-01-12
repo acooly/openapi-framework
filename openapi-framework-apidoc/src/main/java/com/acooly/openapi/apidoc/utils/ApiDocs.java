@@ -16,10 +16,6 @@ import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author zhangpu 2017-12-11 00:07
  */
@@ -30,6 +26,10 @@ public class ApiDocs {
 
     public static String getServiceNo(String serviceName, String serviceVersion) {
         return serviceName + API_DOC_COMMON_SPLIT_CHAR + serviceVersion;
+    }
+
+    public static String genItemNo(String messageNo, String parentNo, String name) {
+        return DigestUtils.md5Hex(messageNo + Strings.trimToEmpty(parentNo) + name);
     }
 
 
@@ -70,6 +70,7 @@ public class ApiDocs {
                 .append(Strings.trimToEmpty(apiDocItem.getItemNo()))
                 .append(Strings.trimToEmpty(apiDocItem.getName()))
                 .append(Strings.trimToEmpty(apiDocItem.getTitle()))
+                .append(Strings.trimToEmpty(apiDocItem.getDescn()))
                 .append(String.valueOf(apiDocItem.getMin()))
                 .append(String.valueOf(apiDocItem.getMax()))
                 .append(apiDocItem.getDataType().code())
@@ -77,19 +78,6 @@ public class ApiDocs {
                 .append(apiDocItem.getStatus().code())
                 .append(apiDocItem.getEncryptstatus().code());
         return DigestUtils.md5Hex(waitToSign.toString().getBytes());
-    }
-
-
-    private static List<Field> getDeclaredFileds(Class<?> clazz, Class annotationClazz) {
-        List<Field> list = new ArrayList<Field>();
-        Field[] fields = clazz.getDeclaredFields();
-
-        for (Field field : fields) {
-            if (field.getAnnotation(annotationClazz) != null) {
-                list.add(field);
-            }
-        }
-        return list;
     }
 
 

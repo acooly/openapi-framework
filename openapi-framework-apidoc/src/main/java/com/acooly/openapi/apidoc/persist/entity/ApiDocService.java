@@ -126,9 +126,21 @@ public class ApiDocService extends AbstractEntity {
 
     @Override
     public int hashCode() {
-        if(Strings.isNoneBlank(getServiceNo())){
+        if (Strings.isNoneBlank(getServiceNo())) {
             return getServiceNo().hashCode();
         }
         return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        } else if (!(o instanceof AbstractEntity)) {
+            return false;
+        } else {
+            ApiDocService that = (ApiDocService) o;
+            return Strings.equals(that.getServiceNo(), this.getServiceNo());
+        }
     }
 }

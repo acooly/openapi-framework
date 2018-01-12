@@ -143,13 +143,13 @@ public class ApiDocParserImpl implements ApiDocParser {
     protected ApiDocMessage doParseMessage(ApiDocService apiDocService, final Class<?> clazz) {
         ApiDocMessage messageDoc = new ApiDocMessage();
         messageDoc.setServiceNo(apiDocService.getServiceNo());
-        messageDoc.setApiDocItems(doParseMessageItem(clazz));
         messageDoc.setMessageType(doParseMessageType(clazz));
-        messageDoc.setMessageNo(messageDoc.getServiceNo() + messageDoc.getMessageType().code());
+        messageDoc.setMessageNo(messageDoc.getServiceNo() + "_" + messageDoc.getMessageType().code());
+        messageDoc.setApiDocItems(doParseMessageItem(clazz, messageDoc.getMessageNo(), null));
         return messageDoc;
     }
 
-    protected List<ApiDocItem> doParseMessageItem(final Class<?> clazz) {
+    protected List<ApiDocItem> doParseMessageItem(final Class<?> clazz, String messageNo, String parentNo) {
         List<ApiDocItem> apiItems = Lists.newArrayList();
         Class<?> cc = clazz;
         do {
@@ -165,7 +165,7 @@ public class ApiDocParserImpl implements ApiDocParser {
                 }
                 ApiDocItem item = null;
                 item = doParseItem(field);
-
+                item.setItemNo(ApiDocs.genItemNo(messageNo, parentNo, item.getName()));
                 Class<?> subItemType = null;
                 if (ApiDataTypeUtils.isCollection(field)) {
                     // 集合或数组
@@ -179,8 +179,10 @@ public class ApiDocParserImpl implements ApiDocParser {
                 }
 
                 if (subItemType != null) {
-                    item.setChildren(doParseMessageItem(subItemType));
+                    item.setChildren(doParseMessageItem(subItemType, messageNo, item.getItemNo()));
                 }
+                item.setMessageNo(messageNo);
+                item.setParentNo(parentNo);
                 apiItems.add(item);
             }
             cc = cc.getSuperclass();
@@ -230,8 +232,9 @@ public class ApiDocParserImpl implements ApiDocParser {
         // 数据长度
         ApiDataSize apiDataSize = ApiDataTypeUtils.getApiDataSize(field);
 
-        return new ApiDocItem(field.getName(), title, constraint, apiDataSize.getMin(), apiDataSize.getMax(),
+        ApiDocItem apiDocItem = new ApiDocItem(field.getName(), title, constraint, apiDataSize.getMin(), apiDataSize.getMax(),
                 dataType, demo, fieldStatus, apiEncryptstatus);
+        return apiDocItem;
     }
 
 

@@ -83,7 +83,7 @@ public class ApiDocServiceServiceImpl extends EntityServiceImpl<ApiDocService, A
                 apiDocItemService.mergeSaves(apiDocMessage.getApiDocItems());
             }
         } catch (Exception e) {
-            throw new BusinessException("合并Apidoc失败：" + apiDocService.getServiceNo());
+            throw new BusinessException("合并Apidoc失败：" + apiDocService.getServiceNo(),e);
         }
     }
 

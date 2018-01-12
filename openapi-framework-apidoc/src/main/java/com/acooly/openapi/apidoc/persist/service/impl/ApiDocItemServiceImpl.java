@@ -32,7 +32,7 @@ import java.util.List;
 public class ApiDocItemServiceImpl extends EntityServiceImpl<ApiDocItem, ApiDocItemDao> implements ApiDocItemService {
 
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW,rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     @Override
     public void mergeSaves(List<ApiDocItem> apiDocItems) {
         doMergeSaves(apiDocItems,null);
