@@ -7,7 +7,7 @@
  * 修订记录:
  * kuli@yiji.com 2017-07-28 16:43 创建
  */
-package com.acooly.openapi.apidoc.parser.impl;
+package com.acooly.openapi.apidoc.generator.parser.impl;
 
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiRequest;

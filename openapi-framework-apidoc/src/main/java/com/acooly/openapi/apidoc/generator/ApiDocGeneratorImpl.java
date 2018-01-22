@@ -3,16 +3,15 @@
  * Copyright (c) 2015 All Rights Reserved.
  */
 
-package com.acooly.openapi.apidoc.builder;
+package com.acooly.openapi.apidoc.generator;
 
 import com.acooly.core.utils.Collections3;
-import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.ApiDocContext;
 import com.acooly.openapi.apidoc.ApiDocProperties;
-import com.acooly.openapi.apidoc.output.ApiDocOutputer;
-import com.acooly.openapi.apidoc.output.ApiDocOutputerFactory;
-import com.acooly.openapi.apidoc.output.ApiOutputerTypeEnum;
-import com.acooly.openapi.apidoc.parser.ApiDocParser;
+import com.acooly.openapi.apidoc.generator.output.ApiDocOutputer;
+import com.acooly.openapi.apidoc.generator.output.ApiDocOutputerFactory;
+import com.acooly.openapi.apidoc.generator.output.ApiOutputerTypeEnum;
+import com.acooly.openapi.apidoc.generator.parser.ApiDocParser;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
@@ -32,9 +31,9 @@ import java.util.List;
  */
 @Service("apiDocBuilder")
 @Slf4j
-public class ApiDocBuilderImpl implements ApiDocBuilder {
+public class ApiDocGeneratorImpl implements ApiDocGenerator {
 
-    private static final Logger logger = LoggerFactory.getLogger(ApiDocBuilderImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApiDocGeneratorImpl.class);
     List<String> packageList = Lists.newArrayList();
 
     @Autowired

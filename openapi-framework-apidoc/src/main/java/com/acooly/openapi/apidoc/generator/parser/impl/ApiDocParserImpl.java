@@ -3,14 +3,14 @@
  * Copyright (c) 2015 All Rights Reserved.
  */
 
-package com.acooly.openapi.apidoc.parser.impl;
+package com.acooly.openapi.apidoc.generator.parser.impl;
 
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.openapi.apidoc.enums.*;
-import com.acooly.openapi.apidoc.parser.ApiDocParser;
-import com.acooly.openapi.apidoc.parser.dto.ApiDataSize;
-import com.acooly.openapi.apidoc.parser.dto.ApiDocItemContext;
+import com.acooly.openapi.apidoc.generator.parser.dto.ApiDataSize;
+import com.acooly.openapi.apidoc.generator.parser.dto.ApiDocItemContext;
+import com.acooly.openapi.apidoc.generator.parser.ApiDocParser;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocItem;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;

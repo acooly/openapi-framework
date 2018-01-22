@@ -167,9 +167,11 @@
 </script>
 
 <script id="apidoc_demo_template" type="text/html">
-<% for(var key in data.messages){ var value=data.messages[key]; %>
-<pre class="layui-code" lay-title="<%=key%>">
-<%=value%>
+<% for(var i=0;i<rows.length;i++){ var e=rows[i]; %>
+<pre class="layui-code" lay-title="<%=e.messageType%>">
+<%=e.header%>
+
+<%=e.body%>
 </pre>
 <%}%>
 

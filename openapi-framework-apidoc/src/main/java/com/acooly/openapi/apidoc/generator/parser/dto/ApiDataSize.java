@@ -7,7 +7,7 @@
  * 修订记录:
  * zhangpu@acooly.cn 2017-12-14 16:55 创建
  */
-package com.acooly.openapi.apidoc.parser.dto;
+package com.acooly.openapi.apidoc.generator.parser.dto;
 
 import lombok.Getter;
 import lombok.Setter;

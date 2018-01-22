@@ -3,7 +3,7 @@
  * Copyright (c) 2015 All Rights Reserved.
  */
 
-package com.acooly.openapi.apidoc.output;
+package com.acooly.openapi.apidoc.generator.output;
 
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;

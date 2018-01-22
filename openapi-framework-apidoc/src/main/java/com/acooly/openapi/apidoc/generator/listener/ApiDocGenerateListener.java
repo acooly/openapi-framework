@@ -3,10 +3,10 @@
  * Copyright (c) 2015 All Rights Reserved.
  */
 
-package com.acooly.openapi.apidoc.listener;
+package com.acooly.openapi.apidoc.generator.listener;
 
 import com.acooly.openapi.apidoc.ApiDocProperties;
-import com.acooly.openapi.apidoc.builder.ApiDocBuilder;
+import com.acooly.openapi.apidoc.generator.ApiDocGenerator;
 import com.acooly.openapi.framework.common.event.ApiMetaParseFinish;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class ApiDocGenerateListener implements ApplicationListener<ApiMetaParseF
     @Autowired
     private ApiDocProperties apiDocProperties;
     @Autowired
-    private ApiDocBuilder apiDocBuilder;
+    private ApiDocGenerator apiDocBuilder;
 
     @Override
     public void onApplicationEvent(ApiMetaParseFinish event) {

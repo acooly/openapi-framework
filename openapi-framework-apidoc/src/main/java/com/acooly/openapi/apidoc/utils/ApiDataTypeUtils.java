@@ -7,7 +7,7 @@ package com.acooly.openapi.apidoc.utils;
 
 import com.acooly.core.utils.Money;
 import com.acooly.openapi.apidoc.enums.ApiDataTypeEnum;
-import com.acooly.openapi.apidoc.parser.dto.ApiDataSize;
+import com.acooly.openapi.apidoc.generator.parser.dto.ApiDataSize;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Max;

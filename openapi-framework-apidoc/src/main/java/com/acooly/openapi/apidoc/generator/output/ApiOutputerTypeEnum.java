@@ -3,7 +3,7 @@
  * Copyright (c) 2015 All Rights Reserved.
  */
 
-package com.acooly.openapi.apidoc.output;
+package com.acooly.openapi.apidoc.generator.output;
 
 import com.acooly.core.utils.enums.Messageable;
 import com.google.common.collect.Maps;

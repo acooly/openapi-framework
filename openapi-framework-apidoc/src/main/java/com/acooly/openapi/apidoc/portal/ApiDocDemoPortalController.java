@@ -9,10 +9,11 @@
  */
 package com.acooly.openapi.apidoc.portal;
 
-import com.acooly.core.common.web.support.JsonResult;
+import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.safety.signature.SignTypeEnum;
-import com.acooly.openapi.apidoc.builder.ApiDocBuilder;
+import com.acooly.openapi.apidoc.builder.ApiDocMessageBuilder;
+import com.acooly.openapi.apidoc.builder.ApiDocMessageContext;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 文档中心 控制器
@@ -35,7 +37,7 @@ public class ApiDocDemoPortalController extends AbstractPortalController {
     @Autowired
     private ApiDocServiceService apiDocServiceService;
     @Autowired
-    private ApiDocBuilder apiDocBuilder;
+    private ApiDocMessageBuilder apiDocMessageBuilder;
 
 
     /**
@@ -43,17 +45,17 @@ public class ApiDocDemoPortalController extends AbstractPortalController {
      */
     @RequestMapping("message")
     @ResponseBody
-    public JsonResult message(HttpServletRequest request, HttpServletResponse response) {
-        JsonResult result = new JsonResult();
-
+    public JsonListResult<ApiDocMessageContext> message(HttpServletRequest request, HttpServletResponse response) {
+        JsonListResult<ApiDocMessageContext> result = new JsonListResult<ApiDocMessageContext>();
         try {
             String id = request.getParameter("id");
-            ApiDocService apiServiceDoc = apiDocServiceService.get(Long.valueOf(id));
+            ApiDocService apiServiceDoc = apiDocServiceService.loadApiDocService(Long.valueOf(id));
             String signType = Strings.isBlankDefault(request.getParameter("signType"), SignTypeEnum.MD5Hex.name());
-            apiDocBuilder.build();
+            List<ApiDocMessageContext> messages = apiDocMessageBuilder.build(apiServiceDoc, signType);
+            result.setRows(messages);
             result.appendData(referenceData(request));
         } catch (Exception e) {
-            handleException("解决方案服务列表查询", e, request);
+            handleException("获取服务示例报文", e, request);
         }
         return result;
     }

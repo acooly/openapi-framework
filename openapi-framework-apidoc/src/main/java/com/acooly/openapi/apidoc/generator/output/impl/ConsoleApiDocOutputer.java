@@ -3,13 +3,13 @@
  * Copyright (c) 2015 All Rights Reserved.
  */
 
-package com.acooly.openapi.apidoc.output.impl;
+package com.acooly.openapi.apidoc.generator.output.impl;
 
 import java.util.List;
 
-import com.acooly.openapi.apidoc.output.ApiDocOutputer;
+import com.acooly.openapi.apidoc.generator.output.ApiDocOutputer;
+import com.acooly.openapi.apidoc.generator.output.ApiOutputerTypeEnum;
 import com.acooly.openapi.apidoc.ApiDocContext;
-import com.acooly.openapi.apidoc.output.ApiOutputerTypeEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

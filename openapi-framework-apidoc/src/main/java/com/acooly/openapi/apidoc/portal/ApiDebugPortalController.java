@@ -16,7 +16,7 @@ import com.acooly.core.utils.net.HttpResult;
 import com.acooly.core.utils.net.Https;
 import com.acooly.module.safety.Safes;
 import com.acooly.module.safety.signature.SignTypeEnum;
-import com.acooly.openapi.apidoc.builder.ApiDocBuilder;
+import com.acooly.openapi.apidoc.generator.ApiDocGenerator;
 import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.utils.Servlets;
@@ -52,7 +52,7 @@ public class ApiDebugPortalController extends AbstractPortalController {
     protected ApiDocServiceService apiDocServiceService;
 
     @Autowired
-    private ApiDocBuilder apiDocBuilder;
+    private ApiDocGenerator apiDocBuilder;
 
     @Override
     public String index(HttpServletRequest request, HttpServletResponse response, Model model) {

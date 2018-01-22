@@ -7,7 +7,7 @@
  * 修订记录:
  * zhangpu@acooly.cn 2017-12-12 10:13 创建
  */
-package com.acooly.openapi.apidoc.parser.dto;
+package com.acooly.openapi.apidoc.generator.parser.dto;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;

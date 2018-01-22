@@ -3,7 +3,7 @@
  * Copyright (c) 2015 All Rights Reserved.
  */
 
-package com.acooly.openapi.apidoc.builder;
+package com.acooly.openapi.apidoc.generator;
 
 
 /**
@@ -11,7 +11,7 @@ package com.acooly.openapi.apidoc.builder;
  *
  * @author zhangpu 2015/1/29.
  */
-public interface ApiDocBuilder {
+public interface ApiDocGenerator {
 
 	/**
 	 * 生成Apidoc文档
