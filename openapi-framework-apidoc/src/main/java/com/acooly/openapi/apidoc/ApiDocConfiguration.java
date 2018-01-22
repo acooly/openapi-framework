@@ -13,6 +13,7 @@ import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.google.common.collect.Lists;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,7 @@ import static com.acooly.openapi.apidoc.ApiDocProperties.PREFIX;
 @EnableConfigurationProperties({ApiDocProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.openapi.apidoc")
+@EntityScan(basePackages = "com.acooly.openapi.apidoc.persist.entity")
 public class ApiDocConfiguration {
 
     @Bean

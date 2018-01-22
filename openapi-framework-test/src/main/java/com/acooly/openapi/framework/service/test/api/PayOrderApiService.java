@@ -28,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
   busiType = ApiBusiType.Trade
 )
 public class PayOrderApiService extends BaseApiService<PayOrderRequest, PayOrderResponse> {
-  @Autowired private OpenApiRemoteService openApiRemoteService;
+//  @Autowired private OpenApiRemoteService openApiRemoteService;
 
   @Override
   protected void doService(PayOrderRequest request, PayOrderResponse response) {
@@ -49,7 +49,7 @@ public class PayOrderApiService extends BaseApiService<PayOrderRequest, PayOrder
               } catch (Exception e) {
                 throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e);
               }
-              openApiRemoteService.asyncNotify(apiNotifyOrder);
+//              openApiRemoteService.asyncNotify(apiNotifyOrder);
             })
         .start();
   }

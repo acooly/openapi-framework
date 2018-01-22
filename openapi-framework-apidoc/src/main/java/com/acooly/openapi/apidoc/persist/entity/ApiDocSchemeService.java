@@ -8,6 +8,7 @@ package com.acooly.openapi.apidoc.persist.entity;
 
 
 import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.core.utils.Strings;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -59,4 +60,24 @@ public class ApiDocSchemeService extends AbstractEntity {
     @Size(max = 255)
     private String comments;
 
+
+    public ApiDocSchemeService() {
+    }
+
+    public ApiDocSchemeService(String schemeNo, String serviceNo) {
+        this.schemeNo = schemeNo;
+        this.serviceNo = serviceNo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        } else if (!(o instanceof AbstractEntity)) {
+            return false;
+        } else {
+            ApiDocSchemeService that = (ApiDocSchemeService) o;
+            return Strings.equals(that.getServiceNo(), this.getServiceNo()) && Strings.equals(that.getSchemeNo(), this.getSchemeNo());
+        }
+    }
 }

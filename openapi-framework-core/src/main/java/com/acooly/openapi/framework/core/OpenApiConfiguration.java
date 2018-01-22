@@ -136,7 +136,7 @@ public class OpenApiConfiguration {
     @ConditionalOnProperty(name = "acooly.openapi.notify.enable", havingValue = "false")
     public static class Disable {
       @Bean
-      @ConditionalOnMissingClass
+      @ConditionalOnMissingBean
       public ApiNotifySender unsupportApiNotifySender() {
         return new UnsupportApiNotifySender();
       }

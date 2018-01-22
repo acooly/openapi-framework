@@ -9,14 +9,23 @@ package com.acooly.openapi.apidoc.persist.service;
 
 import com.acooly.core.common.service.EntityService;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocSchemeService;
+import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
+
+import java.util.List;
 
 /**
  * 方案服务列表 Service接口
- *
+ * <p>
  * Date: 2017-12-05 12:34:38
- * @author acooly
  *
+ * @author acooly
  */
 public interface ApiDocSchemeServiceService extends EntityService<ApiDocSchemeService> {
+
+
+    List<ApiDocSchemeService> findSchemeServices(String schemeNo);
+
+    List<ApiDocService> findSchemeApiDocServices(String schemeNo);
+
 
 }

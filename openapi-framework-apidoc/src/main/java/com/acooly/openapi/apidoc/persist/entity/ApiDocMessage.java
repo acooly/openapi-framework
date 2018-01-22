@@ -9,6 +9,7 @@ package com.acooly.openapi.apidoc.persist.entity;
 
 import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.openapi.apidoc.enums.MessageTypeEnum;
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -86,6 +87,6 @@ public class ApiDocMessage extends AbstractEntity {
     private String signatrue;
 
     @Transient
-    private List<ApiDocItem> apiDocItems;
+    private List<ApiDocItem> apiDocItems = Lists.newArrayList();
 
 }

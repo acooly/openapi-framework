@@ -63,7 +63,9 @@ CREATE TABLE `api_doc_message` (
 CREATE TABLE `api_doc_item` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `parent_id` bigint(20) DEFAULT NULL COMMENT '父ID',
-  `item_no` varchar(255) DEFAULT NULL COMMENT '唯一编号(message_no+parent_item_no+name)',
+  `message_no` varchar(64) NOT NULL COMMENT '报文编码',
+  `parent_no` varchar(64) DEFAULT NULL COMMENT '父编号',
+  `item_no` varchar(64) DEFAULT NULL COMMENT '唯一编号(message_no+parent_item_no+name)',
   `name` varchar(128) NOT NULL COMMENT '字段名称',
   `title` varchar(128) NOT NULL COMMENT '字段标题',
   `min` int(11) DEFAULT '0' COMMENT '最小长度',
@@ -73,7 +75,6 @@ CREATE TABLE `api_doc_item` (
   `demo` varchar(512) DEFAULT NULL COMMENT '字段示例',
   `status` varchar(16) NOT NULL DEFAULT '' COMMENT '可选状态',
   `encryptStatus` varchar(16) DEFAULT NULL COMMENT '是否加密{yes:需要,no:无需}',
-  `message_id` bigint(20) NOT NULL COMMENT '报文ID',
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
   `sort_time` bigint(20) DEFAULT NULL COMMENT '排序辅助值',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

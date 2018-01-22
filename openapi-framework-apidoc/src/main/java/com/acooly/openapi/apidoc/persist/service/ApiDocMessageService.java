@@ -10,6 +10,8 @@ package com.acooly.openapi.apidoc.persist.service;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
 
+import java.util.List;
+
 /**
  * 服务报文 Service接口
  * <p>
@@ -20,5 +22,7 @@ import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
 public interface ApiDocMessageService extends EntityService<ApiDocMessage> {
 
     void mergeSave(ApiDocMessage apiDocMessage);
+
+    List<ApiDocMessage> loadApiDocMessages(String serviceNo);
 
 }

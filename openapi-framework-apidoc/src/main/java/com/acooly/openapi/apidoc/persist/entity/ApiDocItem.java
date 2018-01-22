@@ -11,6 +11,7 @@ import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.openapi.apidoc.enums.ApiDataTypeEnum;
 import com.acooly.openapi.apidoc.enums.ApiEncryptstatusEnum;
 import com.acooly.openapi.apidoc.enums.FieldStatus;
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -19,6 +20,7 @@ import javax.annotation.Signed;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -60,6 +62,7 @@ public class ApiDocItem extends AbstractEntity {
 
     /**
      * 唯一编号
+     * md5(message_no+parent_no+name)
      */
     @Signed
     @Size(max = 255)
@@ -142,7 +145,7 @@ public class ApiDocItem extends AbstractEntity {
     private String signatrue;
 
     @Transient
-    private List<ApiDocItem> children;
+    private List<ApiDocItem> children = Lists.newArrayList();
 
     public ApiDocItem() {
     }
@@ -158,4 +161,20 @@ public class ApiDocItem extends AbstractEntity {
         this.status = status;
         this.encryptstatus = encryptstatus;
     }
+
+    public void addChild(ApiDocItem apiDocItem) {
+        children.add(apiDocItem);
+    }
+
+
+    public static class ApiDocItemComparator implements Comparator<ApiDocItem> {
+        @Override
+        public int compare(ApiDocItem node1, ApiDocItem node2) {
+            long orderTime1 = node1.getSortTime();
+            long orderTime2 = node2.getSortTime();
+            return orderTime1 > orderTime2 ? -1 : (orderTime1 == orderTime2 ? 0 : 1);
+        }
+    }
+
+
 }

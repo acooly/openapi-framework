@@ -1,0 +1,169 @@
+.directory {
+  padding: 0 0 80px 0;
+  font-size: 14px;
+  line-height: 30px;
+}
+.directory .link {
+  margin-bottom: 10px;
+  overflow: hidden;
+  color: #333333;
+  line-height: 32px;
+}
+.directory .link span,
+.directory .link a {
+  display: inline-block;
+  vertical-align: top;
+}
+.directory .link span {
+  padding: 0 4px 0 0;
+  text-align: center;
+  width: 144px;
+  height: 32px;
+  background: url(../../images/link-bg.png) no-repeat center center;
+}
+.directory .link a {
+  color: #4680fe;
+  margin-left: 10px;
+}
+.directory .link1 span {
+  background-image: url(../../images/ml-wgbg.png);
+  width: 92px;
+}
+.directory .img img {
+  max-width: 100%;
+}
+.directory h5 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333333;
+  line-height: 26px;
+  height: 26px;
+}
+.directory .switch .switch-title {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 26px;
+  height: 26px;
+  border-bottom: none;
+}
+.directory .switch .switch-title a {
+  padding-left: 0;
+  padding-right: 25px;
+  background: url(../../images/mljt-ico.png) no-repeat right center;
+}
+.directory .switch .switch-title .on {
+  background-image: url(../../images/mljt-ico1.png);
+}
+.directory .jj,
+.directory .wg,
+.directory .jhlc,
+.directory .txms,
+.directory .xxsm {
+  padding: 40px 10px 30px 30px;
+}
+.directory .jj .img {
+  margin-left: -11px;
+}
+.directory .glgs ul {
+  padding: 40px 0 20px 30px;
+}
+.directory .glgs ul li {
+  padding-left: 15px;
+  line-height: 20px;
+  background: url(../../images/glgs-bg01.png) no-repeat left center;
+  margin-bottom: 20px;
+}
+.directory .bank-bm ul {
+  overflow: hidden;
+}
+.directory .bank-bm ul li {
+  margin-bottom: 16px;
+  float: left;
+  margin-left: 16px;
+  width: 154px;
+  height: 154px;
+  border: 3px solid #F1F1F1;
+  border-radius: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 16px;
+  color: #333333;
+  line-height: 18px;
+}
+.directory .bank-bm ul li .img {
+  padding-top: 12px;
+}
+.directory .bank-bm ul li .img img {
+  width: 64px;
+  height: 64px;
+}
+.directory .bank-bm ul li .d1 {
+  height: 36px;
+  line-height: 36px;
+}
+.directory .bank-bm ul li .d1 span {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 18px;
+  max-width: 154px;
+}
+.directory .bank-bm ul li .d2 {
+  margin: 0 10px;
+  border-bottom: 1px dashed #E2E2E2;
+  height: 0;
+}
+.directory .bank-bm ul li .d3 {
+  padding: 0 0 4px 0;
+  line-height: 36px;
+  height: 36px;
+}
+.directory .bank-bm ul li .d3 span {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 18px;
+  color: #4680fe;
+}
+.directory .bank-bm ul .ml {
+  margin-left: 0;
+}
+.directory .txms {
+  padding: 40px 0 30px 30px;
+}
+.directory .txms table {
+  border-top: 1px solid #e2e2e2;
+  border-bottom: 1px solid #E2E2E2;
+  width: 100%;
+  border-left: none;
+  border-right: none;
+  font-size: 14px;
+}
+.directory .txms table tr {
+  border: none;
+}
+.directory .txms table tr:first-child td {
+  padding: 25px 0 15px 18px;
+}
+.directory .txms table tr:first-child td:first-child {
+  padding: 25px 0 15px 0;
+}
+.directory .txms table tr:last-child td {
+  padding: 0 0 25px 18px;
+}
+.directory .txms table tr:last-child td:first-child {
+  padding: 0 0 25px 0;
+}
+.directory .txms table td {
+  vertical-align: top;
+  border: none;
+  border-left: 1px solid #E2E2E2;
+  padding: 0 0 15px 18px;
+  line-height: 24px;
+}
+.directory .txms table td:first-child {
+  border-left: none;
+  background-color: #f9f9f9;
+  text-align: center;
+  min-width: 125px;
+  font-weight: bold;
+  padding: 0 0 15px 0;
+}

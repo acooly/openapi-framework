@@ -19,8 +19,17 @@ public final class ApiConstants {
   public static final String SERVICE = "service";
   public static final String NOTIFY_URL = "notifyUrl";
   public static final String RETURN_URL = "returnUrl";
+
+  @Deprecated
   public static final String RESULT_CODE = "resultCode";
+  @Deprecated
   public static final String RESULT_MESSAGE = "resultMessage";
+
+
+  public static final String CODE = "code";
+  public static final String MESSAGE = "message";
+  public static final String DETAIL = "detail";
+
   public static final String SUCCESS = "success";
   public static final String PROTOCOL = "protocol";
   public static final String VERSION = "version";

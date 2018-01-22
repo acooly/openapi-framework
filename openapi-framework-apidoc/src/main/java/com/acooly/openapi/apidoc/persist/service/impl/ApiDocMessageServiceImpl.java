@@ -9,9 +9,13 @@ package com.acooly.openapi.apidoc.persist.service.impl;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.openapi.apidoc.persist.dao.ApiDocMessageDao;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
+import com.acooly.openapi.apidoc.persist.service.ApiDocItemService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocMessageService;
 import com.acooly.openapi.apidoc.utils.ApiDocs;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 服务报文 Service实现
@@ -23,6 +27,8 @@ import org.springframework.stereotype.Service;
 @Service("apiDocMessageService")
 public class ApiDocMessageServiceImpl extends EntityServiceImpl<ApiDocMessage, ApiDocMessageDao> implements ApiDocMessageService {
 
+    @Autowired
+    private ApiDocItemService apiDocItemService;
 
     @Override
     public void mergeSave(ApiDocMessage apiDocMessage) {
@@ -39,7 +45,14 @@ public class ApiDocMessageServiceImpl extends EntityServiceImpl<ApiDocMessage, A
             // insert
             save(apiDocMessage);
         }
+    }
 
-
+    @Override
+    public List<ApiDocMessage> loadApiDocMessages(String serviceNo) {
+        List<ApiDocMessage> apiDocMessages = getEntityDao().findByServiceNo(serviceNo);
+        for(ApiDocMessage apiDocMessage : apiDocMessages){
+            apiDocMessage.setApiDocItems(apiDocItemService.loadByMessageNo(apiDocMessage.getMessageNo()));
+        }
+        return apiDocMessages;
     }
 }

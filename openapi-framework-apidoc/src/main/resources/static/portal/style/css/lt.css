@@ -1,0 +1,148 @@
+.lt .lt-title {
+  background-color: #4680FE;
+  height: 125px;
+  line-height: 125px;
+  padding-left: 55px;
+  font-size: 20px;
+  color: #FFFFFF;
+}
+.lt .lt-title div:last-child {
+  font-size: 18px;
+  color: #ffdf4a;
+}
+.lt .lt-form {
+  padding: 60px 0 90px 0;
+}
+.lt .lt-form .line {
+  width: 970px;
+  border-bottom: 1px dashed #E2E2E2;
+  margin: 30px auto;
+}
+.lt .lt-form form h4 {
+  margin-left: 180px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #666;
+  padding-left: 30px;
+  background: url(../../images/line01.png) no-repeat left center;
+  line-height: 40px;
+}
+.lt .lt-form form > div {
+  margin-bottom: 20px;
+  text-align: center;
+  margin-left: 300px;
+}
+.lt .lt-form form > div span {
+  display: block;
+  float: left;
+  line-height: 40px;
+  font-size: 14px;
+  color: #666;
+}
+.lt .lt-form form > div span input {
+  width: 340px;
+  height: 20px;
+  line-height: 20px;
+  border: 1px solid #E2E2E2;
+  padding: 9px;
+}
+.lt .lt-form form > div span .drop-down {
+  text-align: left;
+  position: relative;
+}
+.lt .lt-form form > div span .drop-down .drop-down-title {
+  width: 340px;
+  height: 20px;
+  padding: 9px;
+  line-height: 20px;
+  border: 1px solid #E2E2E2;
+  background: url(../../images/xl-zk.png) no-repeat 98% center;
+  cursor: pointer;
+}
+.lt .lt-form form > div span .drop-down .on {
+  background-image: url(../../images/xl-sq.png);
+  border-color: #4680FE;
+}
+.lt .lt-form form > div span .drop-down ul {
+  display: none;
+  position: absolute;
+  width: 358px;
+  border: 1px solid #4680FE;
+  top: 39px;
+  left: 0;
+  z-index: 99;
+  background-color: #FFFFFF;
+}
+.lt .lt-form form > div span .drop-down ul li {
+  padding: 0 9px;
+  height: 30px;
+  line-height: 30px;
+  color: #666;
+  font-size: 14px;
+}
+.lt .lt-form form > div span .drop-down ul li:hover {
+  background-color: #4680FE;
+  color: #fff;
+}
+.lt .lt-form form > div span .submit {
+  background-color: #4680FE;
+  height: 40px;
+  width: 360px;
+  font-weight: bold;
+  font-size: 16px;
+  color: #fff;
+  border-color: #4680FE;
+  margin-top: 20px;
+}
+.lt .lt-form form > div .s1 {
+  width: 210px;
+  text-align: right;
+  margin-right: 20px;
+  height: 40px;
+}
+.lt .lt-form form > div .s2 {
+  width: 360px;
+}
+.lt .switch {
+  padding: 50px 46px 1px 46px;
+}
+.lt .switch .switch-title {
+  margin: 0 0 40px 0;
+  border: none;
+}
+.lt .switch .switch-title a {
+  padding-right: 24px;
+  padding-left: 0;
+  background-position: right center;
+}
+.lt .on .switch-title a {
+  color: #4680FE;
+  font-weight: bold;
+}
+.lt .title {
+  font-size: 16px;
+  color: #333333;
+  font-weight: bold;
+  height: 1px;
+  background-color: #E2E2E2;
+}
+.lt .title span {
+  display: block;
+  float: left;
+  margin-top: -12px;
+  background-color: #FFFFFF;
+  padding-right: 20px;
+}
+.lt .jg01,
+.lt .jg02 {
+  margin: 28px 0 50px 0;
+  border: 1px solid red;
+}
+.lt .jg01 pre,
+.lt .jg02 pre {
+  word-wrap: break-word;
+}
+.lt .jg01 pre code,
+.lt .jg02 pre code {
+  font-family: "微软雅黑" !important;
+}
