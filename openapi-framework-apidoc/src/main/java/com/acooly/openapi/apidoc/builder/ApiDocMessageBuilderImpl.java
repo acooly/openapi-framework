@@ -135,7 +135,7 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
         } else {
             sb.append("POST /www.mechant.com/" + (messageType == MessageTypeEnum.Notify ? "notify" : "return") + ".html HTTP/1.1\n");
             sb.append("Content-Length: " + contentLength + "\n");
-            sb.append("Content-Type: application/x-www-form-urlencoded; charset=UTF-8\n");
+            sb.append("Content-Type: application/json;charset=UTF-8\n");
             sb.append("Host: www.mechant.com\n");
             sb.append(ApiConstants.SIGN_TYPE +  ": MD5\n");
             sb.append(ApiConstants.SIGN +  ":" + sign + "\n");
