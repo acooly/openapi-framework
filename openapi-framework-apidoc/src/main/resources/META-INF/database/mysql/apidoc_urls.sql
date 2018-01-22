@@ -1,4 +1,3 @@
-
 INSERT INTO `sys_resource` (`ID`, `PARENTID`, `NAME`, `TYPE`, `SHOW_STATE`, `ORDER_TIME`, `VALUE`, `SHOW_MODE`, `ICON`, `DESCN`) VALUES ('20151126', NULL, '开放平台', 'MENU', '0', '2016-11-21 16:27:31', '', '1', 'icons-resource-shouyeshouye', NULL);
 INSERT INTO `sys_resource` (`ID`, `PARENTID`, `NAME`, `TYPE`, `SHOW_STATE`, `ORDER_TIME`, `VALUE`, `SHOW_MODE`, `ICON`, `DESCN`) VALUES ('201511261', '20151126', '服务管理', 'URL', '0', '2016-09-28 09:42:22', '/manage/api/apiServiceDoc/index.html', '1', 'icons-resource-shezhi', NULL);
 INSERT INTO `sys_resource` (`ID`, `PARENTID`, `NAME`, `TYPE`, `SHOW_STATE`, `ORDER_TIME`, `VALUE`, `SHOW_MODE`, `ICON`, `DESCN`) VALUES ('201511262', '20151126', '方案管理', 'URL', '0', '2016-11-21 16:29:33', '/manage/api/apiDocScheme/index.html', '1', 'icons-resource-shezhi', NULL);

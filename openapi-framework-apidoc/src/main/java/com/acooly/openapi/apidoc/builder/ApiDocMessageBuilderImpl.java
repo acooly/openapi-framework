@@ -11,10 +11,7 @@ package com.acooly.openapi.apidoc.builder;
 
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
-import com.acooly.module.safety.Safes;
-import com.acooly.module.safety.signature.SignTypeEnum;
 import com.acooly.openapi.apidoc.enums.ApiDataTypeEnum;
-import com.acooly.openapi.apidoc.enums.FieldStatus;
 import com.acooly.openapi.apidoc.enums.MessageTypeEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocItem;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
@@ -128,9 +125,9 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
             sb.append(ApiConstants.SIGN +  ":" + sign + "\n");
             sb.append("Connection: Keep-Alive\n   \n\n");
         } else if (messageType == MessageTypeEnum.Request) {
-            sb.append("POST /gateway.html HTTP/1.1\n");
+            sb.append("POST /gateway.do HTTP/1.1\n");
             sb.append("Content-Length: " + contentLength + "\n");
-            sb.append("Content-Type: application/x-www-form-urlencoded; charset=UTF-8\n");
+            sb.append("Content-Type: application/json;charset=UTF-8\n");
             sb.append("Host: api.xxx.com\n");
             sb.append(ApiConstants.SIGN_TYPE +  ": MD5\n");
             sb.append(ApiConstants.SIGN +  ":" + sign + "\n");
