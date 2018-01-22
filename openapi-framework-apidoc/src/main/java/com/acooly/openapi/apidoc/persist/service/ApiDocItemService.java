@@ -29,4 +29,6 @@ public interface ApiDocItemService extends EntityService<ApiDocItem> {
     void mergeSaves(List<ApiDocItem> apiDocItems);
 
 
+    List<ApiDocItem> loadByMessageNo(String messageNo);
+
 }

@@ -9,7 +9,7 @@ import com.acooly.openapi.apidoc.ApiDocContext;
 import com.acooly.openapi.apidoc.output.ApiDocOutputer;
 import com.acooly.openapi.apidoc.output.ApiOutputerTypeEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
-import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
+import com.acooly.openapi.apidoc.persist.service.ApiDocIntegrateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -27,12 +27,13 @@ public class DatabaseApiDocOutputer implements ApiDocOutputer<Boolean> {
     private static final Logger logger = LoggerFactory.getLogger(DatabaseApiDocOutputer.class);
 
     @Resource
-    private ApiDocServiceService apiDocServiceService;
+    private ApiDocIntegrateService apiDocIntegrateService;
 
     @Override
     public Boolean output(List<ApiDocService> apiServiceDocs, ApiDocContext apidocContext) {
         try {
-            apiDocServiceService.merge(apiServiceDocs);
+            apiDocIntegrateService.merge(apiServiceDocs);
+            apiDocIntegrateService.distributeDefaultScheme(apiServiceDocs);
         } catch (Exception e) {
             logger.error("输出到数据库失败,", e);
             return false;

@@ -1,0 +1,155 @@
+.tab-title{
+    ul{
+        li{
+            padding-left: 0;
+            border: none;
+            cursor: default;
+            div{
+                cursor: pointer;
+                line-height: 42px;
+                border-bottom: 1px dashed #E2E2E2;
+                font-size: 14px;
+                padding-left: 25px;
+                background: url(../../img/qa-jt2.png) no-repeat 9px center;
+            }
+            dl{
+                display: none;
+                padding: 12px 0 12px 30px;
+                border-bottom: 1px dashed #E2E2E2;
+                dd{
+                    cursor: pointer;
+                    line-height: 22px;
+                    padding-left: 12px;
+                    border-left: 1px dashed #E2E2E2;
+                    margin-bottom: 5px;
+                    position: relative;
+                    z-index: 2;
+                    &:before,&:after{
+                        display: block;
+                        position: absolute;
+                        content: "";
+                        z-index: 10;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                    }
+                    &:after{
+                        background-image: url(../../img/QA-list-yd.png);
+                        width: 8px;
+                        height: 8px;
+                        top: 50%;
+                        left: -5px;
+                        margin-top: -4px;
+                    }
+                    &:before{                        
+                        width: 224px;
+                        height: 22px;
+                        z-index: -1;  
+                        right: -7px;
+                        top: 0;                      
+                    }
+                }
+                .active01{
+                    &:before{
+                        background-image: url(../../img/QA-SUNMENUBG.png);
+                    }
+                    &:after{
+                        background-image: url(../../img/QA-list-yd1.png);
+                    }
+                }                
+            }
+        }
+        .active{
+            div{
+                background-image: url(../../img/qa-jt1.png);
+                font-weight: bold;
+            }
+        }
+    }
+}
+.list-title{
+    font-size: 24px;
+    line-height: 36px;
+    padding: 0 0 30px 0;
+}
+
+.switch{
+    .switch-title{
+        margin: 0;
+        padding: 0;
+        border: none;
+        height: auto;
+        line-height: 34px;
+        padding-top: 1px;
+        a{
+            background-image: url(../../img/qa-q-ico.png);
+            font-size: 14px;
+            padding-left: 28px;
+        }
+    }
+    .switch-content{
+        display: none;
+        margin-bottom: 30px;
+        .text{
+            line-height: 20px;
+            padding-left: 28px;
+            background: url(../../img/qa-a-ico.png) no-repeat left 1px;            
+        }
+    }
+}
+.switch.on{   
+    background-color: #f9f9f9; 
+    .fl{
+        margin-top: 20px;
+    }
+    .switch-title{
+        margin-top: 20px;
+        a{
+            font-weight: bold;            
+            background-image: url(../../img/qa-q1-ico.png);        
+        }
+    }
+}
+
+.wt-title{
+    line-height: 30px;
+    border-bottom: 1px solid #E2E2E2;
+    font-size: 14px;
+    color: #999999;
+    &>div{
+        width: 766px;
+        padding: 0 0 0 20px;
+        border-left: 1px solid #E2E2E2;
+        &:first-child{
+            width: 78px;
+            border: none;
+            padding: 0;
+            text-align: center;
+            font-size: 14px;
+        }
+        span{
+            i{
+                margin-left: 16px;
+                font-size: 12px;
+            }
+        }
+    }    
+}
+
+.wt-list{
+    li{
+        line-height: 35px;
+        border-bottom: 1px dashed #E2E2E2;
+        &>div{
+            width: 746px;
+            padding: 0 20px;
+            border-left: 1px solid #E2E2E2;
+            &:first-child{
+                width: 78px;
+                border: none;
+                padding: 0;
+                text-align: center;
+                font-size: 14px;
+            }
+        }
+    }
+}

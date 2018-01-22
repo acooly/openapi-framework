@@ -6,25 +6,16 @@
  */
 package com.acooly.openapi.apidoc.persist.service.impl;
 
-import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityServiceImpl;
-import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.persist.dao.ApiDocServiceDao;
-import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocItemService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocMessageService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
 import com.acooly.openapi.apidoc.utils.ApiDocs;
-import com.esotericsoftware.minlog.Log;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * 服务 Service实现
@@ -36,57 +27,11 @@ import java.util.List;
 @Service("apiDocServiceService")
 public class ApiDocServiceServiceImpl extends EntityServiceImpl<ApiDocService, ApiDocServiceDao> implements ApiDocServiceService {
 
-
     @Autowired
     private ApiDocMessageService apiDocMessageService;
 
     @Autowired
     private ApiDocItemService apiDocItemService;
-
-
-    @Override
-    public void merge(List<ApiDocService> apiDocServices) {
-        List<ApiDocService> persists = getAll();
-        List<Long> needRemoves = Lists.newArrayList();
-        for (ApiDocService persist : persists) {
-            // 生成没有，数据库存在，合并删除
-            if (!apiDocServices.contains(persist)) {
-                needRemoves.add(persist.getId());
-                continue;
-            }
-        }
-        Log.info("合并删除的服务：{}", needRemoves.toString());
-        for (ApiDocService entity : apiDocServices) {
-            mergeOne(entity);
-        }
-
-        // do remove
-    }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public void mergeOne(ApiDocService apiDocService) {
-        try {
-            mergeSave(apiDocService);
-
-            List<ApiDocMessage> apiDocMessages = apiDocService.getApiDocMessages();
-            if (Collections3.isEmpty(apiDocMessages)) {
-                return;
-            }
-
-            for (ApiDocMessage apiDocMessage : apiDocMessages) {
-                apiDocMessageService.mergeSave(apiDocMessage);
-
-                if (Collections3.isEmpty(apiDocMessage.getApiDocItems())) {
-                    continue;
-                }
-
-                apiDocItemService.mergeSaves(apiDocMessage.getApiDocItems());
-            }
-        } catch (Exception e) {
-            throw new BusinessException("合并Apidoc失败：" + apiDocService.getServiceNo(),e);
-        }
-    }
-
 
     @Override
     public void mergeSave(ApiDocService apiDocService) {
@@ -115,5 +60,31 @@ public class ApiDocServiceServiceImpl extends EntityServiceImpl<ApiDocService, A
             serviceNo = ApiDocs.getServiceNo(entity.getName(), entity.getVersion());
         }
         return serviceNo;
+    }
+
+    @Override
+    public ApiDocService findByServiceNo(String serviceNo) {
+        return getEntityDao().findByServiceNo(serviceNo);
+    }
+
+
+    @Override
+    public ApiDocService loadApiDocService(Long id) {
+        ApiDocService apiDocService = get(id);
+        if (apiDocService == null) {
+            return null;
+        }
+        apiDocService.setApiDocMessages(apiDocMessageService.loadApiDocMessages(apiDocService.getServiceNo()));
+        return apiDocService;
+    }
+
+    @Override
+    public ApiDocService loadApiDocServiceByNo(String serviceNo) {
+        ApiDocService apiDocService = getEntityDao().findByServiceNo(serviceNo);
+        if (apiDocService == null) {
+            return null;
+        }
+        apiDocService.setApiDocMessages(apiDocMessageService.loadApiDocMessages(apiDocService.getServiceNo()));
+        return apiDocService;
     }
 }

@@ -197,7 +197,9 @@ public class ApiDataTypeUtils {
                 max = size.max();
             } else if (length != null) {
                 min = length.min();
-                max = length.max();
+                if(length.max() != Integer.MAX_VALUE){
+                    max = length.max();
+                }
             }
 
             return new ApiDataSize(min, max);

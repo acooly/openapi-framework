@@ -22,7 +22,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 @Slf4j
 public class ApiDocs {
 
-    private static final String API_DOC_COMMON_SPLIT_CHAR = "_";
+    public static final String API_DOC_COMMON_SPLIT_CHAR = "_";
 
     public static String getServiceNo(String serviceName, String serviceVersion) {
         return serviceName + API_DOC_COMMON_SPLIT_CHAR + serviceVersion;

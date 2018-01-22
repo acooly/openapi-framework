@@ -12,6 +12,7 @@ import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.enums.ResponseType;
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -121,8 +122,15 @@ public class ApiDocService extends AbstractEntity {
     private String signature;
 
     @Transient
-    private List<ApiDocMessage> apiDocMessages;
+    private List<ApiDocMessage> apiDocMessages = Lists.newArrayList();
 
+
+    public ApiDocService() {
+    }
+
+    public ApiDocService(String serviceNo) {
+        this.serviceNo = serviceNo;
+    }
 
     @Override
     public int hashCode() {

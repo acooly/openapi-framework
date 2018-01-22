@@ -11,6 +11,8 @@ import com.acooly.openapi.apidoc.persist.entity.ApiDocItem;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * 报文字段 Mybatis Dao
  * <p>
@@ -22,5 +24,8 @@ public interface ApiDocItemDao extends EntityMybatisDao<ApiDocItem> {
 
     @Select("select * from api_doc_item where item_no = #{itemNo}")
     ApiDocItem findByItemNo(@Param("itemNo") String itemNo);
+
+    @Select("select * from api_doc_item where message_no = #{messageNo}")
+    List<ApiDocItem> findByMessageNo(@Param("messageNo") String messageNo);
 
 }

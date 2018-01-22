@@ -1,0 +1,137 @@
+.top{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 99;
+	background: none;
+	background-color: transparent;
+	.nav{
+        ul{
+            li{
+                dl{
+                    padding: 10px 0;
+                    line-height: 40px;
+                    width: 116px;
+                    top: 40px;
+                    background: url(../../img/bg01.png) repeat;
+                    border-radius: 16px;
+                    margin-left: -58px;
+                    &:before{
+                        height: 25px;
+                        top: -20px;
+                    }
+                    &:after{
+                        top: -6px;
+                        border: none;
+                        width: 14px;
+                        height: 6px;
+                        background: url(../../img/sj01.png) no-repeat center center;
+                    }
+                    dd{
+                        display: block;
+                        margin: 0;
+                        padding: 0;
+                        line-height: 32px;
+                        border-left: none;
+                        a{
+                            color: #a8cbda;
+                        }
+                    }
+                }
+            }         
+        }      	    
+	}
+	.search{
+	    float: left;
+	    padding-top: 37px;
+	    form{
+	        display: none;
+	    }
+	    .search-btn{
+	        background: url(../../img/search-ico1.png) no-repeat center;
+	        width: 16px;
+	        height: 16px;
+	        display: block;
+	    }
+	}
+	.login{
+	    margin-left: 26px;
+	    a{
+	        margin-top: 36px;
+	        display: block;
+	        background: url(../../img/login-ico.png) no-repeat center center;
+	        height: 17px;
+	        width: 16px;
+	    }
+	}
+}
+
+
+.foot{
+    position: fixed;
+    width: 100%;
+    z-index: 99;
+    display: none;
+    bottom: 0;
+}
+
+//绑定菜单
+#menu{
+    position: absolute;
+    right: 3%;
+    top: 50%;
+    height: 76px;
+    width: 12px;
+    z-index: 55;
+    margin-top: -36px;
+    li{
+        width: 100%;
+        height: 12px;
+        background: url(../../img/y-normal.png) no-repeat center center;
+        margin-top: 20px;
+        &:first-child{
+            margin-top: 0;
+        }
+        a{
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .active{
+        background-image: url(../../img/y-active.png);
+    }
+}
+
+html,body{
+    width: 100%;
+    height: 100%;
+    background: url(../../img/star-sky-bg.jpg) no-repeat center center;
+    background-size: cover;     
+}
+
+#dowebok{   
+    .section{
+        text-align: center;
+        line-height: 100%;
+        .img{
+            padding-top: 110px;
+            img{
+                
+            }
+        }
+    }
+
+}
+
+.mouse{
+    background: url(../../img/mouse.png) no-repeat center center;
+    width: 22px;
+    height: 46px;
+    position: fixed;
+    z-index: 99;
+    bottom: 60px;
+    left: 50%;
+    margin-left: -11px;
+}

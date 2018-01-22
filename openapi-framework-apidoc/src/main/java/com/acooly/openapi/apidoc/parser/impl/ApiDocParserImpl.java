@@ -202,21 +202,7 @@ public class ApiDocParserImpl implements ApiDocParser {
         // 字段中文名
         String title = Strings.isBlankDefault(openApiField.desc(), field.getName());
         // 字段说明
-        String constraint = openApiField.constraint();
-        if (StringUtils.isBlank(constraint)) {
-            constraint = openApiField.desc();
-        }
-        ApiDocItemContext apiDocItemMemo = new ApiDocItemContext();
-        apiDocItemMemo.setContent(constraint);
-        if (field.getType().isEnum()) {
-            Object[] objects = field.getType().getEnumConstants();
-            Messageable messageable = null;
-            for (Object object : objects) {
-                messageable = (Messageable) object;
-                apiDocItemMemo.put(messageable.code(), messageable.message());
-            }
-        }
-
+        String descn = doParseApiDocItemDescn(field);
         // 是否加密
         ApiEncryptstatusEnum apiEncryptstatus = openApiField.security() ? ApiEncryptstatusEnum.yes : ApiEncryptstatusEnum.no;
 
@@ -232,9 +218,36 @@ public class ApiDocParserImpl implements ApiDocParser {
         // 数据长度
         ApiDataSize apiDataSize = ApiDataTypeUtils.getApiDataSize(field);
 
-        ApiDocItem apiDocItem = new ApiDocItem(field.getName(), title, constraint, apiDataSize.getMin(), apiDataSize.getMax(),
+        ApiDocItem apiDocItem = new ApiDocItem(field.getName(), title, descn, apiDataSize.getMin(), apiDataSize.getMax(),
                 dataType, demo, fieldStatus, apiEncryptstatus);
         return apiDocItem;
+    }
+
+    /**
+     * 解析字段说明
+     *
+     * @param field
+     * @return
+     */
+    private String doParseApiDocItemDescn(Field field) {
+        OpenApiField openApiField = field.getAnnotation(OpenApiField.class);
+        // 字段中文名
+        String title = Strings.isBlankDefault(openApiField.desc(), field.getName());
+        String constraint = openApiField.constraint();
+        if (Strings.isBlank(constraint)) {
+            constraint = title;
+        }
+        ApiDocItemContext apiDocItemMemo = new ApiDocItemContext();
+        apiDocItemMemo.setContent(constraint);
+        if (field.getType().isEnum()) {
+            Object[] objects = field.getType().getEnumConstants();
+            Messageable messageable = null;
+            for (Object object : objects) {
+                messageable = (Messageable) object;
+                apiDocItemMemo.put(messageable.code(), messageable.message());
+            }
+        }
+        return apiDocItemMemo.toJson();
     }
 
 
