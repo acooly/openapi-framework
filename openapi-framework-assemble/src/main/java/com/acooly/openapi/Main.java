@@ -1,4 +1,4 @@
-package com.acooly.openapi.framework;
+package com.acooly.openapi;
 
 import com.acooly.core.common.BootApp;
 import com.acooly.core.common.boot.Apps;
