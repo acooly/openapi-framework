@@ -1,4 +1,4 @@
-package com.acooly.openapi.framework.serviceimpl.persistent.dao;
+package com.acooly.openapi.apidoc.persist.dao;
 
 import com.acooly.module.mybatis.EntityMybatisDao;
 import com.acooly.openapi.framework.domain.ApiMetaService;

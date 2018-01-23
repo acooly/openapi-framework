@@ -18,6 +18,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class ApiDocComponentInitializer implements ComponentInitializer {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
-//        setPropertyIfMissing("acooly.security.csrf.exclusions.apidoc[0]", "/apiScheme/**");
+        setPropertyIfMissing("acooly.mybatis.daoScanPackages[0]", "com.acooly.openapi.apidoc.persist.dao");
+        setPropertyIfMissing("acooly.mybatis.typeAliasesPackage[apidoc]", "com.acooly.openapi.apidoc.persist.entity");
+
     }
 }

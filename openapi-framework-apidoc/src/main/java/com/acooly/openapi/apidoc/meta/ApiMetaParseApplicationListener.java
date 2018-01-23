@@ -1,4 +1,4 @@
-package com.acooly.openapi.framework.serviceimpl.meta;
+package com.acooly.openapi.apidoc.meta;
 
 import com.acooly.openapi.framework.common.annotation.OpenApiNote;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
@@ -6,7 +6,7 @@ import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.common.event.ApiMetaParseFinish;
 import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.domain.ApiMetaService;
-import com.acooly.openapi.framework.service.ApiMetaServiceService;
+import com.acooly.openapi.apidoc.persist.service.ApiMetaServiceService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

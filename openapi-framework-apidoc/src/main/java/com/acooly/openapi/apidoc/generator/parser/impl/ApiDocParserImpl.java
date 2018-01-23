@@ -25,7 +25,7 @@ import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.domain.ApiMetaService;
-import com.acooly.openapi.framework.service.ApiMetaServiceService;
+import com.acooly.openapi.apidoc.persist.service.ApiMetaServiceService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;

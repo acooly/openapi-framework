@@ -7,12 +7,12 @@
  * 修订记录:
  * zhangpu@acooly.cn 2017-12-08 02:55 创建
  */
-package com.acooly.openapi.framework.serviceimpl.persistent;
+package com.acooly.openapi.apidoc.persist.service.impl;
 
 import com.acooly.core.common.service.EntityServiceImpl;
+import com.acooly.openapi.apidoc.persist.dao.ApiMetaServiceDao;
+import com.acooly.openapi.apidoc.persist.service.ApiMetaServiceService;
 import com.acooly.openapi.framework.domain.ApiMetaService;
-import com.acooly.openapi.framework.service.ApiMetaServiceService;
-import com.acooly.openapi.framework.serviceimpl.persistent.dao.ApiMetaServiceDao;
 import org.springframework.stereotype.Service;
 
 /**

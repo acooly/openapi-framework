@@ -5,7 +5,7 @@
  * date:2016-07-16
  *
  */
-package com.acooly.openapi.framework.service;
+package com.acooly.openapi.apidoc.persist.service;
 
 import com.acooly.core.common.service.EntityService;
 import com.acooly.openapi.framework.domain.ApiMetaService;
