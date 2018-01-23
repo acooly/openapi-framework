@@ -3,7 +3,7 @@ CREATE TABLE `api_doc_service` (
   `service_no` varchar(255) NOT NULL COMMENT '服务编号(name+version)',
   `name` varchar(128) NOT NULL COMMENT '服务名称',
   `version` varchar(32) DEFAULT '1.0' COMMENT '服务版本',
-  `title` varchar(128) NOT NULL DEFAULT '' COMMENT '服务标题',
+  `title` varchar(256) NOT NULL DEFAULT '' COMMENT '服务标题',
   `owner` varchar(64) DEFAULT NULL COMMENT '所属系统',
   `note` varchar(512) DEFAULT '' COMMENT '服务说明',
   `manual_note` varchar(512) DEFAULT '' COMMENT '手工说明',
