@@ -191,6 +191,12 @@ Connection: Keep-Alive
   "version": "1.0"
 }
 </code></pre>
+                    <blockquote>
+                        *   x-api-accessKey、x-api-sign、x-api-signType这三个参数也可以放在请求url中<br>
+                        *  x-api-accessKey:商户开户时分配的访问key <br>
+                        *  x-api-signType:商户开户时指定的签名类型 <br>
+                        *  x-api-sign：md5(请求体内容+secretKey) <br>
+                    </blockquote>
 
                     <p>application/x-www-form-urlencoded实例:</p>
 
@@ -211,7 +217,8 @@ body={"buyerCertNo":"330702194706165014","buyerUserId":"09876543211234567890","c
                         *  x-api-accessKey、x-api-sign、x-api-signType这三个认证参数也可以放在请求url中，比如上面的例子，请求地址为:
                         /gateway.do?x-api-accessKey=test&x-api-sign=a8b539bba201cdcc1838c4f73276e528&x-api-signType=MD5
                         <br>
-                        * 表单方式提交时：请求数据存放在body参数中
+                        * 表单方式提交时：请求数据存放在body参数中<br>
+                        *  x-api-sign：md5(body参数值+secretKey) <br>
                     </blockquote>
                 </li>
 
@@ -232,6 +239,10 @@ Connection: Keep-Alive
 
 {"code":"SUCCESS","context":"22aa964a-f4bc-43bd-be70-cddfba881187","ext":{},"message":"成功","partnerId":"test","requestNo":"0e95458f-1898-4333-ab4c-731cb8cb50b9","service":"createOrder","status":"enable","success":true,"version":"1.0"}
 </code></pre>
+                    <blockquote>
+                        *  x-api-sign：md5(http 响应体内容+secretKey) <br>
+                        *  建议对所有响应(同步，异步)都验签
+                    </blockquote>
                 </li>
 
                 <li><p><strong>通知报文</strong>：通知报文是网关完成处理后，主动请求商户端通知处理的结果。其中包括同步通知和异步通知，同步通知的地址为请求报文中传入的returnUrl,
@@ -239,11 +250,12 @@ Connection: Keep-Alive
 
                     <p>同步通知报文实例：</p>
 
-                    <pre><code>http://www.merchant.com/returnUrl.html?x-api-signType=MD5&x-api-sign=47fd51a27ff63456686668b07392ab49&body=%7B%22code%22%3A%22SUCCESS%22%2C%22context%22%3A%221ca29b24-abca-4ace-8bae-277e5db79890%22%2C%22ext%22%3A%7B%7D%2C%22message%22%3A%22%E6%88%90%E5%8A%9F%22%2C%22partnerId%22%3A%22test%22%2C%22requestNo%22%3A%22b1bb149d-d1e9-4db2-8e33-0f3d0f7f36cf%22%2C%22service%22%3A%22withdraw%22%2C%22success%22%3Atrue%2C%22tradeNo%22%3A%22324862a678366339cc4047447b3b8d88%22%2C%22version%22%3A%221.0%22%7D
-                               </code></pre>
+                    <pre><code>http://www.merchant.com/returnUrl.html?x-api-signType=MD5&x-api-sign=47fd51a27ff63456686668b07392ab49&body=%7B%22code%22%3A%22SUCCESS%22%2C%22context%22%3A%221ca29b24-abca-4ace-8bae-277e5db79890%22%2C%22ext%22%3A%7B%7D%2C%22message%22%3A%22%E6%88%90%E5%8A%9F%22%2C%22partnerId%22%3A%22test%22%2C%22requestNo%22%3A%22b1bb149d-d1e9-4db2-8e33-0f3d0f7f36cf%22%2C%22service%22%3A%22withdraw%22%2C%22success%22%3Atrue%2C%22tradeNo%22%3A%22324862a678366339cc4047447b3b8d88%22%2C%22version%22%3A%221.0%22%7D</code></pre>
 
                     <blockquote>
-                        <p>其中：http://www.merchant.com/returnUrl.html是商户端请求时传入的returnUrl.响应内容放在body参数中。</p>
+                        * http://www.merchant.com/returnUrl.html是商户端请求时传入的returnUrl.<br>
+                        * 响应内容放在body参数中。<br>
+                        *  x-api-sign：md5(body参数+secretKey) <br>
                     </blockquote>
 
                     <p>异步通知报文实例：</p>
@@ -260,6 +272,10 @@ Connection: Keep-Alive
 
 {"code":"SUCCESS","context":"22aa964a-f4bc-43bd-be70-cddfba881187","ext":{},"message":"成功","partnerId":"test","requestNo":"0e95458f-1898-4333-ab4c-731cb8cb50b9","service":"createOrder","status":"enable","success":true,"version":"1.0"}
 </code></pre>
+                    <blockquote>
+                        *  x-api-signType:商户开户时指定的签名类型 <br>
+                        *  x-api-sign：md5(请求体内容+secretKey) <br>
+                    </blockquote>
                 </li>
             </ul>
 
@@ -630,17 +646,13 @@ Connection: Keep-Alive
 
             <ol>
                 <li>1. 构造请求数据json</li>
-                <code>
-                {"amount":"100.00","busiType":"T0","context":"1ca29b24-abca-4ace-8bae-277e5db79890","ext":{},"partnerId":"test","requestNo":"b1bb149d-d1e9-4db2-8e33-0f3d0f7f36cf","service":"withdraw","version":"1.0"}
-                </code>
+                <pre><code>{"amount":"100.00","busiType":"T0","context":"1ca29b24-abca-4ace-8bae-277e5db79890","ext":{},"partnerId":"test","requestNo":"b1bb149d-d1e9-4db2-8e33-0f3d0f7f36cf","service":"withdraw","version":"1.0"}</code></pre>
                 <li>2. 构造签名数据：请求数据+secretKey</li>
                 开通商户时，分配的secretKey=06f7aab08aa2431e6dae6a156fc9e034<br/>
-                <code>
-                {"amount":"100.00","busiType":"T0","context":"1ca29b24-abca-4ace-8bae-277e5db79890","ext":{},"partnerId":"test","requestNo":"b1bb149d-d1e9-4db2-8e33-0f3d0f7f36cf","service":"withdraw","version":"1.0"}06f7aab08aa2431e6dae6a156fc9e034
-                </code>
+                <pre><code>{"amount":"100.00","busiType":"T0","context":"1ca29b24-abca-4ace-8bae-277e5db79890","ext":{},"partnerId":"test","requestNo":"b1bb149d-d1e9-4db2-8e33-0f3d0f7f36cf","service":"withdraw","version":"1.0"}06f7aab08aa2431e6dae6a156fc9e034</code></pre>
 
                 <li>3. 生成签名</li>
-                x-api-sign=2d378cfad3bc3119e326fffa05d4e335
+                <pre><code>x-api-sign=2d378cfad3bc3119e326fffa05d4e335</code></pre>
 
             </ol>
 
@@ -759,78 +771,6 @@ String plainText = new String(RSAEncrypt(Base64Decode(cipherText), merchantPriva
 
             <p>代码工具中提供的代码块以java语言编写，作为商户端开发接入的参考实现.</p>
 
-            <h3 id="toc_31">获取所有参数</h3>
-
-            <p>商户端在收集请求参数，通知参数时，需要获取请求域（scope）内所有的参数。</p>
-
-            <p>第三方依赖包：</p>
-
-            <pre class="line-numbers"><code class="language-markup">&lt;dependency&gt;
-    &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-    &lt;artifactId&gt;javax.servlet-api&lt;/artifactId&gt;
-    &lt;version&gt;3.0.1&lt;/version&gt;
-    &lt;scope&gt;provided&lt;/scope&gt;
-&lt;/dependency&gt;</code></pre>
-
-            <p>参考代码：</p>
-
-            <pre class="line-numbers"><code class="language-java">    /**
-     * 获取所有参数,
-     * 我们不允许用户传入多个同名参数.如果传入，则获取首个参数值
-     *
-     * @param request ServletRequest
-     * @return 所有参数Map
-     */
-    public static Map&lt;String, String&gt; getParameters(ServletRequest request) {
-        Map&lt;String, String&gt; params = Maps.newHashMap();
-        Enumeration&lt;String&gt; enumeration = request.getParameterNames();
-        while (enumeration.hasMoreElements()) {
-            String name = enumeration.nextElement();
-            String[] values = request.getParameterValues(name);
-            if (values == null || values.length == 0) {
-                continue;
-            }
-            String value = values[0];
-            // 注意：这里是判断不为null,没有包括空字符串的判断。
-            if (value != null) {
-                params.put(name, value);
-            }
-        }
-        return params;
-    }</code></pre>
-
-            <h3 id="toc_32">待签字符串组装</h3>
-
-            <p>参考代码：</p>
-
-            <pre class="line-numbers"><code class="language-java">    /**
-     * 生成待签字符串
-     *
-     * @param data 原始map数据
-     * @return 待签字符串
-     */
-    public static String buildWaitingForSign(Map&lt;String, String&gt; data) {
-        if (data == null || data.size() == 0) {
-            throw new IllegalArgumentException(&quot;请求数据不能为空&quot;);
-        }
-        String waitingForSign = null;
-        Map&lt;String, String&gt; sortedMap = new TreeMap&lt;&gt;(data);
-        // 如果sign参数存在,去除sign参数,不参与签名
-        if (sortedMap.containsKey(&quot;sign&quot;)) {
-            sortedMap.remove(&quot;sign&quot;);
-        }
-        StringBuilder stringToSign = new StringBuilder();
-        for (Map.Entry&lt;String, String&gt; entry : sortedMap.entrySet()) {
-            if (entry.getValue() != null) {
-                stringToSign.append(entry.getKey()).append(&quot;=&quot;).append(entry.getValue()).append(&quot;&amp;&quot;);
-            }
-        }
-        stringToSign.deleteCharAt(stringToSign.length() - 1);
-        waitingForSign = stringToSign.toString();
-        logger.debug(&quot;代签名字符串:{}&quot;, waitingForSign);
-        return waitingForSign;
-    }</code></pre>
-
             <h3 id="toc_33">摘要签名和验签</h3>
 
             <p>摘要方式签名，这里采用MD5方式提供参考，目前采用apache-commons的标准工具实现。</p>
@@ -859,24 +799,7 @@ String plainText = new String(RSAEncrypt(Base64Decode(cipherText), merchantPriva
         String signature = DigestUtils.md5Hex(waitToSignStr + key);
         return signature;
     }
-
-
-    /**
-     * 报文数据MD5摘要签名
-     * &lt;p&gt;
-     * 对报文数据签名,并回填签名到报文数据map中
-     *
-     * @param data 报文数据
-     * @param key  商户安全码
-     * @return 保护签名的报文数据
-     */
-    public static Map&lt;String, String&gt; signMD5(Map&lt;String, String&gt; data, String key) {
-        String waitToSignStr = buildWaitingForSign(data);
-        // MD5摘要并转换为Hex格式
-        String signature = DigestUtils.md5Hex(waitToSignStr + key);
-        data.put(&quot;sign&quot;, signature);
-        return data;
-    }</code></pre>
+            </code></pre>
 
             <h4 id="toc_35">验签</h4>
 
@@ -896,52 +819,8 @@ String plainText = new String(RSAEncrypt(Base64Decode(cipherText), merchantPriva
         return verifySign.equals(signature);
     }
 
-    /**
-     * 验证MD5签名
-     *
-     * @param data       报文数据
-     * @param key        商户安全码
-     * @param verifySign 待验证签名
-     * @return 验签结果。 true: 成功, false: 失败
-     */
-    public static boolean verifyMD5(Map&lt;String, String&gt; data, String key, String verifySign) {
-        // 生成待签字符串
-        String waitToSignStr = buildWaitingForSign(data);
-        // MD5摘要签名计算
-        String signature = DigestUtils.md5Hex(waitToSignStr + key);
-        return verifySign.equals(signature);
-    }
 </code></pre>
 
-            <h3 id="toc_36">发送报文组装</h3>
-
-            <p>在完成加密，签名处理后，我们需要对处理后的数据进行编码处理后才能发送给网关。</p>
-
-            <blockquote>
-                <p>GET方式请求不需要进行URLEncoding，如果是POST方式提交不用进行编码处理，POST-FORM模式需要指定Header: Content-Type: application/x-www-form-urlencoded;
-                    charset=UTF-8</p>
-            </blockquote>
-
-            <p>参考代码：</p>
-
-            <pre class="line-numbers"><code class="language-java">    /**
-     * 生成发送数据
-     *
-     * @param map 报文数据
-     * @return 编码后的发送数据
-     */
-    public static String getMessage(Map&lt;String, String&gt; map) {
-        StringBuilder messageBuilder = new StringBuilder();
-        for (Map.Entry&lt;String, String&gt; entry : map.entrySet()) {
-            if (Strings.isNotBlank(entry.getValue())) {
-                messageBuilder.append(entry.getKey()).append(&quot;=&quot;)
-                        .append(Encodes.urlEncode(entry.getValue()))
-                        .append(&quot;&amp;&quot;);
-            }
-        }
-        messageBuilder.deleteCharAt(messageBuilder.length() - 1);
-        return messageBuilder.toString();
-    }</code></pre>
 
             <h3 id="toc_37">加载公钥</h3>
 
