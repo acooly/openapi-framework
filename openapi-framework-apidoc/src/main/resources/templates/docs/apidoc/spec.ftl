@@ -115,13 +115,13 @@
 
             <h3 id="toc_6"><a name="transfer_sync_asyn">同步转异步</a></h3>
 
-            <p>同步转异步的主体交互模式完全同异步通讯。不同的是异步通知是可选的，只有在同步响应返回resultCode=PROCESSING的时候才会有异步通知。具体根据<q>异步通讯</q>第5步的时候商户系统需要对返回的resultCode进行如下判断：
+            <p>同步转异步的主体交互模式完全同异步通讯。不同的是异步通知是可选的，只有在同步响应返回code=PROCESSING的时候才会有异步通知。具体根据<q>异步通讯</q>第5步的时候商户系统需要对返回的code进行如下判断：
             </p>
 
             <ul>
-                <li>如果resultCode=PROCESSING,那么表示该业务返回时没有完成最终处理，当前正在处理中，需要等待后续异步通知最终结果；</li>
-                <li>如果resultCode=SUCCESS表示该业务已经完成最终处理，后续无异步通知。</li>
-                <li>如果resultCode为其他值的情况表示处理错误响应，已经是最终结果，无后续异步处理。</li>
+                <li>如果code=PROCESSING,那么表示该业务返回时没有完成最终处理，当前正在处理中，需要等待后续异步通知最终结果；</li>
+                <li>如果code=SUCCESS表示该业务已经完成最终处理，后续无异步通知。</li>
+                <li>如果code为其他值的情况表示处理错误响应，已经是最终结果，无后续异步处理。</li>
             </ul>
 
             <h3 id="toc_7"><a name="transfer_redirect">跳转通讯</a></h3>
@@ -208,8 +208,10 @@ body={"buyerCertNo":"330702194706165014","buyerUserId":"09876543211234567890","c
                                 </code></pre>
 
                     <blockquote>
-                        x-api-accessKey、x-api-sign、x-api-signType这三个认证参数也可以放在请求url中，比如上面的例子，请求地址为:
+                        *  x-api-accessKey、x-api-sign、x-api-signType这三个认证参数也可以放在请求url中，比如上面的例子，请求地址为:
                         /gateway.do?x-api-accessKey=test&x-api-sign=a8b539bba201cdcc1838c4f73276e528&x-api-signType=MD5
+                        <br>
+                        * 表单方式提交时：请求数据存放在body参数中
                     </blockquote>
                 </li>
 
@@ -313,12 +315,12 @@ Connection: Keep-Alive
 
                 <tbody>
                 <tr>
-                    <td>requestNo</td>
-                    <td>请求号</td>
-                    <td>S(16-40)</td>
+                    <td>partnerId</td>
+                    <td>商户ID</td>
+                    <td>SF(20)</td>
                     <td>M</td>
-                    <td>2016089983</td>
-                    <td>请求号，要求商户唯一。</td>
+                    <td>20160809223120000001</td>
+                    <td>签约的商户或合作商的ID,由平台分配。定长20字符</td>
                 </tr>
                 <tr>
                     <td>service</td>
@@ -329,20 +331,20 @@ Connection: Keep-Alive
                     <td>Api服务名称，与服务版本一起唯一标志一个服务</td>
                 </tr>
                 <tr>
-                    <td>partnerId</td>
-                    <td>商户ID</td>
-                    <td>SF(20)</td>
-                    <td>M</td>
-                    <td>20160809223120000001</td>
-                    <td>签约的商户或合作商的ID,由平台分配。定长20字符</td>
-                </tr>
-                <tr>
                     <td>version</td>
                     <td>服务版本</td>
                     <td>S(8)</td>
                     <td>O</td>
                     <td>1.0</td>
                     <td>Api服务版本，与服务名称一起唯一标志一个服务</td>
+                </tr>
+                <tr>
+                    <td>requestNo</td>
+                    <td>请求号</td>
+                    <td>S(16-40)</td>
+                    <td>M</td>
+                    <td>2016089983</td>
+                    <td>请求号，要求商户唯一。</td>
                 </tr>
                 <tr>
                     <td>ext</td>
@@ -404,20 +406,37 @@ Connection: Keep-Alive
                     <td>表示接口调用是否成功。true：成功false：失败</td>
                 </tr>
                 <tr>
-                    <td>requestNo</td>
-                    <td>请求号</td>
-                    <td>S(16-40)</td>
+                    <td>code</td>
+                    <td>响应编码</td>
+                    <td>S(32)</td>
                     <td>M</td>
-                    <td>2016089983</td>
-                    <td>请求号，要求商户唯一。</td>
+                    <td>PARAM_ERROR</td>
+                    <td>返回码,EXECUTE_SUCCESS：为处理成功，其他请参考“4.1 返回码”</td>
                 </tr>
                 <tr>
-                    <td>protocol</td>
-                    <td>协议类型</td>
-                    <td>S(16)</td>
+                    <td>message</td>
+                    <td>响应消息</td>
+                    <td>S(128)</td>
                     <td>M</td>
-                    <td>HTTP-FORM-JOSN</td>
-                    <td>协议格式。HTTP-FORM-JOSN(默认)</td>
+                    <td>参数错误</td>
+                    <td>响应编码对应的消息描述</td>
+                </tr>
+                <tr>
+                    <td>detail</td>
+                    <td>响应详情</td>
+                    <td>S(128)</td>
+                    <td>O</td>
+                    <td>手机号码格式错误</td>
+                    <td>服务响应信息详情</td>
+                </tr>
+
+                <tr>
+                    <td>partnerId</td>
+                    <td>商户ID</td>
+                    <td>SF(20)</td>
+                    <td>M</td>
+                    <td>20160809223120000001</td>
+                    <td>签约的商户或合作商的ID,由平台分配。定长20字符</td>
                 </tr>
                 <tr>
                     <td>service</td>
@@ -431,40 +450,24 @@ Connection: Keep-Alive
                     <td>version</td>
                     <td>服务版本</td>
                     <td>S(8)</td>
-                    <td>M</td>
+                    <td>O</td>
                     <td>1.0</td>
                     <td>Api服务版本，与服务名称一起唯一标志一个服务</td>
                 </tr>
                 <tr>
-                    <td>partnerId</td>
-                    <td>商户ID</td>
-                    <td>SF(20)</td>
+                    <td>requestNo</td>
+                    <td>请求号</td>
+                    <td>S(16-40)</td>
                     <td>M</td>
-                    <td>20160809223120000001</td>
-                    <td>签约的商户或合作商的ID,由平台分配。定长20字符</td>
+                    <td>2016089983</td>
+                    <td>请求号，要求商户唯一。</td>
                 </tr>
                 <tr>
-                    <td>signType</td>
-                    <td>签名方式</td>
-                    <td>S(16)</td>
-                    <td>M</td>
-                    <td>MD5</td>
-                    <td>签名认证方式，可选值为MD5,SHA1和RSA，MD5为默认值</td>
-                </tr>
-                <tr>
-                    <td>sign</td>
-                    <td>签名</td>
-                    <td>S(128)</td>
-                    <td>M</td>
-                    <td>fasdfasdfasdfasdf...</td>
-                    <td>报文签名</td>
-                </tr>
-                <tr>
-                    <td>orderNo</td>
-                    <td>交易订单号</td>
+                    <td>ext</td>
+                    <td>扩展参数</td>
                     <td>S(16-40)</td>
                     <td>O</td>
-                    <td>201606260001</td>
+                    <td>{userId:1,busiId:2}</td>
                     <td>交易类业务的交易订单号，交易类业务如未特殊说明，都根据该订单号支持幂等。</td>
                 </tr>
                 <tr>
@@ -472,41 +475,18 @@ Connection: Keep-Alive
                     <td>会话参数</td>
                     <td>S(128)</td>
                     <td>O</td>
-                    <td>{userId:1,busiId:2}</td>
+                    <td>id=123456</td>
                     <td>调用端的API调用会话参数，请求参数任何合法值，在响应时会回传给调用端。</td>
                 </tr>
-                <tr>
-                    <td>resultCode</td>
-                    <td>响应编码</td>
-                    <td>S(32)</td>
-                    <td>M</td>
-                    <td>PARAM_ERROR</td>
-                    <td>返回码,EXECUTE_SUCCESS：为处理成功，其他请参考“4.1 返回码”</td>
-                </tr>
-                <tr>
-                    <td>resultMessage</td>
-                    <td>响应消息</td>
-                    <td>S(128)</td>
-                    <td>M</td>
-                    <td>参数错误</td>
-                    <td>响应编码对应的消息描述</td>
-                </tr>
-                <tr>
-                    <td>resultDetail</td>
-                    <td>响应详情</td>
-                    <td>S(128)</td>
-                    <td>O</td>
-                    <td>手机号码格式错误</td>
-                    <td>服务响应信息详情</td>
-                </tr>
+
                 </tbody>
             </table>
 
             <blockquote>
                 <p>结果判断：<br>
-                    * success返回的标志只是标志该服务是否执行成功，并不一定确定该服务对应的业务处理成功，请根据具体接口进行判断。比如：异步提现接口，请求后的同步响应success=true,resultCode=EXECUTE_PROCESSING
+                    * success返回的标志只是标志该服务是否执行成功，并不一定确定该服务对应的业务处理成功，请根据具体接口进行判断。比如：异步提现接口，请求后的同步响应success=true,code=PROCESSING
                     则表示：异步提现提交成功，正常处理中，提现并没有成功完成。<br>
-                    * resultCode=EXECUTE_SUCCESS和resultCode=EXECUTE_PROCESSING表示处理成功，其他表示失败。</p>
+                    * code=SUCCESS和code=PROCESSING表示处理成功，其他表示失败。</p>
             </blockquote>
 
             <h4 id="toc_17">公共通知报文</h4>
@@ -514,139 +494,20 @@ Connection: Keep-Alive
             <p>
                 网关在设计处理通知报文时，为提高商户端的使用简便和体验，服务的同步通知（跳转通知）和异步通知采用完全相同的结构，只是在同步通知和异步通知时部分数据项填充不一定一致，请跟进具体api服务及业务进行处理。所以我们同步和异步通知的公共报文部分是完全相同的。</p>
 
-            <table>
-                <thead>
-                <tr>
-                    <th>参数名</th>
-                    <th>参数描述</th>
-                    <th>类型</th>
-                    <th>状态</th>
-                    <th>实例</th>
-                    <th>备注</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <tr>
-                    <td>requestNo</td>
-                    <td>请求号</td>
-                    <td>S(16-40)</td>
-                    <td>M</td>
-                    <td>2016089983</td>
-                    <td>请求号，要求商户唯一。</td>
-                </tr>
-                <tr>
-                    <td>protocol</td>
-                    <td>协议类型</td>
-                    <td>S(16)</td>
-                    <td>M</td>
-                    <td>HTTP-FORM-JOSN</td>
-                    <td>协议格式。HTTP-FORM-JOSN(默认)</td>
-                </tr>
-                <tr>
-                    <td>service</td>
-                    <td>服务名称</td>
-                    <td>S(32)</td>
-                    <td>M</td>
-                    <td>userRegister</td>
-                    <td>Api服务名称，与服务版本一起唯一标志一个服务</td>
-                </tr>
-                <tr>
-                    <td>version</td>
-                    <td>服务版本</td>
-                    <td>S(8)</td>
-                    <td>M</td>
-                    <td>1.0</td>
-                    <td>Api服务版本，与服务名称一起唯一标志一个服务</td>
-                </tr>
-                <tr>
-                    <td>partnerId</td>
-                    <td>商户ID</td>
-                    <td>SF(20)</td>
-                    <td>M</td>
-                    <td>20160809223120000001</td>
-                    <td>签约的商户或合作商的ID,由平台分配。定长20字符</td>
-                </tr>
-                <tr>
-                    <td>signType</td>
-                    <td>签名方式</td>
-                    <td>S(16)</td>
-                    <td>M</td>
-                    <td>MD5</td>
-                    <td>签名认证方式，可选值为MD5,SHA1和RSA，MD5为默认值</td>
-                </tr>
-                <tr>
-                    <td>sign</td>
-                    <td>签名</td>
-                    <td>S(128)</td>
-                    <td>M</td>
-                    <td>fasdfasdfasdfasdf...</td>
-                    <td>报文签名</td>
-                </tr>
-                <tr>
-                    <td>orderNo</td>
-                    <td>交易订单号</td>
-                    <td>S(16-40)</td>
-                    <td>O</td>
-                    <td>201606260001</td>
-                    <td>交易类业务的交易订单号，交易类业务如未特殊说明，都根据该订单号支持幂等。</td>
-                </tr>
-                <tr>
-                    <td>context</td>
-                    <td>会话参数</td>
-                    <td>S(128)</td>
-                    <td>O</td>
-                    <td>{userId:1,busiId:2}</td>
-                    <td>调用端的API调用会话参数，请求参数任何合法值，在响应时会回传给调用端。</td>
-                </tr>
-                <tr>
-                    <td>resultCode</td>
-                    <td>响应编码</td>
-                    <td>S(32)</td>
-                    <td>M</td>
-                    <td>PARAM_ERROR</td>
-                    <td>返回码,EXECUTE_SUCCESS：为处理成功，其他请参考“4.1 返回码”</td>
-                </tr>
-                <tr>
-                    <td>resultMessage</td>
-                    <td>响应消息</td>
-                    <td>S(128)</td>
-                    <td>M</td>
-                    <td>参数错误</td>
-                    <td>响应编码对应的消息描述</td>
-                </tr>
-                <tr>
-                    <td>resultDetail</td>
-                    <td>响应详情</td>
-                    <td>S(128)</td>
-                    <td>O</td>
-                    <td>手机号码格式错误</td>
-                    <td>服务响应信息详情</td>
-                </tr>
-                <tr>
-                    <td>notifyTime</td>
-                    <td>通知时间</td>
-                    <td>SF(19)</td>
-                    <td>O</td>
-                    <td>2016-02-02 12:02:12</td>
-                    <td>通知的发送时间。格式为yyyy-MM-dd HH:mm:ss</td>
-                </tr>
-                </tbody>
-            </table>
 
             <h2 id="toc_18"><a name="errorcode">错误码与错误处理</a></h2>
 
             <h3 id="toc_19">错误码</h3>
 
-            <p>错误码的定义在报文中统一使用响应码表示。响应码中除了EXECUTE_SUCCESS和EXECUTE_PROCESSING外的其他响应码都表示错误码。</p>
+            <p>错误码的定义在报文中统一使用响应码表示。响应码中除了SUCCESS和PROCESSING外的其他响应码都表示错误码。</p>
 
             <p>
-                所有API服务都是通过错误码标识处理结果，包括同步响应，跳转同步通知和异步通知我们采用这一统一的原则。错误码的表示方式采用三元错误消息方式，由resultCode,resultMessage和resultDetai三个数据项表示唯一的错误消息，其中resultDetail为可选。</p>
+                所有API服务都是通过错误码标识处理结果，包括同步响应，跳转同步通知和异步通知我们采用这一统一的原则。错误码的表示方式采用三元错误消息方式，由code,message和detail三个数据项表示唯一的错误消息，其中detail为可选。</p>
 
             <ul>
-                <li>resultCode: 表示错误消息的编码Key，如果商户端需对特定的错误场景进行处理，请跟进错误码进行处理。</li>
-                <li>resultMessage: 表示错误码对应的描述文字。</li>
-                <li>resultDetail: 表示错误的详细描述，该数据线为可选。</li>
+                <li>code: 表示错误消息的编码Key，如果商户端需对特定的错误场景进行处理，请跟进错误码进行处理。</li>
+                <li>message: 表示错误码对应的描述文字。</li>
+                <li>detail: 表示错误的详细描述，该数据线为可选。</li>
             </ul>
 
             <p>错误码主要分为系统错误码和业务错误码两大类，系统错误码表示网关做的基础验证和处理失败对应的错误码；业务错误码表示具体api服务业务处理错误对应的错误码。系统错误码有明确的定义，请参考下表，业务错误码根据具体的业务定义，不做统一定义。</p>
@@ -661,11 +522,11 @@ Connection: Keep-Alive
 
                 <tbody>
                 <tr>
-                    <td>EXECUTE_SUCCESS</td>
+                    <td>SUCCESS</td>
                     <td>交易成功</td>
                 </tr>
                 <tr>
-                    <td>EXECUTE_PROCESSING</td>
+                    <td>PROCESSING</td>
                     <td>交易处理中</td>
                 </tr>
                 <tr>
@@ -685,11 +546,11 @@ Connection: Keep-Alive
                     <td>参数格式错误</td>
                 </tr>
                 <tr>
-                    <td>UNAUTHENTICATED</td>
+                    <td>UNAUTHENTICATED_ERROR</td>
                     <td>认证(签名)错误</td>
                 </tr>
                 <tr>
-                    <td>UNAUTHORIZED</td>
+                    <td>UNAUTHORIZED_ERROR</td>
                     <td>未授权的服务</td>
                 </tr>
                 <tr>
@@ -721,10 +582,10 @@ Connection: Keep-Alive
 
             <h3 id="toc_20">结果判断原则</h3>
 
-            <p>所有交易同步响应和异步通知的响应结果中都有resultCode数据项，请根据resultCode的响应值判断交易的最终结果。具体判断方法如下：<br>
-                * resultCode=EXECUTE_SUCCESS : 表示最终结果为成功。<br>
-                * resultCode=EXECUTE_PROCESSING：表示交易正在处理中，需要等待异步通知来确定最终交易结果<br>
-                * resultCode=其他： 表示交易错误或失败。</p>
+            <p>所有交易同步响应和异步通知的响应结果中都有code数据项，请根据code的响应值判断交易的最终结果。具体判断方法如下：<br>
+                * code=SUCCESS : 表示最终结果为成功。<br>
+                * code=PROCESSING：表示交易正在处理中，需要等待异步通知来确定最终交易结果<br>
+                * code=其他： 表示交易错误或失败。</p>
 
             <h2 id="toc_21"><a name="security">安全</a></h2>
 
@@ -736,11 +597,11 @@ Connection: Keep-Alive
             </ol>
 
             <p><strong>安全方案选择</strong><br>
-                具体采用哪种方案，根据商户开户时确定。在技术实现上，通过请求报文中的signType确定选择哪种方案。具体要求如下：</p>
+                具体采用哪种方案，根据商户开户时确定。在技术实现上，通过请求报文中的x-api-signType确定选择哪种方案。具体要求如下：</p>
 
             <ul>
-                <li>signType=RSA: 表示选择证书方案。需要使用商户证书私钥对请求报文签名；使用网关证书对收到的报文验签；使用网关证书按需对数据加密；使用商户证书私钥对收到的密文数据项解密。</li>
-                <li>signType为其他: 包括MD5,Sha1Hex，Sha2Hex等，表示选择摘要方案。商户使用商户安全码对报文进行摘要签名和验签，对安全数据项按需进行ASE对称加密和解密。</li>
+                <li>x-api-signType=RSA: 表示选择证书方案。需要使用商户证书私钥对请求报文签名；使用网关证书对收到的报文验签；使用网关证书按需对数据加密；使用商户证书私钥对收到的密文数据项解密。</li>
+                <li>x-api-signType为其他: 包括MD5,Sha1Hex，Sha2Hex等，表示选择摘要方案。商户使用商户安全码对报文进行摘要签名和验签，对安全数据项按需进行ASE对称加密和解密。</li>
             </ul>
 
             <h3 id="toc_22"><a name="merchantKey">商户秘钥</a></h3>
@@ -765,123 +626,24 @@ Connection: Keep-Alive
 
             <p>所有Api服务的安全认证采用数字签名方式，目前支持的签名和验签算法主要包括摘要签名和证书签名两种方式，其中摘要签名支持MD5，Sha1Hex和Sha256Hex，证书方式签名支持RSA算法。</p>
 
-            <p>在签名和验签前，我们首先需要处理的是生成报文对应的待签字符串，下面我们首先介绍待签字符串的生成，然后在分别介绍两种签名方式的具体计算和验证方法。</p>
-
-            <h4 id="toc_24">待签字符串生成</h4>
-
-            <p><strong>需要参与签名的参数</strong></p>
-
-            <p>请求报文，响应报文和通知报文，都采用相同的规则：对发送或接收到的所有参数（包括公共报文部分），除去sign参数外，都是需要参与计算待签名字符串的参数。</p>
-
-            <blockquote>
-                <p>
-                    注意：报文的签名数据默认为全签，以java为例子，建议直接通过request.getParameters()获取全部的参数，我们API服务的接口通信报文中不存在同名参数的多个值，所有该方法返回的所有参数值都可以直接按没有数组的情况处理。</p>
-            </blockquote>
-
-            <p><strong>生成待签名字符串</strong></p>
-
-            <p>根据不同的报文场景（请求，响应，通知等），确定好待签名的数据项，采用如下格式进行组装（参数数组）：</p>
-
-            <pre class="line-numbers"><code class="language-java">string[] parameters={
-    &quot;service=fastpay&quot;,
-    &quot;partnerId=20121015300000032621&quot;,
-    &quot;returnUrl= http://www.test.com/yiji/return_url.asp&quot;,
-    &quot;orderNo=6741334835157966&quot;,
-    &quot;tradeName=xxx电视机&quot;,
-    &quot;tradeAmount=100&quot;
-};</code></pre>
-
-            <p>对数组里的每一个成员按<strong>字符ASC码</strong>的顺序排序，若遇到相同首字符，则看第二个字符，以此类推。排序完成之后，再把所有数组值以“&amp;”字符连接起来，这串字符串便是待签名字符串，例如：</p>
-
-            <pre class="line-numbers"><code class="language-http">orderNo=6741334835157966&amp;partnerId=20121015300000032621&amp;returnUrl=http://www.test.com/yiji/return_url.asp&amp;service=fastpay&amp;tradeAmount=100&amp;tradeName=xxx电视机</code></pre>
-
-            <blockquote>
-                <p>注意：<br>
-                    1. 没有值的参数无需传递，也无需包含到待签名数据中；<br>
-                    2. 签名时将字符转化成字节流时指定字符集全部采用UTF-8；<br>
-                    3. 待签字符串中的特殊字符无需签名，根据HTTP协议，传递参数的值中如果存在特殊字符（如：&amp;、@等）和中文字符，那么该值需要做UTF-8编码的URL-Encoding，这样请求接收方才能接收到正确的参数值。这种情况下，待签名数据应该是原生值而不是encoding之后的值。例如：调用某接口需要对请求参数email进行数字签名，那么待签名数据应该是email=<a
-                            href="mailto:test@msn.com">test@msn.com</a>，而不是email=test%40msn.com。</p>
-            </blockquote>
-
-            <p><strong>复杂报文签名</strong></p>
-
-            <p>
-                所有的请求报文和通知报文（异步通知，同步跳转通知）采用FORM方式的key/value方式组报的主要是为便于form表单提交，如果API服务某个数据项是复杂对象(Object)类型或数组类型(Array)，则需要把该项的值转换为标准JSON字符串后作为签名的参数值。</p>
+            签名处理过程如下：
 
             <ol>
-                <li><p>请求报文的签名</p>
+                <li>1. 构造请求数据json</li>
+                <code>
+                {"amount":"100.00","busiType":"T0","context":"1ca29b24-abca-4ace-8bae-277e5db79890","ext":{},"partnerId":"test","requestNo":"b1bb149d-d1e9-4db2-8e33-0f3d0f7f36cf","service":"withdraw","version":"1.0"}
+                </code>
+                <li>2. 构造签名数据：请求数据+secretKey</li>
+                开通商户时，分配的secretKey=06f7aab08aa2431e6dae6a156fc9e034<br/>
+                <code>
+                {"amount":"100.00","busiType":"T0","context":"1ca29b24-abca-4ace-8bae-277e5db79890","ext":{},"partnerId":"test","requestNo":"b1bb149d-d1e9-4db2-8e33-0f3d0f7f36cf","service":"withdraw","version":"1.0"}06f7aab08aa2431e6dae6a156fc9e034
+                </code>
 
-                    <p>
-                        我们使用一个示例来进行说明，在标准支付接口中创建订单时，会要求传入的商品列表字段：goodlist，需要请求商户传递本次支付的所有商品信息（多个），每个商品信息为一个对象结构，包括：name，price，quantity等数据项，这个数据线的类型为复杂类型Array，那么:</p>
+                <li>3. 生成签名</li>
+                x-api-sign=2d378cfad3bc3119e326fffa05d4e335
 
-                    <p>待签数据(无需URLEncoding)：</p>
-
-                    <pre class="line-numbers"><code class="language-http">goodsInfos=[{&quot;goodType&quot;:&quot;actual&quot;,&quot;name&quot;:&quot;天子精品1&quot;,&quot;price&quot;:400.00,&quot;quantity&quot;:1,&quot;referUrl&quot;:&quot;http:// acooly.cn/tianzi&quot;} ,{&quot;goodType&quot;:&quot;actual&quot;,&quot;name&quot;:&quot;天子精品2&quot;,&quot;price&quot;:400.00,&quot;quantity&quot;:  1,&quot;referUrl&quot;:&quot;http://acooly.cn/tianzi&quot;}]</code></pre>
-
-                    <p>发送数据(需要URLEncoding)：</p>
-
-                    <pre><code>goodsInfos =%5B%7B%22goodType%22%3A%22actual%22%2C%22name%22%3A%22%E5%A4%A9%E5%AD%90%E7%B2%BE   %E5%93%811%22%2C%22price%22%3A400.00%2C%22quantity%22%3A1%2C%22referUrl%22%3A%22http%3A%2F  %2Facooly.cn%2Ftianzi%22%7D+%2C%7B%22goodType%22%3A%22actual%22%2C%22name%22%3A%22%E5%A4%A9%E5%AD   %90%E7%B2%BE%E5%93%812%22%2C%22price%22%3A400.00%2C%22quantity%22%3A1%2C%22referUrl%22%3A%22http%3A %2F%2Facooly.cn%2Ftianzi%22%7D%5D</code></pre>
-                </li>
-                <li><p>通知报文的验签<br>
-                    复杂结构时生成待签字符串的方式与（1. 请求报文的签名）相同。</p></li>
-                <li><p>响应报文的验签<br>
-                    响应报文采用在http协议Body体写入JSON结构体方式响应数据。请求方收到的同步响应为标准JSON结构体。如果是单级结构（类似
-                    key/value）时，则采用通用验证签方式组织待签字符串。如果是多级结构，则需要把二级以下的Json结构体以字符串方式作为一级属性 的数据项参与验证签名。</p>
-
-                    <p>复杂响应报文示例：</p>
-
-                    <pre class="line-numbers"><code class="language-java">{
-    &quot;goodInfos&quot;: [
-        {
-          &quot;goodType&quot;: &quot;actual&quot;,
-          &quot;name&quot;: &quot;天子精品1&quot;,
-          &quot;price&quot;: 400,
-          &quot;quantity&quot;: 1,
-          &quot;referUrl&quot;: &quot;http://acooly.cn/tianzi&quot;
-          },
-          {
-          &quot;goodType&quot;: &quot;actual&quot;,
-          &quot;name&quot;: &quot;天子精品2&quot;,
-          &quot;price&quot;: 400,
-          &quot;quantity&quot;: 1,
-          &quot;referUrl&quot;: &quot;http://acooly.cn/tianzi&quot;
-          }
-    ],
-    &quot;orderNo&quot;: &quot;41111111111111111113&quot;,
-    //……
-}</code></pre>
-
-                    <p>响应报文待签字符串：</p>
-
-                    <pre class="line-numbers"><code class="language-http">goodsInfos=[{&quot;goodType&quot;:&quot;actual&quot;,&quot;name&quot;:&quot;天子精品1&quot;,&quot;price&quot;:400.00,&quot;quantity&quot;:1,&quot;referUrl&quot;:&quot;http://acooly.cn/tianzi&quot;} ,{&quot;goodType&quot;:&quot;actual&quot;,&quot;name&quot;:&quot;天子精品2&quot;,&quot;price&quot;:400.00,&quot;quantity&quot;:1,&quot;referUrl&quot;:&quot;http://acooly.cn/tianzi&quot;}]</code></pre>
-                </li>
             </ol>
 
-            <h4 id="toc_25">摘要签名验签</h4>
-
-            <p>摘要方式签名主要支持MD5，Sha1Hex和Sha256Hex，他们都采用标准的摘要算法实现。算法原则如下：</p>
-
-            <ol>
-                <li><p><strong>签名明文</strong>: 签名和验签的明文为代签字符串后接商户安全码（我们这里命名为secretKey商户开户时已邮件发送给商户联系人），请注意待签字符串与secretKey间没有任何连接字符。</p>
-
-                    <p>例如:</p>
-
-                    <ul>
-                        <li>代签字符串为：key1=val1&amp;key2=val2,</li>
-                        <li>secretKey为: c9cef22553afujh64b04a012f9cb8ea9,</li>
-                        <li>则计算签名的明文为：key1=val1&amp;key2=val2<span style="color:red">c9cef22553afujh64b04a012f9cb8ea9</span></li>
-                    </ul>
-                </li>
-                <li><p><strong>签名计算</strong>：首先转换签名明文(P)为UTF-8的字节数组（byte[]）,通过标准摘要算法计算出摘要值的字节数组形式（byte[]），然后转换摘要的字节数组为Hex（小写字母的16进制形式）的字符串格式(S)则为摘要签名。<br>
-                    <strong>伪代码公式为: S=Hex(MD5(P.getBytes(<q>UTF-8</q>)))</strong></p>
-
-                    <blockquote>
-                        <p>摘要签名计算出的值作为请求报文的sign参数值一并请求网关。</p>
-                    </blockquote>
-                </li>
-                <li><p><strong>验证签名</strong>：验证签名是在商户端收到网站的同步响应报文或通知报文后，对这些报文进行签名验证。原则为，使用“2. <strong>签名计算</strong>”的方法对报文计算签名值为signClient,然后与报文中传入的sign参数值（服务器端计算的签名）进行字符串比较，如果相同则表示验证签名通过，报文在传输过程中未被篡改。
-                </p></li>
-            </ol>
 
             <h4 id="toc_26">证书签名和验签</h4>
 
@@ -931,7 +693,7 @@ Connection: Keep-Alive
             <p><strong>加解密说明</strong>：</p>
 
             <ul>
-                <li>加密秘钥为商户安全码(secrtKey，全数组和字母组合)的前16字节，长度为128位, 使用16字节字符串转换为UTF-8编码的byte数组。</li>
+                <li>加密秘钥为商户安全码(secretKey，全数组和字母组合)的前16字节，长度为128位, 使用16字节字符串转换为UTF-8编码的byte数组。</li>
                 <li>ASE算法的模式为ECB，填充方式为PKCS5Padding。算法/模式/填充为：AES/ECB/PKCS5Padding</li>
                 <li>加密的明文以UTF-8编码转换为byte数组作为加密入参</li>
                 <li>加密后密文需要Base64编码默认作为最终加密数据用于签名和传输</li>

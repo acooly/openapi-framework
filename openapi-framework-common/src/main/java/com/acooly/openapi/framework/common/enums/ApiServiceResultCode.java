@@ -29,8 +29,6 @@ public enum ApiServiceResultCode implements Messageable {
   PARTNER_NOT_REGISTER("PARTNER_NOT_REGISTER", "商户没有注册"),
   /** 合作伙伴id没有产品 */
   PARTNER_NOT_PRODUCT("PARTNER_NOT_PRODUCT", "商户没有配置产品"),
-  // TODO:delete
-  APP_CLIENT_NOT_SUPPORT("APP_CLIENT_NOT_SUPPORT", "//TODO"),
   NOTIFY_ERROR("NOTIFY_ERROR", "异步通知失败"),
   ;
   private final String code;
