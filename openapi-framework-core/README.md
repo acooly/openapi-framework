@@ -111,7 +111,7 @@ https://api.xxx.com/gateway.do
 	get-queryString实例:
 	
 	```http
-	http://api.xxx.com/geteway.html?key1=value1&key2=value2&key3=%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6
+	http://api.xxx.com/geteway.do?key1=value1&key2=value2&key3=%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6
 	```
 
 * **响应报文**：网关处理完成后的同步响应报文采用http-body-json模式组装报文，所有的响应参数采用UTF-8编码json格式，直接写入响应报文的body体数据流。

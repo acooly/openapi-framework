@@ -168,7 +168,7 @@ amount=1000.00&amp;buyerCertNo=330702194706165014&amp;buyerUserId=09876543211234
 
                                 <p>get-queryString实例:</p>
 
-                                <pre class="line-numbers"><code class="language-http">http://api.xxx.com/geteway.html?key1=value1&amp;key2=value2&amp;key3=%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6</code></pre></li>
+                                <pre class="line-numbers"><code class="language-http">http://api.xxx.com/geteway.do?key1=value1&amp;key2=value2&amp;key3=%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6</code></pre></li>
                             <li><p><strong>响应报文</strong>：网关处理完成后的同步响应报文采用http-body-json模式组装报文，所有的响应参数采用UTF-8编码json格式，直接写入响应报文的body体数据流。</p>
 
                                 <p>实例：</p>
