@@ -5,10 +5,10 @@ OpenApi商户开发规范
 ## 网关
 
 测试环境：
-https://api.xxx.com/gateway.html
+https://api.xxx.com/gateway.do
 
 正式环境：
-https://api.xxx.com/gateway.html
+https://api.xxx.com/gateway.do
 
 ## 交互流程
 
@@ -99,7 +99,7 @@ https://api.xxx.com/gateway.html
 	post-form实例：
 	
 	```http
-	POST /gateway.html HTTP/1.1
+	POST /gateway.do HTTP/1.1
 	Content-Length: 529
 	Content-Type: application/x-www-form-urlencoded; charset=UTF-8
 	Host: api.xxx.com
@@ -173,7 +173,11 @@ https://api.xxx.com/gateway.html
 
 类型表示报文数据项的数据类型和长度，主要的表示语义如下：
 
-* S(x)：x为数字，表示字符串最大长度为x，最小长度为0，如果该字段状态为必选则最小长度为1* S(x-y)：x和y为数字，表示字符串长度范围为：x-y，包含x和y* SF(x): x为数字，表示字符串固定长度为x。* n(x), x为数字，表示为数字类型，最大长度为x， n(x-y)和nf(x)与字符串同理。* M：表示money类型，支持两位小数点的元。如:2000.01，10000或100.00
+* S(x)：x为数字，表示字符串最大长度为x，最小长度为0，如果该字段状态为必选则最小长度为1
+* S(x-y)：x和y为数字，表示字符串长度范围为：x-y，包含x和y
+* SF(x): x为数字，表示字符串固定长度为x。
+* n(x), x为数字，表示为数字类型，最大长度为x， n(x-y)和nf(x)与字符串同理。
+* M：表示money类型，支持两位小数点的元。如:2000.01，10000或100.00
 * Object/JSON: 表示对象类型，下面会紧跟Object的子报文结构定义。
 * Array/JSON-ARRAY: 表示数组对象类型，下面会紧跟数组成员对象的子报文结构定义。
 
@@ -182,7 +186,8 @@ https://api.xxx.com/gateway.html
 
 * “M”：为必选型(Mandatory),表示必须报送该数据项。
 * “O”：为可选型(Optional),表示可以填写也可以不填写该数据项，如果不填写则为空。
-* “C”：为有条件选择型(Conditional),表示在符合条件的情况下,必须填写此数据项,不符合条件的情况下,可以不填写此数据项，相关条件一般会在具体报文说明中明确说明。
+* “C”：为有条件选择型(Conditional),表示在符合条件的情况下,必须填写此数据项,不符
+合条件的情况下,可以不填写此数据项，相关条件一般会在具体报文说明中明确说明。
 
 ### 报文定义
 
@@ -268,12 +273,29 @@ https://api.xxx.com/gateway.html
 错误码主要分为系统错误码和业务错误码两大类，系统错误码表示网关做的基础验证和处理失败对应的错误码；业务错误码表示具体api服务业务处理错误对应的错误码。系统错误码有明确的定义，请参考下表，业务错误码根据具体的业务定义，不做统一定义。
 
 |错误代码|含义
-|-------|------|EXECUTE\_SUCCESS|交易成功|EXECUTE\_PROCESSING|交易处理中|INTERNAL\_ERROR|系统内部错误|SERVICE\_NOT\_FOUND\_ERROR|服务不存在|PARAMETER\_ERROR|参数错误|PARAM\_FORMAT\_ERROR|参数格式错误|UNAUTHENTICATED|认证(签名)错误|UNAUTHORIZED|未授权的服务|REQUEST\_NO\_NOT_UNIQUE|商户请求号不唯一|FIELD\_NOT\_UNIQUE|对象字段重复|REDIRECT\_URL\_NOT\_EXIST|重定向服务需设置redirectUrl|PARTNER\_NOT\_REGISTER|合作伙伴没有注册|PARTNER\_NOT\_PRODUCT|商户没有配置产品|UNSUPPORTED\_SECHEME|不支持的请求协议
+|-------|------
+|EXECUTE\_SUCCESS|交易成功
+|EXECUTE\_PROCESSING|交易处理中
+|INTERNAL\_ERROR|系统内部错误
+|SERVICE\_NOT\_FOUND\_ERROR|服务不存在
+|PARAMETER\_ERROR|参数错误
+|PARAM\_FORMAT\_ERROR|参数格式错误
+|UNAUTHENTICATED|认证(签名)错误
+|UNAUTHORIZED|未授权的服务
+|REQUEST\_NO\_NOT_UNIQUE|商户请求号不唯一
+|FIELD\_NOT\_UNIQUE|对象字段重复
+|REDIRECT\_URL\_NOT\_EXIST|重定向服务需设置redirectUrl
+|PARTNER\_NOT\_REGISTER|合作伙伴没有注册
+|PARTNER\_NOT\_PRODUCT|商户没有配置产品
+|UNSUPPORTED\_SECHEME|不支持的请求协议
 
 
 ### 结果判断原则
 
-所有交易同步响应和异步通知的响应结果中都有resultCode数据项，请根据resultCode的响应值判断交易的最终结果。具体判断方法如下：* resultCode=EXECUTE\_SUCCESS : 表示最终结果为成功。* resultCode=EXECUTE\_PROCESSING：表示交易正在处理中，需要等待异步通知来确定最终交易结果* resultCode=其他： 表示交易错误或失败。
+所有交易同步响应和异步通知的响应结果中都有resultCode数据项，请根据resultCode的响应值判断交易的最终结果。具体判断方法如下：
+* resultCode=EXECUTE\_SUCCESS : 表示最终结果为成功。
+* resultCode=EXECUTE\_PROCESSING：表示交易正在处理中，需要等待异步通知来确定最终交易结果
+* resultCode=其他： 表示交易错误或失败。
 
 ## 安全
 
@@ -313,17 +335,35 @@ https://api.xxx.com/gateway.html
 
 **需要参与签名的参数**
 
-请求报文，响应报文和通知报文，都采用相同的规则：对发送或接收到的所有参数（包括公共报文部分），除去sign参数外，都是需要参与计算待签名字符串的参数。>注意：报文的签名数据默认为全签，以java为例子，建议直接通过request.getParameters()获取全部的参数，我们API服务的接口通信报文中不存在同名参数的多个值，所有该方法返回的所有参数值都可以直接按没有数组的情况处理。
+请求报文，响应报文和通知报文，都采用相同的规则：对发送或接收到的所有参数（包括公共报文部分），除去sign参数外，都是需要参与计算待签名字符串的参数。
+
+>注意：报文的签名数据默认为全签，以java为例子，建议直接通过request.getParameters()获取全部的参数，我们API服务的接口通信报文中不存在同名参数的多个值，所有该方法返回的所有参数值都可以直接按没有数组的情况处理。
 
 **生成待签名字符串**
 
-根据不同的报文场景（请求，响应，通知等），确定好待签名的数据项，采用如下格式进行组装（参数数组）：```java
-string[] parameters={ 	"service=fastpay", 	"partnerId=20121015300000032621", 	"returnUrl= http://www.test.com/yiji/return_url.asp", 	"orderNo=6741334835157966", 	"tradeName=xxx电视机", 	"tradeAmount=100" };
-```对数组里的每一个成员按**字符ASC码**的顺序排序，若遇到相同首字符，则看第二个字符，以此类推。排序完成之后，再把所有数组值以“&”字符连接起来，这串字符串便是待签名字符串，例如：```httporderNo=6741334835157966&partnerId=20121015300000032621&returnUrl=http://www.test.com/yiji/return_url.asp&service=fastpay&tradeAmount=100&tradeName=xxx电视机
+根据不同的报文场景（请求，响应，通知等），确定好待签名的数据项，采用如下格式进行组装（参数数组）：
+
+```java
+string[] parameters={ 
+	"service=fastpay", 
+	"partnerId=20121015300000032621", 
+	"returnUrl= http://www.test.com/yiji/return_url.asp", 
+	"orderNo=6741334835157966", 
+	"tradeName=xxx电视机", 
+	"tradeAmount=100" 
+};
+```
+
+对数组里的每一个成员按**字符ASC码**的顺序排序，若遇到相同首字符，则看第二个字符，以此类推。排序完成之后，再把所有数组值以“&”字符连接起来，这串字符串便是待签名字符串，例如：
+
+```http
+orderNo=6741334835157966&partnerId=20121015300000032621&returnUrl=http://www.test.com/yiji/return_url.asp&service=fastpay&tradeAmount=100&tradeName=xxx电视机
 ```
 
 >注意：
->1. 没有值的参数无需传递，也无需包含到待签名数据中；>2. 签名时将字符转化成字节流时指定字符集全部采用UTF-8；>3. 待签字符串中的特殊字符无需签名，根据HTTP协议，传递参数的值中如果存在特殊字符（如：&、@等）和中文字符，那么该值需要做UTF-8编码的URL-Encoding，这样请求接收方才能接收到正确的参数值。这种情况下，待签名数据应该是原生值而不是encoding之后的值。例如：调用某接口需要对请求参数email进行数字签名，那么待签名数据应该是email=test@msn.com，而不是email=test%40msn.com。
+>1. 没有值的参数无需传递，也无需包含到待签名数据中；
+>2. 签名时将字符转化成字节流时指定字符集全部采用UTF-8；
+>3. 待签字符串中的特殊字符无需签名，根据HTTP协议，传递参数的值中如果存在特殊字符（如：&、@等）和中文字符，那么该值需要做UTF-8编码的URL-Encoding，这样请求接收方才能接收到正确的参数值。这种情况下，待签名数据应该是原生值而不是encoding之后的值。例如：调用某接口需要对请求参数email进行数字签名，那么待签名数据应该是email=test@msn.com，而不是email=test%40msn.com。
 
 **复杂报文签名**
 
@@ -335,15 +375,53 @@ string[] parameters={ 	"service=fastpay", 	"partnerId=20121015300000032621", 
 
 	待签数据(无需URLEncoding)：
 
-	```http	goodsInfos=[{"goodType":"actual","name":"天子精品1","price":400.00,"quantity":1,"referUrl":"http://	acooly.cn/tianzi"} ,{"goodType":"actual","name":"天子精品2","price":400.00,"quantity":	1,"referUrl":"http://acooly.cn/tianzi"}]	```	发送数据(需要URLEncoding)：
+	```http
+	goodsInfos=[{"goodType":"actual","name":"天子精品1","price":400.00,"quantity":1,"referUrl":"http://	acooly.cn/tianzi"} ,{"goodType":"actual","name":"天子精品2","price":400.00,"quantity":	1,"referUrl":"http://acooly.cn/tianzi"}]
+	```
 
-	```	goodsInfos =%5B%7B%22goodType%22%3A%22actual%22%2C%22name%22%3A%22%E5%A4%A9%E5%AD%90%E7%B2%BE	%E5%93%811%22%2C%22price%22%3A400.00%2C%22quantity%22%3A1%2C%22referUrl%22%3A%22http%3A%2F	%2Facooly.cn%2Ftianzi%22%7D+%2C%7B%22goodType%22%3A%22actual%22%2C%22name%22%3A%22%E5%A4%A9%E5%AD	%90%E7%B2%BE%E5%93%812%22%2C%22price%22%3A400.00%2C%22quantity%22%3A1%2C%22referUrl%22%3A%22http%3A	%2F%2Facooly.cn%2Ftianzi%22%7D%5D	```2. 通知报文的验签复杂结构时生成待签字符串的方式与（1. 请求报文的签名）相同。3. 响应报文的验签	响应报文采用在http协议Body体写入JSON结构体方式响应数据。请求方收到的同步响应为标准JSON结构体。如果是单级结构（类似	key/value）时，则采用通用验证签方式组织待签字符串。如果是多级结构，则需要把二级以下的Json结构体以字符串方式作为一级属性	的数据项参与验证签名。	复杂响应报文示例：	
+	发送数据(需要URLEncoding)：
+
+	```
+	goodsInfos =%5B%7B%22goodType%22%3A%22actual%22%2C%22name%22%3A%22%E5%A4%A9%E5%AD%90%E7%B2%BE	%E5%93%811%22%2C%22price%22%3A400.00%2C%22quantity%22%3A1%2C%22referUrl%22%3A%22http%3A%2F	%2Facooly.cn%2Ftianzi%22%7D+%2C%7B%22goodType%22%3A%22actual%22%2C%22name%22%3A%22%E5%A4%A9%E5%AD	%90%E7%B2%BE%E5%93%812%22%2C%22price%22%3A400.00%2C%22quantity%22%3A1%2C%22referUrl%22%3A%22http%3A	%2F%2Facooly.cn%2Ftianzi%22%7D%5D
+	```
+
+2. 通知报文的验签
+复杂结构时生成待签字符串的方式与（1. 请求报文的签名）相同。
+
+3. 响应报文的验签
+	响应报文采用在http协议Body体写入JSON结构体方式响应数据。请求方收到的同步响应为标准JSON结构体。如果是单级结构（类似	key/value）时，则采用通用验证签方式组织待签字符串。如果是多级结构，则需要把二级以下的Json结构体以字符串方式作为一级属性	的数据项参与验证签名。
+
+	复杂响应报文示例：
+	
 	```java
-	{    	"goodInfos": [	        {              "goodType": "actual",               "name": "天子精品1",               "price": 400,               "quantity": 1,               "referUrl": "http://acooly.cn/tianzi"        	  },         	  {              "goodType": "actual",               "name": "天子精品2",               "price": 400,               "quantity": 1,               "referUrl": "http://acooly.cn/tianzi"        	  }    	], 		"orderNo": "41111111111111111113", 		//……	}
-	```	响应报文待签字符串：	
+	{
+    	"goodInfos": [
+	        {
+              "goodType": "actual", 
+              "name": "天子精品1", 
+              "price": 400, 
+              "quantity": 1, 
+              "referUrl": "http://acooly.cn/tianzi"
+        	  }, 
+        	  {
+              "goodType": "actual", 
+              "name": "天子精品2", 
+              "price": 400, 
+              "quantity": 1, 
+              "referUrl": "http://acooly.cn/tianzi"
+        	  }
+    	], 
+		"orderNo": "41111111111111111113", 
+		//……
+	}
+	```
+
+	响应报文待签字符串：
+	
 	```http
 	goodsInfos=[{"goodType":"actual","name":"天子精品1","price":400.00,"quantity":1,"referUrl":"http://acooly.cn/tianzi"} ,{"goodType":"actual","name":"天子精品2","price":400.00,"quantity":1,"referUrl":"http://acooly.cn/tianzi"}]
-	```
+	```
+
 
 #### 摘要签名验签
 

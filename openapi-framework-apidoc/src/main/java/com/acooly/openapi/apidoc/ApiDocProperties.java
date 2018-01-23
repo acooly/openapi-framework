@@ -65,7 +65,7 @@ public class ApiDocProperties {
 
     private String gateway = "";
     @NotBlank
-    private String testGateway = "http://localhost:8090/gateway.html";
+    private String testGateway = "http://localhost:8090/gateway.do";
 
 
     private List<String> outputTypes = Lists.newArrayList("console");
