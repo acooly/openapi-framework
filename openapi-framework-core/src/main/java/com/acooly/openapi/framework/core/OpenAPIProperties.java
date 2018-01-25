@@ -48,6 +48,8 @@ public class OpenAPIProperties {
 
   private Notify notify = new Notify();
 
+  private AuthInfoCache authInfoCache = new AuthInfoCache();
+
   @PostConstruct
   public void init() {
     this.getAnonymous().getPermissions().add("*:login");
@@ -82,5 +84,22 @@ public class OpenAPIProperties {
     private boolean enable = true;
     private int connectionTimeout = 10 * 1000;
     private int readTimeout = 10 * 1000;
+  }
+
+  @Data
+  public static class AuthInfoCache {
+    /** 认证授权信息缓存实现类型 */
+    private Type type = Type.REDIS;
+    /** 缓存信息过期时间 */
+    private int timeout = 5 * 60;
+
+    public enum Type {
+      /** 不使用缓存 */
+      NOOP,
+      /** 使用内存缓存 */
+      MEMORY,
+      /** 使用redis缓存 */
+      REDIS
+    }
   }
 }

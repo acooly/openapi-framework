@@ -7,7 +7,6 @@ package com.acooly.openapi.framework.core.common.cache.impl;
 import com.acooly.openapi.framework.core.common.cache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,32 +17,25 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author zhangpu
  * @date 2014年6月27日
  */
-@Component
 public class SimpleMemeryCacheManager implements CacheManager {
 
   private static Logger logger = LoggerFactory.getLogger(SimpleMemeryCacheManager.class);
 
   /** 默认有效期（秒）1小时 */
-  protected int DEFAILT_HOLD_SECOND = 5 * 60;
+  private int timeout;
 
   /** 成员总数操作阈值，则清理过期数据 */
   protected int CLEAN_THRESHOLD_SIZE = 1000;
 
-  protected Map<String, CacheValue> container = new ConcurrentHashMap<String, CacheValue>();
+  protected Map<String, CacheValue> container = new ConcurrentHashMap<>();
 
-  public static void main(String[] args) throws Exception {
-    CacheManager cacheManager = new SimpleMemeryCacheManager();
-    for (int i = 1; i <= 12; i++) {
-      if (i == 10) {
-        Thread.sleep(5000);
-      }
-      cacheManager.add(String.valueOf(i), i, 1);
-    }
+  public SimpleMemeryCacheManager(int timeout) {
+    this.timeout = timeout;
   }
 
   @Override
   public void add(String key, Object value) {
-    add(key, value, DEFAILT_HOLD_SECOND);
+    add(key, value, timeout);
   }
 
   @Override
