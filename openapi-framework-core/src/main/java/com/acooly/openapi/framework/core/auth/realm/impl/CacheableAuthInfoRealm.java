@@ -6,24 +6,22 @@
  */
 package com.acooly.openapi.framework.core.auth.realm.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
+import com.acooly.core.utils.Profiles;
 import com.acooly.openapi.framework.core.auth.permission.Permission;
 import com.acooly.openapi.framework.core.auth.permission.PermissionResolver;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.core.auth.realm.SimpleAuthInfoRealm;
 import com.acooly.openapi.framework.core.common.cache.CacheManager;
+import com.acooly.openapi.framework.core.common.cache.impl.NOOPCacheManager;
 import com.acooly.openapi.framework.core.exception.impl.ApiServiceAuthenticationException;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-import com.acooly.core.utils.Profiles;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.acooly.openapi.framework.core.common.cache.impl.NOOPCacheManager;
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 缓存实现
@@ -62,7 +60,7 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm, SimpleAut
 
 	@Override
 	public Object getAuthenticationInfo(String partnerId) {
-		String key = partnerId + AUTHC_CACHE_KEY_POSTFIX;
+		String key = authenticationKey(partnerId);
 		Object value = cacheManager.get(key);
 		if (value == null) {
 			synchronized (key) {
@@ -83,7 +81,7 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm, SimpleAut
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAuthorizationInfo(String partnerId) {
-		String key = partnerId + AUTHZ_CACHE_KEY_POSTFIX;
+		String key = authorizationKey(partnerId);
 		List<Permission> value = (List<Permission>) cacheManager.get(key);
 		if (value == null) {
 			synchronized (key) {
@@ -108,6 +106,16 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm, SimpleAut
 		return value;
 	}
 
+	private String authorizationKey(String accessKey) {
+		return accessKey + AUTHZ_CACHE_KEY_POSTFIX;
+	}
+	private String authenticationKey(String accessKey) {
+		return accessKey + AUTHC_CACHE_KEY_POSTFIX;
+	}
+	public void removeCache(String accessKey) {
+		cacheManager.cleanup(authenticationKey(accessKey));
+		cacheManager.cleanup(authorizationKey(accessKey));
+	}
 	@Override
 	public abstract String getSecretKey(String accessKey);
 
