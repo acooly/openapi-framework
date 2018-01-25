@@ -4,14 +4,12 @@
  */
 package com.acooly.openapi.framework.core.common.cache.impl;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
+import com.acooly.openapi.framework.core.common.cache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
-import com.acooly.openapi.framework.core.common.cache.CacheManager;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 本地内存缓存实现
@@ -19,7 +17,7 @@ import com.acooly.openapi.framework.core.common.cache.CacheManager;
  * @author zhangpu
  * @date 2014年6月27日
  */
-@Component
+//@Component
 public class SimpleMemeryCacheManager implements CacheManager {
 
 	private static Logger logger = LoggerFactory.getLogger(SimpleMemeryCacheManager.class);

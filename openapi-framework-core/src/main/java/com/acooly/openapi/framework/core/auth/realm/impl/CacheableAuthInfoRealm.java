@@ -19,111 +19,101 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * 缓存实现
- * 
+ *
  * @author zhangpu
  * @author Bohr.Qiu <qiubo@qq.com>
  */
-public abstract class CacheableAuthInfoRealm implements AuthInfoRealm, SimpleAuthInfoRealm, InitializingBean {
+public abstract class CacheableAuthInfoRealm
+    implements AuthInfoRealm, SimpleAuthInfoRealm, InitializingBean {
 
-	protected Logger logger = LoggerFactory.getLogger(this.getClass());
+  protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@Resource(name = "simpleMemeryCacheManager")
-    CacheManager cacheManager;
+  @Autowired CacheManager cacheManager;
 
-	@Resource
-    PermissionResolver permissionResolver;
+  @Resource PermissionResolver permissionResolver;
 
-	protected static final String AUTHC_CACHE_KEY_POSTFIX = "authc";
-	protected static final String AUTHZ_CACHE_KEY_POSTFIX = "authz";
+  @Override
+  public void afterPropertiesSet() throws Exception {
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
+    // 非线上环境禁用缓存
+    try {
+      if (Profiles.isTest()) {
+        cacheManager = new NOOPCacheManager();
+        logger.info("openapi-不启用权限缓存.");
+        return;
+      }
+    } catch (Exception e) {
 
-		// 非线上环境禁用缓存
-		try {
-			if (Profiles.isTest()) {
-				cacheManager = new NOOPCacheManager();
-				logger.info("openapi-不启用权限缓存.");
-				return;
-			}
-		} catch (Exception e) {
+    }
+    logger.info("openapi-启用权限缓存.");
+  }
 
-		}
-		logger.info("openapi-启用权限缓存.");
-	}
+  @Override
+  public Object getAuthenticationInfo(String partnerId) {
+    String key = authenticationKey(partnerId);
+    Object value = cacheManager.get(key);
+    if (value == null) {
+      value = getSecretKey(partnerId);
+      if (value != null) {
+        cacheManager.add(key, value);
+      } else {
+        throw new ApiServiceAuthenticationException("获取认证信息失败或不存在");
+      }
+    }
+    return value;
+  }
 
-	@Override
-	public Object getAuthenticationInfo(String partnerId) {
-		String key = authenticationKey(partnerId);
-		Object value = cacheManager.get(key);
-		if (value == null) {
-			synchronized (key) {
-				value = cacheManager.get(key);
-				if (value == null) {
-					value = getSecretKey(partnerId);
-					if (value != null) {
-						cacheManager.add(key, value);
-					} else {
-						throw new ApiServiceAuthenticationException("获取认证信息失败或不存在");
-					}
-				}
-			}
-		}
-		return value;
-	}
+  @SuppressWarnings("unchecked")
+  @Override
+  public Object getAuthorizationInfo(String partnerId) {
+    String key = authorizationKey(partnerId);
+    List<Permission> value = (List<Permission>) cacheManager.get(key);
+    if (value == null) {
+      List<String> permStrList = getAuthorizedServices(partnerId);
+      // 如果没有查询到权限信息,不设置缓存,有可能是网络或者权限系统内部错误
+      if (permStrList == null || permStrList.isEmpty()) {
+        return null;
+      }
+      List<Permission> perms = Lists.newArrayList();
+      for (String permStr : permStrList) {
+        if (!Strings.isNullOrEmpty(permStr)) {
+          perms.add(permissionResolver.resolvePermission(permStr));
+        }
+      }
+      value = perms;
+      cacheManager.add(key, value);
+    }
+    return value;
+  }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Object getAuthorizationInfo(String partnerId) {
-		String key = authorizationKey(partnerId);
-		List<Permission> value = (List<Permission>) cacheManager.get(key);
-		if (value == null) {
-			synchronized (key) {
-				value = (List<Permission>) cacheManager.get(key);
-				if (value == null) {
-					List<String> permStrList = getAuthorizedServices(partnerId);
-					// 如果没有查询到权限信息,不设置缓存,有可能是网络或者权限系统内部错误
-					if (permStrList == null || permStrList.isEmpty()) {
-						return null;
-					}
-					List<Permission> perms = Lists.newArrayList();
-					for (String permStr : permStrList) {
-						if (!Strings.isNullOrEmpty(permStr)) {
-							perms.add(permissionResolver.resolvePermission(permStr));
-						}
-					}
-					value = perms;
-					cacheManager.add(key, value);
-				}
-			}
-		}
-		return value;
-	}
+  private String authorizationKey(String accessKey) {
+    return AUTHZ_CACHE_KEY_PREFIX + accessKey;
+  }
 
-	private String authorizationKey(String accessKey) {
-		return accessKey + AUTHZ_CACHE_KEY_POSTFIX;
-	}
-	private String authenticationKey(String accessKey) {
-		return accessKey + AUTHC_CACHE_KEY_POSTFIX;
-	}
-	public void removeCache(String accessKey) {
-		cacheManager.cleanup(authenticationKey(accessKey));
-		cacheManager.cleanup(authorizationKey(accessKey));
-	}
-	@Override
-	public abstract String getSecretKey(String accessKey);
+  private String authenticationKey(String accessKey) {
+    return AUTHC_CACHE_KEY_PREFIX + accessKey;
+  }
 
-	/**
-	 * 获取产品名称列表
-	 *
-	 * @param partnerId
-	 * @return
-	 */
-	public abstract List<String> getAuthorizedServices(String partnerId);
+  public void removeCache(String accessKey) {
+    cacheManager.cleanup(authenticationKey(accessKey));
+    cacheManager.cleanup(authorizationKey(accessKey));
+  }
+
+  @Override
+  public abstract String getSecretKey(String accessKey);
+
+  /**
+   * 获取产品名称列表
+   *
+   * @param partnerId
+   * @return
+   */
+  public abstract List<String> getAuthorizedServices(String partnerId);
 }
