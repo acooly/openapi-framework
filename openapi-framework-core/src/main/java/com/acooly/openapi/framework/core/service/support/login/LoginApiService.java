@@ -6,6 +6,7 @@ import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.core.OpenAPIProperties;
+import com.acooly.openapi.framework.core.auth.realm.impl.CacheableAuthInfoRealm;
 import com.acooly.openapi.framework.core.service.base.BaseApiService;
 import com.acooly.openapi.framework.domain.LoginDto;
 import com.acooly.openapi.framework.domain.LoginRequest;
@@ -17,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.Resource;
 
 /**
  * 用户登录
@@ -42,6 +45,9 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
   @Autowired(required = false)
   private AuthInfoRealmManageService authInfoRealmManageService;
 
+  @Resource
+  private CacheableAuthInfoRealm cacheableAuthInfoRealm;
+
   @Override
   protected void doService(LoginRequest request, LoginResponse response) {
     try {
@@ -58,6 +64,7 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
         if (openAPIProperties.getLogin().isSecretKeyDynamic()) {
           sercretKey = RandomStringUtils.randomAlphanumeric(32);
           authInfoRealmManageService.updateAuthenticationInfo(accessKey, sercretKey);
+          cacheableAuthInfoRealm.removeCache(accessKey);
         }
       }
       response.getExt().putAll(dto.getExt());
