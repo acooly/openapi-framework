@@ -15,7 +15,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
@@ -27,7 +26,7 @@ import java.util.List;
  * @author zhangpu
  * @author Bohr.Qiu <qiubo@qq.com>
  */
-public abstract class CacheableAuthInfoRealm implements AuthInfoRealm, InitializingBean {
+public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
   protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
   @Autowired private CacheManager cacheManager;
