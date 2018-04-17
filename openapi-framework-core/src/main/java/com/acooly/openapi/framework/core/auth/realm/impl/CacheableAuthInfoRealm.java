@@ -93,11 +93,11 @@ public abstract class CacheableAuthInfoRealm
     return value;
   }
 
-  private String authorizationKey(String accessKey) {
+  protected String authorizationKey(String accessKey) {
     return AUTHZ_CACHE_KEY_PREFIX + accessKey;
   }
 
-  private String authenticationKey(String accessKey) {
+  protected String authenticationKey(String accessKey) {
     return AUTHC_CACHE_KEY_PREFIX + accessKey;
   }
 
