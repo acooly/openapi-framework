@@ -39,7 +39,7 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler,Initial
     /**
      * 参数值的最大长度，大于vlength就用...表示
      */
-	public static final int vlength = 500;
+	public static final int vlength = 5000;
 	/**
 	 * 需要mask的参数key，多个使用（逗号）分隔
 	 */
