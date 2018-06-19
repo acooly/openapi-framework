@@ -30,7 +30,10 @@ public class HomePortalController extends AbstractPortalController {
     public String index(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "/docs/index";
     }
-
+    @RequestMapping("/")
+    public String index1(HttpServletRequest request, HttpServletResponse response, Model model) {
+        return "/docs/index";
+    }
     @RequestMapping("common/header")
     public String header(HttpServletRequest request, HttpServletResponse response, Model model) {
         model.addAttribute("logo",apiDocProperties.getLogo());
