@@ -118,6 +118,10 @@ public class HttpApiServiceExecuter implements ApiServiceExecuter<HttpServletReq
 
         // 原始请求数据处理
         Map<String, String> requestData = Servlets.getParameters(orignalRequest);
+
+        //发布收到用户请求时的事件
+        publishRequestReceivedEvent(requestData);
+
         apiContext.setRequestData(requestData);
         MDC.put(ApiConstants.REQUEST_NO, ApiUtils.getRequestNo(requestData));
         try {

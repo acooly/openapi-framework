@@ -1,7 +1,7 @@
 /*
  * acooly.cn Inc.
  * Copyright (c) 2016 All Rights Reserved.
- * create by zhangpu 
+ * create by zhangpu
  * date:2016年3月17日
  *
  */
@@ -25,7 +25,7 @@ import java.util.Set;
 
 /**
  * OpenApi统一日志默认实现
- * 
+ *
  * @author zhangpu
  */
 @Component
@@ -36,6 +36,10 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler,Initial
 
 	public static final String DEF_MASK_KEYS = "cardNo,idcard,mobileNo,userName";
 	public static final String DEF_IGNORE_KEYS = "password,pass,passwd";
+    /**
+     * 参数值的最大长度，大于vlength就用...表示
+     */
+	public static final int vlength = 5000;
 	/**
 	 * 需要mask的参数key，多个使用（逗号）分隔
 	 */
@@ -86,7 +90,13 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler,Initial
 			} else if (needMask(entry.getKey())) {
 				logData.put(entry.getKey(), doMask(entry.getValue()));
 			} else {
-				logData.put(entry.getKey(), entry.getValue().toString());
+                String v = entry.getValue().toString();
+                if (v.length() > vlength) {
+                    String sv = v.substring(0, vlength) + "...";
+                    logData.put(entry.getKey(), sv);
+                } else {
+                    logData.put(entry.getKey(), entry.getValue().toString());
+                }
 			}
 		}
 		if(sep){
