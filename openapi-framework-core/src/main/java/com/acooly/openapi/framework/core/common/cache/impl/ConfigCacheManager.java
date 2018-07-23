@@ -4,14 +4,16 @@ import com.acooly.module.config.entity.AppConfig;
 import com.acooly.module.config.service.impl.AppConfigManager;
 import com.acooly.openapi.framework.core.common.cache.CacheManager;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author qiuboboy@qq.com
  * @date 2018-07-23 16:16
  */
-public class ConfigCacheManager implements CacheManager {
+public class ConfigCacheManager implements CacheManager,InitializingBean {
   private static final String NAME_SPACE = "openapi.cache.";
 
   @Autowired private AppConfigManager configManager;
@@ -59,5 +61,10 @@ public class ConfigCacheManager implements CacheManager {
   @Override
   public void cleanup(String key) {
     configManager.invalidate(NAME_SPACE + key);
+  }
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    ParserConfig.getGlobalInstance().addAccept("com.acooly.");
   }
 }
