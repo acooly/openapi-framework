@@ -2,6 +2,7 @@
 package com.acooly.openapi.framework.domain;
 
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
+import com.acooly.openapi.framework.common.enums.DeviceType;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,7 +36,7 @@ public class LoginRequest extends ApiRequest {
   private String channel;
 
   @OpenApiField(desc = "设备类型")
-  private String deviceType;
+  private DeviceType deviceType;
 
   @Size(max = 64)
   @OpenApiField(desc = "设备型号")

@@ -53,7 +53,7 @@ public class ApiDocProperties {
     /**
      * 是否现实通用服务方案（所有API）
      */
-    private boolean showCommon = false;
+    private boolean showCommon = true;
 
     /**
      * 版权信息
@@ -68,7 +68,7 @@ public class ApiDocProperties {
     private String testGateway = "http://localhost:8090/gateway.do";
 
 
-    private List<String> outputTypes = Lists.newArrayList("console");
+    private List<String> outputTypes = Lists.newArrayList("database");
 
     @PostConstruct
     public void init() {

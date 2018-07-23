@@ -160,7 +160,7 @@ public class OpenApiConfiguration {
   }
 
   @Configuration
-  @ConditionalOnProperty("acooly.openapi.login.enable")
+  @ConditionalOnProperty(value = "acooly.openapi.login.enable",matchIfMissing = true)
   public static class ApiLoginConfiguration {
     @ConditionalOnMissingBean(AppApiLoginService.class)
     @Bean
