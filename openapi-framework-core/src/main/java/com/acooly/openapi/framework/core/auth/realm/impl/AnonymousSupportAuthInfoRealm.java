@@ -4,6 +4,7 @@ import com.acooly.openapi.framework.core.OpenAPIProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Set;
 
 /** @author qiubo@yiji.com */
 public abstract class AnonymousSupportAuthInfoRealm extends CacheableAuthInfoRealm {
@@ -22,7 +23,7 @@ public abstract class AnonymousSupportAuthInfoRealm extends CacheableAuthInfoRea
   protected abstract String doGetSecretKey(String accessKey);
 
   @Override
-  public List<String> getAuthorizedServices(String accessKey) {
+  public Set<String> getAuthorizedServices(String accessKey) {
     if (openAPIProperties.getAnonymous().isEnable()) {
       if (accessKey.equals(openAPIProperties.getAnonymous().getAccessKey())) {
         return openAPIProperties.getAnonymous().getPermissions();
@@ -31,5 +32,5 @@ public abstract class AnonymousSupportAuthInfoRealm extends CacheableAuthInfoRea
     return doGetAuthorizedServices(accessKey);
   }
 
-  protected abstract List<String> doGetAuthorizedServices(String accessKey);
+  protected abstract Set<String> doGetAuthorizedServices(String accessKey);
 }

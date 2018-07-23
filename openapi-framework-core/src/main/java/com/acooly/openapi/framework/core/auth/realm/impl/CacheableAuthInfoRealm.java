@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 缓存实现
@@ -54,7 +55,7 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
     String key = authorizationKey(accessKey);
     List<Permission> value = (List<Permission>) cacheManager.get(key);
     if (value == null) {
-      List<String> permStrList = getAuthorizedServices(accessKey);
+      Set<String> permStrList = getAuthorizedServices(accessKey);
       // 如果没有查询到权限信息,不设置缓存,有可能是网络或者权限系统内部错误
       if (permStrList == null || permStrList.isEmpty()) {
         return null;
@@ -92,5 +93,5 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
    * @param accessKey
    * @return
    */
-  public abstract List<String> getAuthorizedServices(String accessKey);
+  public abstract Set<String> getAuthorizedServices(String accessKey);
 }

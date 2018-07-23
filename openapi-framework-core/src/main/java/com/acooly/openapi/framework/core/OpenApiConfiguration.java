@@ -3,15 +3,13 @@ package com.acooly.openapi.framework.core;
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
 import com.acooly.module.jpa.ex.AbstractEntityJpaDao;
-import com.acooly.openapi.framework.core.OpenAPIProperties.AuthInfoCache.Type;
 import com.acooly.openapi.framework.core.auth.ApiAuthorization;
 import com.acooly.openapi.framework.core.auth.impl.DefaultApiAuthorization;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.core.auth.realm.impl.DefaultAuthInfoRealm;
 import com.acooly.openapi.framework.core.common.cache.CacheManager;
+import com.acooly.openapi.framework.core.common.cache.impl.ConfigCacheManager;
 import com.acooly.openapi.framework.core.common.cache.impl.NOOPCacheManager;
-import com.acooly.openapi.framework.core.common.cache.impl.RedisCacheManager;
-import com.acooly.openapi.framework.core.common.cache.impl.SimpleMemeryCacheManager;
 import com.acooly.openapi.framework.core.notify.ApiNotifySender;
 import com.acooly.openapi.framework.core.notify.api.OpenApiRemoteServiceImpl;
 import com.acooly.openapi.framework.core.service.support.NothingToDoOrderInfoService;
@@ -46,9 +44,8 @@ import static com.acooly.openapi.framework.core.OpenAPIProperties.PREFIX;
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.openapi.framework")
 @EnableJpaRepositories(
-  repositoryBaseClass = AbstractEntityJpaDao.class,
-  basePackages = "com.acooly.openapi.framework"
-)
+    repositoryBaseClass = AbstractEntityJpaDao.class,
+    basePackages = "com.acooly.openapi.framework")
 @EntityScan(basePackages = "com.acooly.openapi.framework.domain")
 public class OpenApiConfiguration {
   @Autowired private OpenAPIProperties properties;
@@ -67,12 +64,10 @@ public class OpenApiConfiguration {
 
   @Bean
   public CacheManager cacheManager() {
-    if (properties.getAuthInfoCache().getType() == Type.NOOP) {
-      return new NOOPCacheManager();
-    } else if (properties.getAuthInfoCache().getType() == Type.MEMORY) {
-      return new SimpleMemeryCacheManager(properties.getAuthInfoCache().getTimeout());
+    if (properties.getAuthInfoCache().isEnable()) {
+      return new ConfigCacheManager(properties.getAuthInfoCache().getDefaultTimeout());
     } else {
-      return new RedisCacheManager(properties.getAuthInfoCache().getTimeout());
+      return new NOOPCacheManager();
     }
   }
 
@@ -160,7 +155,7 @@ public class OpenApiConfiguration {
   }
 
   @Configuration
-  @ConditionalOnProperty(value = "acooly.openapi.login.enable",matchIfMissing = true)
+  @ConditionalOnProperty(value = "acooly.openapi.login.enable", matchIfMissing = true)
   public static class ApiLoginConfiguration {
     @ConditionalOnMissingBean(AppApiLoginService.class)
     @Bean

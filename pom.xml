@@ -14,7 +14,9 @@
 
 
     <name>openapi-framework</name>
-
+    <properties>
+        <caffeine.version>2.6.2</caffeine.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.acooly</groupId>

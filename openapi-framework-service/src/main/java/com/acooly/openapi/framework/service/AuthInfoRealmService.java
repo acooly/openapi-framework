@@ -1,6 +1,6 @@
 package com.acooly.openapi.framework.service;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author qiuboboy@qq.com
@@ -28,5 +28,5 @@ public interface AuthInfoRealmService {
    *
    * @param accessKey
    */
-  List<String> getAuthorizationInfo(String accessKey);
+  Set<String> getAuthorizationInfo(String accessKey);
 }

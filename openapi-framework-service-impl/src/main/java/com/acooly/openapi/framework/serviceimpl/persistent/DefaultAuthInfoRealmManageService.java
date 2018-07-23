@@ -8,9 +8,10 @@ import com.acooly.openapi.framework.core.auth.realm.impl.CacheableAuthInfoRealm;
 import com.acooly.openapi.framework.domain.ApiPartner;
 import com.acooly.openapi.framework.domain.ApiPartnerService;
 import com.acooly.openapi.framework.service.AuthInfoRealmManageService;
+import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author qiuboboy@qq.com
@@ -64,7 +65,7 @@ public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageSer
   }
 
   @Override
-  public List<String> getAuthorizationInfo(String accessKey) {
-    return apiPartnerServiceService.getAuthorizedServices(accessKey);
+  public Set<String> getAuthorizationInfo(String accessKey) {
+    return Sets.newHashSet(apiPartnerServiceService.getAuthorizedServices(accessKey));
   }
 }

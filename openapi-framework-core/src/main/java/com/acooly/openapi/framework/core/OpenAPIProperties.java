@@ -11,7 +11,7 @@ package com.acooly.openapi.framework.core;
 
 import com.acooly.core.utils.validate.Validators;
 import com.acooly.openapi.framework.core.auth.permission.Permission;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 import static com.acooly.openapi.framework.common.ApiConstants.ANONYMOUS_ACCESS_KEY;
 import static com.acooly.openapi.framework.common.ApiConstants.ANONYMOUS_SECRET_KEY;
@@ -60,7 +60,6 @@ public class OpenAPIProperties {
 
   @Data
   public static class Anonymous {
-
     private boolean enable = true;
     /** 匿名accessKey */
     @NotBlank private String accessKey = ANONYMOUS_ACCESS_KEY;
@@ -69,7 +68,7 @@ public class OpenAPIProperties {
     @Length(min = 16)
     private String secretKey = ANONYMOUS_SECRET_KEY;
     /** 匿名权限信息 */
-    @NotNull private List<String> permissions = Lists.newArrayList();
+    @NotNull private Set<String> permissions = Sets.newHashSet();
   }
 
   @Data
@@ -88,18 +87,9 @@ public class OpenAPIProperties {
 
   @Data
   public static class AuthInfoCache {
-    /** 认证授权信息缓存实现类型 */
-    private Type type = Type.MEMORY;
-    /** 缓存信息过期时间 */
-    private int timeout = 5 * 60;
-
-    public enum Type {
-      /** 不使用缓存 */
-      NOOP,
-      /** 使用内存缓存 */
-      MEMORY,
-      /** 使用redis缓存 */
-      REDIS
-    }
+    /** 认证授权信息缓存是否开启 */
+    private boolean enable = true;
+    /** 缓存信息过期时间,单位：ms */
+    private int defaultTimeout = 2 * 60 * 60 * 1000;
   }
 }

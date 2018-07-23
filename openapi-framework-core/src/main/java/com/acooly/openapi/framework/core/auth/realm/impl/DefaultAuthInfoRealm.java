@@ -3,7 +3,7 @@ package com.acooly.openapi.framework.core.auth.realm.impl;
 import com.acooly.openapi.framework.service.AuthInfoRealmService;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.Set;
 
 /** @author qiubo@yiji.com */
 public class DefaultAuthInfoRealm extends AnonymousSupportAuthInfoRealm {
@@ -16,7 +16,7 @@ public class DefaultAuthInfoRealm extends AnonymousSupportAuthInfoRealm {
   }
 
   @Override
-  public List<String> doGetAuthorizedServices(String accessKey) {
+  public Set<String> doGetAuthorizedServices(String accessKey) {
     return authInfoRealmService.getAuthorizationInfo(accessKey);
   }
 }

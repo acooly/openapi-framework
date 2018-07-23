@@ -26,8 +26,5 @@ public class NOOPCacheManager implements CacheManager {
   }
 
   @Override
-  public void cleanup() {}
-
-  @Override
   public void cleanup(String key) {}
 }

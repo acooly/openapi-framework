@@ -12,7 +12,9 @@
 
     <artifactId>openapi-framework-core</artifactId>
     <name>openapi-framework-core</name>
-
+    <properties>
+        <caffeine.version>2.6.2</caffeine.version>
+    </properties>
     <dependencies>
 
         <dependency>
@@ -31,6 +33,11 @@
             <artifactId>acooly-component-jpa</artifactId>
             <version>${parent.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-config</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>

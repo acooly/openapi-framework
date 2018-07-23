@@ -12,6 +12,8 @@ package com.acooly.openapi.framework.core.auth.permission;
 
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.google.common.base.Splitter;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Iterator;
 
@@ -30,6 +32,8 @@ import static com.acooly.openapi.framework.common.ApiConstants.WILDCARD_TOKEN;
  *
  * @author qiubo@qq.com
  */
+@Getter
+@Setter
 public class DefaultPermission implements Permission {
 
   /** 权限字符串 */
