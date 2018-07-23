@@ -129,7 +129,7 @@ public interface ApiNotifySender {
 
 ## 版本说明
 
-### v5.0.0-SNAPSHOT
+### v4.2.0-SNAPSHOT
 
 #### 1. 请求
 
