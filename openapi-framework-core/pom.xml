@@ -29,7 +29,7 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-jpa</artifactId>
-            <version>${acooly.framework.version}</version>
+            <version>${parent.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -38,49 +38,16 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-redis</artifactId>
-            <version>1.8.0.RELEASE</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-configuration-processor</artifactId>
-            <version>${acooly.framework.version}</version>
+            <version>${parent.version}</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
-
-
-    <profiles>
-
-        <profile>
-            <id>develop</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-
-        <profile>
-            <id>deploy</id>
-            <activation>
-                <property>
-                    <name>opt</name>
-                    <value>deploy</value>
-                </property>
-            </activation>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources</directory>
-                        <filtering>true</filtering>
-                        <excludes>
-                            <exclude>spring/keystore/**/*</exclude>
-                        </excludes>
-                    </resource>
-                </resources>
-            </build>
-        </profile>
-    </profiles>
-
 </project>
