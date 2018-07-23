@@ -15,7 +15,6 @@ import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.acooly.openapi.apidoc.persist.service.*;
-import com.esotericsoftware.minlog.Log;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +58,7 @@ public class ApiDocIntegrateServiceImpl implements ApiDocIntegrateService {
                 continue;
             }
         }
-        Log.info("合并删除的服务：{}", needRemoves.toString());
+        log.info("合并删除的服务：{}", needRemoves.toString());
         for (ApiDocService entity : apiDocServices) {
             mergeOne(entity);
         }
