@@ -9,7 +9,7 @@ CREATE TABLE `api_partner` (
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `comments` varchar(128) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='合作方管理';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='合作方管理';
 
 CREATE TABLE `api_partner_service` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -25,7 +25,7 @@ CREATE TABLE `api_partner_service` (
   `comments` varchar(128) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_PARTNER_SERVICE` (`apipartnerid`,`apiserviceid`)
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `api_scheme` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '物理主键',
@@ -34,7 +34,7 @@ CREATE TABLE `api_scheme` (
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `comments` varchar(128) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='服务方案';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='服务方案';
 
 CREATE TABLE `api_service_type` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -46,7 +46,7 @@ CREATE TABLE `api_service_type` (
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `comments` varchar(64) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='服务分类';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COMMENT='服务分类';
 
 CREATE TABLE `api_service` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -62,6 +62,6 @@ CREATE TABLE `api_service` (
   UNIQUE KEY `UK_SERVICE_KEY` (`name`,`version`) COMMENT '服务唯一索引',
   KEY `FK_8m0vhsfvwi48tbivdtcr8urb` (`type_id`),
   CONSTRAINT `FK_8m0vhsfvwi48tbivdtcr8urb` FOREIGN KEY (`type_id`) REFERENCES `api_service_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='服务分类';
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COMMENT='服务分类';
 
 

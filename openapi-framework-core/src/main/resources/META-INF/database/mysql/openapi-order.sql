@@ -23,4 +23,4 @@ CREATE TABLE `api_order_info` (
   KEY `IDX_ORDER_GID` (`gid`) USING BTREE,
   KEY `IDX_PARTNER_ORDER` (`partner_id`,`service`,`version`) USING BTREE,
   KEY `IDX_ADD_TIME` (`raw_add_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='请求信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='请求信息表';

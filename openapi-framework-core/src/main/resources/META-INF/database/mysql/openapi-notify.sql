@@ -23,5 +23,5 @@ CREATE TABLE `api_notify_message` (
   PRIMARY KEY (`id`),
   KEY `IDX_NOTIFY_STATUS` (`status`,`execute_status`),
   KEY `IDX_NOTIFY_QUERY` (`gid`,`partner_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 

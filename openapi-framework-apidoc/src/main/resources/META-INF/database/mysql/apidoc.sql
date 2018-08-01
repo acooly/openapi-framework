@@ -16,7 +16,7 @@ CREATE TABLE `api_doc_service` (
   `signature` varchar(128) DEFAULT NULL COMMENT '签名(MD5(service_no+title+owner+note+service_type+busi_type))',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_API_DOC_SERVICE_NO` (`service_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=1726 DEFAULT CHARSET=utf8 COMMENT='服务信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1726 DEFAULT CHARSET=utf8mb4 COMMENT='服务信息';
 
 CREATE TABLE `api_doc_scheme` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -30,7 +30,7 @@ CREATE TABLE `api_doc_scheme` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='服务方案';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COMMENT='服务方案';
 
 CREATE TABLE `api_doc_scheme_service` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -42,7 +42,7 @@ CREATE TABLE `api_doc_scheme_service` (
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_API_SCHEME_SERVICE` (`scheme_no`,`service_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=185 DEFAULT CHARSET=utf8 COMMENT='方案服务列表';
+) ENGINE=InnoDB AUTO_INCREMENT=185 DEFAULT CHARSET=utf8mb4 COMMENT='方案服务列表';
 
 CREATE TABLE `api_doc_message` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -58,7 +58,7 @@ CREATE TABLE `api_doc_message` (
   `signatrue` varchar(128) DEFAULT NULL COMMENT '签名(message_no+message_type+note)',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_API_DOC_MESSAGE_NO` (`message_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=3836 DEFAULT CHARSET=utf8 COMMENT='服务报文';
+) ENGINE=InnoDB AUTO_INCREMENT=3836 DEFAULT CHARSET=utf8mb4 COMMENT='服务报文';
 
 CREATE TABLE `api_doc_item` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -84,7 +84,7 @@ CREATE TABLE `api_doc_item` (
   UNIQUE KEY `UK_api_doc_item` (`item_no`),
   KEY `FK_apidoc_item_self` (`parent_id`),
   CONSTRAINT `FK_apidoc_item_self` FOREIGN KEY (`parent_id`) REFERENCES `api_doc_item` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24999 DEFAULT CHARSET=utf8 COMMENT='报文字段';
+) ENGINE=InnoDB AUTO_INCREMENT=24999 DEFAULT CHARSET=utf8mb4 COMMENT='报文字段';
 
 CREATE TABLE `api_meta_service` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -103,4 +103,4 @@ CREATE TABLE `api_meta_service` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_name_version` (`service_name`,`version`)
-) ENGINE=InnoDB AUTO_INCREMENT=1512 DEFAULT CHARSET=utf8 COMMENT='服务类';
+) ENGINE=InnoDB AUTO_INCREMENT=1512 DEFAULT CHARSET=utf8mb4 COMMENT='服务类';
