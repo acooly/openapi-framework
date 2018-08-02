@@ -138,9 +138,9 @@ public class ApiDocPortalController extends AbstractPortalController {
     }
 
 
-    @RequestMapping(value = "apidoc")
+    @RequestMapping(value = "metadata")
     @ResponseBody
-    public Object apidocMetadata(HttpServletRequest request, HttpServletResponse response) {
+    public Object metadata(HttpServletRequest request, HttpServletResponse response) {
         JsonResult result = new JsonResult();
         try {
             return doLoadApidoc(request);

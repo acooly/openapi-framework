@@ -54,7 +54,7 @@
                             <td>${e.version}</td>
                             <td>${e.serviceType}</td>
                             <td>${e.title}</td>
-                            <td><a target="_blank" href="/docs/apidoc/apidoc.html?id=${e.id}">查看</a></td>
+                            <td><a target="_blank" href="/docs/apidoc/metadata.html?id=${e.id}">查看</a></td>
                         </tr>
                         </#list>
                         </tbody>
