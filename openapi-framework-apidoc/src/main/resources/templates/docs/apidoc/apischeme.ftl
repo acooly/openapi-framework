@@ -44,6 +44,7 @@
                             <th>版本</th>
                             <th>服务类型</th>
                             <th>说明</th>
+                            <th>元数据</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -53,6 +54,7 @@
                             <td>${e.version}</td>
                             <td>${e.serviceType}</td>
                             <td>${e.title}</td>
+                            <td><a target="_blank" href="/docs/apidoc/apidoc.html?id=${e.id}">查看</a></td>
                         </tr>
                         </#list>
                         </tbody>

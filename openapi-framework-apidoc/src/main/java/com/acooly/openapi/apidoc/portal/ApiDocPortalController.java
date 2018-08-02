@@ -11,6 +11,7 @@ package com.acooly.openapi.apidoc.portal;
 
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonListResult;
+import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.enums.FieldStatus;
 import com.acooly.openapi.apidoc.enums.MessageTypeEnum;
@@ -131,7 +132,20 @@ public class ApiDocPortalController extends AbstractPortalController {
             result.setEntity(apiServiceDoc);
             result.appendData(referenceData(request));
         } catch (Exception e) {
-            handleException("apidoc详情", e, request);
+            handleException(result, "apidoc详情", e);
+        }
+        return result;
+    }
+
+
+    @RequestMapping(value = "apidoc")
+    @ResponseBody
+    public Object apidocMetadata(HttpServletRequest request, HttpServletResponse response) {
+        JsonResult result = new JsonResult();
+        try {
+            return doLoadApidoc(request);
+        } catch (Exception e) {
+            handleException(result, "apidoc元数据", e);
         }
         return result;
     }
