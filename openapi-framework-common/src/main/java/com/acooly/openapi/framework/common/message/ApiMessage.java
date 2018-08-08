@@ -1,7 +1,6 @@
 package com.acooly.openapi.framework.common.message;
 
 import com.acooly.core.common.facade.InfoBase;
-import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.google.common.collect.Maps;
 import lombok.Getter;
@@ -33,8 +32,9 @@ public abstract class ApiMessage extends InfoBase {
   @OpenApiField(desc = "商户ID", constraint = "必填")
   private String partnerId;
 
-  @OpenApiField(desc = "服务版本", constraint = "非必填")
-  private String version = ApiConstants.VERSION_DEFAULT;
+  @NotEmpty
+  @OpenApiField(desc = "服务版本", constraint = "必填")
+  private String version;
 
   @Size(max = 128)
   @OpenApiField(desc = "会话参数", constraint = "调用端的API调用会话参数，请求参数任何合法值，在响应时会回传给调用端")
