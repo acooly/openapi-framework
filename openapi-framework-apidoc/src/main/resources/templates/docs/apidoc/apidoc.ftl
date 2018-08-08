@@ -4,11 +4,11 @@
 		<@includePage path="/docs/common/meta.html"/>
 		<@includePage path="/docs/common/include.html"/>
         <link rel="stylesheet" type="text/css" href="/portal/style/css/api.css"/>
-        <link rel="stylesheet" type="text/css" href="/portal/js/hightlight/styles/dark.css"/>
+        <link rel="stylesheet" type="text/css" href="/portal/js/jquery.json-viewer/json-viewer/jquery.json-viewer.css"/>
         <link href="/plugin/tooltipster/css/tooltipster.bundle.css" rel="stylesheet">
         <link href="/plugin/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-shadow.min.css" rel="stylesheet">
         <script type="text/javascript" src="/portal/js/clipboard.min.js" ></script>
-        <script type="text/javascript" src="/portal/js/hightlight/highlight.pack.js" ></script>
+        <script type="text/javascript" src="/portal/js/jquery.json-viewer/json-viewer/jquery.json-viewer.js" ></script>
         <script type="text/javascript" src="/plugin/baiduTemplate.js"></script>
         <script type="text/javascript" src="/portal/script/apidoc.js" ></script>
 
@@ -56,6 +56,9 @@
         <div class="doc-header-more">
             <button onclick="location.href='/docs/apidebug/index.html?service=<%=entity.name%>'" class="layui-btn layui-btn-small layui-btn-radius">
                 <i class="layui-icon">&#xe63c;</i> 点此联调
+            </button>
+            <button onclick="window.open('/docs/apidoc/metadata.html?id=<%=entity.id%>')" class="layui-btn layui-btn-small layui-btn-radius">
+                <i class="layui-icon">&#xe63c;</i> 下载元数据
             </button>
         </div>
     </div>
@@ -163,6 +166,17 @@
                 </div>
                 <div class="switch-content" id="apidoc_demo_container"></div>
             </div>
+
+        <#--<div class="switch">-->
+            <#--<div class="switch-title">-->
+                <#--<a name="apidoc_demo">元数据</a>-->
+            <#--</div>-->
+            <#--<div class="switch-content">-->
+                <#--<pre id="json-renderer"></pre>-->
+            <#--</div>-->
+        <#--</div>-->
+
+
     </div>
 </script>
 
@@ -218,10 +232,15 @@
 </script>
 
 
+
+
 <script src="/plugin/tooltipster/js/tooltipster.bundle.js"></script>
 <script src="/plugin/tooltipster/js/tooltipster-scrollableTip.js"></script>
 
 <script>
+
+
+
 
     $(function(){
         var defApidocId = "${apidocId}";
