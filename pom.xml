@@ -55,7 +55,6 @@
         <module>openapi-framework-common</module>
         <module>openapi-framework-service</module>
         <module>openapi-framework-service-impl</module>
-        <module>openapi-framework-trafficlimiter</module>
         <module>openapi-framework-apidoc</module>
         <module>openapi-framework-extensions</module>
     </modules>
