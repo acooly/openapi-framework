@@ -40,6 +40,11 @@
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-extensions</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
             <artifactId>acooly-taglibs</artifactId>
             <exclusions>
                 <exclusion>

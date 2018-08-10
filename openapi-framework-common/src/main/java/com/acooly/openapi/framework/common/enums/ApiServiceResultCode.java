@@ -18,6 +18,8 @@ public enum ApiServiceResultCode implements Messageable {
   REQUEST_NO_NOT_UNIQUE("REQUEST_NO_NOT_UNIQUE", "请求号重复"),
   FIELD_NOT_UNIQUE("FIELD_NOT_UNIQUE", "对象字段重复"),
 
+  TOO_MANY_REQUEST("TOO_MANY_REQUEST", "请求数太多"),
+
   REQUEST_GID_NOT_EXSIT("REQUEST_GID_NOT_EXSIT", "gid不存在"),
 
   SERVICE_NOT_FOUND_ERROR("SERVICE_NOT_FOUND_ERROR", "服务不存在"),
