@@ -155,8 +155,7 @@ public class ApiContext {
     String mediaType = null;
     String contentType = orignalRequest.getContentType();
     if (Strings.isNotBlank(contentType)) {
-      if (contentType.equalsIgnoreCase(MediaType.APPLICATION_JSON_VALUE)
-          || contentType.equalsIgnoreCase(MediaType.APPLICATION_JSON_UTF8_VALUE)) {
+      if (contentType.contains(MediaType.APPLICATION_JSON_VALUE)) {
         mediaType = MediaType.APPLICATION_JSON_VALUE;
       } else if (contentType.contains(MediaType.APPLICATION_FORM_URLENCODED_VALUE)) {
         mediaType = MediaType.APPLICATION_FORM_URLENCODED_VALUE;
