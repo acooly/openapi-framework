@@ -175,7 +175,7 @@ public class ApiDocParserImpl implements ApiDocParser {
                     }
                 } else if (ApiDataTypeUtils.isObject(field)) {
                     // 对象
-                    subItemType = field.getClass();
+                    subItemType = field.getType();
                 }
 
                 if (subItemType != null) {
