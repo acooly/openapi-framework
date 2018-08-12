@@ -10,6 +10,7 @@ import com.acooly.module.mybatis.EntityMybatisDao;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -29,4 +30,9 @@ public interface ApiDocMessageDao extends EntityMybatisDao<ApiDocMessage> {
     @Select("select * from api_doc_message where service_no = #{serviceNo}")
     List<ApiDocMessage> findByServiceNo(@Param("serviceNo") String serviceNo);
 
+    @Update("delete from api_doc_message where message_no = #{messageNo}")
+    void deleteByMessageNo(@Param("messageNo") String messageNo);
+
+    @Update("delete from api_doc_message where service_no = #{serviceNo}")
+    void deleteByServiceNo(@Param("serviceNo") String serviceNo);
 }

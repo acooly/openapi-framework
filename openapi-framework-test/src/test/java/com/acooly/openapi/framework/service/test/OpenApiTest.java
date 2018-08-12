@@ -64,10 +64,10 @@ public class OpenApiTest extends AbstractApiServieTests {
     request.setPayeeUserId("12345678900987654321");
     request.setPayerUserId("09876543211234567890");
     request.setBuyerUserId("09876543211234567890");
-    request.setBuyeryEmail("qiuboboy@qq.com");
+//    request.setBuyeryEmail("qiuboboy@qq.com");
     request.setBuyeryMobileNo("13898765453");
-    request.setBuyerCertNo("330702194706165014");
-    request.setPassword(encrypt("12312312"));
+//    request.setBuyerCertNo("330702194706165014");
+//    request.setPassword(encrypt("12312312"));
     request.setContext(content);
     List<GoodInfo> goodInfos = Lists.newArrayList();
     for (int i = 1; i <= 2; i++) {
@@ -75,7 +75,7 @@ public class OpenApiTest extends AbstractApiServieTests {
       goodInfo.setGoodType(GoodType.actual);
       goodInfo.setName("天子精品" + i);
       goodInfo.setPrice(Money.amout("400.00"));
-      goodInfo.setQuantity(1);
+//      goodInfo.setQuantity(1);
       goodInfo.setReferUrl("http://acooly.cn/tianzi");
       goodInfos.add(goodInfo);
     }
@@ -168,10 +168,10 @@ public class OpenApiTest extends AbstractApiServieTests {
     request.setPayeeUserId("12345678900987654321");
     request.setPayerUserId("09876543211234567890");
     request.setBuyerUserId("09876543211234567890");
-    request.setBuyeryEmail("qiuboboy@qq.com");
     request.setBuyeryMobileNo("13898765453");
-    request.setBuyerCertNo("330702194706165014");
-    request.setPassword(encrypt("12312312"));
+//    request.setBuyeryEmail("qiuboboy@qq.com");
+//    request.setBuyerCertNo("330702194706165014");
+//    request.setPassword(encrypt("12312312"));
     request.setContext(content);
     request.setPartnerId(partnerId);
     request.ext("xx", "oo");

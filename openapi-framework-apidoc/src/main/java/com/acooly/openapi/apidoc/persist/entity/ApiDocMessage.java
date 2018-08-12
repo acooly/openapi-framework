@@ -1,13 +1,14 @@
 /*
-* acooly.cn Inc.
-* Copyright (c) 2017 All Rights Reserved.
-* create by acooly
-* date:2017-12-05
-*/
+ * acooly.cn Inc.
+ * Copyright (c) 2017 All Rights Reserved.
+ * create by acooly
+ * date:2017-12-05
+ */
 package com.acooly.openapi.apidoc.persist.entity;
 
 
 import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.enums.MessageTypeEnum;
 import com.google.common.collect.Lists;
 import lombok.Getter;
@@ -38,6 +39,7 @@ public class ApiDocMessage extends AbstractEntity {
 
     /**
      * 消息编号
+     * serviceNo+messageType
      */
     @NotEmpty
     @Size(max = 64)
@@ -88,5 +90,26 @@ public class ApiDocMessage extends AbstractEntity {
 
     @Transient
     private List<ApiDocItem> apiDocItems = Lists.newArrayList();
+
+
+    @Override
+    public int hashCode() {
+        if (Strings.isNoneBlank(getMessageNo())) {
+            return getMessageNo().hashCode();
+        }
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        } else if (!(o instanceof AbstractEntity)) {
+            return false;
+        } else {
+            ApiDocMessage that = (ApiDocMessage) o;
+            return Strings.equals(that.getMessageNo(), this.getMessageNo());
+        }
+    }
 
 }

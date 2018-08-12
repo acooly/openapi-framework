@@ -21,7 +21,9 @@ import java.util.List;
  */
 public interface ApiDocMessageService extends EntityService<ApiDocMessage> {
 
-    void mergeSave(ApiDocMessage apiDocMessage);
+    void merge(String serviceNo,List<ApiDocMessage> apiDocMessages);
+
+    void cascadeDelete(String serviceNo);
 
     List<ApiDocMessage> loadApiDocMessages(String serviceNo);
 

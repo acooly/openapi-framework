@@ -45,6 +45,12 @@ public class ApiDocs {
         return Strings.equals(ApiDocs.signApiDocItem(entity1), ApiDocs.signApiDocItem(entity2));
     }
 
+    public static boolean equelsNoAndTypeApiDocItem(ApiDocItem entity1, ApiDocItem entity2) {
+        return Strings.equals(entity1.getItemNo(), entity2.getItemNo()) &&
+                entity1.getDataType() == entity2.getDataType();
+    }
+
+
     public static String signApiDocService(ApiDocService entity) {
         StringBuilder waitToSign = new StringBuilder();
         waitToSign.append(Strings.trimToEmpty(entity.getServiceNo()))
@@ -58,7 +64,8 @@ public class ApiDocs {
     public static String signApiDocMessage(ApiDocMessage entity) {
         StringBuilder waitToSign = new StringBuilder();
         waitToSign.append(Strings.trimToEmpty(entity.getServiceNo()))
-                .append(Strings.trimToEmpty(entity.getMessageType() == null ? null : entity.getMessageType().name()));
+                .append(Strings.trimToEmpty(entity.getMessageType() == null ? null : entity.getMessageType().name()))
+                .append(Strings.trimToEmpty(entity.getNote()));
         return DigestUtils.md5Hex(waitToSign.toString().getBytes());
     }
 

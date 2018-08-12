@@ -10,6 +10,7 @@ import com.acooly.module.mybatis.EntityMybatisDao;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * 服务 Mybatis Dao
@@ -23,5 +24,8 @@ public interface ApiDocServiceDao extends EntityMybatisDao<ApiDocService> {
 
     @Select("select * from api_doc_service where service_no = #{serviceNo}")
     ApiDocService findByServiceNo(@Param("serviceNo") String serviceNo);
+
+    @Update("delete from api_doc_service where service_no = #{serviceNo}")
+    void deleteByServiceNo(@Param("serviceNo") String serviceNo);
 
 }

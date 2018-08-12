@@ -29,9 +29,9 @@ public class ApiDocGenerateListener implements ApplicationListener<ApiMetaParseF
 
     @Override
     public void onApplicationEvent(ApiMetaParseFinish event) {
-        log.info("启动ApiDoc生成...");
+        log.info("ApiDoc生成事件 [启动]");
         apiDocBuilder.build();
-        log.info("完成ApiDoc生成");
+        log.info("ApiDoc生成事件 [完成]");
     }
 
 }

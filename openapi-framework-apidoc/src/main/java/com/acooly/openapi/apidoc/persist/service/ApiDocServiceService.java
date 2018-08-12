@@ -10,6 +10,8 @@ package com.acooly.openapi.apidoc.persist.service;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 
+import java.util.List;
+
 /**
  * 服务 Service接口
  * <p>
@@ -23,13 +25,9 @@ public interface ApiDocServiceService extends EntityService<ApiDocService> {
     /**
      * 合并保存服务信息
      *
-     * @param apiDocService
+     * @param apiDocServices
      */
-    void mergeSave(ApiDocService apiDocService);
-
-
-    ApiDocService findByServiceNo(String serviceNo);
-
+    void merge(List<ApiDocService> apiDocServices);
 
     ApiDocService loadApiDocService(Long id);
 

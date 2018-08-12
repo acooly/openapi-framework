@@ -9,17 +9,17 @@
  */
 package com.acooly.openapi.apidoc.persist.service.impl;
 
-import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.Collections3;
-import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
-import com.acooly.openapi.apidoc.persist.service.*;
+import com.acooly.openapi.apidoc.persist.service.ApiDocIntegrateService;
+import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeService;
+import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
+import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -35,12 +35,6 @@ public class ApiDocIntegrateServiceImpl implements ApiDocIntegrateService {
     private ApiDocServiceService apiDocServiceService;
 
     @Autowired
-    private ApiDocMessageService apiDocMessageService;
-
-    @Autowired
-    private ApiDocItemService apiDocItemService;
-
-    @Autowired
     private ApiDocSchemeService apiDocSchemeService;
 
     @Autowired
@@ -49,21 +43,7 @@ public class ApiDocIntegrateServiceImpl implements ApiDocIntegrateService {
 
     @Override
     public void merge(List<ApiDocService> apiDocServices) {
-        List<ApiDocService> persists = apiDocServiceService.getAll();
-        List<Long> needRemoves = Lists.newArrayList();
-        for (ApiDocService persist : persists) {
-            // 生成没有，数据库存在，合并删除
-            if (!apiDocServices.contains(persist)) {
-                needRemoves.add(persist.getId());
-                continue;
-            }
-        }
-        log.info("合并删除的服务：{}", needRemoves.toString());
-        for (ApiDocService entity : apiDocServices) {
-            mergeOne(entity);
-        }
-
-        // do remove
+        apiDocServiceService.merge(apiDocServices);
     }
 
 
@@ -74,7 +54,7 @@ public class ApiDocIntegrateServiceImpl implements ApiDocIntegrateService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Throwable.class)
     public void distributeScheme(ApiDocScheme apiDocScheme, List<ApiDocService> apiDocServices) {
 
         try {
@@ -109,34 +89,12 @@ public class ApiDocIntegrateServiceImpl implements ApiDocIntegrateService {
             if (Collections3.isNotEmpty(unsaveEntities)) {
                 apiDocSchemeServiceService.saves(unsaveEntities);
             }
-            log.info("合并构建方案服务列表 成功。新增: {}， 删除冗余:{}", unsaveEntities.size(), removeEntities.size());
+            log.info("构建服务方案 成功。scheme:{} , 新增: {}， 删除冗余:{}", apiDocScheme.getTitle(), unsaveEntities.size(), removeEntities.size());
         } catch (Exception e) {
-            log.warn("合并构建方案服务列表 失败. scheme:{}. error:{}", apiDocScheme, e.getMessage());
+            log.warn("构建服务方案 失败. scheme:{}. error:{}", apiDocScheme, e.getMessage());
             throw new RuntimeException("合并构建方案服务列表 失败", e);
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public void mergeOne(ApiDocService apiDocService) {
-        try {
-            apiDocServiceService.mergeSave(apiDocService);
 
-            List<ApiDocMessage> apiDocMessages = apiDocService.getApiDocMessages();
-            if (Collections3.isEmpty(apiDocMessages)) {
-                return;
-            }
-
-            for (ApiDocMessage apiDocMessage : apiDocMessages) {
-                apiDocMessageService.mergeSave(apiDocMessage);
-
-                if (Collections3.isEmpty(apiDocMessage.getApiDocItems())) {
-                    continue;
-                }
-
-                apiDocItemService.mergeSaves(apiDocMessage.getApiDocItems());
-            }
-        } catch (Exception e) {
-            throw new BusinessException("合并Apidoc失败：" + apiDocService.getServiceNo(), e);
-        }
-    }
 }

@@ -1,13 +1,14 @@
 /*
-* acooly.cn Inc.
-* Copyright (c) 2017 All Rights Reserved.
-* create by acooly
-* date:2017-12-05
-*/
+ * acooly.cn Inc.
+ * Copyright (c) 2017 All Rights Reserved.
+ * create by acooly
+ * date:2017-12-05
+ */
 package com.acooly.openapi.apidoc.persist.entity;
 
 
 import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.enums.ApiDataTypeEnum;
 import com.acooly.openapi.apidoc.enums.ApiEncryptstatusEnum;
 import com.acooly.openapi.apidoc.enums.FieldStatus;
@@ -164,6 +165,27 @@ public class ApiDocItem extends AbstractEntity {
 
     public void addChild(ApiDocItem apiDocItem) {
         children.add(apiDocItem);
+    }
+
+
+    @Override
+    public int hashCode() {
+        if (Strings.isNoneBlank(getItemNo())) {
+            return getItemNo().hashCode();
+        }
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        } else if (!(o instanceof AbstractEntity)) {
+            return false;
+        } else {
+            ApiDocItem that = (ApiDocItem) o;
+            return Strings.equals(that.getItemNo(), this.getItemNo());
+        }
     }
 
 

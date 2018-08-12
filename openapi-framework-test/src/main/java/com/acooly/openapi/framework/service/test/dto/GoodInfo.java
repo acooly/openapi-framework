@@ -20,29 +20,31 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-/** @author zhangpu */
+/**
+ * @author zhangpu
+ */
 @Getter
 @Setter
 public class GoodInfo extends InfoBase {
 
-  @NotEmpty
-  @Size(max = 63)
-  @OpenApiField(desc = "名称", demo = "牛肉干")
-  private String name;
+    @NotEmpty
+    @Size(max = 63)
+    @OpenApiField(desc = "商品名称", demo = "牛肉干")
+    private String name;
 
-  @NotNull
-  @OpenApiField(desc = "类型")
-  private GoodType goodType;
+    @NotNull
+    @OpenApiField(desc = "商品类型")
+    private GoodType goodType;
 
-  @Size(min = 1)
-  @OpenApiField(desc = "数量", demo = "1")
-  private int quantity;
+    @Size(min = 1)
+    @OpenApiField(desc = "商品数量", demo = "1")
+    private int quantity;
 
-  @MoneyConstraint(min = 1)
-  @OpenApiField(desc = "价格", demo = "120.00")
-  private Money price;
+    @MoneyConstraint(min = 1)
+    @OpenApiField(desc = "价格", demo = "120.00")
+    private Money price;
 
-  @HttpUrl(blankable = true)
-  @OpenApiField(desc = "介绍网址", demo = "http://www.merchant.com/goods.html")
-  private String referUrl;
+    @HttpUrl(blankable = true)
+    @OpenApiField(desc = "介绍网址", demo = "http://www.merchant.com/goods.html")
+    private String referUrl;
 }

@@ -24,11 +24,26 @@ public interface ApiDocItemService extends EntityService<ApiDocItem> {
     /**
      * 合并保存报文字段列表
      *
+     * @param messageNo
      * @param apiDocItems
      */
-    void mergeSaves(List<ApiDocItem> apiDocItems);
+    void merge(String messageNo, List<ApiDocItem> apiDocItems);
 
 
+    /**
+     * 根据报文编码查询字段
+     *
+     * @param messageNo
+     * @return
+     */
     List<ApiDocItem> loadByMessageNo(String messageNo);
+
+
+    /**
+     * 根据消息编码删除字段数据
+     *
+     * @param messageNo
+     */
+    void deleteByMessageNo(String messageNo);
 
 }

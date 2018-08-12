@@ -10,6 +10,8 @@ package com.acooly.openapi.apidoc.persist.service;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.openapi.framework.domain.ApiMetaService;
 
+import java.util.List;
+
 /**
  * 服务元数据 Service接口
  * <p>
@@ -19,7 +21,8 @@ import com.acooly.openapi.framework.domain.ApiMetaService;
  */
 public interface ApiMetaServiceService extends EntityService<ApiMetaService> {
 
-    ApiMetaService mergeSave(ApiMetaService apiMetaService);
+
+    void merge(List<ApiMetaService> apiMetaServices);
 
     ApiMetaService findByServiceNameAndVersion(String serviceName, String version);
 

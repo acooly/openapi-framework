@@ -7,8 +7,10 @@
 package com.acooly.openapi.framework.domain;
 
 import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.enums.ResponseType;
+import com.google.common.base.MoreObjects;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -98,4 +100,38 @@ public class ApiMetaService extends AbstractEntity {
      */
     @Size(max = 128)
     private String notifyClass;
+
+    public String getServiceNo() {
+        return getServiceName() + "_" + getVersion();
+    }
+
+    @Override
+    public int hashCode() {
+        if (Strings.isNoneBlank(getServiceNo())) {
+            return getServiceNo().hashCode();
+        }
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        } else if (!(o instanceof AbstractEntity)) {
+            return false;
+        } else {
+            ApiMetaService that = (ApiMetaService) o;
+            return Strings.equals(that.getServiceNo(), this.getServiceNo());
+        }
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper("")
+                .add("serviceName", serviceName)
+                .add("version", version)
+                .add("serviceDesc", serviceDesc)
+                .add("responseType", responseType)
+                .toString();
+    }
 }
