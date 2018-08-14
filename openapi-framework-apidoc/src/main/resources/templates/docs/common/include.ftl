@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/plugin/layui/css/layui.css">
 <link rel="stylesheet" href="/portal/style/css/global.css" />
 <link rel="stylesheet" href="/portal/style/css/main.css" />
-<script type="text/javascript" src="/portal/js/jquery-1.11.3.min.js" ></script>
+<script type="text/javascript" src="/plugin/jquery/jquery-1.11.3.min.js" ></script>
 <script type="text/javascript" src="/plugin/layui/layui.all.js"></script>
 <script type="text/javascript" src="/plugin/acooly/acooly.portal.js"></script>
 <script type="text/javascript" src="/manage/assert/script/acooly.format.js"></script>
