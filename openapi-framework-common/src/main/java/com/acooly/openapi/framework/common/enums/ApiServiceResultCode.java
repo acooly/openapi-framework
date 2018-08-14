@@ -20,6 +20,9 @@ public enum ApiServiceResultCode implements Messageable {
 
   TOO_MANY_REQUEST("TOO_MANY_REQUEST", "请求数太多"),
 
+  MOCK_NOT_FOUND("MOCK_NOT_FOUND", "MOCK请求不匹配"),
+
+
   REQUEST_GID_NOT_EXSIT("REQUEST_GID_NOT_EXSIT", "gid不存在"),
 
   SERVICE_NOT_FOUND_ERROR("SERVICE_NOT_FOUND_ERROR", "服务不存在"),

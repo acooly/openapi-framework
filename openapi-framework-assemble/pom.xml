@@ -25,7 +25,11 @@
             <artifactId>openapi-framework-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-mock</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-test</artifactId>

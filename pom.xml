@@ -57,6 +57,7 @@
         <module>openapi-framework-service-impl</module>
         <module>openapi-framework-apidoc</module>
         <module>openapi-framework-extensions</module>
+        <module>openapi-framework-mock</module>
     </modules>
 
 </project>
