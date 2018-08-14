@@ -64,10 +64,10 @@ public class OpenApiTest extends AbstractApiServieTests {
     request.setPayeeUserId("12345678900987654321");
     request.setPayerUserId("09876543211234567890");
     request.setBuyerUserId("09876543211234567890");
-//    request.setBuyeryEmail("qiuboboy@qq.com");
+    request.setBuyeryEmail("qiuboboy@qq.com");
     request.setBuyeryMobileNo("13898765453");
-//    request.setBuyerCertNo("330702194706165014");
-//    request.setPassword(encrypt("12312312"));
+    request.setBuyerCertNo("330702194706165014");
+    request.setPassword(encrypt("12312312"));
     request.setContext(content);
     List<GoodInfo> goodInfos = Lists.newArrayList();
     for (int i = 1; i <= 2; i++) {
@@ -75,7 +75,6 @@ public class OpenApiTest extends AbstractApiServieTests {
       goodInfo.setGoodType(GoodType.actual);
       goodInfo.setName("天子精品" + i);
       goodInfo.setPrice(Money.amout("400.00"));
-//      goodInfo.setQuantity(1);
       goodInfo.setReferUrl("http://acooly.cn/tianzi");
       goodInfos.add(goodInfo);
     }
@@ -85,6 +84,41 @@ public class OpenApiTest extends AbstractApiServieTests {
     log.info("{}", response);
     assertThat(response).isNotNull();
     assertThat(response.isSuccess()).isTrue();
+    assertThat(response.getContext()).isEqualTo(content);
+  }
+
+  @Test
+  public void testSync_ParamCheckError() throws Exception {
+    CreateOrderRequest request = new CreateOrderRequest();
+    request.setRequestNo(UUID.randomUUID().toString());
+    request.setService("createOrder");
+    request.setTitle("同步请求创建订单");
+    request.setPayeeUserId("12345678900987654321");
+    request.setPayerUserId("09876543211234567890");
+    request.setBuyerUserId("09876543211234567890");
+    request.setBuyeryEmail("qiubo");
+    request.setBuyeryMobileNo("138987654531");
+    request.setBuyerCertNo("33070219470665014");
+    request.setPassword(encrypt("12312312"));
+    request.setContext(content);
+    List<GoodInfo> goodInfos = Lists.newArrayList();
+    for (int i = 1; i <= 2; i++) {
+      GoodInfo goodInfo = new GoodInfo();
+      goodInfo.setGoodType(GoodType.actual);
+      goodInfo.setName("天子精品" + i);
+      goodInfo.setPrice(Money.amout("400.00"));
+      goodInfo.setReferUrl("http://acooly.cn/tianzi");
+      goodInfos.add(goodInfo);
+    }
+    request.setGoodsInfos(goodInfos);
+    request.ext("xx", "oo");
+    CreateOrderResponse response = request(request, CreateOrderResponse.class);
+    log.info("{}", response);
+    assertThat(response).isNotNull();
+    assertThat(response.isSuccess()).isFalse();
+    assertThat(response.getCode()).isEqualTo("PARAMETER_ERROR");
+    assertThat(response.getDetail()).contains("buyeryMobileNo").contains("buyerCertNo").contains("buyeryEmail");
+
     assertThat(response.getContext()).isEqualTo(content);
   }
 
