@@ -12,7 +12,9 @@ package com.acooly.openapi.framework.core;
 import com.acooly.core.utils.validate.Validators;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.core.auth.permission.Permission;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +23,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import javax.annotation.PostConstruct;
-import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.acooly.openapi.framework.common.ApiConstants.ANONYMOUS_ACCESS_KEY;
@@ -69,8 +71,8 @@ public class OpenAPIProperties {
 
     @PostConstruct
     public void init() {
-        this.getAnonymous().getPermissions().add("*:login");
-        this.getAnonymous().getPermissions().forEach(Permission::permMatch);
+        this.getAnonymous().getPermissions().put("openapicore", "*:login");
+        this.getAnonymous().getPermissionSet().forEach(Permission::permMatch);
         log.info("匿名访问服务配置:{}", this.getAnonymous());
         Validators.assertJSR303(anonymous);
     }
@@ -92,8 +94,13 @@ public class OpenAPIProperties {
         /**
          * 匿名权限信息
          */
-        @NotNull
-        private Set<String> permissions = Sets.newHashSet();
+        private Map<String, String> permissions = Maps.newHashMap();
+
+        public Set<String> getPermissionSet() {
+            Set<String> set = Sets.newHashSet();
+            permissions.values().forEach(s -> set.addAll(Splitter.on(",").trimResults().omitEmptyStrings().splitToList(s)));
+            return set;
+        }
     }
 
     @Data

@@ -3,7 +3,6 @@ package com.acooly.openapi.framework.core.auth.realm.impl;
 import com.acooly.openapi.framework.core.OpenAPIProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 import java.util.Set;
 
 /** @author qiubo@yiji.com */
@@ -26,7 +25,7 @@ public abstract class AnonymousSupportAuthInfoRealm extends CacheableAuthInfoRea
   public Set<String> getAuthorizedServices(String accessKey) {
     if (openAPIProperties.getAnonymous().isEnable()) {
       if (accessKey.equals(openAPIProperties.getAnonymous().getAccessKey())) {
-        return openAPIProperties.getAnonymous().getPermissions();
+        return openAPIProperties.getAnonymous().getPermissionSet();
       }
     }
     return doGetAuthorizedServices(accessKey);
