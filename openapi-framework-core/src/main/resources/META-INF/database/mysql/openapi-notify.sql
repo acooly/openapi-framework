@@ -1,7 +1,3 @@
--- ----------------------------
---  Table structure for `api_notify_message`
--- ----------------------------
-DROP TABLE IF EXISTS `api_notify_message`;
 CREATE TABLE `api_notify_message` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `gid` varchar(40) DEFAULT NULL,
