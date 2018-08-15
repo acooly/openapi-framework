@@ -169,6 +169,7 @@ public class OpenApiTest extends AbstractApiServieTests {
     request.setRequestNo(UUID.randomUUID().toString());
     request.setService("login");
     request.setUsername("qiubo");
+    request.setPartnerId("test");
     request.setPassword(encrypt("passwd"));
     LoginResponse response = request(request, LoginResponse.class);
     log.info("{}", response);
@@ -178,6 +179,7 @@ public class OpenApiTest extends AbstractApiServieTests {
     secretKey = response.getSecretKey();
     LoginAssertRequest loginAssertRequest = new LoginAssertRequest();
     loginAssertRequest.setRequestNo(UUID.randomUUID().toString());
+    loginAssertRequest.setPartnerId("test");
     loginAssertRequest.setService("loginAssert");
     LoginAssertResponse loginAssertResponse =
         request(loginAssertRequest, LoginAssertResponse.class);
