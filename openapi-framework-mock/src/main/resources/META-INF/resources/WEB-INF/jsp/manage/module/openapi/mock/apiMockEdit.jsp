@@ -15,15 +15,15 @@
 			</tr>					
 			<tr>
 				<th>期望参数：</th>
-				<td><textarea rows="3" cols="40" placeholder="请输入期望参数..." style="width:300px;" name="expect" class="easyui-validatebox" data-options="validType:['length[1,256]']"></textarea></td>
+				<td><textarea rows="3" cols="40" placeholder="请输入期望参数，json代码" style="width:300px;" name="expect" class="easyui-validatebox" data-options="validType:['length[1,256]']"></textarea></td>
 			</tr>					
 			<tr>
 				<th>同步响应：</th>
-				<td><textarea rows="3" cols="40" placeholder="请输入同步响应..." style="width:300px;" name="response" class="easyui-validatebox" data-options="validType:['length[1,256]']"></textarea></td>
+				<td><textarea rows="3" cols="40" placeholder="请输入同步响应，json代码" style="width:300px;" name="response" class="easyui-validatebox" data-options="validType:['length[1,256]']"></textarea></td>
 			</tr>					
 			<tr>
 				<th>异步响应：</th>
-				<td><textarea rows="3" cols="40" placeholder="请输入异步响应..." style="width:300px;" name="notify" class="easyui-validatebox" data-options="validType:['length[1,256]']"></textarea></td>
+				<td><textarea rows="3" cols="40" placeholder="请输入异步响应，json代码" style="width:300px;" name="notify" class="easyui-validatebox" data-options="validType:['length[1,256]']"></textarea></td>
 			</tr>					
         </table>
       </jodd:form>
