@@ -200,8 +200,6 @@ public class OpenApiTest extends AbstractApiServieTests {
         log.info("{}", response);
 
         // 登录成功后，使用下发的认证信息访问服务
-        accessKey = response.getAccessKey();
-        secretKey = response.getSecretKey();
         openApiClient = new OpenApiClient("http://127.0.0.1:8089/gateway.do", response.getAccessKey(), response.getSecretKey());
         LoginAssertRequest loginAssertRequest = new LoginAssertRequest();
         loginAssertRequest.setRequestNo(UUID.randomUUID().toString());
