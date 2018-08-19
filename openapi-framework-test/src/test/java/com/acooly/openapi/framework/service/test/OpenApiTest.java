@@ -209,7 +209,7 @@ public class OpenApiTest extends AbstractApiServieTests {
                 openApiClient.send(loginAssertRequest, LoginAssertResponse.class);
         assertThat(loginAssertResponse).isNotNull();
         assertThat(loginAssertResponse.isSuccess()).isTrue();
-        assertThat(loginAssertResponse.getAccessKey()).isEqualTo(accessKey);
+        assertThat(loginAssertResponse.getAccessKey()).isEqualTo(response.getAccessKey());
     }
 
     /**
