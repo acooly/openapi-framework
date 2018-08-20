@@ -16,7 +16,7 @@ import com.acooly.openapi.framework.core.exception.impl.ApiServiceAuthentication
  */
 public interface Signer<T> {
 
-  String sign(T t, Object key);
+  String sign(String t, String key);
 
   /**
    * 认证失败抛出异常
@@ -26,7 +26,7 @@ public interface Signer<T> {
    * @param t
    * @throws ApiServiceAuthenticationException
    */
-  void verify(String sign, String key, T t) throws ApiServiceAuthenticationException;
+  void verify(String sign, String key, String body) throws ApiServiceAuthenticationException;
 
   SignTypeEnum getSinType();
 }

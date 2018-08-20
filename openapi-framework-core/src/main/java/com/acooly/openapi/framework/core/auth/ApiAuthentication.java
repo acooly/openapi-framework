@@ -19,8 +19,5 @@ public interface ApiAuthentication {
   void authenticate(ApiContext apiContext);
 
   String signature(Map<String, String> response);
-
-  String signature(Map<String, String> responseData, String accessKey, String signType);
-
   String signature(String body, String accessKey, String signType);
 }

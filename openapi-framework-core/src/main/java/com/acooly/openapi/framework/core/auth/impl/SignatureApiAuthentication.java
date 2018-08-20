@@ -4,7 +4,6 @@ import com.acooly.core.common.boot.Env;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.context.ApiContext;
-import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
@@ -46,7 +45,7 @@ public class SignatureApiAuthentication implements ApiAuthentication {
       }
       Signer<ApiContext> signer = signerFactory.getSigner(apiContext.getSignType());
       signer.verify(
-          requestSign, (String) authInfoRealm.getAuthenticationInfo(accessKey), apiContext);
+          requestSign, (String) authInfoRealm.getAuthenticationInfo(accessKey), apiContext.getRequestBody());
     } catch (ApiServiceException asae) {
       throw asae;
     } catch (Exception e) {
@@ -70,23 +69,6 @@ public class SignatureApiAuthentication implements ApiAuthentication {
   }
 
   @Override
-  public String signature(Map<String, String> responseData, String partnerId, String signType) {
-    try {
-      String sign =
-          signerFactory
-              .getSigner(SignTypeEnum.valueOf(signType))
-              .sign(
-                  ApiContextHolder.getApiContext(), authInfoRealm.getAuthenticationInfo(partnerId));
-      return sign;
-    } catch (ApiServiceException asae) {
-      throw asae;
-    } catch (Exception e) {
-      logger.warn("签名异常", e);
-      throw new ApiServiceAuthenticationException("签名错误");
-    }
-  }
-
-  @Override
   public String signature(String body, String accessKey, String signType) {
     try {
       if (accessKey == null) {
@@ -101,7 +83,7 @@ public class SignatureApiAuthentication implements ApiAuthentication {
       String sign =
           signerFactory
               .getSigner(SignTypeEnum.valueOf(signType))
-              .sign(ApiContextHolder.getApiContext(), secretKey);
+              .sign(body, secretKey);
       return sign;
     } catch (ApiServiceException asae) {
       throw asae;

@@ -42,7 +42,7 @@ public class ApiMockTest extends AbstractApiServieTests {
         request.setBuyeryEmail("qiuboboy1@qq.com");
         request.setBuyeryMobileNo("13898765453");
         request.setBuyerCertNo("330702194706165014");
-        request.setPassword(encrypt("12312312"));
+        request.setPassword("12312312");
         request.setContext(content);
         List<GoodInfo> goodInfos = Lists.newArrayList();
         for (int i = 1; i <= 2; i++) {

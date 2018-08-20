@@ -4,7 +4,9 @@ import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.client.OpenApiClient;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
+import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
+import com.acooly.openapi.framework.core.service.support.auth.AuthRequest;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.domain.LoginRequest;
 import com.acooly.openapi.framework.domain.LoginResponse;
@@ -34,6 +36,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -70,7 +73,7 @@ public class OpenApiTest extends AbstractApiServieTests {
         request.setBuyeryEmail("qiuboboy@qq.com");
         request.setBuyeryMobileNo("13898765453");
         request.setBuyerCertNo("330702194706165014");
-        request.setPassword(encrypt("12312312"));
+        request.setPassword("12312312");
         request.setContext(content);
         List<GoodInfo> goodInfos = Lists.newArrayList();
         for (int i = 1; i <= 2; i++) {
@@ -103,7 +106,7 @@ public class OpenApiTest extends AbstractApiServieTests {
         request.setBuyeryEmail("qiuboboy@qq.com");
         request.setBuyeryMobileNo("13898765453");
         request.setBuyerCertNo("330702194706165014");
-        request.setPassword(encrypt("12312312"));
+        request.setPassword("12312312");
         request.setContext(content);
         OpenApiClient openApiClient = new OpenApiClient("http://127.0.0.1:8089/gateway.do", TEST_ACCESS_KEY, TEST_SECRET_KEY);
         CreateOrderResponse response = openApiClient.send(request, CreateOrderResponse.class);
@@ -125,7 +128,7 @@ public class OpenApiTest extends AbstractApiServieTests {
         request.setBuyeryEmail("qiubo");
         request.setBuyeryMobileNo("138987654531");
         request.setBuyerCertNo("33070219470665014");
-        request.setPassword(encrypt("12312312"));
+        request.setPassword("12312312");
         request.setContext(content);
         List<GoodInfo> goodInfos = Lists.newArrayList();
         for (int i = 1; i <= 2; i++) {
@@ -210,6 +213,19 @@ public class OpenApiTest extends AbstractApiServieTests {
         assertThat(loginAssertResponse).isNotNull();
         assertThat(loginAssertResponse.isSuccess()).isTrue();
         assertThat(loginAssertResponse.getAccessKey()).isEqualTo(response.getAccessKey());
+
+        String body="sdfdsfdfdfsd";
+        AuthRequest authRequest=new AuthRequest();
+        authRequest.setRequestNo(UUID.randomUUID().toString());
+        authRequest.setService("auth");
+        authRequest.setPartnerId("test");
+        authRequest.setAccessKey(response.getAccessKey());
+        authRequest.setBody(body);
+        authRequest.setExpireDate(new Date());
+        authRequest.setSign(openApiClient.sign(body));
+        ApiResponse apiResponse = openApiClient.send(authRequest, ApiResponse.class);
+        assertThat(apiResponse).isNotNull();
+        assertThat(apiResponse.isSuccess()).isTrue();
     }
 
     /**

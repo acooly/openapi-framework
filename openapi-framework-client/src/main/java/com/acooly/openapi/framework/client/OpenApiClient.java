@@ -77,7 +77,7 @@ public class OpenApiClient {
             List<Field> fieldList = Lists.newArrayList();
             for (Field field : request.getClass().getDeclaredFields()) {
                 OpenApiField annotation = field.getAnnotation(OpenApiField.class);
-                if (annotation.security()) {
+                if (annotation != null && annotation.security()) {
                     field.setAccessible(true);
                     fieldList.add(field);
                 }
