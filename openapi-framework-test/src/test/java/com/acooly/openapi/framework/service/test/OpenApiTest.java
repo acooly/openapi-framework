@@ -214,15 +214,21 @@ public class OpenApiTest extends AbstractApiServieTests {
         assertThat(loginAssertResponse.isSuccess()).isTrue();
         assertThat(loginAssertResponse.getAccessKey()).isEqualTo(response.getAccessKey());
 
+        //测试认证服务
         String body="sdfdsfdfdfsd";
         AuthRequest authRequest=new AuthRequest();
         authRequest.setRequestNo(UUID.randomUUID().toString());
         authRequest.setService("auth");
         authRequest.setPartnerId("test");
+        //签名使用的accessKey
         authRequest.setAccessKey(response.getAccessKey());
+        //需要传输的数据
         authRequest.setBody(body);
+        //请求有效期
         authRequest.setExpireDate(new Date());
+        //使用secretKey签名
         authRequest.setSign(openApiClient.sign(body));
+        //认证签名是否正确
         ApiResponse apiResponse = openApiClient.send(authRequest, ApiResponse.class);
         assertThat(apiResponse).isNotNull();
         assertThat(apiResponse.isSuccess()).isTrue();
