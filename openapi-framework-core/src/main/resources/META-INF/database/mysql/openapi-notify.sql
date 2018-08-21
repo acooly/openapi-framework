@@ -21,3 +21,5 @@ CREATE TABLE `api_notify_message` (
   KEY `IDX_NOTIFY_QUERY` (`gid`,`partner_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
+insert into `sys_resource` ( `ID`, `PARENTID`, `SHOW_MODE`, `ICON`, `DESCN`, `VALUE`, `TYPE`, `ORDER_TIME`, `NAME`, `SHOW_STATE`) values ( '201808211421', '2018082114', '1', 'icons-resource-jiekuanbiaoxinxi', null, '/manage/openapi/notifyMessage/index.html', 'URL', '2018-08-21 11:30:50', '通知记录', '0');
+insert into `SYS_ROLE_RESC` ( `ROLE_ID`, `RESC_ID`) values ( '1', '201808211421');

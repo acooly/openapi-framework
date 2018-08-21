@@ -18,14 +18,14 @@ public class Coder {
     DefaultCodeGenerateService service = (DefaultCodeGenerateService) Generator.getGenerator();
     //set workspace if possible
     if (StringUtils.isBlank(service.getGenerateConfiguration().getWorkspace())) {
-      String workspace = getProjectPath() + "openapi-framework-mock";
+      String workspace = getProjectPath() + "openapi-framework-test";
       service.getGenerateConfiguration().setWorkspace(workspace);
     }
     //set root pacakge if possible
     if (StringUtils.isBlank(service.getGenerateConfiguration().getRootPackage())) {
       service.getGenerateConfiguration().setRootPackage(getRootPackage());
     }
-    service.generateTable("api_mock");
+    service.generateTable("api_tenant","api_auth");
   }
 
   public static String getProjectPath() {
@@ -36,6 +36,6 @@ public class Coder {
   }
 
   public static String getRootPackage() {
-    return "com.acooly.openapi.mock";
+    return "com.acooly.openapi.framework.serviceimpl.manage";
   }
 }

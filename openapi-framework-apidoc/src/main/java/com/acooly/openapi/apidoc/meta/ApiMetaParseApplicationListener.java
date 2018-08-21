@@ -1,6 +1,6 @@
 package com.acooly.openapi.apidoc.meta;
 
-import com.acooly.openapi.apidoc.persist.service.ApiMetaServiceService;
+import com.acooly.openapi.framework.service.ApiMetaServiceService;
 import com.acooly.openapi.framework.common.annotation.OpenApiNote;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.enums.ResponseType;

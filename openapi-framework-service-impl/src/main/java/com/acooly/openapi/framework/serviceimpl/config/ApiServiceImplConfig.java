@@ -22,7 +22,7 @@ public class ApiServiceImplConfig {
     return new AbstractDatabaseScriptIniter() {
       @Override
       public String getEvaluateSql(DatabaseType databaseType) {
-        return "SELECT count(*) FROM api_partner";
+        return "SELECT count(*) FROM api_tenant";
       }
 
       @Override

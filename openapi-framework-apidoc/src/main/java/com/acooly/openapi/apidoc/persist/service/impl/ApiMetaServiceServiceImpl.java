@@ -12,7 +12,7 @@ package com.acooly.openapi.apidoc.persist.service.impl;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Collections3;
 import com.acooly.openapi.apidoc.persist.dao.ApiMetaServiceDao;
-import com.acooly.openapi.apidoc.persist.service.ApiMetaServiceService;
+import com.acooly.openapi.framework.service.ApiMetaServiceService;
 import com.acooly.openapi.framework.domain.ApiMetaService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
