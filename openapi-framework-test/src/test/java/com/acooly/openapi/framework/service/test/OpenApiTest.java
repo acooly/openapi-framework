@@ -216,8 +216,10 @@ public class OpenApiTest extends AbstractApiServieTests {
         assertThat(loginAssertResponse.getAccessKey()).isEqualTo(response.getAccessKey());
 
         //测试认证服务
+
         ExpiredBody expiredBody=new ExpiredBody();
         String body="sdfdsfdfdfsd";
+        //设置请求参数
         expiredBody.setBody(body);
         //请求有效期
         expiredBody.setExpireDate(new Date());
