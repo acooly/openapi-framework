@@ -1,7 +1,5 @@
 package com.acooly.openapi.framework.serviceimpl.persistent;
 
-import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
-import com.acooly.openapi.framework.core.auth.realm.impl.CacheableAuthInfoRealm;
 import com.acooly.openapi.framework.service.AuthInfoRealmManageService;
 import com.acooly.openapi.framework.serviceimpl.manage.entity.ApiAuth;
 import com.acooly.openapi.framework.serviceimpl.manage.service.ApiAuthService;
@@ -18,9 +16,6 @@ public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageSer
 
     @Autowired
     ApiAuthService apiAuthService;
-
-    @Autowired(required = false)
-    AuthInfoRealm authInfoRealm;
 
     @Override
     public void createAuthenticationInfo(String accessKey, String secretKey) {
@@ -42,9 +37,6 @@ public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageSer
         ApiAuth apiAuth = apiAuthService.findByAccesskey(accessKey);
         apiAuth.setSecretKey(sercretKey);
         apiAuthService.update(apiAuth);
-        if (authInfoRealm instanceof CacheableAuthInfoRealm) {
-            ((CacheableAuthInfoRealm) authInfoRealm).removeCache(accessKey);
-        }
     }
 
     @Override
