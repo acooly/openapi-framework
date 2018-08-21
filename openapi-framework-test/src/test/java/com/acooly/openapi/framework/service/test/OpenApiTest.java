@@ -7,6 +7,7 @@ import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.core.service.support.auth.AuthRequest;
+import com.acooly.openapi.framework.core.service.support.auth.AuthRequest.ExpiredBody;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.domain.LoginRequest;
 import com.acooly.openapi.framework.domain.LoginResponse;
@@ -215,7 +216,11 @@ public class OpenApiTest extends AbstractApiServieTests {
         assertThat(loginAssertResponse.getAccessKey()).isEqualTo(response.getAccessKey());
 
         //测试认证服务
+        ExpiredBody expiredBody=new ExpiredBody();
         String body="sdfdsfdfdfsd";
+        expiredBody.setBody(body);
+        //请求有效期
+        expiredBody.setExpireDate(new Date());
         AuthRequest authRequest=new AuthRequest();
         authRequest.setRequestNo(UUID.randomUUID().toString());
         authRequest.setService("auth");
@@ -223,11 +228,9 @@ public class OpenApiTest extends AbstractApiServieTests {
         //签名使用的accessKey
         authRequest.setAccessKey(response.getAccessKey());
         //需要传输的数据
-        authRequest.setBody(body);
-        //请求有效期
-        authRequest.setExpireDate(new Date());
+        authRequest.setExpiredBody(expiredBody);
         //使用secretKey签名
-        authRequest.setSign(openApiClient.sign(body));
+        authRequest.setSign(openApiClient.sign(expiredBody.getSignBody()));
         //认证签名是否正确
         ApiResponse apiResponse = openApiClient.send(authRequest, ApiResponse.class);
         assertThat(apiResponse).isNotNull();
