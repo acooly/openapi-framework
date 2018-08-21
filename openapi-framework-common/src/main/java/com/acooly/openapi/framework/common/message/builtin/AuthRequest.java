@@ -1,4 +1,4 @@
-package com.acooly.openapi.framework.core.service.support.auth;
+package com.acooly.openapi.framework.common.message.builtin;
 
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.message.ApiRequest;

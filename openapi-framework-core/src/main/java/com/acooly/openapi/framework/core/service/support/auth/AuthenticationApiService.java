@@ -6,6 +6,7 @@ import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.common.message.builtin.AuthRequest;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
 import com.acooly.openapi.framework.core.service.base.BaseApiService;
 import org.springframework.beans.factory.annotation.Autowired;
