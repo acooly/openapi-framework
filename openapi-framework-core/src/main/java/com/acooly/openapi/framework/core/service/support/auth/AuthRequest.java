@@ -39,7 +39,7 @@ public class AuthRequest extends ApiRequest {
         @OpenApiField(desc = "请求参数", constraint = "必填")
         private String body;
         @NotNull
-        @OpenApiField(desc = "请求有效期，上线偏差不超过20分钟", constraint = "必填")
+        @OpenApiField(desc = "请求有效期，时间偏差不超过20分钟", constraint = "必填")
         private Date expireDate;
 
         public String getSignBody(){
