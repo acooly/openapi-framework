@@ -1,2 +1,2 @@
-insert into `openapi-test`.`api_tenant` (`id`, `partner_id`, `partner_name`, `secret_type`, `sign_type`, `create_time`, `update_time`, `comments`) values ( 1,'test', '测试帐号', 'digest', 'MD5', '2018-08-21 15:36:56', '2018-08-21 15:36:56', '');
-insert into `openapi-test`.`api_auth` ( `id`,`access_key`, `secret_key`, `permissions`, `create_time`, `update_time`, `comments`) values ( 1,'test', '06f7aab08aa2431e6dae6a156fc9e0b4', '*:*', '2018-08-21 15:38:54', '2018-08-21 15:38:54', '');
+insert into `api_tenant` (`id`, `partner_id`, `partner_name`, `secret_type`, `sign_type`, `create_time`, `update_time`, `comments`) values ( 1,'test', '测试帐号', 'digest', 'MD5', '2018-08-21 15:36:56', '2018-08-21 15:36:56', '');
+insert into `api_auth` ( `id`,`access_key`, `secret_key`, `permissions`, `create_time`, `update_time`, `comments`) values ( 1,'test', '06f7aab08aa2431e6dae6a156fc9e0b4', '*:*', '2018-08-21 15:38:54', '2018-08-21 15:38:54', '');
