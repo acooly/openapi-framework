@@ -22,6 +22,8 @@ public class ApiQueryOrder extends OrderBase implements Parameterize<String, Str
 
   private Map<String, String> parameters = Maps.newLinkedHashMap();
 
+  private String accesskey;
+
   @Override
   public void setParameter(String key, String value) {
     this.parameters.put(key, value);
@@ -60,5 +62,13 @@ public class ApiQueryOrder extends OrderBase implements Parameterize<String, Str
   @Override
   public void clear() {
     this.parameters.clear();
+  }
+
+  public String getAccesskey() {
+    return accesskey;
+  }
+
+  public void setAccesskey(String accesskey) {
+    this.accesskey = accesskey;
   }
 }

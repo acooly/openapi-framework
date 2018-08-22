@@ -21,7 +21,7 @@ import com.acooly.openapi.framework.facade.api.OpenApiRemoteService;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import com.acooly.openapi.framework.facade.order.ApiQueryOrder;
 import com.acooly.openapi.framework.facade.result.ApiNotifyResult;
-import com.acooly.openapi.framework.service.ApiPartnerService;
+import com.acooly.openapi.framework.service.AuthInfoRealmService;
 import com.acooly.openapi.framework.service.OrderInfoService;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
@@ -44,7 +44,7 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
   @Resource private OrderInfoService orderInfoService;
   @Resource private ApiAuthentication apiAuthentication;
 
-  @Resource private ApiPartnerService apiPartnerService;
+  @Resource private AuthInfoRealmService authInfoRealmService;
 
   /** 异步通知处理 */
   @Override
@@ -113,7 +113,7 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
     ResultBase result = new ResultBase();
     try {
       apiQueryOrder.check();
-      String sercretKey = apiPartnerService.getPartnerSercretKey(apiQueryOrder.getPartnerId());
+      String sercretKey = authInfoRealmService.getSercretKey(apiQueryOrder.getAccesskey());
       result.setParameter("sercretKey", sercretKey);
     } catch (ApiServiceException e) {
       result.setStatus(ResultStatus.failure);
