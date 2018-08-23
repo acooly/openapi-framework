@@ -96,7 +96,7 @@ public class JsonMarshallor {
     serializer.setDateFormat("yyyy-MM-dd HH:mm:ss");
     serializer.config(SerializerFeature.QuoteFieldNames, true);
     serializer.config(SerializerFeature.DisableCircularReferenceDetect, true);
-
+    serializer.config(SerializerFeature.WriteNullStringAsEmpty,true);
     return serializer;
   }
 
