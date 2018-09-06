@@ -1,5 +1,6 @@
 package com.acooly.openapi.framework.core.service.support.login;
 
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
@@ -72,7 +73,11 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
       response.setAccessKey(accessKey);
       response.setSecretKey(sercretKey);
     } catch (Exception e) {
-      throw new ApiServiceException("LOGIN_FAIL", e.getMessage());
+      if (e instanceof BusinessException) {
+        throw (BusinessException) e;
+      }else{
+        throw new ApiServiceException("LOGIN_FAIL", e.getMessage());
+      }
     }
   }
 
