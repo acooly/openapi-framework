@@ -31,8 +31,6 @@ import static com.acooly.openapi.apidoc.ApiDocProperties.PREFIX;
 @Validated
 public class ApiDocProperties {
     public static final String PREFIX = "acooly.openapi.apidoc";
-    public static final String ALWAYS = "always";
-    public static final String NONE = "none";
     private boolean enable;
 
     /**
