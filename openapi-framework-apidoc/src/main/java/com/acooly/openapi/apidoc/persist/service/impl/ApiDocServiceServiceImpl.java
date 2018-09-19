@@ -20,8 +20,6 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,7 +37,6 @@ public class ApiDocServiceServiceImpl extends EntityServiceImpl<ApiDocService, A
     @Autowired
     private ApiDocMessageService apiDocMessageService;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
     @Override
     public void merge(List<ApiDocService> apiDocServices) {
         if (Collections3.isEmpty(apiDocServices)) {
