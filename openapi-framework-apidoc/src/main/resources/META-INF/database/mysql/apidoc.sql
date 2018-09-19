@@ -1,6 +1,6 @@
 CREATE TABLE `api_doc_service` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `service_no` varchar(255) NOT NULL COMMENT '服务编号(name+version)',
+  `service_no` varchar(150) NOT NULL COMMENT '服务编号(name+version)',
   `name` varchar(128) NOT NULL COMMENT '服务名称',
   `version` varchar(32) DEFAULT '1.0' COMMENT '服务版本',
   `title` varchar(256) NOT NULL DEFAULT '' COMMENT '服务标题',
