@@ -78,7 +78,7 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
         return contexts;
     }
 
-    protected Map<String, String> buildCommonMessage(ApiDocService apiDocService, ApiDocMessage apiDocMessage, String requestNo) {
+    protected Map<String, Object> buildCommonMessage(ApiDocService apiDocService, ApiDocMessage apiDocMessage, String requestNo) {
         Map<String, Object> header = Maps.newHashMap();
         header.put(ApiConstants.PARTNER_ID, PARTNER_ID);
         header.put(ApiConstants.REQUEST_NO, requestNo);
