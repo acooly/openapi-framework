@@ -79,7 +79,7 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
     }
 
     protected Map<String, String> buildCommonMessage(ApiDocService apiDocService, ApiDocMessage apiDocMessage, String requestNo) {
-        Map<String, String> header = Maps.newHashMap();
+        Map<String, Object> header = Maps.newHashMap();
         header.put(ApiConstants.PARTNER_ID, PARTNER_ID);
         header.put(ApiConstants.REQUEST_NO, requestNo);
         header.put(ApiConstants.SERVICE, apiDocService.getName());
@@ -95,7 +95,7 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
                 header.put(ApiConstants.NOTIFY_URL, "https://www.xxx.com/notifyUrl");
             }
         } else if (messageType == MessageTypeEnum.Response) {
-            header.put("success", "true");
+            header.put("success", true);
             header.put("detail", "请求成功");
             if (apiDocService.getServiceType() == ResponseType.ASNY) {
                 header.put(ApiConstants.CODE, "PROCESSING");
