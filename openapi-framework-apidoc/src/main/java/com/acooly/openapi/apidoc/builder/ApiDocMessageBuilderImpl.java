@@ -68,11 +68,11 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
             Map<String, Object> data = Maps.newLinkedHashMap();
             data.putAll(buildCommonMessage(apiDocService, apiDocMessage, requestNo));
             data.putAll(doBuildMessage(apiDocMessage.getApiDocItems()));
-            messageBody = JSON.toJSONString(data,true);
+            messageBody = JSON.toJSONString(data, true);
             String sign = DigestUtils.md5Hex(messageBody + key);
 
             contexts.add(new ApiDocMessageContext(apiDocService.getServiceNo(),
-                    messageType,getMessageHeader(messageType,sign,Strings.length(messageBody)),messageBody));
+                    messageType, getMessageHeader(messageType, sign, Strings.length(messageBody)), messageBody));
 
         }
         return contexts;
@@ -95,6 +95,8 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
                 header.put(ApiConstants.NOTIFY_URL, "https://www.xxx.com/notifyUrl");
             }
         } else if (messageType == MessageTypeEnum.Response) {
+            header.put("success", "true");
+            header.put("detail", "请求成功");
             if (apiDocService.getServiceType() == ResponseType.ASNY) {
                 header.put(ApiConstants.CODE, "PROCESSING");
                 header.put(ApiConstants.MESSAGE, "正在处理中");
@@ -121,24 +123,24 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
             sb.append("Content-Type: application/json;charset=UTF-8\n");
             sb.append("Content-Length: " + contentLength + "\n");
             sb.append("Keep-Alive: timeout=15, max=100\n");
-            sb.append(ApiConstants.SIGN_TYPE +  ": MD5\n");
-            sb.append(ApiConstants.SIGN +  ":" + sign + "\n");
+            sb.append(ApiConstants.SIGN_TYPE + ": MD5\n");
+            sb.append(ApiConstants.SIGN + ":" + sign + "\n");
             sb.append("Connection: Keep-Alive\n   \n\n");
         } else if (messageType == MessageTypeEnum.Request) {
             sb.append("POST /gateway.do HTTP/1.1\n");
             sb.append("Content-Length: " + contentLength + "\n");
             sb.append("Content-Type: application/json;charset=UTF-8\n");
             sb.append("Host: api.xxx.com\n");
-            sb.append(ApiConstants.SIGN_TYPE +  ": MD5\n");
-            sb.append(ApiConstants.SIGN +  ":" + sign + "\n");
+            sb.append(ApiConstants.SIGN_TYPE + ": MD5\n");
+            sb.append(ApiConstants.SIGN + ":" + sign + "\n");
             sb.append("Connection: Keep-Alive\n   \n\n");
         } else {
             sb.append("POST /www.mechant.com/" + (messageType == MessageTypeEnum.Notify ? "notify" : "return") + ".html HTTP/1.1\n");
             sb.append("Content-Length: " + contentLength + "\n");
             sb.append("Content-Type: application/json;charset=UTF-8\n");
             sb.append("Host: www.mechant.com\n");
-            sb.append(ApiConstants.SIGN_TYPE +  ": MD5\n");
-            sb.append(ApiConstants.SIGN +  ":" + sign + "\n");
+            sb.append(ApiConstants.SIGN_TYPE + ": MD5\n");
+            sb.append(ApiConstants.SIGN + ":" + sign + "\n");
             sb.append("Connection: Keep-Alive\n   \n\n");
         }
 
@@ -175,7 +177,7 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
             value = String.valueOf(RandomUtils.nextInt(1, 10000));
         } else if (dataType == ApiDataTypeEnum.O) {
             value = doBuildMessage(apiDocItem.getChildren());
-        }else if (dataType == ApiDataTypeEnum.A) {
+        } else if (dataType == ApiDataTypeEnum.A) {
             value = Lists.newArrayList(doBuildMessage(apiDocItem.getChildren()));
         }
 
