@@ -315,7 +315,7 @@ Connection: Keep-Alive
 
             <p>完整的报文定义 = 公共报文 + 具体接口定义的业务报文</p>
 
-            <h4 id="toc_15">公共请求报文</h4>
+            <h4 id="toc_15"><a name="Request">公共请求报文</a></h4>
 
             <table>
                 <thead>
@@ -398,7 +398,7 @@ Connection: Keep-Alive
             </table>
 
 
-            <h4 id="toc_16">公共响应报文</h4>
+            <h4 id="toc_16"><a name="Response">公共响应报文</a></h4>
 
             <table>
                 <thead>

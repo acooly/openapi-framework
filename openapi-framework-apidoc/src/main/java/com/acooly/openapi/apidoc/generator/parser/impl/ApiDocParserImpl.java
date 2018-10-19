@@ -152,7 +152,7 @@ public class ApiDocParserImpl implements ApiDocParser {
     protected List<ApiDocItem> doParseMessageItem(final Class<?> clazz, String messageNo, String parentNo) {
         List<ApiDocItem> apiItems = Lists.newArrayList();
         Class<?> cc = clazz;
-        do {
+        while (cc != null && cc != ApiRequest.class && cc != ApiResponse.class && cc != ApiNotify.class && cc != Object.class){
             Field[] fields = cc.getDeclaredFields();
             for (Field field : fields) {
                 if (Modifier.isStatic(field.getModifiers())) {
@@ -187,7 +187,7 @@ public class ApiDocParserImpl implements ApiDocParser {
             }
             cc = cc.getSuperclass();
         }
-        while (cc != null && cc != ApiRequest.class && cc != ApiResponse.class && cc != ApiNotify.class && cc != Object.class);
+
         return apiItems;
     }
 

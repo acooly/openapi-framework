@@ -96,7 +96,7 @@
                         </tr>
                         </thead>
                         <tr>
-                            <td colspan="7">公共参数: <a href="">公共请求报文</a></td>
+                            <td colspan="7">公共参数: <a href="/docs/apischeme/spec.html#<%=e.messageType%>" target="_blank">公共<%=e.messageType%>报文</a></td>
                         </tr>
                         <%
                         if(e.apiDocItems && e.apiDocItems.length > 0){
