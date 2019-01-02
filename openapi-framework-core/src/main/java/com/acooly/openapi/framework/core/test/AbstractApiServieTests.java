@@ -83,10 +83,12 @@ public abstract class AbstractApiServieTests {
         }
 
         String className = request.getClass().getSimpleName();
+        String serviceName = null;
         if (StringUtils.contains(className, "ApiRequest")) {
-            request.setService(StringUtils.substringBeforeLast(className, "ApiRequest"));
+            serviceName = StringUtils.substringBeforeLast(className, "ApiRequest");
         } else if (StringUtils.contains(className, "Request")) {
-            request.setService(StringUtils.substringBeforeLast(className, "Request"));
+            serviceName = StringUtils.substringBeforeLast(className, "Request");
         }
+        request.setService(StringUtils.uncapitalize(serviceName));
     }
 }
