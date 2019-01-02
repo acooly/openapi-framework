@@ -4,10 +4,12 @@ import com.acooly.openapi.framework.client.OpenApiClient;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.message.ApiMessage;
 import com.acooly.openapi.framework.common.message.ApiRequest;
+import com.acooly.openapi.framework.common.utils.Ids;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -54,12 +56,37 @@ public abstract class AbstractApiServieTests {
         if (Strings.isNullOrEmpty(request.getService())) {
             request.setService(service);
         }
+        if (Strings.isNullOrEmpty(request.getService())) {
+            guessServiceName(request);
+        }
         Assert.hasText(request.getService());
+        if (Strings.isNullOrEmpty(request.getRequestNo())) {
+            request.setRequestNo(Ids.getDid());
+        }
         OpenApiClient openApiClient = new OpenApiClient(gatewayUrl, accessKey, secretKey);
         return openApiClient.send(request, clazz);
     }
 
     public String sign(String body) {
         return DigestUtils.md5Hex(body + secretKey);
+    }
+
+
+    /**
+     * 猜一猜服务名
+     *
+     * @param request
+     */
+    protected void guessServiceName(ApiRequest request) {
+        if (!Strings.isNullOrEmpty(request.getService())) {
+            return;
+        }
+
+        String className = request.getClass().getSimpleName();
+        if (StringUtils.contains(className, "ApiRequest")) {
+            request.setService(StringUtils.substringBeforeLast(className, "ApiRequest"));
+        } else if (StringUtils.contains(className, "Request")) {
+            request.setService(StringUtils.substringBeforeLast(className, "Request"));
+        }
     }
 }
