@@ -8,110 +8,115 @@ import java.util.List;
 import java.util.Map;
 
 public enum ApiServiceResultCode implements Messageable {
-  SUCCESS("SUCCESS", "成功"),
-  PROCESSING("PROCESSING", "处理中"),
-  INTERNAL_ERROR("INTERNAL_ERROR", "内部错误"),
-  PARAMETER_ERROR("PARAMETER_ERROR", "参数错误"),
-  FAILURE("FAILURE", "执行失败"),
-  UNAUTHENTICATED_ERROR("UNAUTHENTICATED_ERROR", "认证(签名)错误"),
-  PARAM_FORMAT_ERROR("PARAM_FORMAT_ERROR", "参数格式错误"),
-  REQUEST_NO_NOT_UNIQUE("REQUEST_NO_NOT_UNIQUE", "请求号重复"),
-  FIELD_NOT_UNIQUE("FIELD_NOT_UNIQUE", "对象字段重复"),
+    SUCCESS("SUCCESS", "成功"),
+    PROCESSING("PROCESSING", "处理中"),
+    INTERNAL_ERROR("INTERNAL_ERROR", "内部错误"),
+    PARAMETER_ERROR("PARAMETER_ERROR", "参数错误"),
+    FAILURE("FAILURE", "执行失败"),
+    UNAUTHENTICATED_ERROR("UNAUTHENTICATED_ERROR", "认证(签名)错误"),
+    PARAM_FORMAT_ERROR("PARAM_FORMAT_ERROR", "参数格式错误"),
+    REQUEST_NO_NOT_UNIQUE("REQUEST_NO_NOT_UNIQUE", "请求号重复"),
+    FIELD_NOT_UNIQUE("FIELD_NOT_UNIQUE", "对象字段重复"),
 
-  TOO_MANY_REQUEST("TOO_MANY_REQUEST", "请求数太多"),
+    TOO_MANY_REQUEST("TOO_MANY_REQUEST", "请求数太多"),
 
-  MOCK_NOT_FOUND("MOCK_NOT_FOUND", "MOCK请求不匹配"),
+    MOCK_NOT_FOUND("MOCK_NOT_FOUND", "MOCK请求不匹配"),
 
+    REQUEST_GID_NOT_EXSIT("REQUEST_GID_NOT_EXSIT", "gid不存在"),
 
-  REQUEST_GID_NOT_EXSIT("REQUEST_GID_NOT_EXSIT", "gid不存在"),
+    SERVICE_NOT_FOUND_ERROR("SERVICE_NOT_FOUND_ERROR", "服务不存在"),
 
-  SERVICE_NOT_FOUND_ERROR("SERVICE_NOT_FOUND_ERROR", "服务不存在"),
+    UNAUTHORIZED_ERROR("UNAUTHORIZED_ERROR", "未授权的服务"),
 
-  UNAUTHORIZED_ERROR("UNAUTHORIZED_ERROR", "未授权的服务"),
+    REDIRECT_URL_NOT_EXIST("REDIRECT_URL_NOT_EXIST", "跳转服务需设置redirectUrl"),
+    /**
+     * 合作伙伴id没有在openapi中注册
+     */
+    PARTNER_NOT_REGISTER("PARTNER_NOT_REGISTER", "商户没有注册"),
+    /**
+     * 合作伙伴id没有产品
+     */
+    PARTNER_NOT_PRODUCT("PARTNER_NOT_PRODUCT", "商户没有配置产品"),
 
-  REDIRECT_URL_NOT_EXIST("REDIRECT_URL_NOT_EXIST", "跳转服务需设置redirectUrl"),
-  /** 合作伙伴id没有在openapi中注册 */
-  PARTNER_NOT_REGISTER("PARTNER_NOT_REGISTER", "商户没有注册"),
-  /** 合作伙伴id没有产品 */
-  PARTNER_NOT_PRODUCT("PARTNER_NOT_PRODUCT", "商户没有配置产品"),
-  NOTIFY_ERROR("NOTIFY_ERROR", "异步通知失败"),
-  ;
-  private final String code;
-  private final String message;
+    NOTIFY_ERROR("NOTIFY_ERROR", "异步通知失败"),
 
-  ApiServiceResultCode(String code, String message) {
-    this.code = code;
-    this.message = message;
-  }
+    OBJECT_NOT_EXIST("OBJECT_NOT_EXIST", "对象不存在");
+    private final String code;
+    private final String message;
 
-  public static Map<String, String> mapping() {
-    Map<String, String> map = Maps.newLinkedHashMap();
-    for (ApiServiceResultCode type : values()) {
-      map.put(type.getCode(), type.getMessage());
+    ApiServiceResultCode(String code, String message) {
+        this.code = code;
+        this.message = message;
     }
-    return map;
-  }
 
-  /**
-   * 通过枚举值码查找枚举值。
-   *
-   * @param code 查找枚举值的枚举值码。
-   * @return 枚举值码对应的枚举值。
-   * @throws IllegalArgumentException 如果 code 没有对应的 Status 。
-   */
-  public static ApiServiceResultCode findStatus(String code) {
-    for (ApiServiceResultCode status : values()) {
-      if (status.getCode().equals(code)) {
-        return status;
-      }
+    public static Map<String, String> mapping() {
+        Map<String, String> map = Maps.newLinkedHashMap();
+        for (ApiServiceResultCode type : values()) {
+            map.put(type.getCode(), type.getMessage());
+        }
+        return map;
     }
-    throw new IllegalArgumentException("ApiServiceResultCode not legal:" + code);
-  }
 
-  /**
-   * 获取全部枚举值。
-   *
-   * @return 全部枚举值。
-   */
-  public static List<ApiServiceResultCode> getAllStatus() {
-    List<ApiServiceResultCode> list = new ArrayList<ApiServiceResultCode>();
-    for (ApiServiceResultCode status : values()) {
-      list.add(status);
+    /**
+     * 通过枚举值码查找枚举值。
+     *
+     * @param code 查找枚举值的枚举值码。
+     * @return 枚举值码对应的枚举值。
+     * @throws IllegalArgumentException 如果 code 没有对应的 Status 。
+     */
+    public static ApiServiceResultCode findStatus(String code) {
+        for (ApiServiceResultCode status : values()) {
+            if (status.getCode().equals(code)) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException("ApiServiceResultCode not legal:" + code);
     }
-    return list;
-  }
 
-  /**
-   * 获取全部枚举值码。
-   *
-   * @return 全部枚举值码。
-   */
-  public static List<String> getAllStatusCode() {
-    List<String> list = new ArrayList<String>();
-    for (ApiServiceResultCode status : values()) {
-      list.add(status.code());
+    /**
+     * 获取全部枚举值。
+     *
+     * @return 全部枚举值。
+     */
+    public static List<ApiServiceResultCode> getAllStatus() {
+        List<ApiServiceResultCode> list = new ArrayList<ApiServiceResultCode>();
+        for (ApiServiceResultCode status : values()) {
+            list.add(status);
+        }
+        return list;
     }
-    return list;
-  }
 
-  public String getCode() {
-    return code;
-  }
+    /**
+     * 获取全部枚举值码。
+     *
+     * @return 全部枚举值码。
+     */
+    public static List<String> getAllStatusCode() {
+        List<String> list = new ArrayList<String>();
+        for (ApiServiceResultCode status : values()) {
+            list.add(status.code());
+        }
+        return list;
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getCode() {
+        return code;
+    }
 
-  public String code() {
-    return code;
-  }
+    public String getMessage() {
+        return message;
+    }
 
-  public String message() {
-    return message;
-  }
+    public String code() {
+        return code;
+    }
 
-  @Override
-  public String toString() {
-    return String.format("%s:%s", this.code, this.message);
-  }
+    public String message() {
+        return message;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s:%s", this.code, this.message);
+    }
 }

@@ -15,6 +15,7 @@ public class ApiRequest extends ApiMessage {
 
 
   /** 参数校验,校验失败请抛出RuntimeException */
+  @Override
   public void check() throws RuntimeException {}
 
   public <T extends OrderBase> T toOrder(Class<T> clazz) {
