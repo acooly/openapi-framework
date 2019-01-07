@@ -37,6 +37,5 @@ public class OpenApiClientProperties {
     private String accessKey = "test";
     @NotBlank
     private String secretKey = "test";
-    @NotBlank
     private boolean showLog = true;
 }
