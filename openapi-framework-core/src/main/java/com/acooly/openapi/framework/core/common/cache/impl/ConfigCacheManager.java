@@ -60,7 +60,7 @@ public class ConfigCacheManager implements CacheManager,InitializingBean {
 
   @Override
   public void cleanup(String key) {
-    configManager.delete(NAME_SPACE + key);
+    configManager.invalidate(NAME_SPACE + key);
   }
 
   @Override

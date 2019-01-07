@@ -8,9 +8,9 @@ package com.acooly.openapi.apidoc.generator.parser.impl;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.openapi.apidoc.enums.*;
+import com.acooly.openapi.apidoc.generator.parser.ApiDocParser;
 import com.acooly.openapi.apidoc.generator.parser.dto.ApiDataSize;
 import com.acooly.openapi.apidoc.generator.parser.dto.ApiDocItemContext;
-import com.acooly.openapi.apidoc.generator.parser.ApiDocParser;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocItem;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
@@ -145,14 +145,14 @@ public class ApiDocParserImpl implements ApiDocParser {
         messageDoc.setServiceNo(apiDocService.getServiceNo());
         messageDoc.setMessageType(doParseMessageType(clazz));
         messageDoc.setMessageNo(messageDoc.getServiceNo() + "_" + messageDoc.getMessageType().code());
-        messageDoc.setApiDocItems(doParseMessageItem(clazz, messageDoc.getMessageNo(), null));
+        messageDoc.setApiDocItems(doParseMessageItem(clazz, messageDoc.getMessageNo(), null, null));
         return messageDoc;
     }
 
-    protected List<ApiDocItem> doParseMessageItem(final Class<?> clazz, String messageNo, String parentNo) {
+    protected List<ApiDocItem> doParseMessageItem(final Class<?> clazz, String messageNo, List<Class> ignores, String parentNo) {
         List<ApiDocItem> apiItems = Lists.newArrayList();
         Class<?> cc = clazz;
-        while (cc != null && cc != ApiRequest.class && cc != ApiResponse.class && cc != ApiNotify.class && cc != Object.class){
+        while (cc != null && cc != ApiRequest.class && cc != ApiResponse.class && cc != ApiNotify.class && cc != Object.class) {
             Field[] fields = cc.getDeclaredFields();
             for (Field field : fields) {
                 if (Modifier.isStatic(field.getModifiers())) {
@@ -179,7 +179,13 @@ public class ApiDocParserImpl implements ApiDocParser {
                 }
 
                 if (subItemType != null) {
-                    item.setChildren(doParseMessageItem(subItemType, messageNo, item.getItemNo()));
+                    if (ignores == null) {
+                        ignores = Lists.newArrayList();
+                    }
+                    if (!ignores.contains(subItemType)) {
+                        ignores.add(subItemType);
+                        item.setChildren(doParseMessageItem(subItemType, messageNo, ignores, item.getItemNo()));
+                    }
                 }
                 item.setMessageNo(messageNo);
                 item.setParentNo(parentNo);
