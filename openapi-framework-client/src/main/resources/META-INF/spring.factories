@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.acooly.openapi.framework.client.OpenApiClientAutoConfig
