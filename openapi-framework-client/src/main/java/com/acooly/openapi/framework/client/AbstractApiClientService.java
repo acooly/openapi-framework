@@ -42,8 +42,13 @@ public abstract class AbstractApiClientService {
             return;
         }
         try {
-            request.setService(
-                    Strings.uncapitalize(Strings.substringBefore(request.getClass().getSimpleName(), "Request")));
+            String requestClassName = request.getClass().getSimpleName();
+            if (Strings.containsIgnoreCase(requestClassName, "ApiRequest")) {
+                request.setService(Strings.uncapitalize(Strings.substringBefore(requestClassName, "ApiRequest")));
+            } else if (Strings.containsIgnoreCase(requestClassName, "Request")) {
+                request.setService(Strings.uncapitalize(Strings.substringBefore(requestClassName, "Request")));
+            }
+
         } catch (Exception e) {
             log.warn("默认规则解析服务名失败。 request:{}", request.getClass().getName());
         }
