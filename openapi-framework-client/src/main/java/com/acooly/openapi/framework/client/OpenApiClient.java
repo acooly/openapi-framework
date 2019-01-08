@@ -65,9 +65,11 @@ public class OpenApiClient {
      * @return 响应对象
      */
     public <T> T send(ApiRequest request, Class<T> clazz) {
-        Assert.hasText(request.getPartnerId(), "partnerId不能为空");
         if (Strings.isNullOrEmpty(request.getVersion())) {
             request.setVersion(DEFAULT_VERSION);
+        }
+        if (Strings.isNullOrEmpty(request.getPartnerId())) {
+            request.setPartnerId(this.accessKey);
         }
         Assert.hasText(request.getService(), "service不能为空");
         request.check();
