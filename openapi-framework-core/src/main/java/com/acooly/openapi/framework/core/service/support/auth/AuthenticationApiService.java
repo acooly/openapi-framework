@@ -33,11 +33,11 @@ public class AuthenticationApiService extends BaseApiService<AuthRequest, ApiRes
 
     @Override
     protected void doService(AuthRequest request, ApiResponse response) {
-        Date date = request.getExpiredBody().getExpireDate();
-        Date now = new Date();
-        if (Math.abs(now.getTime() - date.getTime()) > AuthRequest.EXPIRE) {
-            throw new ApiServiceException("AUTH_EXPIRE", "认证已经过期");
-        }
+//        Date date = request.getExpiredBody().getExpireDate();
+//        Date now = new Date();
+//        if (Math.abs(now.getTime() - date.getTime()) > AuthRequest.EXPIRE) {
+//            throw new ApiServiceException("AUTH_EXPIRE", "认证已经过期");
+//        }
         String signature = apiAuthentication.signature(request.getExpiredBody().getSignBody(), request.getAccessKey(), ApiContextHolder.getApiContext().getSignType().name());
         if (!request.getSign().equals(signature)) {
             throw new ApiServiceException("AUTH_FAILURE", "认证服务认证失败");
