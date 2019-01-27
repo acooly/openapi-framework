@@ -48,7 +48,7 @@ public class ApiDocProperties {
      */
     private String copyright = "Copyright@acooly";
 
-    private String logo = "/portal/images/logo.png";
+    private String logo = "/portal/images/logo-acooly-white.png";
 
 
     private String gateway = "";

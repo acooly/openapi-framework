@@ -18,42 +18,41 @@
 
     <dependencies>
 
+
+        <!-- 服务集成(最小) -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- OpenApi自动文档 -->
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-apidoc</artifactId>
             <version>${project.version}</version>
         </dependency>
 
-
-        <!-- 服务集成 -->
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        <!-- 接口MOCK（后台根据接口名称配置mock报文） -->
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-mock</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-test</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-service-impl</artifactId>
-            <version>${project.version}</version>
-
-        </dependency>
+        <!-- OpenApi扩展，目前扩展了流控 -->
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-extensions</artifactId>
             <version>${project.version}</version>
         </dependency>
 
+        <!-- OpenApi notify -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-notify</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
 
         <dependency>

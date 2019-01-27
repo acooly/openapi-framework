@@ -1,9 +1,9 @@
 /*
-* acooly.cn Inc.
-* Copyright (c) 2017 All Rights Reserved.
-* create by acooly
-* date:2017-12-05
-*/
+ * acooly.cn Inc.
+ * Copyright (c) 2017 All Rights Reserved.
+ * create by acooly
+ * date:2017-12-05
+ */
 package com.acooly.openapi.apidoc.persist.entity;
 
 
@@ -80,4 +80,12 @@ public class ApiDocScheme extends AbstractEntity {
     @Size(max = 255)
     private String comments;
 
+    public ApiDocScheme() {
+
+    }
+
+    public ApiDocScheme(String schemeNo, String title) {
+        this.schemeNo = schemeNo;
+        this.title = title;
+    }
 }

@@ -16,7 +16,7 @@ import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.core.OpenAPIProperties;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
-import com.acooly.openapi.framework.service.OrderInfoService;
+import com.acooly.openapi.framework.service.service.OrderInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

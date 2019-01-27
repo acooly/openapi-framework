@@ -21,7 +21,7 @@ import com.acooly.openapi.framework.service.test.response.TreeNodeListApiRespons
  */
 @OpenApiService(
         name = "treeNodeList",
-        desc = "树形结构查询",
+        desc = "测试：树形结构查询",
         responseType = ResponseType.SYN,
         owner = "openApi-arch",
         busiType = ApiBusiType.Trade

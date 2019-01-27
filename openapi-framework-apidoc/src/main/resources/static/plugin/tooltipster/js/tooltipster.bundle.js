@@ -20,7 +20,7 @@
   }
 }(this, function ($) {
 
-// This file will be UMDified by a build task.
+// This file will be UMDified by a build scheduling.
 
 var defaults = {
 		animation: 'fade',
@@ -88,7 +88,7 @@ var defaults = {
 		),
 		hasTransitions: transitionSupport(),
 		IE: false,
-		// don't set manually, it will be updated by a build task after the manifest
+		// don't set manually, it will be updated by a build scheduling after the manifest
 		semVer: '4.2.5',
 		window: win
 	},
@@ -1002,7 +1002,7 @@ $.Tooltipster.prototype = {
 	},
 	
 	/**
-	 * Schedules or cancels the garbage collector task
+	 * Schedules or cancels the garbage collector scheduling
 	 *
 	 * @returns {self}
 	 * @private
@@ -1014,7 +1014,7 @@ $.Tooltipster.prototype = {
 		// in case the selfDestruction option has been changed by a method call
 		if (self.__options.selfDestruction) {
 			
-			// the GC task
+			// the GC scheduling
 			self.__garbageCollector = setInterval(function() {
 				
 				var now = new Date().getTime();
@@ -1376,7 +1376,7 @@ $.Tooltipster.prototype = {
 			
 			// if the origin or tooltip elements have been removed.
 			// Note: we could destroy the instance now if the origin has
-			// been removed but we'll leave that task to our garbage collector
+			// been removed but we'll leave that scheduling to our garbage collector
 			if (!bodyContains(self._$origin) || !bodyContains(self._$tooltip)) {
 				self._close();
 			}
@@ -3339,10 +3339,10 @@ function transitionSupport() {
 }
 
 // we'll return jQuery for plugins not to have to declare it as a dependency,
-// but it's done by a build task since it should be included only once at the
+// but it's done by a build scheduling since it should be included only once at the
 // end when we concatenate the main file with a plugin
 // sideTip is Tooltipster's default plugin.
-// This file will be UMDified by a build task.
+// This file will be UMDified by a build scheduling.
 
 var pluginName = 'tooltipster.sideTip';
 
@@ -4267,7 +4267,7 @@ $.tooltipster._plugin({
 	}
 });
 
-/* a build task will add "return $;" here */
+/* a build scheduling will add "return $;" here */
 return $;
 
 }));

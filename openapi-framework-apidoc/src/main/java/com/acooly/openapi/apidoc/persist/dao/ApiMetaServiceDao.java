@@ -1,7 +1,7 @@
 package com.acooly.openapi.apidoc.persist.dao;
 
 import com.acooly.module.mybatis.EntityMybatisDao;
-import com.acooly.openapi.framework.domain.ApiMetaService;
+import com.acooly.openapi.framework.service.domain.ApiMetaService;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

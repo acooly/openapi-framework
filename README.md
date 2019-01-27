@@ -85,7 +85,7 @@ OpenApi服务框架提供API服务的统一处理和执行能力。主要由open
 
 ### OpenAPI异步通知发送服务集成
 
-OpenAPI框架（core）的异步通知模块设计为可插拔模式，可插入服务的API接口为：com.acooly.openapi.framework.core.notify.ApiNotifySender 
+OpenAPI框架（core）的异步通知模块设计为可插拔模式，可插入服务的API接口为：com.acooly.openapi.framework.notify.service.ApiNotifySender 
 
 ```java
 /*
@@ -153,7 +153,7 @@ public interface ApiNotifySender {
 
 1. 认证授权扩展点
 
-    实现`com.acooly.openapi.framework.service.AuthInfoRealmService`
+    实现`com.acooly.openapi.framework.service.service.AuthInfoRealmService`
 
 2. 用户登录扩展点
 
@@ -161,7 +161,7 @@ public interface ApiNotifySender {
     
 3. 用户登录自动下发新认证信息扩展点
 
-    实现`com.acooly.openapi.framework.service.AuthInfoRealmManageService`
+    实现`com.acooly.openapi.framework.service.service.AuthInfoRealmManageService`
     
     此接口继承`AuthInfoRealmService`接口
     

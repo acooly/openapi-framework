@@ -59,6 +59,7 @@
         <module>openapi-framework-extensions</module>
         <module>openapi-framework-mock</module>
         <module>openapi-framework-client</module>
+        <module>openapi-framework-notify</module>
     </modules>
 
 </project>

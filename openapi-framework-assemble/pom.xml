@@ -38,9 +38,10 @@
 
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-service-impl</artifactId>
+            <artifactId>openapi-framework-notify</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-extensions</artifactId>

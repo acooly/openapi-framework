@@ -1,6 +1,6 @@
 package com.acooly.openapi.framework.core.auth.realm.impl;
 
-import com.acooly.openapi.framework.service.AuthInfoRealmService;
+import com.acooly.openapi.framework.service.service.AuthInfoRealmService;
 
 import javax.annotation.Resource;
 import java.util.Set;
