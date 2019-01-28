@@ -1,32 +1,30 @@
 package com.acooly.openapi.framework.service.test.api;
 
 import com.acooly.core.utils.enums.SimpleStatus;
-import com.acooly.openapi.framework.common.annotation.OpenApiNote;
+import com.acooly.openapi.framework.common.annotation.ApiDocNote;
+import com.acooly.openapi.framework.common.annotation.ApiDocType;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.core.service.base.BaseApiService;
-import com.acooly.openapi.framework.service.test.request.CreateOrderRequest;
-import com.acooly.openapi.framework.service.test.response.CreateOrderResponse;
+import com.acooly.openapi.framework.service.test.request.OrderCreateRequest;
+import com.acooly.openapi.framework.service.test.response.OrderCreateResponse;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by zhangpu on 2016/2/12.
  */
-@OpenApiNote(
-        "APP在运营过程中，因为手机本地兼容问题，可能会造成APP崩溃，错误。为了改善用户体验，不断优化APP，我们需要在客户手机发生崩溃或错误的时候，收集崩溃 现场的错误堆栈信息，并通过该接口发送到服务器端，我们会在运营系统保存并展示实时上报的信息，并通过分析该崩溃报告在下个版本解决对应的问题。")
-@OpenApiService(
-        name = "orderCreate",
-        desc = "测试：创建订单服务",
-        responseType = ResponseType.SYN,
-        owner = "openApi-arch",
-        busiType = ApiBusiType.Trade
-)
-public class OrderCreateApiService extends BaseApiService<CreateOrderRequest, CreateOrderResponse> {
+@Slf4j
+@ApiDocType(code = "test", name = "测试")
+@ApiDocNote("测试同步请求，跳转支付，异步通知整个过程。<b/>第一步：同步：创建订单")
+@OpenApiService(name = "orderCreate", desc = "测试：创建订单服务", responseType = ResponseType.SYN, owner = "openApi-test", busiType = ApiBusiType.Trade)
+public class OrderCreateApiService extends BaseApiService<OrderCreateRequest, OrderCreateResponse> {
     @Override
-    protected void doService(CreateOrderRequest request, CreateOrderResponse response) {
+    protected void doService(OrderCreateRequest request, OrderCreateResponse response) {
+        log.info("OrderCreateRequest: {}", request);
         response.setTestMoney(request.getAmount());
         response.setGoodInfos(request.getGoodsInfos());
         response.setStatus(SimpleStatus.enable);
-        // OK mock 处理了。
+
     }
 }

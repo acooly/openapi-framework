@@ -32,7 +32,7 @@ public class OpenApiNotifyProperties {
     private boolean enable = true;
 
     /**
-     * 是否启动dubbo-facade服务
+     * 是否启动OpenApi的dubbo-facade服务
      */
     private boolean enableFacade = false;
 

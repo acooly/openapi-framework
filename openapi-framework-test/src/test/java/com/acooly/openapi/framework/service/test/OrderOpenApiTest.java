@@ -9,9 +9,9 @@ import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
 import com.acooly.openapi.framework.service.test.notify.PayOrderNotify;
-import com.acooly.openapi.framework.service.test.request.CreateOrderRequest;
+import com.acooly.openapi.framework.service.test.request.OrderCreateRequest;
 import com.acooly.openapi.framework.service.test.request.PayOrderRequest;
-import com.acooly.openapi.framework.service.test.response.CreateOrderResponse;
+import com.acooly.openapi.framework.service.test.response.OrderCreateResponse;
 import com.acooly.openapi.framework.service.test.response.PayOrderResponse;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
@@ -44,6 +44,10 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
 
     static String content = UUID.randomUUID().toString();
 
+
+    String payerUserId = "09876543211234567890";
+    Money amount = Money.amout("200");
+
     /**
      * 同步请求
      * <p>
@@ -54,12 +58,14 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
      */
     @Test
     public void testOrderCreateSync() throws Exception {
-        CreateOrderRequest request = new CreateOrderRequest();
+        OrderCreateRequest request = new OrderCreateRequest();
         request.setRequestNo(Ids.getDid());
+        request.setMerchOrderNo(Ids.getDid());
         request.setService("orderCreate");
         request.setTitle("同步请求创建订单");
+        request.setAmount(amount);
         request.setPayeeUserId("12345678900987654321");
-        request.setPayerUserId("09876543211234567890");
+        request.setPayerUserId(payerUserId);
         request.setBuyerUserId("09876543211234567890");
         request.setBuyeryEmail("qiuboboy@qq.com");
         request.setBuyeryMobileNo("13898765453");
@@ -67,19 +73,18 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
         request.setPassword("12312312");
         request.setContext(content);
         List<GoodInfo> goodInfos = Lists.newArrayList();
-        for (int i = 1; i <= 2; i++) {
-            GoodInfo goodInfo = new GoodInfo();
-            goodInfo.setGoodType(GoodType.actual);
-            goodInfo.setName("天子精品" + i);
-            goodInfo.setPrice(Money.amout("400.00"));
-            goodInfo.setReferUrl("http://acooly.cn/tianzi");
-            goodInfos.add(goodInfo);
-        }
+        GoodInfo goodInfo = new GoodInfo();
+        goodInfo.setGoodType(GoodType.actual);
+        goodInfo.setName("天子精品");
+        goodInfo.setPrice(Money.amout("400.00"));
+        goodInfo.setReferUrl("http://acooly.cn/tianzi");
+        goodInfos.add(goodInfo);
+
         request.setGoodsInfos(goodInfos);
         request.ext("xx", "oo");
-        CreateOrderResponse response = request(request, CreateOrderResponse.class);
+        OrderCreateResponse response = request(request, OrderCreateResponse.class);
         log.info("{}", response);
-        log.info("请求单号: {}", request.getRequestNo());
+        log.info("订单号: {}", request.getMerchOrderNo());
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isTrue();
         assertThat(response.getContext()).isEqualTo(content);

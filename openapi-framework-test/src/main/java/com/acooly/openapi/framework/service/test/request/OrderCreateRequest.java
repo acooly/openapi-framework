@@ -23,14 +23,18 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class CreateOrderRequest extends ApiRequest {
+public class OrderCreateRequest extends ApiRequest {
+
+    @NotEmpty
+    @Size(max = 64)
+    @OpenApiField(desc = "订单号", constraint = "商户订单号，唯一标志一笔交易", demo = "20912213123sdf")
+    private String merchOrderNo;
 
     @NotEmpty
     @Size(max = 64)
     @OpenApiField(desc = "标题", demo = "特色牛肉干")
     private String title;
 
-    //  @MoneyConstraint(min = 100, max = 1000000)
     @OpenApiField(desc = "金额", constraint = "单笔金额最小1元，最大10000元", demo = "120.00")
     private Money amount;
 
@@ -65,7 +69,6 @@ public class CreateOrderRequest extends ApiRequest {
     @OpenApiField(desc = "交易密码", demo = "!QAZ@WSX", security = true)
     private String password;
 
-    @Size(min = 1)
     @OpenApiField(desc = "商品信息")
     private List<GoodInfo> goodsInfos;
 

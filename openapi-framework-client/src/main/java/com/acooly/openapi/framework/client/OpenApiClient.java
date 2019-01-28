@@ -65,54 +65,14 @@ public class OpenApiClient {
      * @return 响应对象
      */
     public <T> T send(ApiRequest request, Class<T> clazz) {
-        if (Strings.isNullOrEmpty(request.getVersion())) {
-            request.setVersion(DEFAULT_VERSION);
-        }
-        if (Strings.isNullOrEmpty(request.getPartnerId())) {
-            request.setPartnerId(this.accessKey);
-        }
-        Assert.hasText(request.getService(), "service不能为空");
-        request.check();
 
-        List<Field> fields = securityFieldsMap.get(clazz);
-        if (fields == null) {
-            List<Field> fieldList = Lists.newArrayList();
-            for (Field field : request.getClass().getDeclaredFields()) {
-                OpenApiField annotation = field.getAnnotation(OpenApiField.class);
-                if (annotation != null && annotation.security()) {
-                    field.setAccessible(true);
-                    fieldList.add(field);
-                }
-            }
-            fields = fieldList;
-            securityFieldsMap.put(clazz, fields);
-        }
+        MessageResult messageResult = parse(request);
 
-        if (fields.size() != 0) {
-            fields.forEach(field -> {
-                try {
-                    Object o = field.get(request);
-                    if (o != null) {
-                        String encrypt = encrypt(o.toString());
-                        field.set(request, encrypt);
-                    }
-                } catch (Exception e) {
-                    throw new AppConfigException(e);
-                }
-            });
-        }
-
-
-        String body = JsonMarshallor.INSTANCE.marshall(request);
-        Map<String, String> requestHeader = Maps.newTreeMap();
-        requestHeader.put(ApiConstants.ACCESS_KEY, accessKey);
-        requestHeader.put(ApiConstants.SIGN_TYPE, signType);
-        requestHeader.put(ApiConstants.SIGN, sign(body));
         if (showLog) {
-            log.info("请求-> header:{} body:{}", requestHeader, body);
+            log.info("请求-> header:{} body:{}", messageResult.getHeaders(), messageResult.getBody());
         }
         HttpRequest httpRequest =
-                HttpRequest.post(gatewayUrl).headers(requestHeader).contentType("application/json").followRedirects(false).send(body);
+                HttpRequest.post(gatewayUrl).headers(messageResult.getHeaders()).contentType("application/json").followRedirects(false).send(messageResult.getBody());
         Map<String, List<String>> responseHeader = httpRequest.headers();
         String sign = null;
         String signType;
@@ -158,6 +118,66 @@ public class OpenApiClient {
         }
         return JsonMarshallor.INSTANCE.parse(responseBody, clazz);
     }
+
+
+    /**
+     * 解析报文
+     *
+     * @param request
+     * @return
+     */
+    public MessageResult parse(ApiRequest request) {
+        if (Strings.isNullOrEmpty(request.getVersion())) {
+            request.setVersion(DEFAULT_VERSION);
+        }
+        if (Strings.isNullOrEmpty(request.getPartnerId())) {
+            request.setPartnerId(this.accessKey);
+        }
+        Assert.hasText(request.getService(), "service不能为空");
+        request.check();
+
+
+        List<Field> fields = securityFieldsMap.get(request.getClass());
+        if (fields == null) {
+            List<Field> fieldList = Lists.newArrayList();
+            for (Field field : request.getClass().getDeclaredFields()) {
+                OpenApiField annotation = field.getAnnotation(OpenApiField.class);
+                if (annotation != null && annotation.security()) {
+                    field.setAccessible(true);
+                    fieldList.add(field);
+                }
+            }
+            fields = fieldList;
+            securityFieldsMap.put(request.getClass(), fields);
+        }
+
+        if (fields.size() != 0) {
+            fields.forEach(field -> {
+                try {
+                    Object o = field.get(request);
+                    if (o != null) {
+                        String encrypt = encrypt(o.toString());
+                        field.set(request, encrypt);
+                    }
+                } catch (Exception e) {
+                    throw new AppConfigException(e);
+                }
+            });
+        }
+
+        String body = JsonMarshallor.INSTANCE.marshall(request);
+        Map<String, String> requestHeader = Maps.newTreeMap();
+        requestHeader.put(ApiConstants.ACCESS_KEY, accessKey);
+        requestHeader.put(ApiConstants.SIGN_TYPE, signType);
+        requestHeader.put(ApiConstants.SIGN, sign(body));
+
+        MessageResult result = new MessageResult();
+        result.setUrl(this.getGatewayUrl());
+        result.setBody(body);
+        result.setHeaders(requestHeader);
+        return result;
+    }
+
 
     public String sign(String body) {
         return DigestUtils.md5Hex(body + secretKey);

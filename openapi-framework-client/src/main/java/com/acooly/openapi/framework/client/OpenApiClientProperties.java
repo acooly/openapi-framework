@@ -29,13 +29,13 @@ import static com.acooly.openapi.framework.client.OpenApiClientProperties.PREFIX
 @Validated
 public class OpenApiClientProperties {
     public static final String PREFIX = "acooly.openapi.client";
-    private boolean enable;
+    private boolean enable = false;
 
     @NotBlank
-    private String gateway = "http://localhost:8080/gateway.do";
+    private String gateway = "http://localhost:8089/gateway.do";
     @NotBlank
     private String accessKey = "test";
     @NotBlank
-    private String secretKey = "test";
+    private String secretKey = "06f7aab08aa2431e6dae6a156fc9e0b4";
     private boolean showLog = true;
 }

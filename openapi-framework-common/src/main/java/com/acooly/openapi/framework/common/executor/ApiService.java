@@ -22,15 +22,24 @@ import com.acooly.openapi.framework.common.message.ApiResponse;
  * @date 2014年8月3日
  */
 public interface ApiService<O extends ApiRequest, R extends ApiResponse>
-    extends OpenApiEventPublisher<ServiceEvent> {
+        extends OpenApiEventPublisher<ServiceEvent> {
 
-  void service(ApiContext apiContext);
+    void service(ApiContext apiContext);
 
-  ApiNotify handleNotify(OrderDto orderInfo, Object data);
+    ApiNotify handleNotify(OrderDto orderInfo, Object data);
 
-  O getRequestBean();
+    O getRequestBean();
 
-  R getResponseBean();
+    R getResponseBean();
 
-  ApiNotify getApiNotifyBean();
+    ApiNotify getApiNotifyBean();
+
+    /**
+     * 跳转接口时，跳转到下层服务的地址
+     *
+     * @return
+     */
+    String getRedirectUrl();
+
+    void setRedirectUrl(String redirectUrl);
 }
