@@ -4,6 +4,8 @@
  */
 package com.acooly.openapi.framework.core.service.base;
 
+import com.acooly.openapi.framework.common.context.ApiContext;
+import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.event.dto.ServiceEvent;
 import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.common.message.ApiRequest;
@@ -112,5 +114,9 @@ public abstract class GeneralApiService<O extends ApiRequest, R extends ApiRespo
     @Override
     public void setRedirectUrl(String redirectUrl) {
         this.redirectUrl = redirectUrl;
+        ApiContext apiContext = ApiContextHolder.getApiContext();
+        if (apiContext != null) {
+            apiContext.setRedirectUrl(redirectUrl);
+        }
     }
 }

@@ -29,8 +29,8 @@ public class DefaultHttpApiServiceExecuter extends HttpApiServiceExecuter {
     protected void doInitApiContext(ApiContext apiContext, HttpServletRequest orignalRequest, HttpServletResponse orignalResponse) {
         apiContext.setOrignalRequest(orignalRequest);
         apiContext.setOrignalResponse(orignalResponse);
-        apiContext.init();
         try {
+            apiContext.init();
             ApiService apiService = apiServiceFactory.getApiService(apiContext.getServiceName(), apiContext.getServiceVersion());
             apiContext.setApiService(apiService);
             ApiRequest apiRequest = apiService.getRequestBean();

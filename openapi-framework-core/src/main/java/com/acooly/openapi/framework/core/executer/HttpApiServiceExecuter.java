@@ -7,6 +7,7 @@
  */
 package com.acooly.openapi.framework.core.executer;
 
+import com.acooly.core.utils.StringUtils;
 import com.acooly.core.utils.validate.Validators;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.context.ApiContext;
@@ -147,12 +148,11 @@ public abstract class HttpApiServiceExecuter
     }
 
     protected void doResponse(ApiContext apiContext) {
-        ApiService service = apiContext.getApiService();
         ApiResponse apiResponse = apiContext.getResponse();
         HttpServletResponse response = apiContext.getOrignalResponse();
         String marshallStr = null;
-        String redirectUrl = service.getRedirectUrl();
-        if (apiContext.isRedirect() && Strings.isNullOrEmpty(redirectUrl)) {
+        String redirectUrl = apiContext.getRedirectUrl();
+        if (apiContext.isRedirect() && !StringUtils.isEmpty(redirectUrl)) {
             marshallStr = doResponseMarshal(apiResponse, true);
             String signType = apiContext.getOrignalResponse().getHeader(ApiConstants.SIGN_TYPE);
             String sign = apiContext.getOrignalResponse().getHeader(ApiConstants.SIGN);
@@ -245,18 +245,10 @@ public abstract class HttpApiServiceExecuter
         StringBuilder sb = null;
         try {
             sb = new StringBuilder(returnUrl)
-                    .append("?")
-                    .append(ApiConstants.SIGN_TYPE)
-                    .append("=")
-                    .append(signType)
-                    .append("&")
-                    .append(ApiConstants.SIGN)
-                    .append("=")
-                    .append(sign)
-                    .append("&")
-                    .append(ApiConstants.BODY)
-                    .append("=")
-                    .append(URLEncoder.encode(marshallStr, Charsets.UTF_8.name()));
+                    .append("?").append(ApiConstants.SIGN_TYPE).append("=").append(signType)
+                    .append("&").append(ApiConstants.SIGN).append("=").append(sign)
+                    .append("&").append(ApiConstants.BODY).append("=").append(URLEncoder.encode(marshallStr, Charsets.UTF_8.name()))
+                    .append("&").append(ApiConstants.GID).append("=").append(getApiContext().getGid());
         } catch (UnsupportedEncodingException e) {
             throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e);
         }

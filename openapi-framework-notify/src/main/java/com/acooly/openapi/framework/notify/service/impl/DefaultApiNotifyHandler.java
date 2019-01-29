@@ -77,8 +77,7 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
             ApiContextHolder.getApiContext().setSignType(SignTypeEnum.valueOf(orderInfo.getSignType()));
 
             // 查找对应服务并调用异步业务处理
-            ApiService apiService =
-                    apiServiceFactory.getApiService(orderInfo.getService(), orderInfo.getVersion());
+            ApiService apiService = apiServiceFactory.getApiService(orderInfo.getService(), orderInfo.getVersion());
             ApiNotify apiNotify = apiService.handleNotify(orderInfo, apiNotifyOrder);
             ApiContextHolder.getApiContext().setApiService(apiService);
             ApiContextHolder.getApiContext().setResponse(apiNotify);
@@ -86,8 +85,7 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
             String notifyBody = (String) apiNotifyMarshall.marshall(apiNotify);
             // 删除框架的签名，交给CS系统发送时签名
             String callerNotifyUrl = apiNotifyOrder.getParameter(ApiConstants.NOTIFY_URL);
-            String notifyUrl =
-                    StringUtils.isNotBlank(callerNotifyUrl) ? callerNotifyUrl : orderInfo.getNotifyUrl();
+            String notifyUrl = StringUtils.isNotBlank(callerNotifyUrl) ? callerNotifyUrl : orderInfo.getNotifyUrl();
 
             NotifySendMessage notifySendMessage = new NotifySendMessage();
             notifySendMessage.setGid(apiNotifyOrder.getGid());
@@ -97,8 +95,7 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
             notifySendMessage.setUrl(notifyUrl);
             notifySendMessage.setRequestNo(apiNotify.getRequestNo());
             notifySendMessage.setParameter(ApiConstants.BODY, notifyBody);
-            notifySendMessage.setParameter(
-                    ApiConstants.SIGN, ApiContextHolder.getApiContext().getResponseSign());
+            notifySendMessage.setParameter(ApiConstants.SIGN, ApiContextHolder.getApiContext().getResponseSign());
             //fixme
 //      notifySendMessage.setParameter(ApiConstants.PARTNER_ID, orderInfo.getPartnerId());
             notifySendMessage.setParameter(ApiConstants.SIGN_TYPE, orderInfo.getSignType());
@@ -147,14 +144,13 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
             ApiContextHolder.getApiContext().setSignType(SignTypeEnum.valueOf(orderInfo.getSignType()));
 
             // 查找对应服务并调用异步业务处理
-            ApiService apiService =
-                    apiServiceFactory.getApiService(orderInfo.getService(), orderInfo.getVersion());
+            ApiService apiService = apiServiceFactory.getApiService(orderInfo.getService(), orderInfo.getVersion());
             ApiNotify apiNotify = apiService.handleNotify(orderInfo, apiNotifyOrder);
             ApiContextHolder.getApiContext().setApiService(apiService);
             ApiContextHolder.getApiContext().setResponse(apiNotify);
             // 组装报文
             String notifyBody = (String) apiNotifyMarshall.marshall(apiNotify);
-            // 交给CS系统发送
+            // 组装发送
             NotifySendMessage notifySendMessage = new NotifySendMessage();
             notifySendMessage.setGid(apiNotifyOrder.getGid());
             notifySendMessage.setPartnerId(apiNotify.getPartnerId());

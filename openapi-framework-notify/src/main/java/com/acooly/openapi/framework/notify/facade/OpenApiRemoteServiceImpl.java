@@ -13,7 +13,7 @@ import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.dto.OrderDto;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
-import com.acooly.openapi.framework.common.enums.SignTypeEnum;
+import com.acooly.openapi.framework.common.enums.SignType;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
 import com.acooly.openapi.framework.facade.api.OpenApiRemoteService;
@@ -23,6 +23,7 @@ import com.acooly.openapi.framework.facade.result.ApiNotifyResult;
 import com.acooly.openapi.framework.notify.service.ApiNotifyHandler;
 import com.acooly.openapi.framework.service.service.AuthInfoRealmService;
 import com.acooly.openapi.framework.service.service.OrderInfoService;
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -78,16 +79,21 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
         try {
             apiNotifyOrder.check();
             OrderDto orderInfo = getOrderInfo(apiNotifyOrder.getGid(), apiNotifyOrder.getPartnerId());
+            String accessKey = orderInfo.getAccessKey();
+            String signType = Strings.isBlankDefault(orderInfo.getSignType(), SignType.MD5.code());
             Map<String, String> signedMap = getSignMap(orderInfo, apiNotifyOrder);
-            apiAuthentication.signature(signedMap);
-            Map<String, Object> parameters =
-                    Maps.transformEntries(
-                            signedMap,
-                            (key, value) -> value);
+            String body = JSON.toJSONString(signedMap);
+            String sign = apiAuthentication.signature(body, accessKey, signType);
+            Map<String, Object> parameters = Maps.transformEntries(signedMap, (key, value) -> value);
+            result.setSign(sign);
+            result.setSignType(signType);
+            result.setAccessKey(accessKey);
+            result.setBody(body);
             result.setParameters(parameters);
-            result.setSign(signedMap.get(ApiConstants.SIGN));
-            result.setNotifyUrl(signedMap.get(ApiConstants.NOTIFY_URL));
-            result.setReturnUrl(signedMap.get(ApiConstants.RETURN_URL));
+            String notifyUrl = getNotifyUrl(apiNotifyOrder, orderInfo);
+            String returnUrl = getReturnUrl(apiNotifyOrder, orderInfo);
+            result.setNotifyUrl(notifyUrl);
+            result.setReturnUrl(returnUrl);
             result.setStatus(ResultStatus.success);
         } catch (ApiServiceException e) {
             result.setStatus(ResultStatus.failure);
@@ -137,24 +143,15 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
         Map<String, String> signedMap = Maps.newLinkedHashMap();
         // 设置基础和默认参数
         signedMap.put(ApiConstants.REQUEST_NO, orderInfo.getRequestNo());
-        //fixme
-//    signedMap.put(ApiConstants.PARTNER_ID, orderInfo.getPartnerId());
         signedMap.put(ApiConstants.SERVICE, orderInfo.getService());
         signedMap.put(ApiConstants.VERSION, orderInfo.getVersion());
         signedMap.put(ApiConstants.PROTOCOL, orderInfo.getProtocol().code());
-        String signType = orderInfo.getSignType();
-        signedMap.put(
-                ApiConstants.SIGN_TYPE, Strings.isBlank(signType) ? SignTypeEnum.MD5.toString() : signType);
         signedMap.put(ApiConstants.CONTEXT, orderInfo.getContext());
         signedMap.put(ApiConstants.RESULT_CODE, ApiServiceResultCode.SUCCESS.code());
         signedMap.put(ApiConstants.RESULT_MESSAGE, ApiServiceResultCode.SUCCESS.message());
         signedMap.put(ApiConstants.SUCCESS, "true");
         // 使用下次请求的参数覆盖
         signedMap.putAll(apiNotifyOrder.getParameters());
-        String notifyUrl = getNotifyUrl(apiNotifyOrder, orderInfo);
-        String returnUrl = getReturnUrl(apiNotifyOrder, orderInfo);
-        signedMap.put(ApiConstants.RETURN_URL, returnUrl);
-        signedMap.put(ApiConstants.NOTIFY_URL, notifyUrl);
         return signedMap;
     }
 

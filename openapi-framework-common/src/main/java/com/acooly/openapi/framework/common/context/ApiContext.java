@@ -11,6 +11,7 @@
 package com.acooly.openapi.framework.common.context;
 
 import com.acooly.core.utils.Ids;
+import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
@@ -24,7 +25,6 @@ import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Charsets;
-import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
 import com.google.common.io.CharStreams;
 import lombok.Data;
@@ -124,9 +124,6 @@ public class ApiContext {
 
     public void setRedirectUrl(String redirectUrl) {
         this.redirectUrl = redirectUrl;
-        if (this.apiService != null) {
-            this.apiService.setRedirectUrl(redirectUrl);
-        }
     }
 
     /**
@@ -186,7 +183,7 @@ public class ApiContext {
                     ApiServiceResultCode.PARAMETER_ERROR,
                     "http请求报文头Content-Type支持三种：1.空(默认为json)，2.application/json，3.application/x-www-form-urlencoded");
         }
-        String body;
+        String body = null;
         // body
         if (mediaType.equals(MediaType.APPLICATION_JSON_VALUE)) {
             try {
@@ -196,7 +193,9 @@ public class ApiContext {
             } catch (IOException e) {
                 throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e);
             }
-        } else {
+        }
+
+        if(Strings.isBlank(body)){
             body = orignalRequest.getParameter(BODY);
         }
         throwIfBlank(body, "报文内容为空");
@@ -252,8 +251,16 @@ public class ApiContext {
         if (com.acooly.core.utils.Strings.isBlank(queryString)) {
             return Collections.emptyMap();
         }
-        Map<String, String> queryStringMap =
-                Splitter.on("&").withKeyValueSeparator("=").split(queryString);
+
+        Map<String, String> queryStringMap = Maps.newHashMap();
+        queryStringMap.put(ApiConstants.BODY, Servlets.getParameter(orignalRequest, ApiConstants.BODY));
+        queryStringMap.put(ApiConstants.SIGN, Servlets.getParameter(orignalRequest, ApiConstants.SIGN));
+        queryStringMap.put(ApiConstants.SIGN_TYPE, Servlets.getParameter(orignalRequest, ApiConstants.SIGN_TYPE));
+        queryStringMap.put(ApiConstants.ACCESS_KEY, Servlets.getParameter(orignalRequest, ApiConstants.ACCESS_KEY));
+
+        // 对URLEncoding不兼容
+//        Map<String, String> queryStringMap =
+//                Splitter.on("&").withKeyValueSeparator("=").split(queryString);
         return queryStringMap;
     }
 

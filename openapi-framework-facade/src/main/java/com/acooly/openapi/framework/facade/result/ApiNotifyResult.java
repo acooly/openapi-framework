@@ -9,87 +9,127 @@ package com.acooly.openapi.framework.facade.result;
 
 import com.acooly.core.common.facade.ResultBase;
 import com.acooly.core.utils.Encodes;
+import com.acooly.openapi.framework.common.ApiConstants;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Iterator;
 import java.util.Map;
 
-/** @author zhangpu */
+/**
+ * @author zhangpu
+ */
 public class ApiNotifyResult extends ResultBase {
 
-  /** serialVersionUID */
-  private static final long serialVersionUID = -348730141776307996L;
-  /** 签名 */
-  private String sign;
-  /** 跳转通知URL */
-  private String returnUrl;
-  /** 异步通知URL */
-  private String notifyUrl;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = -348730141776307996L;
+    /**
+     * 签名 x-api-sign
+     */
+    private String sign;
+    /**
+     * x-api-signType
+     */
+    private String signType;
+    private String accessKey;
+    private String body;
 
-  public String getQueryString() {
-    setParameter("sign", this.sign);
-    StringBuilder sb = new StringBuilder();
-    Iterator<Map.Entry<String, Object>> it = getParameters().entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry<String, Object> entry = it.next();
-      if (entry.getValue() != null) {
-        sb.append(entry.getKey()).append('=').append(Encodes.urlEncode((String) entry.getValue()));
-      } else {
-        continue;
-      }
-      if (it.hasNext()) {
-        sb.append('&');
-      }
+
+    /**
+     * 跳转通知URL
+     */
+    private String returnUrl;
+    /**
+     * 异步通知URL
+     */
+    private String notifyUrl;
+
+    public String getQueryString() {
+        Map<String, String> data = Maps.newHashMap();
+        data.put(ApiConstants.SIGN, this.sign);
+        data.put(ApiConstants.SIGN_TYPE, this.signType);
+        data.put(ApiConstants.ACCESS_KEY, this.accessKey);
+        data.put(ApiConstants.BODY, this.body);
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(ApiConstants.BODY).append("=").append(Encodes.urlEncode(this.body)).append("&")
+                .append(ApiConstants.ACCESS_KEY).append("=").append(this.accessKey).append("&")
+                .append(ApiConstants.SIGN_TYPE).append("=").append(this.accessKey).append("&")
+                .append(ApiConstants.SIGN).append("=").append(this.sign);
+        return sb.toString();
     }
-    return sb.toString();
-  }
 
-  public String getCompleteReturnUrl() {
+    public String getCompleteReturnUrl() {
 
-    if (StringUtils.isEmpty(getReturnUrl())) {
-      return null;
+        if (StringUtils.isEmpty(getReturnUrl())) {
+            return null;
+        }
+        String queryString = getQueryString();
+        if (StringUtils.contains(getReturnUrl(), "?")) {
+            return getReturnUrl() + "&" + queryString;
+        } else {
+            return getReturnUrl() + "?" + queryString;
+        }
     }
-    String queryString = getQueryString();
-    if (StringUtils.contains(getReturnUrl(), "?")) {
-      return getReturnUrl() + "&" + queryString;
-    } else {
-      return getReturnUrl() + "?" + queryString;
+
+    public String getCompleteNotifyUrl() {
+        if (StringUtils.isEmpty(getNotifyUrl())) {
+            return null;
+        }
+        String queryString = getQueryString();
+        if (StringUtils.contains(getNotifyUrl(), "?")) {
+            return getNotifyUrl() + "&" + queryString;
+        } else {
+            return getNotifyUrl() + "?" + queryString;
+        }
     }
-  }
 
-  public String getCompleteNotifyUrl() {
-    if (StringUtils.isEmpty(getNotifyUrl())) {
-      return null;
+    public String getSign() {
+        return sign;
     }
-    String queryString = getQueryString();
-    if (StringUtils.contains(getNotifyUrl(), "?")) {
-      return getNotifyUrl() + "&" + queryString;
-    } else {
-      return getNotifyUrl() + "?" + queryString;
+
+    public void setSign(String sign) {
+        this.sign = sign;
     }
-  }
 
-  public String getSign() {
-    return sign;
-  }
+    public String getReturnUrl() {
+        return returnUrl;
+    }
 
-  public void setSign(String sign) {
-    this.sign = sign;
-  }
+    public void setReturnUrl(String returnUrl) {
+        this.returnUrl = returnUrl;
+    }
 
-  public String getReturnUrl() {
-    return returnUrl;
-  }
+    public String getNotifyUrl() {
+        return notifyUrl;
+    }
 
-  public void setReturnUrl(String returnUrl) {
-    this.returnUrl = returnUrl;
-  }
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl;
+    }
 
-  public String getNotifyUrl() {
-    return notifyUrl;
-  }
+    public String getSignType() {
+        return signType;
+    }
 
-  public void setNotifyUrl(String notifyUrl) {
-    this.notifyUrl = notifyUrl;
-  }
+    public void setSignType(String signType) {
+        this.signType = signType;
+    }
+
+    public String getAccessKey() {
+        return accessKey;
+    }
+
+    public void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
 }

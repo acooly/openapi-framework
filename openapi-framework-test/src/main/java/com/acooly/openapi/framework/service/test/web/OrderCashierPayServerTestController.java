@@ -1,5 +1,6 @@
 package com.acooly.openapi.framework.service.test.web;
 
+import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.openapi.framework.common.utils.Exceptions;
 import com.acooly.openapi.framework.common.utils.Servlets;
@@ -48,7 +49,9 @@ public class OrderCashierPayServerTestController {
         String jsonString = getBody(request);
         log.info("收银台 接收跳转请求参数：\n{}", jsonString);
         // 这里需要对跳转过来的参数进行解析，可以选择JSON.parse，这里简单使用OpenApi的工具处理
+        String gid = request.getParameter("gid");
         OrderCashierPayRedirect redirect = JsonMarshallor.INSTANCE.parse(jsonString, OrderCashierPayRedirect.class);
+        log.info("收银台 解析跳转请求GID: {}", gid);
         log.info("收银台 解析跳转请求参数: {}", redirect);
 
         // 2、do business
@@ -58,13 +61,17 @@ public class OrderCashierPayServerTestController {
         // 同步报文这里假设为processing
         final OrderCashierPayNotify notify = new OrderCashierPayNotify();
         BeanCopier.copy(redirect, notify);
-        notify.setPayStatus(OrderPayStatus.processing);
-
         Map<String, String> parameters = Maps.newHashMap();
-        BeanCopier.copy(notify, parameters);
+        parameters.put("merchOrderNo", notify.getMerchOrderNo());
+        parameters.put("amount", notify.getAmount().toString());
+        parameters.put("payerUserId", notify.getPayerUserId());
+
         // 处理完成后，组装跳转返回给请求客户端的参数。这里需要根据OpenAPI对外定义的服务的Notify报文传入通知参数
         final ApiNotifyOrder order = new ApiNotifyOrder();
         order.setParameters(parameters);
+        // 回传GID和parentId，查询请求订单中的returnUrl和notifyUrl
+        order.setGid(gid);
+        order.setPartnerId(notify.getPartnerId());
         ApiNotifyResult apiNotifyResult = openApiRemoteService.syncReturn(order);
 
         // 4、直接跳转到客户端URL
@@ -96,6 +103,10 @@ public class OrderCashierPayServerTestController {
 
 
     public static String getBody(HttpServletRequest request) {
+        String body = request.getParameter("body");
+        if (Strings.isNotBlank(body)) {
+            return body;
+        }
         try (InputStream in = request.getInputStream()) {
             StringWriter bodyWriter = new StringWriter();
             IOUtils.copy(in, bodyWriter, Charset.forName("UTF-8"));
