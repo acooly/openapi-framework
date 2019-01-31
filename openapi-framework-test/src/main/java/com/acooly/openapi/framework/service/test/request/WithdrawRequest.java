@@ -11,8 +11,10 @@ import com.acooly.openapi.framework.common.message.ApiAsyncRequest;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * @author zhangpu
@@ -22,9 +24,11 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class WithdrawRequest extends ApiAsyncRequest {
 
-    /**
-     * 提现用户ID
-     */
+    @NotEmpty
+    @Size(max = 64)
+    @OpenApiField(desc = "订单号", constraint = "商户订单号，唯一标志一笔交易", demo = "20912213123sdf")
+    private String merchOrderNo;
+
     @OpenApiField(desc = "提现用户ID")
     @Length(max = 20, min = 20, message = "提现用户ID为必选项，长度为20字符")
     private String userId;
@@ -62,6 +66,7 @@ public class WithdrawRequest extends ApiAsyncRequest {
             this.code = code;
             this.name = name;
         }
+
         @Override
         public String code() {
             return this.code;

@@ -12,7 +12,7 @@ import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.MessageType;
 import com.acooly.openapi.framework.common.enums.TaskExecuteStatus;
 import com.acooly.openapi.framework.common.enums.TaskStatus;
-import com.acooly.openapi.framework.core.OpenAPIProperties;
+import com.acooly.openapi.framework.notify.OpenApiNotifyProperties;
 import com.acooly.openapi.framework.notify.handle.NotifyMessageSendHandler;
 import com.acooly.openapi.framework.service.domain.NotifyMessage;
 import com.acooly.openapi.framework.service.service.NotifyMessageService;
@@ -58,7 +58,7 @@ public class HttpNotifyMessageSendHandler implements NotifyMessageSendHandler {
     private TaskExecutor openApiNotifyExecutor;
 
     @Autowired
-    private OpenAPIProperties openAPIProperties;
+    private OpenApiNotifyProperties openApiNotifyProperties;
 
     private static Date getNextNotifyTime(int num) {
         GregorianCalendar calendar = new GregorianCalendar();
@@ -100,8 +100,8 @@ public class HttpNotifyMessageSendHandler implements NotifyMessageSendHandler {
             //          ApiConstants.PARTNER_ID, notifyMessage.getParameter(ApiConstants.PARTNER_ID));
             HttpRequest httpRequest =
                     HttpRequest.post(notifyMessage.getUrl())
-                            .connectTimeout(openAPIProperties.getNotify().getConnectionTimeout())
-                            .readTimeout(openAPIProperties.getNotify().getReadTimeout())
+                            .connectTimeout(openApiNotifyProperties.getConnTimeout())
+                            .readTimeout(openApiNotifyProperties.getReadTimeout())
                             .trustAllCerts()
                             .trustAllHosts()
                             .headers(requestHeader)

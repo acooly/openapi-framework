@@ -13,7 +13,8 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import static com.acooly.openapi.framework.core.OpenAPIProperties.PREFIX;
+import static com.acooly.openapi.framework.notify.OpenApiNotifyProperties.PREFIX;
+
 
 /**
  * OpenAPI Notify 模块配置
@@ -21,9 +22,10 @@ import static com.acooly.openapi.framework.core.OpenAPIProperties.PREFIX;
  * @author zhangpu
  * @date 2019-01-27
  */
-@ConfigurationProperties(prefix = PREFIX)
-@Data
+
 @Slf4j
+@Data
+@ConfigurationProperties(prefix = PREFIX)
 public class OpenApiNotifyProperties {
     public static final String PREFIX = "acooly.openapi.notify";
     /**
@@ -40,6 +42,11 @@ public class OpenApiNotifyProperties {
      * 每次从数据库中拉取待通知的最大数量
      */
     private int retryFetchSize = 5;
+
+    /**
+     * 异步通知每次尝试间隔（秒）：默认：120
+     */
+    private int retryPeriod = 120;
 
     /**
      * 异步通知http连接超时时间（毫秒），默认10秒

@@ -1,6 +1,7 @@
 package com.acooly.openapi.framework.client;
 
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.core.utils.Assert;
 import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.security.Cryptos;
 import com.acooly.openapi.framework.common.ApiConstants;
@@ -18,7 +19,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.springframework.util.Assert;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;

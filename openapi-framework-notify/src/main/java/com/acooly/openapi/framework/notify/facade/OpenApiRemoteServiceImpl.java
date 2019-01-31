@@ -147,8 +147,8 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
         signedMap.put(ApiConstants.VERSION, orderInfo.getVersion());
         signedMap.put(ApiConstants.PROTOCOL, orderInfo.getProtocol().code());
         signedMap.put(ApiConstants.CONTEXT, orderInfo.getContext());
-        signedMap.put(ApiConstants.RESULT_CODE, ApiServiceResultCode.SUCCESS.code());
-        signedMap.put(ApiConstants.RESULT_MESSAGE, ApiServiceResultCode.SUCCESS.message());
+        signedMap.put(ApiConstants.CODE, ApiServiceResultCode.SUCCESS.code());
+        signedMap.put(ApiConstants.MESSAGE, ApiServiceResultCode.SUCCESS.message());
         signedMap.put(ApiConstants.SUCCESS, "true");
         // 使用下次请求的参数覆盖
         signedMap.putAll(apiNotifyOrder.getParameters());

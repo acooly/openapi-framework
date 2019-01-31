@@ -63,8 +63,6 @@ public class OpenAPIProperties {
      */
     private Login login = new Login();
 
-    private Notify notify = new Notify();
-
     private AuthInfoCache authInfoCache = new AuthInfoCache();
 
     private List<Rate> rates = Lists.newArrayList();
@@ -112,12 +110,6 @@ public class OpenAPIProperties {
         private boolean secretKeyDynamic = false;
     }
 
-    @Data
-    public static class Notify {
-        private boolean enable = true;
-        private int connectionTimeout = 10 * 1000;
-        private int readTimeout = 10 * 1000;
-    }
 
     @Data
     public static class AuthInfoCache {
