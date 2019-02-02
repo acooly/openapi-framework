@@ -48,10 +48,8 @@ function manage_apiPartner_showSetting(){
           	<div>
 					访问帐号: <input type="text" class="text" size="15" name="search_LIKE_accessKey"/>
 					访问秘钥: <input type="text" class="text" size="15" name="search_LIKE_secretKey"/>
-					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					修改时间: <input size="15" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					修改时间: <input size="15" type="text" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					至<input size="15" type="text" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_apiAuth_searchform','manage_apiAuth_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
@@ -70,7 +68,7 @@ function manage_apiPartner_showSetting(){
 			<th field="id" sum="true">ID</th>
 			<th field="accessKey">访问帐号</th>
 			<th field="secretKey">访问秘钥</th>
-			<th field="permissions">访问权限</th>
+			<th field="permissions" formatter="contentFormatter">访问权限</th>
 		    <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
 		    <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>
 			<th field="comments">备注</th>
@@ -90,7 +88,7 @@ function manage_apiPartner_showSetting(){
     <div id="manage_apiAuth_toolbar">
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/module/openapi/apiAuth/create.html',entity:'apiAuth',width:500,height:400})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/module/openapi/apiAuth/deleteJson.html','manage_apiAuth_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icons-resource-access-user" plain="true" onclick="manage_apiPartner_showSetting();">设置权限</a>
+        <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_apiPartner_showSetting();"><i class="fa fa-cog fa-lg fa-fw fa-col"></i>设置权限</a>
     </div>
   </div>
 

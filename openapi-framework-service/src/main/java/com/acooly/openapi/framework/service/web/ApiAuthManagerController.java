@@ -11,9 +11,9 @@ import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Ids;
 import com.acooly.openapi.framework.common.enums.SignType;
-import com.acooly.openapi.framework.service.service.ApiMetaServiceService;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
 import com.acooly.openapi.framework.service.service.ApiAuthService;
+import com.acooly.openapi.framework.service.service.ApiMetaServiceService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +83,7 @@ public class ApiAuthManagerController extends AbstractJQueryEntityController<Api
     public ViewResult getAllService(HttpServletRequest request, HttpServletResponse response) {
         return ViewResult.success(apiMetaServiceService.getAll());
     }
+
 
     @RequestMapping(value = "setPerm")
     @ResponseBody

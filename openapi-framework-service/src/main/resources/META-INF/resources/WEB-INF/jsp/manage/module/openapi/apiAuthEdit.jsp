@@ -7,14 +7,16 @@
         <table class="tableForm" width="100%">
 			<tr>
 				<th width="25%">访问帐号：</th>
-				<td><input type="text" id="manage_editform_accessKey" onclick="generatePartnerId()" name="accessKey" size="48" placeholder="点击生成访问帐号..." class="easyui-validatebox text" data-options="validType:['length[1,45]'],required:true"/>
+				<td><input type="text" id="manage_editform_accessKey" style="width:300px;" onclick="generatePartnerId()" name="accessKey" size="48" placeholder="点击生成访问帐号..."
+						   class="easyui-validatebox text"
+						   data-options="validType:['length[1,45]'],required:true"/>
 					<a onclick="generateAccessKey()" href="#" title="生成新接入方秘钥"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
-
 				</td>
 			</tr>
 			<tr>
 				<th>访问秘钥：</th>
-				<td><input type="text" id="manage_editform_secretKey" name="secretKey" size="48" placeholder="点击生成访问秘钥..." class="easyui-validatebox text" data-options="validType:['length[1,45]'],required:true" readonly />
+				<td><input type="text" id="manage_editform_secretKey" style="width:300px;" name="secretKey" size="48" placeholder="点击生成访问秘钥..." class="easyui-validatebox text"
+						   data-options="validType:['length[1,45]'],required:true" readonly />
 					<a onclick="generateSecretKey()" href="#" title="生成新接入方秘钥"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
 
 				</td>

@@ -32,10 +32,6 @@ import static com.acooly.openapi.framework.core.OpenAPIProperties.PREFIX;
 @EnableConfigurationProperties({OpenAPIProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.openapi.framework")
-//@EnableJpaRepositories(
-//        repositoryBaseClass = AbstractEntityJpaDao.class,
-//        basePackages = "com.acooly.openapi.framework")
-//@EntityScan(basePackages = "com.acooly.openapi.framework.domain")
 public class OpenApiConfiguration {
     @Autowired
     private OpenAPIProperties properties;
@@ -61,6 +57,11 @@ public class OpenApiConfiguration {
         }
     }
 
+    /**
+     * 网关入口
+     *
+     * @return
+     */
     @Bean
     public ServletRegistrationBean openAPIServlet() {
         ServletRegistrationBean bean = new ServletRegistrationBean();
@@ -79,26 +80,6 @@ public class OpenApiConfiguration {
         public OrderInfoService nothingToDoOrderInfoService() {
             return new NothingToDoOrderInfoService();
         }
-
-//    @ConditionalOnProperty(name = "acooly.openapi.saveOrder", matchIfMissing = true)
-//    @Bean
-//    public AbstractDatabaseScriptIniter openapiOrderInfoScriptIniter() {
-//      return new AbstractDatabaseScriptIniter() {
-//        @Override
-//        public String getEvaluateSql(DatabaseType databaseType) {
-//          return "SELECT count(*) FROM api_order_info";
-//        }
-//
-//        @Override
-//        public List<String> getInitSqlFile(DatabaseType databaseType) {
-//          if (databaseType == DatabaseType.mysql) {
-//            return Lists.newArrayList("META-INF/database/mysql/openapi-order.sql");
-//          } else {
-//            return Lists.newArrayList("META-INF/database/oracle/openapi-order.sql");
-//          }
-//        }
-//      };
-//    }
     }
 
 

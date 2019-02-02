@@ -15,7 +15,6 @@ $(function() {
           <td align="left">
 					GID:<input type="text" size="15" name="search_EQ_gid" />
 					requestNo:<input type="text" size="15" name="search_EQ_requestNo" />
-					merchOrderNo:<input type="text" size="15" name="search_EQ_orderNo" />
                     商户ID:<input type="text" size="15" name="search_EQ_partnerId"  />
 					服务码:<input type="text" size="15" name="search_EQ_service"/>
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:false" onclick="$.acooly.framework.search('manage_orderInfo_searchform','manage_orderInfo_datagrid');">查询</a>
@@ -36,15 +35,15 @@ $(function() {
 			<th field="id">ID</th>
 			<th field="gid">GID</th>
 			<th field="requestNo">requestNo</th>
-			<th field="orderNo">merchOrderNo</th>
             <th field="rawAddTime" >请求时间</th>
 			<th field="partnerId">商户ID</th>
+            <th field="accessKey">访问码</th>
 			<th field="service">服务码</th>
             <th field="version">版本</th>
 			<th field="signType">签名类型</th>
 			<th field="notifyUrl">通知地址</th>
 			<th field="returnUrl">返回地址</th>
-			<th field="context">会话信息</th>
+			<th field="context" formatter="jsonFormatter">会话信息</th>
         </tr>
       </thead>
     </table>
