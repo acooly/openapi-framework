@@ -1,36 +1,25 @@
-/*
- * www.acooly.cn Inc.
- * Copyright (c) 2017 All Rights Reserved
+package com.acooly.openapi.apidoc.generator;
+/**
+ * @author zhangpu
+ * @date 2019-02-06 01:15
  */
-
-/*
- * 修订记录:
- * zhangpu@acooly.cn 2017-08-02 06:53 创建
- */
-package com.acooly.openapi.apidoc.enums;
 
 import com.acooly.core.utils.enums.Messageable;
-import com.google.common.collect.Maps;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * scheme方案的类型分组
- *
- * @author zhangpu 2017-08-02 06:53
- */
-public enum SchemeTypeEnum implements Messageable {
+public enum ApiDocModule implements Messageable {
 
-    auto("auto", "自动生成"),
-
-    custom("custom", "自定义");
+    api("api", "接口文档"),
+    scheme("scheme", "方案文档");
 
     private final String code;
     private final String message;
 
-    private SchemeTypeEnum(String code, String message) {
+    ApiDocModule(String code, String message) {
         this.code = code;
         this.message = message;
     }
@@ -48,14 +37,14 @@ public enum SchemeTypeEnum implements Messageable {
         return code;
     }
 
-
+    @Override
     public String message() {
         return message;
     }
 
     public static Map<String, String> mapping() {
-        Map<String, String> map = Maps.newLinkedHashMap();
-        for (SchemeTypeEnum type : values()) {
+        Map<String, String> map = new LinkedHashMap<String, String>();
+        for (ApiDocModule type : values()) {
             map.put(type.getCode(), type.getMessage());
         }
         return map;
@@ -68,13 +57,13 @@ public enum SchemeTypeEnum implements Messageable {
      * @return 枚举值码对应的枚举值。
      * @throws IllegalArgumentException 如果 code 没有对应的 Status 。
      */
-    public static SchemeTypeEnum find(String code) {
-        for (SchemeTypeEnum status : values()) {
+    public static ApiDocModule find(String code) {
+        for (ApiDocModule status : values()) {
             if (status.getCode().equals(code)) {
                 return status;
             }
         }
-        throw new IllegalArgumentException("SchemeGroupEnum not legal:" + code);
+        return null;
     }
 
     /**
@@ -82,9 +71,9 @@ public enum SchemeTypeEnum implements Messageable {
      *
      * @return 全部枚举值。
      */
-    public static List<SchemeTypeEnum> getAll() {
-        List<SchemeTypeEnum> list = new ArrayList<SchemeTypeEnum>();
-        for (SchemeTypeEnum status : values()) {
+    public static List<ApiDocModule> getAll() {
+        List<ApiDocModule> list = new ArrayList<ApiDocModule>();
+        for (ApiDocModule status : values()) {
             list.add(status);
         }
         return list;
@@ -97,16 +86,10 @@ public enum SchemeTypeEnum implements Messageable {
      */
     public static List<String> getAllCode() {
         List<String> list = new ArrayList<String>();
-        for (SchemeTypeEnum status : values()) {
+        for (ApiDocModule status : values()) {
             list.add(status.code());
         }
         return list;
     }
-
-    @Override
-    public String toString() {
-        return String.format("%s:%s", this.code, this.message);
-    }
-
 
 }

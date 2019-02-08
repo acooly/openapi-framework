@@ -3,10 +3,9 @@
  * Copyright (c) 2015 All Rights Reserved.
  */
 
-package com.acooly.openapi.apidoc.generator.parser.impl;
+package com.acooly.openapi.apidoc.generator.parser.support;
 
 import com.acooly.core.common.boot.Apps;
-import com.acooly.openapi.apidoc.generator.parser.ApiServiceScanner;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;

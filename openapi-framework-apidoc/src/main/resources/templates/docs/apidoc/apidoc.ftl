@@ -5,6 +5,7 @@
 		<@includePage path="/docs/common/include.html"/>
         <link rel="stylesheet" type="text/css" href="/portal/style/css/api.css"/>
         <link rel="stylesheet" type="text/css" href="/portal/js/jquery.json-viewer/json-viewer/jquery.json-viewer.css"/>
+        <link rel="stylesheet" type="text/css" href="/plugin/jsonview/jquery.jsonview.min.css"/>
         <link href="/plugin/tooltipster/css/tooltipster.bundle.css" rel="stylesheet">
         <link href="/plugin/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-shadow.min.css" rel="stylesheet">
         <script type="text/javascript" src="/portal/js/clipboard.min.js" ></script>
@@ -12,6 +13,7 @@
         <script type="text/javascript" src="/plugin/baiduTemplate.js"></script>
         <script type="text/javascript" src="/portal/script/apidoc.js" ></script>
 
+        <script type="text/javascript" src="/plugin/jsonview/jquery.jsonview.min.js" ></script>
     </head>
 	<body>
 		<!--顶部-->
@@ -166,27 +168,16 @@
                 </div>
                 <div class="switch-content" id="apidoc_demo_container"></div>
             </div>
-
-        <#--<div class="switch">-->
-            <#--<div class="switch-title">-->
-                <#--<a name="apidoc_demo">元数据</a>-->
-            <#--</div>-->
-            <#--<div class="switch-content">-->
-                <#--<pre id="json-renderer"></pre>-->
-            <#--</div>-->
-        <#--</div>-->
-
-
     </div>
 </script>
 
 <script id="apidoc_demo_template" type="text/html">
 <% for(var i=0;i<rows.length;i++){ var e=rows[i]; %>
-<pre class="layui-code" lay-title="<%=e.messageType%>">
-<%=e.header%>
-
-<%=e.body%>
-</pre>
+<div class="api-demo-message">
+    <div class="title"><%=e.messageType%></div>
+    <pre><%=e.header%></pre>
+    <div class="body" id="apidoc_demo_<%=e.messageType%>"></div>
+</div>
 <%}%>
 
 </script>
@@ -230,18 +221,10 @@
         <pre id="<%=id%>" style="display: block;max-width: 800px;min-width: 300px;"><%=value%></pre>
     </div>
 </script>
-
-
-
-
 <script src="/plugin/tooltipster/js/tooltipster.bundle.js"></script>
 <script src="/plugin/tooltipster/js/tooltipster-scrollableTip.js"></script>
 
 <script>
-
-
-
-
     $(function(){
         var defApidocId = "${apidocId}";
         if(!defApidocId || defApidocId == ''){

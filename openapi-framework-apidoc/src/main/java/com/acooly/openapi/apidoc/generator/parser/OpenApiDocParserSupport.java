@@ -12,7 +12,7 @@ import java.util.List;
  * @date 2019-01-13 19:18
  */
 @Slf4j
-public class AbstractApiDocParser {
+public class OpenApiDocParserSupport {
 
     @Autowired
     private ApiMetaServiceService apiMetaServiceService;

@@ -8,7 +8,9 @@ package com.acooly.openapi.apidoc.generator.parser.impl;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.openapi.apidoc.enums.*;
+import com.acooly.openapi.apidoc.generator.ApiDocModule;
 import com.acooly.openapi.apidoc.generator.parser.ApiDocParser;
+import com.acooly.openapi.apidoc.generator.parser.OpenApiDocParserSupport;
 import com.acooly.openapi.apidoc.generator.parser.dto.ApiDataSize;
 import com.acooly.openapi.apidoc.generator.parser.dto.ApiDocItemContext;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocItem;
@@ -32,8 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,9 +45,8 @@ import java.util.Set;
 
 @Slf4j
 @Component
-public class ApiDocParserImpl implements ApiDocParser {
+public class ApiDocParserImpl extends OpenApiDocParserSupport implements ApiDocParser<List<ApiDocService>> {
 
-    private static final Logger logger = LoggerFactory.getLogger(ApiDocParserImpl.class);
 
     @Autowired
     private ApiMetaServiceService apiMetaServiceService;
@@ -121,7 +120,7 @@ public class ApiDocParserImpl implements ApiDocParser {
             apiDocService.setApiDocMessages(mds);
             return apiDocService;
         } catch (Exception e) {
-            logger.warn("parse service fail: {}", meta.getServiceName(), e);
+            log.warn("parse service fail: {}", meta.getServiceName(), e);
         }
         return null;
     }
@@ -301,4 +300,8 @@ public class ApiDocParserImpl implements ApiDocParser {
         return apiDocTypeEnum;
     }
 
+    @Override
+    public ApiDocModule getModule() {
+        return ApiDocModule.api;
+    }
 }

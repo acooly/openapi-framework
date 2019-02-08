@@ -311,7 +311,7 @@ corresponds to the arrow we want to display */
 	width: 20px;
 }
 
-/* common rules between .tooltipster-arrow-background and .tooltipster-arrow-border */
+/* auto rules between .tooltipster-arrow-background and .tooltipster-arrow-border */
 
 .tooltipster-sidetip .tooltipster-arrow-background, .tooltipster-sidetip .tooltipster-arrow-border {
 	height: 0;

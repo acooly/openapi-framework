@@ -8,16 +8,16 @@ package com.acooly.openapi.apidoc.persist.entity;
 
 
 import com.acooly.core.common.domain.AbstractEntity;
+import com.acooly.openapi.apidoc.ApiDocProperties;
 import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * 服务方案 Entity
@@ -54,7 +54,7 @@ public class ApiDocScheme extends AbstractEntity {
      * 作者
      */
     @Size(max = 64)
-    private String author;
+    private String author = ApiDocProperties.DEF_SCHEME_AUTHOR;
 
     /**
      * 说明
@@ -66,13 +66,15 @@ public class ApiDocScheme extends AbstractEntity {
      * 方案类型
      */
     @Enumerated(EnumType.STRING)
-    private SchemeTypeEnum schemeType = SchemeTypeEnum.common;
+    private SchemeTypeEnum schemeType = SchemeTypeEnum.auto;
 
     /**
      * 排序值
      */
     private Long sortTime = System.currentTimeMillis();
 
+    @Transient
+    private List<ApiDocSchemeService> apiDocSchemeServices = Lists.newArrayList();
 
     /**
      * 备注
@@ -84,8 +86,37 @@ public class ApiDocScheme extends AbstractEntity {
 
     }
 
+    public void append(ApiDocSchemeService apiDocSchemeService) {
+        this.apiDocSchemeServices.add(apiDocSchemeService);
+    }
+
     public ApiDocScheme(String schemeNo, String title) {
         this.schemeNo = schemeNo;
         this.title = title;
+        this.setSchemeType(SchemeTypeEnum.auto);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+
+        ApiDocScheme that = (ApiDocScheme) o;
+
+        return schemeNo.equals(that.schemeNo);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + schemeNo.hashCode();
+        return result;
     }
 }

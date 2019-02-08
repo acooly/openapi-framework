@@ -5,18 +5,32 @@
 
 package com.acooly.openapi.apidoc.generator.output;
 
-import com.acooly.openapi.apidoc.ApiDocContext;
-import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
-
-import java.util.List;
+import com.acooly.openapi.apidoc.generator.ApiDocModule;
 
 /**
  * API文档输出接口 Created by zhangpu on 2015/1/27.
  */
 public interface ApiDocOutputer<T> {
 
-    T output(List<ApiDocService> apiServiceDocs, ApiDocContext apidocContext);
 
-    ApiOutputerTypeEnum getType();
+    void output(T t);
+
+    /**
+     * 输出类型
+     *
+     * @return
+     */
+    default ApiOutputerTypeEnum getType() {
+        return ApiOutputerTypeEnum.database;
+    }
+
+
+    /**
+     * 标记生成的文档模块
+     *
+     * @return
+     */
+    ApiDocModule getModule();
+
 
 }

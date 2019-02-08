@@ -15,7 +15,6 @@ import com.google.common.collect.Lists;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -49,11 +48,5 @@ public class ApiDocConfiguration {
             }
         };
     }
-
-    @Bean
-    public ServletContextInitializer ApiDocServletContextInitializer(ApiDocProperties apiDocProperties) {
-        return servletContext -> {
-            servletContext.setInitParameter("openapi.apidoc.copyright", apiDocProperties.getCopyright());
-        };
-    }
+    
 }

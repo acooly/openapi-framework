@@ -20,7 +20,6 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -48,13 +47,17 @@ public class ApiDocIntegrateServiceImpl implements ApiDocIntegrateService {
 
 
     @Override
-    public void distributeDefaultScheme(List<ApiDocService> apiDocServices) {
+    public void mergeScheme(List<ApiDocScheme> apiDocSchemes) {
+        apiDocSchemeService.merge(apiDocSchemes);
+    }
+
+    @Override
+    public void distributeSchemeToDefault(List<ApiDocService> apiDocServices) {
         ApiDocScheme apiDocScheme = apiDocSchemeService.createDefault();
         distributeScheme(apiDocScheme, apiDocServices);
     }
 
     @Override
-    @Transactional(rollbackFor = Throwable.class)
     public void distributeScheme(ApiDocScheme apiDocScheme, List<ApiDocService> apiDocServices) {
 
         try {
@@ -89,10 +92,10 @@ public class ApiDocIntegrateServiceImpl implements ApiDocIntegrateService {
             if (Collections3.isNotEmpty(unsaveEntities)) {
                 apiDocSchemeServiceService.saves(unsaveEntities);
             }
-            log.info("构建服务方案 成功。scheme:{} , 新增: {}， 删除冗余:{}", apiDocScheme.getTitle(), unsaveEntities.size(), removeEntities.size());
+            log.info("构建方案 成功。scheme:{} , 新增: {}， 删除冗余:{}", apiDocScheme.getTitle(), unsaveEntities.size(), removeEntities.size());
         } catch (Exception e) {
-            log.warn("构建服务方案 失败. scheme:{}. error:{}", apiDocScheme, e.getMessage());
-            throw new RuntimeException("合并构建方案服务列表 失败", e);
+            log.warn("构建方案 失败. scheme:{}. error:{}", apiDocScheme, e.getMessage());
+            throw new RuntimeException("构建方案 失败", e);
         }
     }
 

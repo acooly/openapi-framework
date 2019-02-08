@@ -33,7 +33,7 @@ import java.util.List;
  * @author zhangpu 2017-10-11 00:00
  */
 @Controller
-@RequestMapping("/docs/apischeme")
+@RequestMapping("/docs/scheme")
 public class ApiDocSchemePortalController extends AbstractPortalController {
 
     @Autowired
@@ -95,7 +95,7 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
         } catch (Exception e) {
             handleException("", e, request);
         }
-        return "/docs/apidoc/apischeme";
+        return "/docs/apidoc/scheme";
     }
 
     @RequestMapping("content")
@@ -124,9 +124,9 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
 
 
     protected void doLoadSchemeMenus(HttpServletRequest request, HttpServletResponse response, Model model) {
-        if (apiDocProperties.isShowCommon()) {
+        if (apiDocProperties.isDefaultSchemeShow()) {
             //通用解决方案
-            List<SchemeDto> commonSchemes = loadSchemeList(request, SchemeTypeEnum.common);
+            List<SchemeDto> commonSchemes = loadSchemeList(request, SchemeTypeEnum.auto);
             model.addAttribute("commonSchemes", commonSchemes);
         }
         //自定义解决方案

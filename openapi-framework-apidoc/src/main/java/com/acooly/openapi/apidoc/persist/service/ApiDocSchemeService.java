@@ -22,10 +22,27 @@ import java.util.List;
  */
 public interface ApiDocSchemeService extends EntityService<ApiDocScheme> {
 
+    /**
+     * 创建默认scheme
+     *
+     * @return
+     */
     ApiDocScheme createDefault();
 
+    /**
+     * 按方案类型查询
+     *
+     * @param schemeType
+     * @return
+     */
     List<ApiDocScheme> findBySchemeType(SchemeTypeEnum schemeType);
 
 
+    /**
+     * 合并
+     *
+     * @param apiDocSchemes
+     */
+    void merge(List<ApiDocScheme> apiDocSchemes);
 
 }

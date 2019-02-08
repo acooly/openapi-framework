@@ -125,7 +125,7 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
             sb.append("Keep-Alive: timeout=15, max=100\n");
             sb.append(ApiConstants.SIGN_TYPE + ": MD5\n");
             sb.append(ApiConstants.SIGN + ":" + sign + "\n");
-            sb.append("Connection: Keep-Alive\n   \n\n");
+            sb.append("Connection: Keep-Alive\n");
         } else if (messageType == MessageTypeEnum.Request) {
             sb.append("POST /gateway.do HTTP/1.1\n");
             sb.append("Content-Length: " + contentLength + "\n");
@@ -133,7 +133,7 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
             sb.append("Host: api.xxx.com\n");
             sb.append(ApiConstants.SIGN_TYPE + ": MD5\n");
             sb.append(ApiConstants.SIGN + ":" + sign + "\n");
-            sb.append("Connection: Keep-Alive\n   \n\n");
+            sb.append("Connection: Keep-Alive\n");
         } else {
             sb.append("POST /www.mechant.com/" + (messageType == MessageTypeEnum.Notify ? "notify" : "return") + ".html HTTP/1.1\n");
             sb.append("Content-Length: " + contentLength + "\n");
@@ -141,7 +141,7 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
             sb.append("Host: www.mechant.com\n");
             sb.append(ApiConstants.SIGN_TYPE + ": MD5\n");
             sb.append(ApiConstants.SIGN + ":" + sign + "\n");
-            sb.append("Connection: Keep-Alive\n   \n\n");
+            sb.append("Connection: Keep-Alive\n");
         }
 
         return sb.toString();

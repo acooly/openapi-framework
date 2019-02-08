@@ -5,17 +5,16 @@
 
 package com.acooly.openapi.apidoc.generator.output.impl;
 
-import com.acooly.openapi.apidoc.ApiDocContext;
+import com.acooly.openapi.apidoc.generator.ApiDocModule;
 import com.acooly.openapi.apidoc.generator.output.ApiDocOutputer;
 import com.acooly.openapi.apidoc.generator.output.ApiOutputerTypeEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.google.common.collect.Maps;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -30,39 +29,37 @@ import java.util.TreeMap;
 /**
  * Created by zhangpu on 2015/1/27.
  */
-public class HtmlApiDocOutputer implements ApiDocOutputer<File> {
+@Slf4j
+public class HtmlApiDocOutputer implements ApiDocOutputer<List<ApiDocService>> {
 
-    private static final Logger logger = LoggerFactory.getLogger(HtmlApiDocOutputer.class);
 
     private String templatePath = "classpath:template/sample";
 
     private String outputPath = "file:///D:\\temp\\apidocs";
 
     @Override
-    public File output(List<ApiDocService> apiServiceDocs, ApiDocContext apidocContext) {
+    public void output(List<ApiDocService> apiServiceDocs) {
         try {
             copyResources();
-            doParseTop(apiServiceDocs, apidocContext);
+            doParseTop(apiServiceDocs);
             doParseApi(apiServiceDocs);
             doParseMenu(apiServiceDocs);
 
         } catch (Exception e) {
-            logger.error("HTML Outputer 异常:{}", e.getMessage());
+            log.error("HTML Outputer 异常:{}", e.getMessage());
         }
-        return null;
     }
 
     /**
      * @param apiServiceDocs
-     * @param apidocContext
      */
-    protected void doParseTop(List<ApiDocService> apiServiceDocs, ApiDocContext apidocContext) {
-        if (apidocContext == null) {
-            apidocContext = new ApiDocContext();
-        }
-        Map<String, Object> map = Maps.newHashMap();
-        map.put("context", apidocContext);
-        doParser("top.ftl", "top.htm", map);
+    protected void doParseTop(List<ApiDocService> apiServiceDocs) {
+//        if (apidocContext == null) {
+//            apidocContext = new ApiDocGenerator.ApiDocContext();
+//        }
+//        Map<String, Object> map = Maps.newHashMap();
+//        map.put("context", apidocContext);
+//        doParser("top.ftl", "top.htm", map);
     }
 
     protected void copyResources() {
@@ -264,6 +261,11 @@ public class HtmlApiDocOutputer implements ApiDocOutputer<File> {
     @Override
     public ApiOutputerTypeEnum getType() {
         return ApiOutputerTypeEnum.html;
+    }
+
+    @Override
+    public ApiDocModule getModule() {
+        return ApiDocModule.api;
     }
 
     public String getTemplatePath() {

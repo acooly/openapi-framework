@@ -72,9 +72,12 @@ function loadMessageDemos(id) {
     var renderTo = 'apidoc_demo_container';
     var jsonData = {id: id};
     baidu.template.ESCAPE = false;
-    $.acooly.portal.ajaxRender(url, jsonData, renderTo, template, null, function () {
-        layui.use('code', function () {
-            layui.code({encode: false, about: false});
+    $.acooly.portal.ajaxRender(url, jsonData, renderTo, template, null, function (result) {
+        // layui.use('code', function () {
+        //     layui.code({encode: false, about: false});
+        // });
+        $(result.rows).each(function(i,e){
+            $("#apidoc_demo_"+e.messageType).JSONView(e.body);
         });
     });
 }

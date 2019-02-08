@@ -24,7 +24,7 @@ CREATE TABLE `api_doc_scheme` (
   `title` varchar(64) NOT NULL DEFAULT '' COMMENT '标题',
   `author` varchar(64) DEFAULT NULL COMMENT '作者',
   `note` varchar(128) DEFAULT NULL COMMENT '说明',
-  `scheme_type` varchar(16) DEFAULT '' COMMENT '方案类型{common:通用,custom:自定义}',
+  `scheme_type` varchar(16) DEFAULT '' COMMENT '方案类型{auto:通用,custom:自定义}',
   `sort_time` bigint(20) DEFAULT NULL COMMENT '排序值',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',

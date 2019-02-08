@@ -31,11 +31,20 @@ public interface ApiDocIntegrateService {
      */
     void merge(List<ApiDocService> apiDocServices);
 
+    /**
+     * 合并方案
+     * 注意：方案是可以后台编辑的，合并的逻辑如下：
+     * 1、传入值有，数据库无，则写入
+     * 2、出入值无，数据库有，判断如果是auto则删除，否则保留
+     *
+     * @param apiDocSchemes
+     */
+    void mergeScheme(List<ApiDocScheme> apiDocSchemes);
 
     /**
      * 分配所有数据到默认方案
      */
-    void distributeDefaultScheme(List<ApiDocService> apiDocServices);
+    void distributeSchemeToDefault(List<ApiDocService> apiDocServices);
 
 
     /**

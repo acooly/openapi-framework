@@ -14,8 +14,8 @@
         <div class="crumb">
             <div class="w1190">
             <span class="layui-breadcrumb">
-              <a href="/docs/index.html">文档中心</a>
-              <a><cite>文档首页</cite></a>
+              <a href="/docs/scheme/index.html">API文档</a>
+              <a><cite>${schemeName}</cite></a>
             </span>
             </div>
         </div>
@@ -24,7 +24,7 @@
 		<div class="container">
             <!--左边-->
             <div class="container-left">
-                <@includePage path="/docs/apischeme/menu.html?page=scheme"/>
+                <@includePage path="/docs/scheme/menu.html?page=scheme"/>
             </div>
             <!--右边-->
             <div class="container-main">

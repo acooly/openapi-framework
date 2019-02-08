@@ -247,3 +247,33 @@
 .api-details .tab1 .tab-content1 .list1 ol li:last-child {
   padding: 0 10px 6px 10px !important;
 }
+
+.api-demo-message {
+  font-size: 12px;
+  border: 1px solid #dddddd;
+  margin: 20px 0;
+
+}
+
+.api-demo-message .title {
+  height: 30px;
+  line-height: 30px;
+  background-color: #efefef;
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.api-demo-message pre {
+  font-size: 13px;
+  line-height: 24px;
+  font-weight: 800;
+  padding: 10px;
+}
+
+.api-demo-message .body{
+  padding: 10px;
+}
+.api-demo-message li {
+  line-height: 20px;
+}

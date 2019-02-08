@@ -28,4 +28,6 @@ public interface ApiDocSchemeDao extends EntityMybatisDao<ApiDocScheme> {
     List<ApiDocScheme> findBySchemeType(@Param("schemeType") SchemeTypeEnum schemeType);
 
 
+
+
 }
