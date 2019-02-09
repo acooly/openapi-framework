@@ -269,11 +269,19 @@
   line-height: 24px;
   font-weight: 800;
   padding: 10px;
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "Apple LiGothic Medium", "ST Heiti", sans-serif;
 }
 
-.api-demo-message .body{
-  padding: 10px;
+.api-demo-message .body{padding: 10px;}
+
+.api-demo-message .body .jsonview {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "Apple LiGothic Medium", "ST Heiti", sans-serif;
 }
 .api-demo-message li {
   line-height: 20px;
+}
+
+.apidoc-metadata {  font-size: 12px; border: 1px solid #eeeeee; margin: 10px;padding: 10px;}
+.apidoc-metadata .jsonview {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "Apple LiGothic Medium", "ST Heiti", sans-serif;
 }

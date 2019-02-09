@@ -4,8 +4,8 @@
         <@includePage path="/docs/common/meta.html"/>
         <@includePage path="/docs/common/include.html"/>
 		<link rel="stylesheet" type="text/css" href="/portal/style/css/index.css"/>
-        <link rel="stylesheet" href="/portal/js/fullpage/jquery.fullPage.css" />
-		<script src="/portal/js/fullpage/jquery.fullPage.min.js"></script>
+        <link rel="stylesheet" href="/plugin/fullpage/jquery.fullPage.css" />
+		<script src="/plugin/fullpage/jquery.fullPage.min.js"></script>
 	</head>
 	<body>
 		<!--顶部-->

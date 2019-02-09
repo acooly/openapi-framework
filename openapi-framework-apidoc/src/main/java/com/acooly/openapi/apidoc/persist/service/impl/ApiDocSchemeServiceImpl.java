@@ -75,7 +75,9 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
             needRemoves.forEach(e -> {
                 ids.add(e.getId());
             });
-            removes(ids.toArray(new Serializable[]{}));
+            if(Collections3.isNotEmpty(ids)){
+                removes(ids.toArray(new Serializable[]{}));
+            }
 
             // 保存：传入有，数据库无的schemes
             persists = getAll();

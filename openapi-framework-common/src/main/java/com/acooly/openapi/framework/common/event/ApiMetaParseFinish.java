@@ -14,8 +14,9 @@ import java.util.List;
 @Data
 public class ApiMetaParseFinish extends SpringApplicationEvent {
     private List<ApiService> apiService;
-    public ApiMetaParseFinish(SpringApplication application, String[] args,List<ApiService> apiService) {
+
+    public ApiMetaParseFinish(SpringApplication application, String[] args, List<ApiService> apiService) {
         super(application, args);
-        this.apiService=apiService;
+        this.apiService = apiService;
     }
 }

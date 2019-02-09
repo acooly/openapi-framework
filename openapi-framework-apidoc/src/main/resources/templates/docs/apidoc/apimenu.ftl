@@ -6,7 +6,7 @@
     <ul>
     <#list apidocs as e>
         <li id="apidoc_api_${e.id}">
-            <a href="javascript:;" onclick="loadData(${e.id})"><div>${e.name}</div></a>
+            <a href="javascript:;" title="${e.title}" onclick="loadData(${e.id})"><div>${e.name}</div></a>
         </li>
     </#list>
     </ul>

@@ -1,6 +1,7 @@
 package com.acooly.openapi.framework.service.test.api;
 
 import com.acooly.core.utils.Money;
+import com.acooly.openapi.framework.common.annotation.ApiDocType;
 import com.acooly.openapi.framework.common.annotation.OpenApiDependence;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
@@ -19,7 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Created by zhangpu on 2016/2/12.
  */
-@OpenApiDependence("createOrder")
+
+@ApiDocType(code = "test", name = "测试")
 @OpenApiService(
         name = "orderPay",
         desc = "测试：支付订单服务",

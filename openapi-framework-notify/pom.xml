@@ -16,12 +16,12 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-facade</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-core</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
@@ -36,10 +36,11 @@
             <version>4.2.0-SNAPSHOT</version>
         </dependency>
 
+
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-configuration-processor</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
             <optional>true</optional>
         </dependency>
     </dependencies>

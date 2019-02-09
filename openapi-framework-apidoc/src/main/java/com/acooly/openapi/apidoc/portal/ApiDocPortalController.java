@@ -69,7 +69,6 @@ public class ApiDocPortalController extends AbstractPortalController {
             ApiDocScheme apiScheme = apiDocSchemeService.get(schemeId);
             model.addAttribute("apiScheme", apiScheme);
             model.addAttribute("apidocId", apidocId);
-            //doLoadServiceMenus(request, response, model);
             model.addAllAttributes(referenceData(request));
         } catch (Exception e) {
             handleException("", e, request);
@@ -84,8 +83,6 @@ public class ApiDocPortalController extends AbstractPortalController {
     @RequestMapping("menu")
     public String menu(HttpServletRequest request, HttpServletResponse response, Model model) {
         try {
-            String id = request.getParameter("schemeId");
-            ApiDocScheme apiDocScheme = apiDocSchemeService.get(Long.valueOf(id));
             doApidocList(request, response, model);
             model.addAttribute("page", request.getParameter("page"));
             model.addAllAttributes(referenceData(request));

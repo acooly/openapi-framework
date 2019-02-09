@@ -14,7 +14,7 @@ import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.utils.Ids;
 import com.acooly.openapi.framework.core.service.base.BaseApiService;
 import com.acooly.openapi.framework.service.test.request.WithdrawRequest;
-import com.acooly.openapi.framework.service.test.response.WithdrawNotify;
+import com.acooly.openapi.framework.service.test.notify.WithdrawNotify;
 import com.acooly.openapi.framework.service.test.response.WithdrawResponse;
 import lombok.extern.slf4j.Slf4j;
 
