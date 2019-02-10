@@ -123,6 +123,7 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
             sb.append("Content-Type: application/json;charset=UTF-8\n");
             sb.append("Content-Length: " + contentLength + "\n");
             sb.append("Keep-Alive: timeout=15, max=100\n");
+            sb.append(ApiConstants.ACCESS_KEY + ": " + Ids.getDid("U") + "\n");
             sb.append(ApiConstants.SIGN_TYPE + ": MD5\n");
             sb.append(ApiConstants.SIGN + ":" + sign + "\n");
             sb.append("Connection: Keep-Alive\n");
@@ -131,6 +132,7 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
             sb.append("Content-Length: " + contentLength + "\n");
             sb.append("Content-Type: application/json;charset=UTF-8\n");
             sb.append("Host: api.xxx.com\n");
+            sb.append(ApiConstants.ACCESS_KEY + ": " + Ids.getDid("U") + "\n");
             sb.append(ApiConstants.SIGN_TYPE + ": MD5\n");
             sb.append(ApiConstants.SIGN + ":" + sign + "\n");
             sb.append("Connection: Keep-Alive\n");
@@ -139,6 +141,7 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
             sb.append("Content-Length: " + contentLength + "\n");
             sb.append("Content-Type: application/json;charset=UTF-8\n");
             sb.append("Host: www.mechant.com\n");
+            sb.append(ApiConstants.ACCESS_KEY + ": " + Ids.getDid("U") + "\n");
             sb.append(ApiConstants.SIGN_TYPE + ": MD5\n");
             sb.append(ApiConstants.SIGN + ":" + sign + "\n");
             sb.append("Connection: Keep-Alive\n");

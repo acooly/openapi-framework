@@ -1,5 +1,6 @@
 package com.acooly.openapi.framework.common.enums;
 
+import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.Messageable;
 import com.google.common.collect.Maps;
 
@@ -107,10 +108,12 @@ public enum ApiServiceResultCode implements Messageable {
         return message;
     }
 
+    @Override
     public String code() {
         return code;
     }
 
+    @Override
     public String message() {
         return message;
     }
