@@ -56,7 +56,7 @@ public class SchemeApiDocParserImpl extends OpenApiDocParserSupport implements A
             // 开启默认scheme
             if (apiDocProperties.isDefaultSchemeEnable()) {
                 ApiDocScheme defaultScheme = new ApiDocScheme(ApiDocProperties.DEF_SCHEME_NO, ApiDocProperties.DEF_SCHEME_TITLE);
-                defaultScheme.setSchemeType(SchemeTypeEnum.auto);
+                defaultScheme.setSchemeType(SchemeTypeEnum.common);
                 List<ApiDocSchemeService> allApis = Lists.newArrayList();
                 apiMetaServices.forEach(e -> {
                     allApis.add(new ApiDocSchemeService(defaultScheme.getSchemeNo(), e.getServiceNo()));
