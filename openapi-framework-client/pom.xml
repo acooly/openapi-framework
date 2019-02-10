@@ -16,6 +16,12 @@
             <artifactId>openapi-framework-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-configuration-processor</artifactId>
+            <version>${parent.version}</version>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
 </project>
