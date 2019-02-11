@@ -1,4 +1,7 @@
-OpenApi服务核心
+<!-- title: OpenApi服务开发指南 -->
+<!-- type: openapi -->
+<!-- author: qiubo,zhangpu -->
+OpenApi服务开发指南
 ====
 openapi-framework-core
 

@@ -1,4 +1,7 @@
-异步和跳转
+<!-- title: OpenApi异步通知 -->
+<!-- type: openapi -->
+<!-- author: zhangpu -->
+OpenApi异步通知
 ====
 
 # 简介

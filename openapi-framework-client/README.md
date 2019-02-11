@@ -1,4 +1,7 @@
-OpenApi通用客户端
+<!-- title: OpenApiSDK组件 -->
+<!-- type: openapi -->
+<!-- author: qiubo,zhangpu -->
+OpenApiSDK组件
 ====
 openapi-framework-client
 ----
