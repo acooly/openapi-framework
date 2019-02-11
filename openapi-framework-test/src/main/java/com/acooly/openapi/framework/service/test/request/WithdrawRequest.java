@@ -13,6 +13,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -45,6 +46,7 @@ public class WithdrawRequest extends ApiAsyncRequest {
     @Length(max = 30, min = 15)
     @OpenApiField(desc = "银行卡号", demo = "6226998032873746")
     private String bankCardNo;
+
 
     @OpenApiField(desc = "到账方式", constraint = "可选值：<li>0: T+0</li><li>1: T+1</li><li>2: T+2</li>", demo = "1")
     @Length(max = 1, min = 1, message = "长度为1字符")

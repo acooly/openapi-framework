@@ -13,18 +13,37 @@ package com.acooly.openapi.framework.core.common.cache;
  */
 public interface CacheManager {
 
-  void add(String key, Object value);
 
-  /**
-   * 添加缓存
-   *
-   * @param key
-   * @param value
-   * @param holdSecond 秒
-   */
-  void add(String key, Object value, int holdSecond);
+    /**
+     * 添加缓存
+     *
+     * @param key
+     * @param value
+     * @param holdSecond 秒
+     */
+    void add(String key, Object value, int holdSecond);
 
-  Object get(String key);
+    /**
+     * 添加缓存（默认配置时长）
+     *
+     * @param key
+     * @param value
+     */
+    void add(String key, Object value);
 
-  void cleanup(String key);
+    /**
+     * 获取缓存
+     *
+     * @param key
+     * @return
+     */
+    Object get(String key);
+
+    /**
+     * 清理缓存
+     *
+     * @param key
+     */
+    void cleanup(String key);
+
 }

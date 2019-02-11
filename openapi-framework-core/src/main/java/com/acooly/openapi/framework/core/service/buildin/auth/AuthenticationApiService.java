@@ -1,5 +1,7 @@
-package com.acooly.openapi.framework.core.service.support.auth;
+package com.acooly.openapi.framework.core.service.buildin.auth;
 
+import com.acooly.openapi.framework.common.ApiConstants;
+import com.acooly.openapi.framework.common.annotation.ApiDocType;
 import com.acooly.openapi.framework.common.annotation.OpenApiNote;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
@@ -17,16 +19,12 @@ import java.util.Date;
  * @author qiuboboy@qq.com
  * @date 2018-08-20 15:49
  */
+@ApiDocType(code = ApiConstants.BUILDIN_APIDOC_CODE, name = ApiConstants.BUILDIN_APIDOC_NAME)
 @OpenApiNote("当app通过内置web控件发起请求时，需要验证请求的合法性,此服务用于验证外部请求签名合法性。" +
         "<br/>app端签名过程：" +
         "<li>1. 获取签名字符串 body+expireDate(格式为：yyyy-MM-dd HH:mm:ss)+secretKey</li>" +
         "<li>2. 求md5值</li>")
-@OpenApiService(
-        name = "auth",
-        desc = "认证服务",
-        responseType = ResponseType.SYN,
-        owner = "公共"
-)
+@OpenApiService(name = "auth", desc = "认证服务", responseType = ResponseType.SYN, owner = "acooly")
 public class AuthenticationApiService extends BaseApiService<AuthRequest, ApiResponse> {
     @Autowired
     private ApiAuthentication apiAuthentication;
