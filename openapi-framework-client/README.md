@@ -1,6 +1,7 @@
 <!-- title: OpenApiSDK组件 -->
 <!-- type: openapi -->
 <!-- author: qiubo,zhangpu -->
+<!-- date: 2019-02-06 -->
 OpenApiSDK组件
 ====
 openapi-framework-client
@@ -20,7 +21,7 @@ openapi-framework-client模块是框架提供的通用开放平台客户端，�
 <!-- OpenApi通知框架 -->
 <dependency>
 	<groupId>com.acooly</groupId>
-	<artifactId>openapi-framework-notify</artifactId>
+	<artifactId>openapi-framework-client</artifactId>
 	<version>${openapi.version}</version>
 </dependency>
 ```

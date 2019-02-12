@@ -1,6 +1,7 @@
 <!-- title: OpenApi服务开发指南 -->
 <!-- type: openapi -->
 <!-- author: qiubo,zhangpu -->
+<!-- date: 2019-02-01 -->
 OpenApi服务开发指南
 ====
 openapi-framework-core

@@ -1,6 +1,7 @@
 <!-- title: OpenApi接入开发指南 -->
 <!-- type: openapi -->
 <!-- author: zhangpu -->
+<!-- date: 2019-02-05 -->
 OpenApi接入开发指南
 ====
 OpenApi商户接入开发规范
