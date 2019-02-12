@@ -1,9 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.acooly.openapi.framework.service.config.ApiServiceAutoConfig
-
-com.acooly.core.common.boot.component.ComponentInitializer=\
-com.acooly.openapi.framework.core.OpenAPIComponentInitializer
-
-
-com.acooly.core.common.boot.log.initializer.LogInitializer=\
-com.acooly.openapi.framework.core.OpenAPIPerfLogInitializer
+com.acooly.openapi.framework.service.ApiServiceAutoConfig

@@ -8,9 +8,12 @@ package com.acooly.openapi.framework.service.service.impl;
 
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityServiceImpl;
+import com.acooly.module.event.EventBus;
 import com.acooly.openapi.framework.service.dao.ApiAuthDao;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
+import com.acooly.openapi.framework.service.event.ApiAuthUpdateEvent;
 import com.acooly.openapi.framework.service.service.ApiAuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,11 +22,13 @@ import org.springframework.stereotype.Service;
  * Date: 2018-08-21 14:31:06
  *
  * @author qiubo
+ * @author zhangpu : 调整缓存更新为事件模式
  */
 @Service("apiAuthService")
 public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> implements ApiAuthService {
-//    @Autowired(required = false)
-//    private AuthInfoRealm authInfoRealm;
+
+    @Autowired(required = false)
+    private EventBus eventBus;
 
     @Override
     public ApiAuth findByAccesskey(String accesskey) {
@@ -32,9 +37,7 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
 
     @Override
     public void update(ApiAuth o) throws BusinessException {
-//        if (authInfoRealm instanceof CacheableAuthInfoRealm) {
-//            ((CacheableAuthInfoRealm) authInfoRealm).removeCache(o.getAccessKey());
-//        }
         super.update(o);
+        eventBus.publish(new ApiAuthUpdateEvent(o));
     }
 }

@@ -7,13 +7,13 @@
  * 修订记录:
  * zhangpu@acooly.cn 2017-12-08 02:55 创建
  */
-package com.acooly.openapi.apidoc.persist.service.impl;
+package com.acooly.openapi.framework.service.service.impl;
 
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Collections3;
-import com.acooly.openapi.apidoc.persist.dao.ApiMetaServiceDao;
-import com.acooly.openapi.framework.service.service.ApiMetaServiceService;
+import com.acooly.openapi.framework.service.dao.ApiMetaServiceDao;
 import com.acooly.openapi.framework.service.domain.ApiMetaService;
+import com.acooly.openapi.framework.service.service.ApiMetaServiceService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
