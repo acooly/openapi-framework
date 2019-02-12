@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.acooly</groupId>
         <artifactId>openapi-framework</artifactId>
-        <version>4.2.0-SNAPSHOT</version>
+        <version>4.2.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>openapi-framework-core</artifactId>
@@ -20,38 +20,37 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-common</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-client</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-service</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-facade</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.acooly</groupId>
             <artifactId>acooly-component-jpa</artifactId>
-            <version>${parent.version}</version>
+            <version>${acooly.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-config</artifactId>
-            <version>${project.version}</version>
+            <version>${acooly.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-facade</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-configuration-processor</artifactId>
-            <version>${parent.version}</version>
+            <version>${acooly.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>

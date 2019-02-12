@@ -5,7 +5,7 @@
     <parent>
         <artifactId>openapi-framework</artifactId>
         <groupId>com.acooly</groupId>
-        <version>4.2.0-SNAPSHOT</version>
+        <version>4.2.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,31 +16,29 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-facade</artifactId>
-            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-core</artifactId>
-            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-dubbo</artifactId>
-            <version>4.2.0-SNAPSHOT</version>
+            <version>${acooly.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-distributedlock</artifactId>
-            <version>4.2.0-SNAPSHOT</version>
+            <version>${acooly.version}</version>
         </dependency>
 
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-configuration-processor</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${acooly.version}</version>
             <optional>true</optional>
         </dependency>
     </dependencies>
