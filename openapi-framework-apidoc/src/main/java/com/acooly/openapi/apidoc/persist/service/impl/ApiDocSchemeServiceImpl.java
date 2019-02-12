@@ -50,7 +50,12 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
 
     @Override
     public List<ApiDocScheme> findBySchemeType(SchemeTypeEnum schemeType) {
-        return getEntityDao().findBySchemeType(schemeType);
+        if(schemeType == null){
+            return getEntityDao().findAll();
+        }else{
+            return getEntityDao().findBySchemeType(schemeType);
+        }
+
     }
 
     /**

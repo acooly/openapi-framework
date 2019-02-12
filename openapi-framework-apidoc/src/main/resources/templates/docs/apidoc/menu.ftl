@@ -3,8 +3,8 @@
         <a href="/docs/scheme/index.html"><i class="layui-icon">&#xe705;</i> 解决方案<i class="icon_menu_switch"></i></a>
     </div>
     <ul class="doc-menu-content">
-    <#if commonSchemes??>
-    <#list commonSchemes as e>
+    <#if showSchemes??>
+    <#list showSchemes as e>
         <li <#if e.id = schemeId >class="item-this"</#if>><a href="/docs/scheme/scheme.html?schemeId=${e.id}">${e.name}</a></li>
     </#list>
     </#if>
@@ -12,17 +12,17 @@
 </div>
 
 
-<div class="doc-menu">
-    <#list customSchemes as e>
-        <div class="doc-menu-header"><i class="layui-icon">&#xe637;</i> ${e.name}<i class="icon_menu_switch"></i></div>
-        <ul>
-        <#list e.contents?keys as key>
-            <li <#if page?? && page = key>class="item-this"</#if>><a href="/docs/scheme/content.html?id=${key}&schemeId=${e.id}">${e.contents[key]}</a></li>
-        </#list>
-        <li <#if e.id = schemeId >class="item-this"</#if>><a href="/docs/scheme/scheme.html?shemeId=${e.id}">Api列表</a></li>
-        </ul>
-    </#list>
-</div>
+<#--<div class="doc-menu">-->
+    <#--<#list showSchemes as e>-->
+        <#--<div class="doc-menu-header"><i class="layui-icon">&#xe637;</i> ${e.name}<i class="icon_menu_switch"></i></div>-->
+        <#--<ul>-->
+        <#--<#list e.contents?keys as key>-->
+            <#--<li <#if page?? && page = key>class="item-this"</#if>><a href="/docs/scheme/content.html?id=${key}&schemeId=${e.id}">${e.contents[key]}</a></li>-->
+        <#--</#list>-->
+        <#--<li <#if e.id = schemeId >class="item-this"</#if>><a href="/docs/scheme/scheme.html?shemeId=${e.id}">Api列表</a></li>-->
+        <#--</ul>-->
+    <#--</#list>-->
+<#--</div>-->
 <script>
 
 

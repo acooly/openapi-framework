@@ -9,6 +9,7 @@
  */
 package com.acooly.openapi.apidoc.portal.dto;
 
+import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,7 @@ public class SchemeDto {
     private Long id;
     private String name;
     private String schemeNo;
+    private SchemeTypeEnum schemeTypeEnum;
 
     private Map<String, String> contents = Maps.newTreeMap();
 

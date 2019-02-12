@@ -124,16 +124,18 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
 
 
     protected void doLoadSchemeMenus(HttpServletRequest request, HttpServletResponse response, Model model) {
-        if (apiDocProperties.isDefaultSchemeShow()) {
-            //通用解决方案
-            List<SchemeDto> commonSchemes = loadSchemeList(request, SchemeTypeEnum.auto);
-            model.addAttribute("commonSchemes", commonSchemes);
+        List<SchemeDto> schemes = loadSchemeList(request, null);
+        List<SchemeDto> showSchemes = Lists.newArrayList();
+        if (!apiDocProperties.isDefaultSchemeShow()) {
+            for(SchemeDto s:schemes){
+                if(s.getSchemeTypeEnum() != SchemeTypeEnum.common){
+                    showSchemes.add(s);
+                }
+            }
+        }else{
+            showSchemes.addAll(schemes);
         }
-        //自定义解决方案
-        List<SchemeDto> customSchemes = loadSchemeList(request, SchemeTypeEnum.custom);
-        model.addAttribute("customSchemes", customSchemes);
-
-
+        model.addAttribute("showSchemes", showSchemes);
     }
 
 
@@ -145,6 +147,7 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
             List<Content> contents = null;
             for (ApiDocScheme scheme : schemes) {
                 schemeDto = new SchemeDto(scheme.getId(), scheme.getTitle(), scheme.getSchemeNo());
+                schemeDto.setSchemeTypeEnum(scheme.getSchemeType());
                 contents = contentService.topByTypeCode(scheme.getSchemeNo(), 100);
                 if (Collections3.isNotEmpty(contents)) {
                     for (Content content : contents) {

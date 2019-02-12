@@ -24,10 +24,11 @@ import java.util.List;
 public interface ApiDocSchemeDao extends EntityMybatisDao<ApiDocScheme> {
 
 
-    @Select("select * from api_doc_scheme where scheme_type = #{schemeType}")
+    @Select("select * from api_doc_scheme where scheme_type = #{schemeType}  order by sort_time desc")
     List<ApiDocScheme> findBySchemeType(@Param("schemeType") SchemeTypeEnum schemeType);
 
-
+    @Select("select * from api_doc_scheme order by sort_time desc")
+    List<ApiDocScheme> findAll();
 
 
 }
