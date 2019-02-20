@@ -141,4 +141,8 @@ public class ApiDocServiceServiceImpl extends EntityServiceImpl<ApiDocService, A
         return serviceNo;
     }
 
+    @Override
+    public List<ApiDocService> findServicesBySchemeNo(String schemeNo) {
+        return this.getEntityDao().findServicesBySchemeNo(schemeNo);
+    }
 }

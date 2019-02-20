@@ -11,6 +11,7 @@ import com.acooly.openapi.apidoc.persist.entity.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -32,6 +33,9 @@ public interface ApiDocSchemeServiceDao extends EntityMybatisDao<ApiDocSchemeSer
             "where t1.service_no = t2.service_no and t2.scheme_no =  #{schemeNo}" +
             " order by t1.name, t1.sort_time desc")
     List<ApiDocService> findSchemeService(@Param("schemeNo") String schemeNo);
+
+    @Select(value = "select * FROM api_doc_scheme_service WHERE scheme_no =#{schemeNo} AND service_no = #{serviceNo}")
+    List<ApiDocSchemeService> findSchemeServicesBySchemeIdAndServiceNo(@Param("schemeNo") String schemeNo, @Param("serviceNo")String serviceNo);
 
 
 }

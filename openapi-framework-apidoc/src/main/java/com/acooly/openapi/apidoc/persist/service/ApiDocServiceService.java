@@ -9,6 +9,8 @@ package com.acooly.openapi.apidoc.persist.service;
 
 import com.acooly.core.common.service.EntityService;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -32,5 +34,7 @@ public interface ApiDocServiceService extends EntityService<ApiDocService> {
     ApiDocService loadApiDocService(Long id);
 
     ApiDocService loadApiDocServiceByNo(String serviceNo);
+
+    List<ApiDocService> findServicesBySchemeNo(String schemeNo);
 
 }

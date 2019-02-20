@@ -5,7 +5,7 @@ function schemeInfo(id) {
     $.ajax({
         type: "POST",
         data: {id: id},
-        url: "/manage/api/apiDocScheme/getSignSchemeInfo.html",
+        url: "/manage/apidoc/apiDocScheme/getSignSchemeInfo.html",
         error: function (data) {
             alert("Connection error");
             return false;
@@ -24,14 +24,14 @@ function addAndRemoveEditInit(id) {
     $.ajax({
         type: "POST",
         data: {id: id},
-        url: '/manage/api/apiDocScheme/getSelectSchemeList.html',
+        url: '/manage/apidoc/apiDocScheme/getSelectSchemeList.html',
         dataType: "json",
         error: function (res) {
             alert("Connection error");
             return false;
         },
         success: function (res) {
-            !modal ? modal = corossBosService(res.data, id) : null;
+            !modal ? modal = corossBosService(res.data, res.schemeNo) : null;
             modal.open();
             $(document).on('closed', '.remodal', function (e) {
                 modal && modal.destroy();
@@ -45,7 +45,7 @@ function addAndRemoveEditInit(id) {
     })
 }
 
-function corossBosService(options, id) {
+function corossBosService(options, schemeNo) {
     var data = options || {};
     var tpl = $('#modal-template').html();
     var modal = $(Handlebars.compile(tpl)(data));
@@ -76,8 +76,8 @@ function corossBosService(options, id) {
             })
 
             $.ajax({
-                url: '/manage/api/apiDocScheme/addServicesToScheme.json',
-                data: {serviceNos: serviceNos, id: id},
+                url: '/manage/apidoc/apiDocScheme/addServicesToScheme.json',
+                data: {serviceNos: serviceNos, schemeNo: schemeNo},
                 success: function (res) {
                     if (res && res.success) {
                         // Y.alert('Tip', res.message || 'success...')
@@ -103,8 +103,8 @@ function corossBosService(options, id) {
             })
 
             $.ajax({
-                url: '/manage/api/apiDocScheme/deleteServicesToScheme.json',
-                data: {serviceNos: serviceNos, id: id},
+                url: '/manage/apidoc/apiDocScheme/deleteServicesToScheme.json',
+                data: {serviceNos: serviceNos, schemeNo: schemeNo},
                 success: function (res) {
                 }
             })

@@ -13,6 +13,7 @@ import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -25,6 +26,9 @@ import java.util.List;
 @Service("apiDocSchemeServiceService")
 public class ApiDocSchemeServiceServiceImpl extends EntityServiceImpl<ApiDocSchemeService, ApiDocSchemeServiceDao> implements ApiDocSchemeServiceService {
 
+    @Resource
+    private ApiDocSchemeServiceDao apiDocSchemeServiceDao;
+
     @Override
     public List<ApiDocSchemeService> findSchemeServices(String schemeNo) {
         return getEntityDao().findBySchemeNo(schemeNo);
@@ -33,5 +37,13 @@ public class ApiDocSchemeServiceServiceImpl extends EntityServiceImpl<ApiDocSche
     @Override
     public List<ApiDocService> findSchemeApiDocServices(String schemeNo) {
         return getEntityDao().findSchemeService(schemeNo);
+    }
+
+    @Override
+    public void deleteSchemeService(String schemeNo, String serviceNo) {
+        List<ApiDocSchemeService> apiSchemeServiceDocList = apiDocSchemeServiceDao.findSchemeServicesBySchemeIdAndServiceNo(schemeNo, serviceNo);
+        for (ApiDocSchemeService apiSchemeServiceDoc : apiSchemeServiceDocList) {
+            apiDocSchemeServiceDao.removeById(apiSchemeServiceDoc.getId());
+        }
     }
 }

@@ -10,6 +10,7 @@ package com.acooly.openapi.apidoc.persist.service;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
@@ -44,5 +45,7 @@ public interface ApiDocSchemeService extends EntityService<ApiDocScheme> {
      * @param apiDocSchemes
      */
     void merge(List<ApiDocScheme> apiDocSchemes);
+
+    JSONObject getSelectSchemeList(String schemeNo);
 
 }

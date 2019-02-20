@@ -76,6 +76,12 @@ public class ApiDocScheme extends AbstractEntity {
     @Transient
     private List<ApiDocSchemeService> apiDocSchemeServices = Lists.newArrayList();
 
+    @Transient
+    private List<ApiDocService> services;
+
+    @Transient
+    private ApiDocSchemeDesc apiDocschemeDesc;
+
     /**
      * 备注
      */

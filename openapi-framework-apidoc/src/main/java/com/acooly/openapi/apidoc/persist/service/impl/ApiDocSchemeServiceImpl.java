@@ -10,14 +10,21 @@ import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Collections3;
 import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
 import com.acooly.openapi.apidoc.persist.dao.ApiDocSchemeDao;
+import com.acooly.openapi.apidoc.persist.dao.ApiDocServiceDao;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
+import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeService;
+import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
 import com.acooly.openapi.apidoc.utils.ApiDocs;
 import com.acooly.openapi.framework.common.utils.Exceptions;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
 
@@ -32,6 +39,8 @@ import java.util.List;
 @Service("apiDocSchemeService")
 public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, ApiDocSchemeDao> implements ApiDocSchemeService {
 
+    @Resource
+    private ApiDocServiceDao apiDocServiceDao;
 
     @Override
     public ApiDocScheme createDefault() {
@@ -50,9 +59,9 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
 
     @Override
     public List<ApiDocScheme> findBySchemeType(SchemeTypeEnum schemeType) {
-        if(schemeType == null){
+        if (schemeType == null) {
             return getEntityDao().findAll();
-        }else{
+        } else {
             return getEntityDao().findBySchemeType(schemeType);
         }
 
@@ -80,7 +89,7 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
             needRemoves.forEach(e -> {
                 ids.add(e.getId());
             });
-            if(Collections3.isNotEmpty(ids)){
+            if (Collections3.isNotEmpty(ids)) {
                 removes(ids.toArray(new Serializable[]{}));
             }
 
@@ -99,5 +108,28 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
         }
 
 
+    }
+
+    @Override
+    public JSONObject getSelectSchemeList(String schemeNo) {
+        JSONObject data = new JSONObject();
+        List<ApiDocService> getOtherSchemeServices = apiDocServiceDao.getOtherSchemeServices(schemeNo);
+        JSONArray getOtherSchemeServicesArray = getServices(getOtherSchemeServices);
+        List<ApiDocService> getSchemeServices = apiDocServiceDao.findServicesBySchemeNo(schemeNo);
+        JSONArray getSchemeServicesArray = getServices(getSchemeServices);
+        data.put("otherAllServices", getOtherSchemeServicesArray);
+        data.put("schemeServices", getSchemeServicesArray);
+        return data;
+    }
+
+    private JSONArray getServices(List<ApiDocService> serviceDocs) {
+        JSONArray retrunArray = new JSONArray();
+        for (ApiDocService apiServiceDoc : serviceDocs) {
+            JSONObject apiServiceDocObj = new JSONObject();
+            apiServiceDocObj.put("serviceTitle", apiServiceDoc.getTitle());
+            apiServiceDocObj.put("serviceNo", apiServiceDoc.getServiceNo());
+            retrunArray.add(apiServiceDocObj);
+        }
+        return retrunArray;
     }
 }
