@@ -10,12 +10,15 @@
 package com.acooly.openapi.apidoc.portal;
 
 import com.acooly.core.utils.Collections3;
+import com.acooly.core.utils.Strings;
 import com.acooly.module.cms.domain.Content;
 import com.acooly.module.cms.service.ContentService;
 import com.acooly.openapi.apidoc.ApiDocProperties;
 import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
+import com.acooly.openapi.apidoc.persist.entity.ApiDocSchemeDesc;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
+import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeDescService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
 import com.acooly.openapi.apidoc.portal.dto.SchemeDto;
@@ -24,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,6 +51,9 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
 
     @Autowired
     private ApiDocProperties apiDocProperties;
+
+    @Autowired
+    private ApiDocSchemeDescService apiDocSchemeDescService;
 
     /**
      * scheme首页（文档中心首页）
@@ -165,10 +172,15 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
         long id = Long.parseLong(request.getParameter("schemeId"));
         ApiDocScheme apiScheme = apiDocSchemeService.get(id);
         List<ApiDocService> entities = apiDocSchemeServiceService.findSchemeApiDocServices(apiScheme.getSchemeNo());
+        ApiDocSchemeDesc apiDocSchemeDesc = apiDocSchemeDescService.findBySchemeNo(apiScheme.getSchemeNo());
+        if(Strings.isNotBlank(apiDocSchemeDesc.getSchemeDesc())) {
+            apiDocSchemeDesc.setSchemeDesc(HtmlUtils.htmlUnescape(apiDocSchemeDesc.getSchemeDesc()));
+        }
         model.addAttribute("apis", entities);
         model.addAttribute("schemeName", apiScheme.getTitle());
         model.addAttribute("schemeId", id);
         model.addAttribute("apiScheme", apiScheme);
+        model.addAttribute("apiSchemeDesc", apiDocSchemeDesc);
     }
 
 }

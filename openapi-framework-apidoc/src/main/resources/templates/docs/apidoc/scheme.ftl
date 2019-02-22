@@ -34,7 +34,7 @@
                 <div class="doc-content">
 
                     <div>
-                        ${apiScheme.note}
+                        ${apiSchemeDesc.schemeDesc}
                     </div>
 
                     <table class="layui-table" lay-skin="line">
