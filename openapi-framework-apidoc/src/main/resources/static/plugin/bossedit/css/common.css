@@ -535,7 +535,7 @@ audio,canvas,video {
     *zoom:1}
 
 body,button,input,select,textarea {
-    font: 9pt/1.5 Microsoft YaHei,tahoma,arial,Hiragino Sans GB,\5b8b\4f53
+    /*font: 9pt/1.5 Microsoft YaHei,tahoma,arial,Hiragino Sans GB,\5b8b\4f53*/
 }
 
 input,select,textarea {
