@@ -17,14 +17,12 @@ $(function() {
         <tr>
           <td align="left">
           	<div>
-					合作方编码: <input type="text" class="text" size="15" name="search_LIKE_partnerId"/>
-					合作方名称: <input type="text" class="text" size="15" name="search_LIKE_partnerName"/>
+                合作方编码: <input type="text" class="text" size="15" name="search_LIKE_partnerId"/>
+                合作方名称: <input type="text" class="text" size="15" name="search_LIKE_partnerName"/>
 				安全方案: <select style="width:80px;height:27px;" name="search_EQ_secretType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allSecretTypes}"><option value="${e.key}" ${param.search_EQ_secretType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
 				签名类型: <select style="width:80px;height:27px;" name="search_EQ_signType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allSignTypes}"><option value="${e.key}" ${param.search_EQ_signType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					修改时间: <input size="15" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+                创建时间: <input size="15" type="text" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					至 <input size="15" type="text" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_apiTenant_searchform','manage_apiTenant_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
@@ -64,12 +62,12 @@ $(function() {
     <div id="manage_apiTenant_toolbar">
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/module/openapi/apiTenant/create.html',entity:'apiTenant',width:500,height:400})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/module/openapi/apiTenant/deleteJson.html','manage_apiTenant_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>
-      <a href="#" class="easyui-menubutton" data-options="menu:'#manage_apiTenant_exports_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>批量导出</a>
-      <div id="manage_apiTenant_exports_menu" style="width:150px;">
-        <div onclick="$.acooly.framework.exports('/manage/module/openapi/apiTenant/exportXls.html','manage_apiTenant_searchform','租户管理')"><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>Excel</div>
-        <div onclick="$.acooly.framework.exports('/manage/module/openapi/apiTenant/exportCsv.html','manage_apiTenant_searchform','租户管理')"><i class="fa fa-file-text-o fa-lg fa-fw fa-col"></i>CSV</div>
-      </div>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.imports({url:'/manage/module/openapi/apiTenant/importView.html',uploader:'manage_apiTenant_import_uploader_file'});"><i class="fa fa-arrow-circle-o-up fa-lg fa-fw fa-col"></i>批量导入</a>
+      <%--<a href="#" class="easyui-menubutton" data-options="menu:'#manage_apiTenant_exports_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>批量导出</a>--%>
+      <%--<div id="manage_apiTenant_exports_menu" style="width:150px;">--%>
+        <%--<div onclick="$.acooly.framework.exports('/manage/module/openapi/apiTenant/exportXls.html','manage_apiTenant_searchform','租户管理')"><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>Excel</div>--%>
+        <%--<div onclick="$.acooly.framework.exports('/manage/module/openapi/apiTenant/exportCsv.html','manage_apiTenant_searchform','租户管理')"><i class="fa fa-file-text-o fa-lg fa-fw fa-col"></i>CSV</div>--%>
+      <%--</div>--%>
+      <%--<a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.imports({url:'/manage/module/openapi/apiTenant/importView.html',uploader:'manage_apiTenant_import_uploader_file'});"><i class="fa fa-arrow-circle-o-up fa-lg fa-fw fa-col"></i>批量导入</a>--%>
     </div>
   </div>
 

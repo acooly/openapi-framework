@@ -26,7 +26,7 @@
 			</tr>
 			<tr>
 				<th>方案类型：</th>
-				<td><select name="schemeType" editable="false" style="height:27px;" panelHeight="auto" class="easyui-combobox" >
+				<td><select name="schemeType" editable="false" panelHeight="auto" class="easyui-combobox" >
 					<c:forEach items="${allSchemeTypes}" var="e">
 						<option value="${e.key}">${e.value}</option>
 					</c:forEach>

@@ -172,15 +172,17 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
         long id = Long.parseLong(request.getParameter("schemeId"));
         ApiDocScheme apiScheme = apiDocSchemeService.get(id);
         List<ApiDocService> entities = apiDocSchemeServiceService.findSchemeApiDocServices(apiScheme.getSchemeNo());
-        ApiDocSchemeDesc apiDocSchemeDesc = apiDocSchemeDescService.findBySchemeNo(apiScheme.getSchemeNo());
-        if(Strings.isNotBlank(apiDocSchemeDesc.getSchemeDesc())) {
-            apiDocSchemeDesc.setSchemeDesc(HtmlUtils.htmlUnescape(apiDocSchemeDesc.getSchemeDesc()));
-        }
         model.addAttribute("apis", entities);
         model.addAttribute("schemeName", apiScheme.getTitle());
         model.addAttribute("schemeId", id);
         model.addAttribute("apiScheme", apiScheme);
-        model.addAttribute("apiSchemeDesc", apiDocSchemeDesc);
+
+
+        ApiDocSchemeDesc apiDocSchemeDesc = apiDocSchemeDescService.findBySchemeNo(apiScheme.getSchemeNo());
+        if(apiDocSchemeDesc != null && Strings.isNotBlank(apiDocSchemeDesc.getSchemeDesc())) {
+            apiDocSchemeDesc.setSchemeDesc(HtmlUtils.htmlUnescape(apiDocSchemeDesc.getSchemeDesc()));
+            model.addAttribute("apiSchemeDesc", apiDocSchemeDesc);
+        }
     }
 
 }

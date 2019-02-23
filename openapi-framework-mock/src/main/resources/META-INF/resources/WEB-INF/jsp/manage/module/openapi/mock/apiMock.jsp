@@ -18,10 +18,8 @@ $(function() {
           <td align="left">
           	<div>
 					版本号: <input type="text" class="text" size="15" name="search_LIKE_version"/>
-					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					修改时间: <input size="15" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					创建时间: <input size="15" type="text" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					至 <input size="15" type="text" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_apiMock_searchform','manage_apiMock_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
@@ -61,12 +59,12 @@ $(function() {
     <div id="manage_apiMock_toolbar">
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/module/openapi/mock/apiMock/create.html',entity:'apiMock',width:500,height:400})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
       <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/module/openapi/mock/apiMock/deleteJson.html','manage_apiMock_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>
-      <a href="#" class="easyui-menubutton" data-options="menu:'#manage_apiMock_exports_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>批量导出</a>
-      <div id="manage_apiMock_exports_menu" style="width:150px;">
-        <div onclick="$.acooly.framework.exports('/manage/module/openapi/mock/apiMock/exportXls.html','manage_apiMock_searchform','服务类')"><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>Excel</div>
-        <div onclick="$.acooly.framework.exports('/manage/module/openapi/mock/apiMock/exportCsv.html','manage_apiMock_searchform','服务类')"><i class="fa fa-file-text-o fa-lg fa-fw fa-col"></i>CSV</div>
-      </div>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.imports({url:'/manage/module/openapi/mock/apiMock/importView.html',uploader:'manage_apiMock_import_uploader_file'});"><i class="fa fa-arrow-circle-o-up fa-lg fa-fw fa-col"></i>批量导入</a>
+      <%--<a href="#" class="easyui-menubutton" data-options="menu:'#manage_apiMock_exports_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>批量导出</a>--%>
+      <%--<div id="manage_apiMock_exports_menu" style="width:150px;">--%>
+        <%--<div onclick="$.acooly.framework.exports('/manage/module/openapi/mock/apiMock/exportXls.html','manage_apiMock_searchform','服务类')"><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>Excel</div>--%>
+        <%--<div onclick="$.acooly.framework.exports('/manage/module/openapi/mock/apiMock/exportCsv.html','manage_apiMock_searchform','服务类')"><i class="fa fa-file-text-o fa-lg fa-fw fa-col"></i>CSV</div>--%>
+      <%--</div>--%>
+      <%--<a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.imports({url:'/manage/module/openapi/mock/apiMock/importView.html',uploader:'manage_apiMock_import_uploader_file'});"><i class="fa fa-arrow-circle-o-up fa-lg fa-fw fa-col"></i>批量导入</a>--%>
     </div>
   </div>
 

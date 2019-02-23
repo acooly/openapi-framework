@@ -13,7 +13,7 @@ $(function() {
  */
 function manage_apiPartner_showSetting(id){
     $('#edit_scheme_id').dialog({
-        title:'编辑解决方案服务',
+        title:'<i class="fa fa-cog fa-lg fa-fw fa-col"></i> 配置解决方案服务列表',
         href:'/manage/apidoc/apiDocScheme/settingService.html?id='+id,
         closable : true,
         modal: true,
@@ -34,12 +34,8 @@ function manage_apiPartner_showSetting(id){
 					方案编码: <input type="text" class="text" size="15" name="search_LIKE_schemeNo"/>
 					标题: <input type="text" class="text" size="15" name="search_LIKE_title"/>
 					作者: <input type="text" class="text" size="15" name="search_LIKE_author"/>
-				    方案类型: <select style="width:80px;height:27px;" name="search_EQ_schemeType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allSchemeTypes}"><option value="${e.key}" ${param.search_EQ_schemeType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
+				    方案类型: <select name="search_EQ_schemeType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allSchemeTypes}"><option value="${e.key}" ${param.search_EQ_schemeType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
 					排序值: <input type="text" class="text" size="15" name="search_EQ_sortTime"/>
-					创建时间: <input size="15" class="text" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					修改时间: <input size="15" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_apiDocScheme_searchform','manage_apiDocScheme_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
@@ -73,7 +69,7 @@ function manage_apiPartner_showSetting(id){
     <!-- 每行的Action动作模板 -->
     <div id="manage_apiDocScheme_action" style="display: none;">
         <a onclick="$.acooly.framework.edit({url:'/manage/apidoc/apiDocScheme/edit.html',id:'{0}',entity:'apiDocScheme',width:860,height:690});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
-      <a onclick="manage_apiPartner_showSetting('{0}');" href="javascript:void(0);" title="编辑服务"><i class="fa fa-cog fa-spin fa-lg fa-fw fa-col"></i></a>
+      <a onclick="manage_apiPartner_showSetting('{0}');" href="javascript:void(0);" title="配置服务"><i class="fa fa-cog fa-lg fa-fw fa-col"></i></a>
       <a onclick="$.acooly.framework.show('/manage/apidoc/apiDocScheme/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
       <a onclick="$.acooly.framework.remove('/manage/apidoc/apiDocScheme/deleteJson.html','{0}','manage_apiDocScheme_datagrid');" href="#" title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>
     </div>

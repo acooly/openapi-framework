@@ -2,6 +2,7 @@ package com.acooly.openapi.framework.service;
 
 import com.acooly.core.common.dao.dialect.DatabaseType;
 import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
+import com.acooly.module.mybatis.EntityMybatisDao;
 import com.acooly.openapi.framework.service.service.AuthInfoRealmManageService;
 import com.acooly.openapi.framework.service.service.impl.DefaultAuthInfoRealmManageService;
 import com.google.common.collect.Lists;
@@ -19,7 +20,8 @@ import java.util.List;
  */
 @Configuration
 @ComponentScan(basePackages = {"com.acooly.openapi.framework.service"})
-@MapperScan("com.acooly.openapi.framework.service.dao")
+@MapperScan(basePackages = "com.acooly.openapi.framework.service.dao"
+        , markerInterface = EntityMybatisDao.class)
 public class ApiServiceAutoConfig {
     @Bean
     public AbstractDatabaseScriptIniter openapiManageScriptIniter() {

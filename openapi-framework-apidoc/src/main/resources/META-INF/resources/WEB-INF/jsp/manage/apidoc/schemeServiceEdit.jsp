@@ -9,14 +9,14 @@
      * 打开权限设置界面
      */
     function manage_apiPartner_showSetting(id) {
-        $('#layout_center_tabs').tabs('close', "编辑解决方案服务");
+        $('#layout_center_tabs').tabs('close', "配置解决方案服务列表");
         $('#edit_scheme_id').dialog({
-            title: '编辑解决方案服务',
+            title: '<i class="fa fa-cog fa-lg fa-fw fa-col"></i> 配置解决方案服务列表',
             href: '/manage/apidoc/apiDocScheme/settingService.html?id='+id,
             closable: true,
             modal: true,
-            width: 800,
-            height: 600,
+            width: 1000,
+            height: 450
         });
     }
 </script>
@@ -53,8 +53,9 @@
                 </div>
                 <div class="fn-clear">
                     <div class="plan-text">
-                        <a href="javascript:;" id="edit-solution-detail" class="type-btn blue-btn btn"
-                           onclick="addAndRemoveEditInit(${id})"><i class="fa fa-plus-circle fa-lg">编辑服务</i></a>
+                        <a href="javascript:;" id="edit-solution-detail" class="btn btn-primary" onclick="addAndRemoveEditInit(${id})">
+                            <i class="fa fa-plus-circle fa-lg"> 选择服务</i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -94,9 +95,9 @@
                 </div>
 
                 <div class="middle-box fn-left">
-                    <button type="button" id="search_rightSelected" class="btn btn-block">&gt;&gt;</button>
-                    <button type="button" id="search_leftSelected" class="btn btn-block">&lt;&lt;</button>
-                    <button type="button" id="closeModal" class="close-cross-box btn btn-block">返回</button>
+                    <button type="button" id="search_rightSelected" class="btn btn-default btn-flat"><i class="fa fa-angle-double-right"></i></button>
+                    <button type="button" id="search_leftSelected" class="btn btn-default btn-flat"><i class="fa fa-angle-double-left"></i></button>
+                    <button type="button" id="closeModal" class="btn btn-default"><i class="fa fa-undo" aria-hidden="true"></i> 返回</button>
                 </div>
 
                 <div class="right-box fn-right">

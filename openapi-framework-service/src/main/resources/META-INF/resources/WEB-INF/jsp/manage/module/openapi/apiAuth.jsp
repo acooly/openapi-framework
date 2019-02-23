@@ -47,9 +47,8 @@ function manage_apiPartner_showSetting(){
           <td align="left">
           	<div>
 					访问帐号: <input type="text" class="text" size="15" name="search_LIKE_accessKey"/>
-					访问秘钥: <input type="text" class="text" size="15" name="search_LIKE_secretKey"/>
 					修改时间: <input size="15" type="text" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-					至<input size="15" type="text" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+					至 <input size="15" type="text" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" />
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_apiAuth_searchform','manage_apiAuth_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
