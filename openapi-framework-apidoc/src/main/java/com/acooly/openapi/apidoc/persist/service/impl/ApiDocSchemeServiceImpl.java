@@ -6,6 +6,8 @@
  */
 package com.acooly.openapi.apidoc.persist.service.impl;
 
+import com.acooly.core.common.dao.support.PageInfo;
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Collections3;
 import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
@@ -20,13 +22,16 @@ import com.acooly.openapi.framework.common.utils.Exceptions;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 服务方案 Service实现
@@ -131,5 +136,33 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
             retrunArray.add(apiServiceDocObj);
         }
         return retrunArray;
+    }
+
+    @Override
+    public void moveUp(Long id) {
+        try {
+            ApiDocScheme apiDocScheme = get(id);
+            long current = apiDocScheme.getSortTime();
+            ApiDocScheme beforeScheme = getEntityDao().findBeforeOne(current, id);
+            if (beforeScheme != null) {
+                apiDocScheme.setSortTime(beforeScheme.getSortTime());
+                beforeScheme.setSortTime(current);
+                this.update(apiDocScheme);
+                this.update(beforeScheme);
+            }
+        } catch (Exception e) {
+            throw new BusinessException("上移失败", e);
+        }
+    }
+
+    @Override
+    public void moveTop(Long id) {
+        try {
+            ApiDocScheme apiDocScheme = get(id);
+            apiDocScheme.setSortTime((new Date()).getTime());
+            update(apiDocScheme);
+        } catch (Exception e) {
+            throw new BusinessException("置顶失败", e);
+        }
     }
 }

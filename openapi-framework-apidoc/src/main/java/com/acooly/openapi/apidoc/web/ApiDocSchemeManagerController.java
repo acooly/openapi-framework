@@ -6,11 +6,11 @@
  */
 package com.acooly.openapi.apidoc.web;
 
-import com.acooly.core.common.domain.Entityable;
+import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.MappingMethod;
-import com.acooly.core.common.web.support.JsonEntityResult;
-import com.acooly.core.utils.Ids;
+import com.acooly.core.common.web.support.JsonListResult;
+import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
@@ -23,6 +23,7 @@ import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -69,6 +70,11 @@ public class ApiDocSchemeManagerController extends AbstractJQueryEntityControlle
         model.addAttribute("id", id);
         model.addAttribute("schemeNo", apiScheme.getSchemeNo());
         return "/manage/apidoc/schemeServiceEdit";
+    }
+
+    @Override
+    public JsonListResult<ApiDocScheme> listJson(HttpServletRequest request, HttpServletResponse response) {
+        return super.listJson(request, response);
     }
 
     /**
@@ -279,5 +285,55 @@ public class ApiDocSchemeManagerController extends AbstractJQueryEntityControlle
             handleException("编辑", e, request);
         }
         return getEditView();
+    }
+
+    /**
+     * 解决方案置顶
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "moveTop")
+    @ResponseBody
+    public JsonResult moveTop(HttpServletRequest request, HttpServletResponse response) {
+
+        JsonResult result = new JsonResult();
+        try {
+            String id = request.getParameter("id");
+            this.getEntityService().moveTop(Long.valueOf(id));
+            result.setMessage("置底成功");
+        } catch (Exception e) {
+            handleException(result, "置底", e);
+        }
+        return result;
+    }
+
+    /**
+     * 上移解决方案
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "moveUp")
+    @ResponseBody
+    public JsonResult moveUp(HttpServletRequest request, HttpServletResponse response) {
+
+        JsonResult result = new JsonResult();
+        try {
+            String id = request.getParameter("id");
+            this.getEntityService().moveUp(Long.valueOf(id));
+            result.setMessage("下移成功");
+        } catch (Exception e) {
+            handleException(result, "下移", e);
+        }
+        return result;
+    }
+
+    @Override
+    protected PageInfo<ApiDocScheme> doList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, Boolean> sortMap = Maps.newHashMap();
+        sortMap.put("sortTime", false);
+        return getEntityService()
+                .query(getPageInfo(request), getSearchParams(request), sortMap);
     }
 }

@@ -48,4 +48,15 @@ public interface ApiDocSchemeService extends EntityService<ApiDocScheme> {
 
     JSONObject getSelectSchemeList(String schemeNo);
 
+    /**
+     * 置顶
+     * @param id
+     */
+    void moveTop(Long id);
+
+    /**
+     * 上移
+     * @param id
+     */
+    void moveUp(Long id);
 }

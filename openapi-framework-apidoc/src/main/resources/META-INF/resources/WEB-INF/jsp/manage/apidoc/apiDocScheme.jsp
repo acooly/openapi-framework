@@ -35,7 +35,7 @@ function manage_apiPartner_showSetting(id){
 					标题: <input type="text" class="text" size="15" name="search_LIKE_title"/>
 					作者: <input type="text" class="text" size="15" name="search_LIKE_author"/>
 				    方案类型: <select name="search_EQ_schemeType" editable="false" panelHeight="auto" class="easyui-combobox"><option value="">所有</option><c:forEach var="e" items="${allSchemeTypes}"><option value="${e.key}" ${param.search_EQ_schemeType == e.key?'selected':''}>${e.value}</option></c:forEach></select>
-					排序值: <input type="text" class="text" size="15" name="search_EQ_sortTime"/>
+					<%--排序值: <input type="text" class="text" size="15" name="search_EQ_sortTime"/>--%>
           	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_apiDocScheme_searchform','manage_apiDocScheme_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
           	</div>
           </td>
@@ -55,12 +55,12 @@ function manage_apiPartner_showSetting(id){
 			<th field="schemeNo">方案编码</th>
 			<th field="title">标题</th>
 			<th field="author">作者</th>
-			<th field="note">说明</th>
 			<th field="schemeType" formatter="mappingFormatter">方案类型</th>
-			<th field="sortTime" sum="true">排序值</th>
+			<%--<th field="sortTime" sum="true">排序值</th>--%>
 		    <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
 		    <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>
-			<th field="comments">备注</th>
+			<%--<th field="comments">备注</th>--%>
+            <th field="note">说明</th>
           	<th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_apiDocScheme_action',value,row)}">动作</th>
         </tr>
       </thead>
@@ -72,19 +72,49 @@ function manage_apiPartner_showSetting(id){
       <a onclick="manage_apiPartner_showSetting('{0}');" href="javascript:void(0);" title="配置服务"><i class="fa fa-cog fa-lg fa-fw fa-col"></i></a>
       <a onclick="$.acooly.framework.show('/manage/apidoc/apiDocScheme/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
       <a onclick="$.acooly.framework.remove('/manage/apidoc/apiDocScheme/deleteJson.html','{0}','manage_apiDocScheme_datagrid');" href="#" title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>
+      <a class="line-action icon-movetop" onclick="moveTop('{0}')" href="#"></a>
+      <a class="line-action icon-moveup" onclick="moveUp('{0}')" href="#"></a>
     </div>
 
     <!-- 表格的工具栏 -->
     <div id="manage_apiDocScheme_toolbar">
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/apidoc/apiDocScheme/create.html',entity:'apiDocScheme',width:500,height:400})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/apidoc/apiDocScheme/deleteJson.html','manage_apiDocScheme_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>
-      <a href="#" class="easyui-menubutton" data-options="menu:'#manage_apiDocScheme_exports_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>批量导出</a>
-      <div id="manage_apiDocScheme_exports_menu" style="width:150px;">
-        <div onclick="$.acooly.framework.exports('/manage/apidoc/apiDocScheme/exportXls.html','manage_apiDocScheme_searchform','服务方案')"><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>Excel</div>
-        <div onclick="$.acooly.framework.exports('/manage/apidoc/apiDocScheme/exportCsv.html','manage_apiDocScheme_searchform','服务方案')"><i class="fa fa-file-text-o fa-lg fa-fw fa-col"></i>CSV</div>
-      </div>
-      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.imports({url:'/manage/apidoc/apiDocScheme/importView.html',uploader:'manage_apiDocScheme_import_uploader_file'});"><i class="fa fa-arrow-circle-o-up fa-lg fa-fw fa-col"></i>批量导入</a>
+      <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/apidoc/apiDocScheme/create.html',entity:'apiDocScheme',width:600,height:670})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
+      <%--<a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/apidoc/apiDocScheme/deleteJson.html','manage_apiDocScheme_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>--%>
+      <%--<a href="#" class="easyui-menubutton" data-options="menu:'#manage_apiDocScheme_exports_menu'"><i class="fa fa-arrow-circle-o-down fa-lg fa-fw fa-col"></i>批量导出</a>--%>
+      <%--<div id="manage_apiDocScheme_exports_menu" style="width:150px;">--%>
+        <%--<div onclick="$.acooly.framework.exports('/manage/apidoc/apiDocScheme/exportXls.html','manage_apiDocScheme_searchform','服务方案')"><i class="fa fa-file-excel-o fa-lg fa-fw fa-col"></i>Excel</div>--%>
+        <%--<div onclick="$.acooly.framework.exports('/manage/apidoc/apiDocScheme/exportCsv.html','manage_apiDocScheme_searchform','服务方案')"><i class="fa fa-file-text-o fa-lg fa-fw fa-col"></i>CSV</div>--%>
+      <%--</div>--%>
+      <%--<a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.imports({url:'/manage/apidoc/apiDocScheme/importView.html',uploader:'manage_apiDocScheme_import_uploader_file'});"><i class="fa fa-arrow-circle-o-up fa-lg fa-fw fa-col"></i>批量导入</a>--%>
     </div>
   </div>
 
 </div>
+<script type="text/javascript">
+
+    function moveUp(id) {
+        var path = contextPath + '/manage/apidoc/apiDocScheme/moveUp.html?id='+id+"&"+new Date();
+        moveScheme(path);
+    }
+
+    function moveTop(id) {
+        var path = contextPath + '/manage/apidoc/apiDocScheme/moveTop.html?id='+id+"&"+new Date();
+        moveScheme(path);
+    }
+
+    function moveScheme(path) {
+        $.ajax({
+            url:path,
+            success : function(result) {
+                $.acooly.framework.search('manage_apiDocScheme_searchform','manage_apiDocScheme_datagrid');
+                $.messager.show({title:'提示', msg:result.message, timeout:1000});
+            },
+            error:function(XmlHttpRequest){
+                var e = XmlHttpRequest.responseText;
+                var json = eval('(' + e + ')');
+                console.log(json);
+                $.messager.alert('提示', json.message);
+            }
+        });
+    }
+</script>

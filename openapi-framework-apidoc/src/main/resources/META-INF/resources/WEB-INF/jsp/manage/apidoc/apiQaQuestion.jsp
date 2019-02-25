@@ -226,7 +226,7 @@
                             <td style="border-bottom: 0px;">
                                 <div>
                                     分类: <input id="manage_apiQaQuestion_typeName" disabled type="text" class="text" size="15" name="manage_apiQaQuestion_typeName" value="根分类"/>
-                                    标题: <input type="text" class="text" size="15" name="search_LIKE_problem"/>
+                                    问题标题: <input type="text" class="text" size="15" name="search_LIKE_problem"/>
                                     详情: <input type="text" class="text" size="15" name="search_LIKE_solution"/>
                                     <%--<input id="manage_apiQaQuestion_typePath" name="search_RLIKE_apiQaClassify.path" type="hidden">--%>
                                     <input id="manage_apiQaQuestion_typeId" name="search_EQ_classifyId" type="hidden">
@@ -246,10 +246,10 @@
                     <tr>
                         <th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
                         <th field="id">id</th>
-                        <th field="problem"  formatter="contentFormatter">问题</th>
+                        <th field="problem"  formatter="contentFormatter">问题标题</th>
                         <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
                         <th field="updateTime" formatter="dateTimeFormatter">更新时间</th>
-                        <th field="weight" >权重</th>
+                        <%--<th field="weight" >权重</th>--%>
                         <th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_apiQaQuestion_action',value,row)}">动作</th>
                     </tr>
                     </thead>
