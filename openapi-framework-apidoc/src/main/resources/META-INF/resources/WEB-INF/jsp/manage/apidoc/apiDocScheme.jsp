@@ -72,8 +72,10 @@ function manage_apiPartner_showSetting(id){
       <a onclick="manage_apiPartner_showSetting('{0}');" href="javascript:void(0);" title="配置服务"><i class="fa fa-cog fa-lg fa-fw fa-col"></i></a>
       <a onclick="$.acooly.framework.show('/manage/apidoc/apiDocScheme/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>
       <a onclick="$.acooly.framework.remove('/manage/apidoc/apiDocScheme/deleteJson.html','{0}','manage_apiDocScheme_datagrid');" href="#" title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>
-      <a class="line-action icon-movetop" onclick="moveTop('{0}')" href="#"></a>
-      <a class="line-action icon-moveup" onclick="moveUp('{0}')" href="#"></a>
+      <a onclick="moveTop('{0}')" href="#" title="置顶">
+          <i class="fa fa-arrow-circle-up fa-lg fa-fw fa-col"></i>
+      </a>
+      <a onclick="moveUp('{0}')" href="#" title="上移"><i class="fa fa-arrow-up fa-lg fa-fw fa-col"></i></a>
     </div>
 
     <!-- 表格的工具栏 -->
