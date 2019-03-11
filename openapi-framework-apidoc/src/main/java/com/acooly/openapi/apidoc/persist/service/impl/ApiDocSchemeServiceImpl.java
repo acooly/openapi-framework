@@ -10,6 +10,7 @@ import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Collections3;
+import com.acooly.openapi.apidoc.ApiDocProperties;
 import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
 import com.acooly.openapi.apidoc.persist.dao.ApiDocSchemeDao;
 import com.acooly.openapi.apidoc.persist.dao.ApiDocServiceDao;
@@ -46,6 +47,9 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
 
     @Resource
     private ApiDocServiceDao apiDocServiceDao;
+
+    @Autowired
+    private ApiDocProperties apiDocProperties;
 
     @Override
     public ApiDocScheme createDefault() {
@@ -90,6 +94,16 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
                     needRemoves.add(persist);
                 }
             }
+            //删除系统默认生成的所有服务解决方案
+            List<ApiDocScheme> commonSchemes = findBySchemeType(SchemeTypeEnum.common);
+            if(apiDocProperties.isDefaultSchemeEnable()) {
+                for (ApiDocScheme scheme : commonSchemes) {
+                    if (!apiDocSchemes.contains(scheme)) {
+                        needRemoves.add(scheme);
+                    }
+                }
+            }
+
             List<Serializable> ids = Lists.newArrayList();
             needRemoves.forEach(e -> {
                 ids.add(e.getId());
