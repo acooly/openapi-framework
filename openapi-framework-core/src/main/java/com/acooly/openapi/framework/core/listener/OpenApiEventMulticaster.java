@@ -10,17 +10,15 @@
  */
 package com.acooly.openapi.framework.core.listener;
 
-import com.acooly.openapi.framework.core.listener.event.OpenApiEvent;
+import com.acooly.openapi.framework.common.event.dto.OpenApiEvent;
+import com.acooly.openapi.framework.common.event.OpenApiEventPublisher;
 
-/**
- * @author qiubo@qq.com
- */
-public interface OpenApiEventMulticaster<E extends OpenApiEvent> extends OpenApiEventPublisher<E>{
+/** @author qiubo@qq.com */
+public interface OpenApiEventMulticaster<E extends OpenApiEvent> extends OpenApiEventPublisher<E> {
 
-	void addListener(ApiListener<E> listener);
-	
-	void removeListener(ApiListener<E> listener);
-	
-	void removeAllListeners();
-	
+  void addListener(ApiListener<E> listener);
+
+  void removeListener(ApiListener<E> listener);
+
+  void removeAllListeners();
 }

@@ -1,0 +1,90 @@
+.resource{
+    padding-bottom: 80px;
+}
+
+.tool{
+    line-height: 24px;
+    table{
+        width: 100%;
+        border: none;
+    }
+    .table1{
+        border: 1px solid #eeeeee;
+        tr{ 
+            border-bottom: 1px solid #EEEEEE;              
+            th,td{
+                padding-left: 20px;
+                border: none;
+            }         
+            th{
+                line-height: 30px;
+                font-weight: bold;
+                padding-left: 20px; 
+                background-color: #f2f2f2;             
+            }
+            td{
+                line-height: 34px;
+                a{
+                    color: #4680FE;
+                    padding-left: 20px;
+                    background: url(../../img/down-ico1.png) no-repeat left center;
+                }
+            }
+        }
+    }
+    .table2{
+        border: none;
+        tr{
+            border: none;
+            &:first-child{
+                td{
+                    padding-top: 12px;
+                    &:first-child{
+                        &:after{
+                            margin-top: 0.5px;
+                        }
+                    }
+                }
+            }
+            &:last-child{
+                td{
+                    padding-bottom: 12px;
+                    &:first-child{
+                        &:after{
+                            margin-top: -11.5px;
+                        }
+                    }                    
+                }
+            }
+            td{
+                padding-left: 20px;
+                line-height: 32px;
+                color: #333333;
+                border: none;
+                &:first-child{
+                    color: #999999;
+                    background-color: #f9f9f9;
+                    text-align: center;
+                    padding-left: 0;
+                    width: 92px;
+                    position: relative;
+                    border-left: 1px solid #E2E2E2;
+                    &:after{
+                        background: url(../../img/fd-yd.png) no-repeat center center;
+                        width: 9px;
+                        height: 9px;
+                        display: block;
+                        content: "";
+                        position: absolute;
+                        left: -5px;
+                        top: 50%;
+                        margin-top: -4.5px;
+                    }
+                }
+            }
+        }
+    }
+    .tj{
+        color: #cdcdcd;
+    }
+}

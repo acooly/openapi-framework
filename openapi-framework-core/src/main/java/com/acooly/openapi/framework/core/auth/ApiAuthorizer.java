@@ -10,14 +10,16 @@
  */
 package com.acooly.openapi.framework.core.auth;
 
-import java.util.List;
-
+import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.core.auth.permission.Permission;
+
+import java.util.List;
 
 /**
  * 授权处理器
+ *
  * @author qiubo@qq.com
  */
 public interface ApiAuthorizer {
-	void authorize(String serviceName, List<Permission> permissionList);
+  void authorize(ApiContext apiContext, List<Permission> permissionList);
 }

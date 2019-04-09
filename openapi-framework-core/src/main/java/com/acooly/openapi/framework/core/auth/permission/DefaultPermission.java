@@ -10,39 +10,71 @@
  */
 package com.acooly.openapi.framework.core.auth.permission;
 
-import com.acooly.openapi.framework.core.OpenApiConstants;
+import com.acooly.openapi.framework.common.ApiConstants;
+import com.google.common.base.Splitter;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Iterator;
+
+import static com.acooly.openapi.framework.common.ApiConstants.WILDCARD_TOKEN;
 
 /**
- * 匹配一个星号的授权.<p/>
- * 比如:商户系统可以配置*,代表此商户拥有所有权限.<p/>
- * 配置xxx*,代表仅开通xxx开头的服务<p/>
- * 预期openapi以后会有服务分级的概念.<p/>
+ * 权限字符串格式为：partnerId:serviceName
+ *
+ * <p>这两部分可以用*号匹配
+ *
+ * <p>比如:配置*,代表拥有所有权限.
+ *
+ * <p>配置123:*,代表可以访问partnerId=123的所有服务
+ *
+ * <p>配置123:xxx*,代表可以访问partnerId=123,xxx开头的服务
  *
  * @author qiubo@qq.com
  */
+@Getter
+@Setter
 public class DefaultPermission implements Permission {
 
-    /**
-     * 权限字符串
-     */
-    private String perm;
+  /** 权限字符串 */
+  private String perm;
 
-    public DefaultPermission(String perm) {
-        this.perm = perm;
-    }
+  private String partnerIdPerm;
+  private String servicePerm;
 
-    @Override
-    public boolean implies(String resource) {
-        if (perm.equals(resource) || perm.equals(OpenApiConstants.WILDCARD_TOKEN)) {
-            return true;
-        }
-        int idx = perm.indexOf(OpenApiConstants.WILDCARD_TOKEN);
-        if (idx < 0) {
-            return false;
-        } else {
-            String pp = perm.substring(0, idx);
-            String pe = perm.substring(idx + 1);
-            return resource.startsWith(pp) && resource.endsWith(pe);
-        }
+  public DefaultPermission(String perm) {
+    if (perm.equals(WILDCARD_TOKEN)) {
+      return;
     }
+    Permission.permMatch(perm);
+    this.perm = perm;
+    Iterator<String> iterator = Splitter.on(":").split(perm).iterator();
+    partnerIdPerm = iterator.next();
+    servicePerm = iterator.next();
+  }
+
+  @Override
+  public boolean implies(String resource) {
+    if (resource.equals(perm) || perm.equals(ApiConstants.WILDCARD_TOKEN)) {
+      return true;
+    }
+    Iterator<String> iterator = Splitter.on(":").split(resource).iterator();
+    String partnerId = iterator.next();
+    String serviceName = iterator.next();
+    return match(partnerId, partnerIdPerm) && match(serviceName, servicePerm);
+  }
+
+  private boolean match(String res, String perm) {
+    if (WILDCARD_TOKEN.equals(perm) || res.equals(perm)) {
+      return true;
+    }
+    int idx = perm.indexOf(WILDCARD_TOKEN);
+    if (idx < 0) {
+      return false;
+    } else {
+      String pp = perm.substring(0, idx);
+      String pe = perm.substring(idx + 1);
+      return res.startsWith(pp) && res.endsWith(pe);
+    }
+  }
 }

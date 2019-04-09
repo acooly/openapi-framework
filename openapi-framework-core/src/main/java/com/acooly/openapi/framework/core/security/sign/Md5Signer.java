@@ -4,6 +4,7 @@
  */
 package com.acooly.openapi.framework.core.security.sign;
 
+import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Component;
 
@@ -14,16 +15,15 @@ import org.springframework.stereotype.Component;
  * @date 2014年8月3日
  */
 @Component("apiMd5Signer")
-public class Md5Signer extends AbstractMapSourceSigner {
+public class Md5Signer extends AbstractSigner {
 
-	@Override
-	protected String doSign(String waitToSignStr, String key) {
-		return DigestUtils.md5Hex(waitToSignStr + key);
-	}
+  @Override
+  protected String doSign(String waitToSignStr, String key) {
+    return DigestUtils.md5Hex(waitToSignStr + key);
+  }
 
-	@Override
-	public SignTypeEnum getSinType() {
-		return SignTypeEnum.MD5;
-	}
-
+  @Override
+  public SignTypeEnum getSinType() {
+    return SignTypeEnum.MD5;
+  }
 }

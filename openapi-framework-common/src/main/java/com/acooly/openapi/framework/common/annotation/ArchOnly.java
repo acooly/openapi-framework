@@ -14,12 +14,10 @@ import java.lang.annotation.*;
 
 /**
  * 仅框架使用api.
+ *
  * @author qiubo@qq.com
  */
-@Target({ ElementType.METHOD, ElementType.TYPE })
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ArchOnly {
-
-
-}
+public @interface ArchOnly {}

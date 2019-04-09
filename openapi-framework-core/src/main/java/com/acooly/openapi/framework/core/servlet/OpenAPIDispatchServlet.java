@@ -4,35 +4,34 @@
  */
 package com.acooly.openapi.framework.core.servlet;
 
-import java.io.IOException;
+import com.acooly.openapi.framework.core.executer.HttpApiServiceExecuter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.acooly.openapi.framework.core.executer.HttpApiServiceExecuter;
+import java.io.IOException;
 
 /**
  * 服务框架入口
- * 
+ *
  * @author zhangpu
  * @date 2014年8月3日
  */
 public class OpenAPIDispatchServlet extends AbstractSpringServlet {
 
-	/** UID */
-	private static final long serialVersionUID = -2915513005298196286L;
-	private HttpApiServiceExecuter httpapiServiceExecuter;
+  /** UID */
+  private static final long serialVersionUID = -2915513005298196286L;
 
-	@Override
-	protected void doInit() {
-		httpapiServiceExecuter = (HttpApiServiceExecuter) getWebApplicationContext().getBean("httpApiServiceExecuter");
-	}
+  private HttpApiServiceExecuter httpapiServiceExecuter;
 
-	@Override
-	protected void doService(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		httpapiServiceExecuter.execute(request, response);
-	}
+  @Override
+  protected void doInit() {
+    httpapiServiceExecuter = getWebApplicationContext().getBean(HttpApiServiceExecuter.class);
+  }
 
+  @Override
+  protected void doService(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    httpapiServiceExecuter.execute(request, response);
+  }
 }

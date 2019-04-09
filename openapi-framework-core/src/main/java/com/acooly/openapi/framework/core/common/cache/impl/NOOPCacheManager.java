@@ -12,33 +12,19 @@ package com.acooly.openapi.framework.core.common.cache.impl;
 
 import com.acooly.openapi.framework.core.common.cache.CacheManager;
 
-/**
- * @author qiubo@qq.com
- */
+/** @author qiubo@qq.com */
 public class NOOPCacheManager implements CacheManager {
-	@Override
-	public void add(String key, Object value) {
+  @Override
+  public void add(String key, Object value) {}
 
-	}
+  @Override
+  public void add(String key, Object value, int holdSecond) {}
 
-	@Override
-	public void add(String key, Object value, int holdSecond) {
+  @Override
+  public Object get(String key) {
+    return null;
+  }
 
-	}
-
-	@Override
-	public Object get(String key) {
-		return null;
-	}
-
-	@Override
-	public void cleanup() {
-
-	}
-
-	@Override
-	public void cleanup(String key) {
-
-	}
-
+  @Override
+  public void cleanup(String key) {}
 }

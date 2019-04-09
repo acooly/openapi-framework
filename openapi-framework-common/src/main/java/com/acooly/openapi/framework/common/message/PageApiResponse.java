@@ -22,7 +22,6 @@ import java.util.function.BiConsumer;
 @Setter
 public abstract class PageApiResponse<T> extends ApiResponse {
 
-
   @NotNull
   @OpenApiField(desc = "总行数")
   private long totalRows = 0;

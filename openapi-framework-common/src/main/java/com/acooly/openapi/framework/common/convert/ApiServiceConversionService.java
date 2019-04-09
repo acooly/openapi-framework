@@ -1,15 +1,11 @@
 /*
  * acooly.cn Inc.
  * Copyright (c) 2016 All Rights Reserved.
- * create by zhangpu 
+ * create by zhangpu
  * date:2016年3月17日
  *
  */
 package com.acooly.openapi.framework.common.convert;
-
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
 
 import com.acooly.openapi.framework.common.convert.converter.DateToStringConverter;
 import com.acooly.openapi.framework.common.convert.converter.MoneyToStringConverter;
@@ -21,58 +17,55 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.convert.support.DefaultConversionService;
-
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.Map;
 
 /**
  * 数据类型转换框架
- * 
+ *
  * @author zhangpu
  */
 @Component
-public class ApiServiceConversionService extends DefaultConversionService implements InitializingBean {
+public class ApiServiceConversionService extends DefaultConversionService
+    implements InitializingBean {
 
-    private static Logger logger = LoggerFactory.getLogger(ApiServiceConversionService.class);
+  // 静态变量初始化为默认实现,方便测试用例编写,服务器端则通过@PostConstruct重新初始化.
+  public static ApiServiceConversionService INSTANCE = new ApiServiceConversionService();
+  private static Logger logger = LoggerFactory.getLogger(ApiServiceConversionService.class);
+  @Autowired protected ApplicationContext applicationContext;
 
-    // 静态变量初始化为默认实现,方便测试用例编写,服务器端则通过@PostConstruct重新初始化.
-    public static ApiServiceConversionService INSTANCE = new ApiServiceConversionService();
+  public ApiServiceConversionService() {
+    super();
+    addCustomConverters();
+  }
 
-    @Autowired
-    protected ApplicationContext applicationContext;
+  private void addCustomConverters() {
+    addConverter(new DateToStringConverter());
+    addConverter(new MoneyToStringConverter());
+    addConverter(new StringToDateConverter());
+    addConverter(new StringToMoneyConverter());
+  }
 
-    public ApiServiceConversionService() {
-        super();
-        addCustomConverters();
+  @PostConstruct
+  public void init() {
+    INSTANCE = this;
+  }
+
+  @SuppressWarnings("rawtypes")
+  @Override
+  public void afterPropertiesSet() throws Exception {
+
+    Map<String, ApiServiceConverter> apiServiceConverterMap =
+        applicationContext.getBeansOfType(ApiServiceConverter.class);
+    if (apiServiceConverterMap == null || apiServiceConverterMap.isEmpty()) {
+      return;
     }
 
-    private void addCustomConverters() {
-		addConverter(new DateToStringConverter());
-		addConverter(new MoneyToStringConverter());
-		addConverter(new StringToDateConverter());
-		addConverter(new StringToMoneyConverter());
+    for (ApiServiceConverter converter : apiServiceConverterMap.values()) {
+      addConverter(converter);
+      logger.info("注册扩展converter: {}", converter.getClass().getName());
     }
-
-
-    @PostConstruct
-    public void init() {
-        INSTANCE = this;
-    }
-
-
-    @SuppressWarnings("rawtypes")
-	@Override
-    public void afterPropertiesSet() throws Exception {
-
-        Map<String, ApiServiceConverter> apiServiceConverterMap = applicationContext.getBeansOfType(ApiServiceConverter.class);
-        if (apiServiceConverterMap == null || apiServiceConverterMap.isEmpty()) {
-            return;
-        }
-
-        for (ApiServiceConverter converter : apiServiceConverterMap.values()) {
-            addConverter(converter);
-            logger.info("注册扩展converter: {}",converter.getClass().getName());
-        }
-
-
-    }
+  }
 }

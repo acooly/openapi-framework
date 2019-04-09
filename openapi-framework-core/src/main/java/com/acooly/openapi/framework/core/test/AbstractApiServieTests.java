@@ -1,27 +1,23 @@
 package com.acooly.openapi.framework.core.test;
 
-import com.acooly.core.utils.net.HttpResult;
-import com.acooly.core.utils.net.Https;
-import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
-import com.acooly.openapi.framework.common.ApiConstants;
+import com.acooly.openapi.framework.client.OpenApiClient;
+import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.message.ApiMessage;
 import com.acooly.openapi.framework.common.message.ApiRequest;
-import com.acooly.openapi.framework.common.utils.Cryptos;
-import com.acooly.openapi.framework.common.utils.Encodes;
-import com.acooly.openapi.framework.core.OpenApiConstants;
-import com.acooly.openapi.framework.core.security.sign.Md5Signer;
-import com.acooly.openapi.framework.core.security.sign.SignTypeEnum;
-import com.acooly.openapi.framework.core.security.sign.Signer;
-import com.acooly.openapi.framework.common.enums.ApiProtocol;
-import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
+import com.acooly.openapi.framework.common.utils.Ids;
 import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
+import com.google.common.base.Strings;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
-import java.util.Date;
 import java.util.Map;
+
+import static com.acooly.openapi.framework.common.ApiConstants.TEST_ACCESS_KEY;
+import static com.acooly.openapi.framework.common.ApiConstants.TEST_SECRET_KEY;
 
 /**
  * ApiService Test base
@@ -29,149 +25,70 @@ import java.util.Map;
  * @author zhangpu
  * @author qiubo@qq.com
  */
+@Slf4j
 public abstract class AbstractApiServieTests {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    protected final static String ENCODING = "utf-8";
-
     protected String signType = SignTypeEnum.MD5.toString();
-    protected String protocal = ApiProtocol.HTTP_FORM_JSON.code();
-    protected String gatewayUrl = "http://127.0.0.1:8080/gateway";
-    protected String key = OpenApiConstants.DEF_SECRETKEY;
-    protected String partnerId = "zhangpu";
+    protected String gatewayUrl = "http://127.0.0.1:8089/gateway.do";
+    protected String accessKey = TEST_ACCESS_KEY;
+    protected String secretKey = TEST_SECRET_KEY;
+    protected String partnerId = "test";
     protected String service = "";
     protected String version = "1.0";
     protected String notifyUrl = "";
     protected String returnUrl = "";
 
-    protected Signer<Map<String, String>> signer = new Md5Signer();
-
-    protected <T> T request(ApiRequest request, Class<T> clazz) {
-        return request(request, clazz, null);
-    }
-
-    protected <T> T request(ApiRequest request, Class<T> clazz, ApiTestHandler testHandler) {
-        Map<String, String> map = marshall(request);
-        if (testHandler != null) {
-            map = testHandler.afterMarshall(map);
-        }
-        HttpResult result = post(map);
-        return JsonMarshallor.INSTANCE.parse(result.getBody(), clazz);
-    }
-
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    protected HttpResult post(Map bizParams) {
-        Map data = Maps.newHashMap();
-//        if (bizParams != null && bizParams.get(ApiConstants.REQUEST_NO) == null) {
-//            data.put(ApiConstants.REQUEST_NO, DigestUtils.md5Hex(UUID.randomUUID().toString()));
-//        }
-        if (service != null) {
-            data.put(ApiConstants.SERVICE, this.service);
-        }
-        if (version != null) {
-            data.put(ApiConstants.VERSION, this.version);
-        }
-        if (partnerId != null) {
-            data.put(ApiConstants.PARTNER_ID, this.partnerId);
-        }
-        if (protocal != null) {
-            data.put(ApiConstants.PROTOCOL, this.protocal);
-        }
-        if (signType != null) {
-            data.put(ApiConstants.SIGN_TYPE, this.signType);
-        }
-        if (notifyUrl != null) {
-            data.put(ApiConstants.NOTIFY_URL, this.notifyUrl);
-        }
-        if (returnUrl != null) {
-            data.put(ApiConstants.RETURN_URL, this.returnUrl);
-        }
-        if (bizParams != null) {
-            data.putAll(bizParams);
-        }
-        return send(data);
-    }
-
-    protected HttpResult send(ApiMessage message) {
-
-        if (Strings.isNullOrEmpty(message.getRequestNo())) {
-            message.setRequestNo(DigestUtils.md5Hex(new Date().toString()));
-        }
-
-        if (Strings.isNullOrEmpty(message.getSignType())) {
-            message.setSignType(this.signType);
-        }
-
-        if (Strings.isNullOrEmpty(message.getProtocol())) {
-            message.setProtocol(this.protocal);
-        }
-
-        if (Strings.isNullOrEmpty(message.getService())) {
-            message.setService(this.service);
-        }
-        if (Strings.isNullOrEmpty(message.getVersion())) {
-            message.setVersion(this.version);
-        }
-        if (Strings.isNullOrEmpty(message.getPartnerId())) {
-            message.setPartnerId(this.partnerId);
-        }
-
-        if (message instanceof ApiRequest) {
-            if (Strings.isNullOrEmpty(((ApiRequest) message).getNotifyUrl())) {
-                ((ApiRequest) message).setNotifyUrl(this.notifyUrl);
-            }
-            if (Strings.isNullOrEmpty(((ApiRequest) message).getReturnUrl())) {
-                ((ApiRequest) message).setReturnUrl(this.returnUrl);
-            }
-
-        }
-        Map<String, String> requestData = marshall(message);
-        return send(requestData);
-    }
-
-    protected <T> T send(ApiMessage message, Class<T> clazz) {
-        HttpResult result = send(message);
-        return JsonMarshallor.INSTANCE.parse(result.getBody(), clazz);
-    }
-
-    protected HttpResult send(Map<String, String> requestData) {
-        if (Strings.isNullOrEmpty(requestData.get(ApiConstants.SIGN))) {
-            requestData.put("sign", signer.sign(requestData, key));
-        }
-        logger.info("请求报文: {}", requestData);
-        HttpResult result = Https.getInstance().post(gatewayUrl, requestData, ENCODING);
-        logger.info("响应报文: {}", result.getBody());
-        return result;
-    }
+    protected boolean showLog = true;
 
     protected static Map<String, String> marshall(ApiMessage message) {
         return ObjectAccessor.of(message).getAllDataExcludeTransient();
     }
 
-    public static void main(String[] args) {
-        ApiRequest a = new ApiRequest();
-        Map<String, String> m = ObjectAccessor.of(a).getAllDataExcludeTransient();
-        System.out.println(m);
+    protected <T> T request(ApiRequest request, Class<T> clazz) {
+        if (Strings.isNullOrEmpty(request.getPartnerId())) {
+            request.setPartnerId(partnerId);
+        }
+        if (Strings.isNullOrEmpty(request.getVersion())) {
+            request.setVersion(version);
+        }
+        Assert.hasText(request.getVersion());
+        if (Strings.isNullOrEmpty(request.getService())) {
+            request.setService(service);
+        }
+        if (Strings.isNullOrEmpty(request.getService())) {
+            guessServiceName(request);
+        }
+        Assert.hasText(request.getService());
+        if (Strings.isNullOrEmpty(request.getRequestNo())) {
+            request.setRequestNo(Ids.getDid());
+        }
+        OpenApiClient openApiClient = new OpenApiClient(gatewayUrl, accessKey, secretKey);
+        return openApiClient.send(request, clazz);
+    }
+
+    public String sign(String body) {
+        return DigestUtils.md5Hex(body + secretKey);
     }
 
 
-    protected String encrypt(String text){
-        byte[] securityKey = key.substring(0, 16).getBytes();
-        byte[] encrypt = Cryptos.aesEncrypt(text.getBytes(), securityKey);
-        return Encodes.encodeBase64(encrypt);
+    /**
+     * 猜一猜服务名
+     *
+     * @param request
+     */
+    protected void guessServiceName(ApiRequest request) {
+        if (!Strings.isNullOrEmpty(request.getService())) {
+            return;
+        }
+
+        String className = request.getClass().getSimpleName();
+        String serviceName = null;
+        if (StringUtils.contains(className, "ApiRequest")) {
+            serviceName = StringUtils.substringBeforeLast(className, "ApiRequest");
+        } else if (StringUtils.contains(className, "Request")) {
+            serviceName = StringUtils.substringBeforeLast(className, "Request");
+        }
+        request.setService(StringUtils.uncapitalize(serviceName));
     }
-
-    public interface ApiTestHandler {
-        /**
-         * marshall后,发送前回调
-         *
-         * @param requestData
-         * @return
-         */
-        Map<String, String> afterMarshall(Map<String, String> requestData);
-
-    }
-
-
 }

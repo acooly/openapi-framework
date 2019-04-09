@@ -9,10 +9,9 @@ package com.acooly.openapi.framework.core.auth.realm;
  * @date 2014年6月27日
  */
 public interface AuthInfoRealm {
-	String APP_CLIENT_REALM="appClientAuthInfoRealm";
-	String AUTHC_CACHE_KEY_PREFIX = "api_authc:";
-	String AUTHZ_CACHE_KEY_PREFIX = "api_authz:";
-	Object getAuthenticationInfo(String partnerId);
+  String AUTHC_CACHE_KEY_PREFIX = "api_authc:";
+  String AUTHZ_CACHE_KEY_PREFIX = "api_authz:";
+  Object getAuthenticationInfo(String accessKey);
 
-	Object getAuthorizationInfo(String partnerId);
+  Object getAuthorizationInfo(String accessKey);
 }

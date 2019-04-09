@@ -20,45 +20,55 @@ import java.util.Set;
  */
 public class ApiQueryOrder extends OrderBase implements Parameterize<String, String> {
 
-    private Map<String, String> parameters = Maps.newLinkedHashMap();
+  private Map<String, String> parameters = Maps.newLinkedHashMap();
 
-    @Override
-    public void setParameter(String key, String value) {
-        this.parameters.put(key, value);
-    }
+  private String accesskey;
 
-    @Override
-    public String getParameter(String key) {
-        return this.parameters.get(key);
-    }
+  @Override
+  public void setParameter(String key, String value) {
+    this.parameters.put(key, value);
+  }
 
-    @Override
-    public void removeParameter(String key) {
-        this.parameters.remove(key);
-    }
+  @Override
+  public String getParameter(String key) {
+    return this.parameters.get(key);
+  }
 
-    @Override
-    public Map<String, String> getParameters() {
-        return this.parameters;
-    }
+  @Override
+  public void removeParameter(String key) {
+    this.parameters.remove(key);
+  }
 
-    @Override
-    public void setParameters(Map<String, String> parameters) {
-        this.parameters = parameters;
-    }
+  @Override
+  public Map<String, String> getParameters() {
+    return this.parameters;
+  }
 
-    @Override
-    public Set<String> keySet() {
-        return this.parameters.keySet();
-    }
+  @Override
+  public void setParameters(Map<String, String> parameters) {
+    this.parameters = parameters;
+  }
 
-    @Override
-    public Collection<String> values() {
-        return this.parameters.values();
-    }
+  @Override
+  public Set<String> keySet() {
+    return this.parameters.keySet();
+  }
 
-    @Override
-    public void clear() {
-        this.parameters.clear();
-    }
+  @Override
+  public Collection<String> values() {
+    return this.parameters.values();
+  }
+
+  @Override
+  public void clear() {
+    this.parameters.clear();
+  }
+
+  public String getAccesskey() {
+    return accesskey;
+  }
+
+  public void setAccesskey(String accesskey) {
+    this.accesskey = accesskey;
+  }
 }

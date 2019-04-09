@@ -12,18 +12,19 @@ package com.acooly.openapi.framework.core.listener;
 
 /**
  * 执行顺序
+ *
  * @author qiubo@qq.com
  */
 public interface Ordered {
-	
-	int HIGHEST_PRECEDENCE = Integer.MIN_VALUE;
-	
-	int LOWEST_PRECEDENCE = Integer.MAX_VALUE;
 
-    /**
-     * 数字越小越先被执行
-     * @return
-     */
-	int getOrder();
-	
+  int HIGHEST_PRECEDENCE = Integer.MIN_VALUE;
+
+  int LOWEST_PRECEDENCE = Integer.MAX_VALUE;
+
+  /**
+   * 数字越小越先被执行
+   *
+   * @return
+   */
+  int getOrder();
 }

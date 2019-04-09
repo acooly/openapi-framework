@@ -3,13 +3,12 @@ package com.acooly.openapi.framework.service.test.request;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.validate.jsr303.CertNo;
 import com.acooly.core.utils.validate.jsr303.MobileNo;
-import com.acooly.core.utils.validate.jsr303.MoneyConstraint;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.annotation.OpenApiFieldCondition;
-import com.acooly.openapi.framework.common.annotation.OpenApiMessage;
-import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -19,10 +18,11 @@ import java.util.List;
 
 /**
  * 创建订单 请求报文
- * <p/>
- * Created by zhangpu on 2016/2/12.
+ *
+ * <p>Created by zhangpu on 2016/2/12.
  */
-@OpenApiMessage(service = "createOrder", type = ApiMessageType.Request)
+@Getter
+@Setter
 public class CreateOrderRequest extends ApiRequest {
 
     @NotEmpty
@@ -30,7 +30,7 @@ public class CreateOrderRequest extends ApiRequest {
     @OpenApiField(desc = "标题", demo = "特色牛肉干")
     private String title;
 
-    @MoneyConstraint(min = 100, max = 1000000)
+    //  @MoneyConstraint(min = 100, max = 1000000)
     @OpenApiField(desc = "金额", constraint = "单笔金额最小1元，最大10000元", demo = "120.00")
     private Money amount;
 
@@ -69,83 +69,4 @@ public class CreateOrderRequest extends ApiRequest {
     @OpenApiField(desc = "商品信息")
     private List<GoodInfo> goodsInfos;
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Money getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Money amount) {
-        this.amount = amount;
-    }
-
-    public String getPayerUserId() {
-        return payerUserId;
-    }
-
-    public void setPayerUserId(String payerUserId) {
-        this.payerUserId = payerUserId;
-    }
-
-    public String getPayeeUserId() {
-        return payeeUserId;
-    }
-
-    public void setPayeeUserId(String payeeUserId) {
-        this.payeeUserId = payeeUserId;
-    }
-
-    public String getBuyerUserId() {
-        return buyerUserId;
-    }
-
-    public void setBuyerUserId(String buyerUserId) {
-        this.buyerUserId = buyerUserId;
-    }
-
-    public String getBuyeryMobileNo() {
-        return buyeryMobileNo;
-    }
-
-    public void setBuyeryMobileNo(String buyeryMobileNo) {
-        this.buyeryMobileNo = buyeryMobileNo;
-    }
-
-    public String getBuyeryEmail() {
-        return buyeryEmail;
-    }
-
-    public void setBuyeryEmail(String buyeryEmail) {
-        this.buyeryEmail = buyeryEmail;
-    }
-
-    public String getBuyerCertNo() {
-        return buyerCertNo;
-    }
-
-    public void setBuyerCertNo(String buyerCertNo) {
-        this.buyerCertNo = buyerCertNo;
-    }
-
-    public List<GoodInfo> getGoodsInfos() {
-        return goodsInfos;
-    }
-
-    public void setGoodsInfos(List<GoodInfo> goodsInfos) {
-        this.goodsInfos = goodsInfos;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

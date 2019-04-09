@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../style/css/global.css"/>
+		<link rel="stylesheet" type="text/css" href="../style/css/qa.css"/>
+		<script type="text/javascript" src="../js/jquery-1.11.3.min.js" ></script>
+		<script type="text/javascript" src="../js/pblic.js" ></script>
+		<script type="text/javascript" src="../js/jPages.js" ></script>
+		<script type="text/javascript" src="../js/qa.js"></script>
+	</head>
+	<body>
+		<!--加载-->
+		<div class="loading">
+			<div class="loading-bg"></div>
+			<div class="loading-img"></div>
+		</div>		
+		
+		<!--顶部-->
+		<div class="top">
+			<div class="w1190 clearfix">
+				<div class="logo">
+					<img src="../img/logo.png" alt="" />
+				</div>
+				<div class="nav">
+					<ul class="clearfix">
+						<!--<li><a href="Payment-products.html">支付产品</a></li>
+						<li class="hover">
+							<a href="javascript:void(0)">文档中心</a>
+							<dl class="clearfix">
+								<dd><a href="Directory.html">文档目录</a></dd>
+								<dd><a href="Resource-download.html">资源下载</a></dd>
+								<dd><a href="API.html">API目录</a></dd>
+							</dl>
+						</li>
+						<li class="on"><a href="javascript:void(0)">QA</a></li>-->
+						<li><a href="Directory.html">开发指南</a></li>
+						<li class=""><a href="API.html">文档中心</a></li>
+						<li class=""><a href="Resource-download.html">资源下载</a></li>
+						<li class="on"><a href="QA.html">帮助中心</a></li>						
+					</ul>
+				</div>
+				<div class="search">
+					<form action="" method="post">
+						<input type="text" name="" id="" value="" class="input"/>
+						<input type="submit" name="" id="" value="" class="submit"/>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!--end-->
+		
+		<!--面包屑-->
+		<div class="crumbs">
+			<div class="w1190 clearfix">
+				<a href="index11.html">首页</a>
+				<span>-></span>
+				<a href="javascript:void(0)">QA：</a>				
+			</div>
+		</div>
+		<!--end-->
+		
+		<!--正文-->
+		<div class="content">
+			<div class="w1190 clearfix tab">
+				<!--左边-->
+				<div class="left fl">
+					<div class="tab-title">
+						<h4>文档目录</h4>
+						<ul>
+							<li class="">
+								<div>OPENAPI技术</div>
+								<dl>
+									<dd data-id="0">newsubclassify</dd>
+									<dd data-id="1">通用参数</dd>
+									<dd data-id="2">如何接入易极付</dd>
+									<dd data-id="3">如何接入易极付</dd>
+								</dl>
+							</li>
+							<li>
+								<div>通用服务</div>
+								<dl>
+									<dd data-id="4">通用服务01</dd>
+									<dd data-id="5">通用服务02</dd>
+									<dd data-id="6">通用服务03</dd>
+									<dd data-id="7">通用服务04</dd>
+								</dl>							
+							</li>
+							<li><div>标准电商支付解决方案</div></li>
+							<li><div>通用服务-实名认证服务</div></li>
+							<li><div>国际</div></li>
+							<li><div>银行卡管理服务</div></li>
+							<li><div>查询服务</div></li>
+							<li><div>资金服务</div></li>							
+						</ul>
+					</div>					
+				</div>
+				<!--右边-->
+				<div class="right fr">
+					<div class="tab-content">
+						<div class="list">
+							<div class="list-top">
+								<div class="clearfix">
+									<div class="list-title fl">通用参数</div>
+									<div class="qa-search fr">
+										<form action="">
+											<input type="text" name="" id="" value="" class="text" placeholder="QA类目搜索"/>
+											<input type="submit" name="" id="" value="搜索" class="submit"/>										
+										</form>
+									</div>									
+								</div>
+								<div class="wt-title clearfix">
+									<div class="fl">问题编号</div>
+									<div class="fr clearfix">
+										<span class="fl">问答内容</span>
+										<span class="fr"><i id="legend1"></i><i id="legend2"></i></span>
+									</div>
+								</div>
+								<ul class="wt-list" id="itemContainer">
+									<li class="clearfix switch">
+									</li>
+								</ul>
+								<div class="paging">
+									<div class="holder"></div>
+									<span>向第</span>																	
+									<input type="text" value="" class="val"/>
+									<span>页跳转</span>
+								    <button class="sure">确定</button>									    
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!--底部-->
+		<div class="foot">
+			<div class="w1190">
+				<div class="d1">Copyright 2017-2022易极付版权所有 渝ICP备11005152号-1 渝ICP证11005152</div>
+				<!--<div class="d2">
+					<span>博恩集团：</span>
+					<a href="">集团网站</a>
+					<a href="">易极付官网</a>
+					<a href="">猪八戒</a>
+					<a href="">博恩软件</a>
+					<a href="">易行通</a>
+					<a href="">博正实业</a>
+					<a href="">博恩富克</a>
+					<a href="">新疆凯恩斯矿业</a>
+				</div>-->
+			</div>
+		</div>
+		<!--end-->
+		
+
+		
+		<script type="text/javascript">
+ 			page_tj(".sure","div.holder",".val");
+ 			accordion(".tab-title ul li","div","dl");
+		</script>
+	</body>
+</html>
+

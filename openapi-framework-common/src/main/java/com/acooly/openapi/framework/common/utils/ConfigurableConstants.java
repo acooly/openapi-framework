@@ -9,48 +9,50 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigurableConstants {
-    protected static Logger logger = LoggerFactory.getLogger(ConfigurableConstants.class);
-    protected static Properties p = new Properties();
+  protected static Logger logger = LoggerFactory.getLogger(ConfigurableConstants.class);
+  protected static Properties p = new Properties();
 
-    protected static void init(String propertyFileName) {
-        InputStream in = null;
+  protected static void init(String propertyFileName) {
+    InputStream in = null;
+    try {
+      in = ConfigurableConstants.class.getClassLoader().getResourceAsStream(propertyFileName);
+      if (in != null) {
+        p.load(in);
+      }
+      logger.info("load: {}", propertyFileName);
+    } catch (IOException e) {
+      logger.error("load " + propertyFileName + " into Constants error!");
+    } finally {
+      if (in != null) {
         try {
-            in = ConfigurableConstants.class.getClassLoader().getResourceAsStream(propertyFileName);
-            if (in != null) {
-                p.load(in);
-            }
-            logger.info("load: {}", propertyFileName);
+          in.close();
         } catch (IOException e) {
-            logger.error("load " + propertyFileName + " into Constants error!");
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    logger.error("close " + propertyFileName + " error!");
-                }
-            }
+          logger.error("close " + propertyFileName + " error!");
         }
+      }
     }
+  }
 
-    /**
-     * 支持profile
-     *
-     * @param propertyFileName
-     */
-    protected static void initWithProfile(String propertyFileName) {
-        String activeProfile = System.getProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME);
-        String configFile = propertyFileName;
-        if (Strings.isNotBlank(activeProfile)) {
-            configFile = Strings.substringBeforeLast(configFile, ".") + "." + activeProfile + "."
-                    + Strings.substringAfterLast(configFile, ".");
-        }
-        init(configFile);
+  /**
+   * 支持profile
+   *
+   * @param propertyFileName
+   */
+  protected static void initWithProfile(String propertyFileName) {
+    String activeProfile = System.getProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME);
+    String configFile = propertyFileName;
+    if (Strings.isNotBlank(activeProfile)) {
+      configFile =
+          Strings.substringBeforeLast(configFile, ".")
+              + "."
+              + activeProfile
+              + "."
+              + Strings.substringAfterLast(configFile, ".");
     }
+    init(configFile);
+  }
 
-    protected static String getProperty(String key, String defaultValue) {
-        return p.getProperty(key, defaultValue);
-    }
-
-
+  protected static String getProperty(String key, String defaultValue) {
+    return p.getProperty(key, defaultValue);
+  }
 }

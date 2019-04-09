@@ -1,0 +1,249 @@
+/*公用的css*/
+.checkbox {
+  width: 12px;
+  height: 12px;
+  border: 1px solid #E2E2E2;
+  display: inline-block;
+  vertical-align: -2px;
+  margin-left: 10px;
+  position: relative;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.checkbox input {
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  top: 0px;
+  left: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  cursor: pointer;
+}
+.checkbox-selected {
+  border-color: #4680FE;
+  background-image: url(../../images/chose1.png);
+}
+.census {
+  color: #c7c7c7;
+  font-size: 12px;
+  line-height: 12px;
+}
+.table {
+  width: 100%;
+  border: 1px solid #E2E2E2;
+}
+.table tr {
+  background-color: #FFFFFF;
+  border: none;
+}
+.table tr:nth-child(2n+1) {
+  background-color: #F9F9F9;
+}
+.table tr:first-child {
+  background-color: #F2F2F2;
+}
+.table tr th,
+.table tr td {
+  border: none;
+  padding: 0 20px;
+}
+.table tr th:last-child,
+.table tr td:last-child {
+  width: 28%;
+}
+.table tr th {
+  height: 30px;
+  line-height: 30px;
+  font-weight: bold;
+}
+.table tr td {
+  line-height: 36px;
+  height: 36px;
+}
+.table tr a {
+  color: #4680FE;
+}
+/*api的css*/
+.api .table tr th:last-child,
+.api .table tr td:last-child {
+  text-align: right;
+}
+.api .census {
+  margin-top: 8px;
+  margin-left: 5px;
+}
+/*api详情页的css*/
+.api-details .hover-details {
+  cursor: pointer;
+  position: relative;
+}
+.api-details .details {
+  display: none;
+  position: absolute;
+  top: 36px;
+  left: 20px;
+  width: 180px;
+  background-color: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+  color: #FFFFFF;
+  line-height: 24px;
+  padding: 5px 10px;
+  z-index: 99;
+  max-height: 400px;
+  overflow-y: auto;
+}
+.api-details .right {
+  padding: 60px 0 100px 0;
+  width: 965px;
+}
+.api-details .census {
+  color: #FF9D40;
+  padding-left: 12px;
+}
+.api-details #contents pre {
+  word-wrap: break-word;
+}
+.api-details #contents pre code {
+  font-family: "微软雅黑" !important;
+}
+.api-details .tips {
+  background-color: #FAFAFA;
+  line-height: 25px;
+  /* color: #999999; */
+  border-top: 1px solid #E2E2E2;
+  /* height: 43px; */
+  padding: 10px 20px;
+}
+.api-details .switch {
+  padding: 0 20px;
+}
+.api-details .tab-title ul li {
+  line-height: 50px;
+  font-size: 12px;
+}
+.api-details .tab-title ul li div {
+  display: inline-block;
+  vertical-align: -8px;
+  *display: inline;
+  line-height: 18px;
+}
+.api-details .tab-title ul li div span {
+  display: block;
+}
+.api-details .list .list-title div {
+  font-size: 12px;
+  color: #999999;
+  line-height: 12px;
+}
+.api-details .list .list-title div span {
+  display: inline-block;
+  border-left: 1px solid #999999;
+}
+.api-details .list .list-title div span:first-child {
+  border: none;
+}
+.api-details .list .list-title div:first-child {
+  font-size: 20px;
+  color: #333333;
+}
+.api-details .list .list-title div:first-child span {
+  border: none;
+}
+.api-details .list .list-title div:first-child span i {
+  color: #999999;
+}
+.api-details .download-link li {
+  background: url(../../images/download-bg.png) no-repeat center center;
+  width: 142px;
+  height: 142px;
+  font-size: 14px;
+  line-height: 18px;
+  border-radius: 10px;
+  text-align: center;
+}
+.api-details .download-link li:hover {
+  background-image: url(../../images/download-bg1.png);
+  box-shadow: 0px 12px 24.3px 2.7px rgba(114, 167, 255, 0.67);
+}
+.api-details .download-link li:hover a {
+  color: #FFFFFF;
+}
+.api-details .download-link li a {
+  display: block;
+  width: 100%;
+  height: 47px;
+  padding: 95px 0 0 0;
+  color: #666;
+  background-position: center 35px;
+  background-repeat: no-repeat;
+}
+.api-details .download-link .li1 a {
+  background-image: url("../../images/xz-ico01.png");
+}
+.api-details .download-link .li1:hover a {
+  background-image: url("../../images/xz-ico1.png");
+}
+.api-details .download-link .li2 a {
+  background-image: url("../../images/xz-ico02.png");
+}
+.api-details .download-link .li2:hover a {
+  background-image: url("../../images/xz-ico2.png");
+}
+.api-details .download-link .li3 a {
+  background-image: url("../../images/xz-ico03.png");
+}
+.api-details .download-link .li3:hover a {
+  background-image: url("../../images/xz-ico3.png");
+}
+.api-details .tab1 .tab-title1 {
+  width: 100%;
+  background-color: #f2f2f2;
+}
+.api-details .tab1 .tab-title1 ul {
+  border: 1px solid #eeeeee;
+  height: 34px;
+}
+.api-details .tab1 .tab-title1 ul li {
+  float: left;
+  line-height: 35px;
+  width: 100px;
+  text-align: center;
+  font-size: 13px;
+  color: #999999;
+  border-left: 1px solid #EEEEEE;
+}
+.api-details .tab1 .tab-title1 ul li:first-child {
+  border: none;
+}
+.api-details .tab1 .tab-title1 ul .on {
+  background-color: #FFFFFF;
+  color: #333333;
+}
+.api-details .tab1 .tab-content1 .list1 {
+  display: none;
+  background-color: #f3f3f3;
+}
+.api-details .tab1 .tab-content1 .list1 ol {
+  list-style: decimal;
+  background-color: #fafafa;
+  margin: 0px 0px 0px 30px !important;
+  padding: 0px;
+  color: #5C5C5C;
+}
+.api-details .tab1 .tab-content1 .list1 ol li {
+  word-break: break-all;
+  list-style: decimal;
+  list-style-position: outside !important;
+  background-color: #F8F8F8;
+  color: #5C5C5C;
+  padding: 0 10px 0 10px !important;
+  margin: 0 !important;
+  line-height: 24px;
+}
+.api-details .tab1 .tab-content1 .list1 ol li:first-child {
+  padding: 6px 10px 0 10px !important;
+}
+.api-details .tab1 .tab-content1 .list1 ol li:last-child {
+  padding: 0 10px 6px 10px !important;
+}

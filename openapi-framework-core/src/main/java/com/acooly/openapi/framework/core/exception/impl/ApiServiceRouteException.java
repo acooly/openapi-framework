@@ -22,15 +22,13 @@ import com.acooly.openapi.framework.common.exception.ApiServiceException;
  */
 public class ApiServiceRouteException extends ApiServiceException {
 
-    /**
-     * serialVersionUID
-     */
-    private static final long serialVersionUID = -3385225632927612343L;
+  /** serialVersionUID */
+  private static final long serialVersionUID = -3385225632927612343L;
 
-    public ApiServiceRouteException(String serviceName, Object version) {
-        super(ApiServiceResultCode.SERVICE_NOT_FOUND_ERROR.getCode(),
-                ApiServiceResultCode.SERVICE_NOT_FOUND_ERROR.getMessage(),
-                "请求服务[" + serviceName + ":" + version + "]不存在");
-    }
-
+  public ApiServiceRouteException(String serviceName, Object version) {
+    super(
+        ApiServiceResultCode.SERVICE_NOT_FOUND_ERROR.getCode(),
+        ApiServiceResultCode.SERVICE_NOT_FOUND_ERROR.getMessage(),
+        "请求服务[" + serviceName + ":" + version + "]不存在");
+  }
 }

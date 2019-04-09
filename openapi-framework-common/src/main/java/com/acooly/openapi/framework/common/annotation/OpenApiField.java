@@ -13,8 +13,7 @@ package com.acooly.openapi.framework.common.annotation;
 import java.lang.annotation.*;
 
 /**
- * 标识此字段为openapi的字段. openapi通过次annotation生成文档.
- * 不标注此annotation的字段不参与Marshall/Unmarshall
+ * 标识此字段为openapi的字段. openapi通过次annotation生成文档. 不标注此annotation的字段不参与Marshall/Unmarshall
  *
  * @author qiubo@qq.com
  */
@@ -23,32 +22,31 @@ import java.lang.annotation.*;
 @Documented
 public @interface OpenApiField {
 
-    /**
-     * 字段标题信息
-     *
-     * @return
-     */
-    String desc() default "";
+  /**
+   * 字段标题信息
+   *
+   * @return
+   */
+  String desc() default "";
 
-    /**
-     * 字段描述信息
-     *
-     * @return
-     */
-    String constraint() default "";
+  /**
+   * 字段描述信息
+   *
+   * @return
+   */
+  String constraint() default "";
 
-    /**
-     * 字段样子
-     *
-     * @return
-     */
-    String demo() default "";
+  /**
+   * 字段样子
+   *
+   * @return
+   */
+  String demo() default "";
 
-    /**
-     * 字段需要加密(AES)
-     *
-     * @return
-     */
-    boolean security() default false;
-
+  /**
+   * 字段需要加密(AES)
+   *
+   * @return
+   */
+  boolean security() default false;
 }

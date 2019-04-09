@@ -9,56 +9,17 @@
  */
 package com.acooly.openapi.framework.common.dto;
 
-import java.io.Serializable;
+import com.acooly.core.common.facade.InfoBase;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
- * @author acooly
- */
-public class ApiServiceDto implements Serializable {
-
-    private Long id;
-    private String title;
-    private String name;
-    private String version;
-    private String path;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
+/** @author acooly */
+@Getter
+@Setter
+public class ApiServiceDto extends InfoBase {
+  private Long id;
+  private String title;
+  private String name;
+  private String version;
+  private String path;
 }

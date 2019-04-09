@@ -2,111 +2,26 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <!-- 继承基础配置,核心依赖包，编译选项和插件配�? -->
+    <!-- 继承基础配置,核心依赖包，编译选项和插件配 -->
     <parent>
         <groupId>com.acooly</groupId>
         <artifactId>acooly-parent</artifactId>
-        <version>4.1.0-SNAPSHOT</version>
+        <version>4.2.0-SNAPSHOT</version>
     </parent>
-
     <artifactId>openapi-framework</artifactId>
-    <version>4.1.0-SNAPSHOT</version>
+    <version>4.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <properties>
-        <acooly.framework.version>4.1.0-SNAPSHOT</acooly.framework.version>
-    </properties>
 
 
     <name>openapi-framework</name>
-
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>openapi-framework-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>openapi-framework-domain</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>openapi-framework-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>openapi-framework-service-persistent</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>openapi-framework-manage</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>openapi-framework-manage-provider</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>openapi-framework-manage-consumer</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>openapi-framework-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>openapi-framework-facade</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>openapi-framework-facade-provider</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>openapi-framework-nms</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>openapi-framework-test</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>openapi-framework-sdk</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
+    <properties>
+        <caffeine.version>2.6.2</caffeine.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-core</artifactId>
-            <version>${acooly.framework.version}</version>
+            <version>${parent.version}</version>
         </dependency>
 
         <dependency>
@@ -130,7 +45,6 @@
             <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
     <modules>
@@ -138,15 +52,13 @@
         <module>openapi-framework-core</module>
         <module>openapi-framework-test</module>
         <module>openapi-framework-facade</module>
-        <module>openapi-framework-nms</module>
         <module>openapi-framework-common</module>
-        <module>openapi-framework-manage</module>
-        <module>openapi-framework-domain</module>
         <module>openapi-framework-service</module>
-        <module>openapi-framework-service-persistent</module>
-        <module>openapi-framework-facade-provider</module>
-        <module>openapi-framework-trafficlimiter</module>
-
+        <module>openapi-framework-service-impl</module>
+        <module>openapi-framework-apidoc</module>
+        <module>openapi-framework-extensions</module>
+        <module>openapi-framework-mock</module>
+        <module>openapi-framework-client</module>
     </modules>
 
 </project>

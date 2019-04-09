@@ -1,33 +1,84 @@
 <?xml version="1.0"?>
 <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.acooly</groupId>
-		<artifactId>openapi-framework</artifactId>
-		<version>4.1.0-SNAPSHOT</version>
-	</parent>
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.acooly</groupId>
+        <artifactId>openapi-framework</artifactId>
+        <version>4.2.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>openapi-framework-test</artifactId>
-	<name>openapi-framework-test</name>
+    <artifactId>openapi-framework-test</artifactId>
+    <name>openapi-framework-test</name>
 
-	<properties>
-		<deploy.skip>true</deploy.skip>
-	</properties>
+    <properties>
+        <deploy.skip>true</deploy.skip>
+    </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.acooly</groupId>
-			<artifactId>openapi-framework-core</artifactId>
-		</dependency>
+    <dependencies>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-apidoc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <!-- 服务集成 -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-mock</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-test</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-service-impl</artifactId>
+            <version>${project.version}</version>
+
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-extensions</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-test</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-coder</artifactId>
+            <version>4.2.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 
 </project>
