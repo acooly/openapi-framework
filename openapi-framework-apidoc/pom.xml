@@ -5,7 +5,7 @@
     <parent>
         <artifactId>openapi-framework</artifactId>
         <groupId>com.acooly</groupId>
-        <version>4.2.0-SNAPSHOT</version>
+        <version>4.2.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -17,45 +17,39 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-service</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-mybatis</artifactId>
-            <version>${parent.version}</version>
+            <version>${acooly.version}</version>
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-common</artifactId>
-            <version>${parent.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-safety</artifactId>
-            <version>${parent.version}</version>
+            <version>${acooly.version}</version>
         </dependency>
 
         <!-- CMS组件 -->
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-cms</artifactId>
-            <version>${parent.version}</version>
+            <version>${acooly.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-configuration-processor</artifactId>
-            <version>${parent.version}</version>
+            <version>${acooly.version}</version>
             <optional>true</optional>
         </dependency>
     </dependencies>

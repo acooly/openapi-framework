@@ -13,8 +13,9 @@ package com.acooly.openapi.apidoc.generator;
  */
 public interface ApiDocGenerator {
 
-	/**
-	 * 生成Apidoc文档
-	 */
-	void build();
+    /**
+     * 生成Apidoc文档
+     */
+    void build();
+
 }

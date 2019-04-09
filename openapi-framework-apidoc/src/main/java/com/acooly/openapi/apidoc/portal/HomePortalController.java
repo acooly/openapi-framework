@@ -30,28 +30,32 @@ public class HomePortalController extends AbstractPortalController {
     public String index(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "/docs/index";
     }
+
     @RequestMapping("/")
     public String index1(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "/docs/index";
     }
+
     @RequestMapping("")
     public String index2(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "/docs/index";
     }
+
     @RequestMapping("common/header")
     public String header(HttpServletRequest request, HttpServletResponse response, Model model) {
-        model.addAttribute("logo",apiDocProperties.getLogo());
+        model.addAttribute("logo", apiDocProperties.getPortal().getLogo());
         return "/docs/common/header";
     }
 
     @RequestMapping("common/footer")
     public String footer(HttpServletRequest request, HttpServletResponse response, Model model) {
-        model.addAttribute("copyright",apiDocProperties.getCopyright());
+        model.addAttribute("copyright", apiDocProperties.getPortal().getCopyright());
         return "/docs/common/footer";
     }
 
     @RequestMapping("common/meta")
     public String meta(HttpServletRequest request, HttpServletResponse response, Model model) {
+        model.addAttribute("title", apiDocProperties.getPortal().getTitle());
         return "/docs/common/meta";
     }
 

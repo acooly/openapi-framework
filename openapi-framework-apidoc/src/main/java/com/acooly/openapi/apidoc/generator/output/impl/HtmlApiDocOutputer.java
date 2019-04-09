@@ -5,17 +5,16 @@
 
 package com.acooly.openapi.apidoc.generator.output.impl;
 
-import com.acooly.openapi.apidoc.ApiDocContext;
-import com.acooly.openapi.apidoc.generator.output.ApiOutputerTypeEnum;
+import com.acooly.openapi.apidoc.generator.ApiDocModule;
 import com.acooly.openapi.apidoc.generator.output.ApiDocOutputer;
+import com.acooly.openapi.apidoc.generator.output.ApiOutputerTypeEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.google.common.collect.Maps;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -30,50 +29,47 @@ import java.util.TreeMap;
 /**
  * Created by zhangpu on 2015/1/27.
  */
-public class HtmlApiDocOutputer implements ApiDocOutputer<File> {
+@Slf4j
+public class HtmlApiDocOutputer implements ApiDocOutputer<List<ApiDocService>> {
 
-    private static final Logger logger = LoggerFactory.getLogger(HtmlApiDocOutputer.class);
 
     private String templatePath = "classpath:template/sample";
 
     private String outputPath = "file:///D:\\temp\\apidocs";
 
     @Override
-    public File output(List<ApiDocService> apiServiceDocs, ApiDocContext apidocContext) {
+    public void output(List<ApiDocService> apiServiceDocs) {
         try {
             copyResources();
-            doParseTop(apiServiceDocs, apidocContext);
+            doParseTop(apiServiceDocs);
             doParseApi(apiServiceDocs);
             doParseMenu(apiServiceDocs);
 
         } catch (Exception e) {
-            logger.error("HTML Outputer 异常:{}", e.getMessage());
+            log.error("HTML Outputer 异常:{}", e.getMessage());
         }
-        return null;
     }
 
     /**
      * @param apiServiceDocs
-     * @param apidocContext
      */
-    protected void doParseTop(List<ApiDocService> apiServiceDocs, ApiDocContext apidocContext) {
-        if (apidocContext == null) {
-            apidocContext = new ApiDocContext();
-        }
-        Map<String, Object> map = Maps.newHashMap();
-        map.put("context", apidocContext);
-        doParser("top.ftl", "top.htm", map);
+    protected void doParseTop(List<ApiDocService> apiServiceDocs) {
+//        if (apidocContext == null) {
+//            apidocContext = new ApiDocGenerator.ApiDocContext();
+//        }
+//        Map<String, Object> map = Maps.newHashMap();
+//        map.put("context", apidocContext);
+//        doParser("top.ftl", "top.htm", map);
     }
 
     protected void copyResources() {
+        FileOutputStream out = null;
+        InputStream in = null;
         try {
             Resource targetDir = getOutputPathResource();
             String targetPath = targetDir.getURL().getPath();
             PathMatchingResourcePatternResolver patternResolver = new PathMatchingResourcePatternResolver();
             Resource[] resources = patternResolver.getResources(templatePath + "/**/*");
-
-            FileOutputStream out = null;
-            InputStream in = null;
             if (resources != null && resources.length > 0) {
                 for (Resource resource : resources) {
                     String path = resource.getURL().getPath();
@@ -89,12 +85,25 @@ public class HtmlApiDocOutputer implements ApiDocOutputer<File> {
                     out = new FileOutputStream(t, false);
                     in = resource.getInputStream();
                     IOUtils.copy(in, out);
-                    IOUtils.closeQuietly(in);
-                    IOUtils.closeQuietly(out);
                 }
             }
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception e) {
+                    //ig
+                }
+            }
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (Exception e) {
+                    //ig
+                }
+            }
         }
     }
 
@@ -190,18 +199,13 @@ public class HtmlApiDocOutputer implements ApiDocOutputer<File> {
      * @param map
      */
     public void doParser(String templateName, String outFileName, Map<String, Object> map) {
-        Reader reader = null;
-        Writer writer = null;
-        try {
+
+        try (Writer writer = new FileWriter(new File(getApiOutputPath(), outFileName), false);) {
             Template template = buildConfiguration().getTemplate(templateName);
-            writer = new FileWriter(new File(getApiOutputPath(), outFileName), false);
             template.process(map, writer);
             writer.flush();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
-        } finally {
-            IOUtils.closeQuietly(reader);
-            IOUtils.closeQuietly(writer);
         }
     }
 
@@ -214,7 +218,7 @@ public class HtmlApiDocOutputer implements ApiDocOutputer<File> {
 
     protected Configuration buildConfiguration() {
         try {
-            Configuration cfg = new Configuration();
+            Configuration cfg = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
             cfg.setDefaultEncoding("UTF-8");
             String tpath = templatePath;
             if (StringUtils.containsIgnoreCase(tpath, "classpath:")) {
@@ -257,6 +261,11 @@ public class HtmlApiDocOutputer implements ApiDocOutputer<File> {
     @Override
     public ApiOutputerTypeEnum getType() {
         return ApiOutputerTypeEnum.html;
+    }
+
+    @Override
+    public ApiDocModule getModule() {
+        return ApiDocModule.api;
     }
 
     public String getTemplatePath() {

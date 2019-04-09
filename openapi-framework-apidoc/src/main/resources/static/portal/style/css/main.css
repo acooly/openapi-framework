@@ -28,7 +28,7 @@ a:hover {color:#009688}
 .doc-menu .item-this a ,.doc-menu .item-this a:hover {color:#fff;  background-color: #5FB878;border-bottom:0;}
 
 /* 页脚 */
-.foot { position: fixed;bottom: 0;width: 100%; background-color: #2F4056;  height: 60px;line-height: 60px;  margin-top: 20px;  color: #999999;  text-align: center;  }
+.foot { position: fixed;bottom: 0;width: 100%; background-color: #2F4056;  height: 40px;line-height: 40px;  margin-top: 20px;  color: #dddddd;  text-align: center;  }
 
 
 

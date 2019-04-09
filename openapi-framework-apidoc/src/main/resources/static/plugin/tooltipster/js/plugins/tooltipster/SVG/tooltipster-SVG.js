@@ -162,7 +162,7 @@ $.tooltipster._plugin({
 	}
 });
 
-/* a build task will add "return $;" here */
+/* a build scheduling will add "return $;" here */
 return $;
 
 }));

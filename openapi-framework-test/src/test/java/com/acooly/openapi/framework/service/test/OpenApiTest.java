@@ -5,21 +5,19 @@ import com.acooly.openapi.framework.client.OpenApiClient;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.common.message.builtin.AuthRequest;
 import com.acooly.openapi.framework.common.message.builtin.AuthRequest.ExpiredBody;
+import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
-import com.acooly.openapi.framework.domain.LoginRequest;
-import com.acooly.openapi.framework.domain.LoginResponse;
-import com.acooly.openapi.framework.service.test.api.LoginAssertApiService.LoginAssertRequest;
-import com.acooly.openapi.framework.service.test.api.LoginAssertApiService.LoginAssertResponse;
+import com.acooly.openapi.framework.service.domain.LoginRequest;
+import com.acooly.openapi.framework.service.domain.LoginResponse;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
 import com.acooly.openapi.framework.service.test.notify.PayOrderNotify;
-import com.acooly.openapi.framework.service.test.request.CreateOrderRequest;
+import com.acooly.openapi.framework.service.test.request.OrderCreateRequest;
 import com.acooly.openapi.framework.service.test.request.PayOrderRequest;
 import com.acooly.openapi.framework.service.test.request.WithdrawRequest;
-import com.acooly.openapi.framework.service.test.response.CreateOrderResponse;
+import com.acooly.openapi.framework.service.test.response.OrderCreateResponse;
 import com.acooly.openapi.framework.service.test.response.PayOrderResponse;
 import com.acooly.openapi.framework.service.test.response.WithdrawResponse;
 import com.github.kevinsawicki.http.HttpRequest;
@@ -64,9 +62,9 @@ public class OpenApiTest extends AbstractApiServieTests {
      */
     @Test
     public void testSync() throws Exception {
-        CreateOrderRequest request = new CreateOrderRequest();
+        OrderCreateRequest request = new OrderCreateRequest();
         request.setRequestNo(UUID.randomUUID().toString());
-        request.setService("createOrder");
+        request.setService("orderCreate");
         request.setTitle("同步请求创建订单");
         request.setPayeeUserId("12345678900987654321");
         request.setPayerUserId("09876543211234567890");
@@ -87,7 +85,7 @@ public class OpenApiTest extends AbstractApiServieTests {
         }
         request.setGoodsInfos(goodInfos);
         request.ext("xx", "oo");
-        CreateOrderResponse response = request(request, CreateOrderResponse.class);
+        OrderCreateResponse response = request(request, OrderCreateResponse.class);
         log.info("{}", response);
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isTrue();
@@ -96,7 +94,7 @@ public class OpenApiTest extends AbstractApiServieTests {
 
     @Test
     public void testSync1() throws Exception {
-        CreateOrderRequest request = new CreateOrderRequest();
+        OrderCreateRequest request = new OrderCreateRequest();
         request.setPartnerId("test");
         request.setRequestNo(UUID.randomUUID().toString());
         request.setService("createOrder");
@@ -110,7 +108,7 @@ public class OpenApiTest extends AbstractApiServieTests {
         request.setPassword("12312312");
         request.setContext(content);
         OpenApiClient openApiClient = new OpenApiClient("http://127.0.0.1:8089/gateway.do", TEST_ACCESS_KEY, TEST_SECRET_KEY);
-        CreateOrderResponse response = openApiClient.send(request, CreateOrderResponse.class);
+        OrderCreateResponse response = openApiClient.send(request, OrderCreateResponse.class);
         log.info("{}", response);
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isTrue();
@@ -119,7 +117,7 @@ public class OpenApiTest extends AbstractApiServieTests {
 
     @Test
     public void testSync_ParamCheckError() throws Exception {
-        CreateOrderRequest request = new CreateOrderRequest();
+        OrderCreateRequest request = new OrderCreateRequest();
         request.setRequestNo(UUID.randomUUID().toString());
         request.setService("createOrder");
         request.setTitle("同步请求创建订单");
@@ -142,7 +140,7 @@ public class OpenApiTest extends AbstractApiServieTests {
         }
         request.setGoodsInfos(goodInfos);
         request.ext("xx", "oo");
-        CreateOrderResponse response = request(request, CreateOrderResponse.class);
+        OrderCreateResponse response = request(request, OrderCreateResponse.class);
         log.info("{}", response);
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isFalse();
@@ -202,28 +200,28 @@ public class OpenApiTest extends AbstractApiServieTests {
         request.setPassword("passwd");
         LoginResponse response = openApiClient.send(request, LoginResponse.class);
         log.info("{}", response);
-
-        // 登录成功后，使用下发的认证信息访问服务
-        openApiClient = new OpenApiClient("http://127.0.0.1:8089/gateway.do", response.getAccessKey(), response.getSecretKey());
-        LoginAssertRequest loginAssertRequest = new LoginAssertRequest();
-        loginAssertRequest.setRequestNo(UUID.randomUUID().toString());
-        loginAssertRequest.setPartnerId("test");
-        loginAssertRequest.setService("loginAssert");
-        LoginAssertResponse loginAssertResponse =
-                openApiClient.send(loginAssertRequest, LoginAssertResponse.class);
-        assertThat(loginAssertResponse).isNotNull();
-        assertThat(loginAssertResponse.isSuccess()).isTrue();
-        assertThat(loginAssertResponse.getAccessKey()).isEqualTo(response.getAccessKey());
+//
+//        // 登录成功后，使用下发的认证信息访问服务
+//        openApiClient = new OpenApiClient("http://127.0.0.1:8089/gateway.do", response.getAccessKey(), response.getSecretKey());
+//        LoginAssertRequest loginAssertRequest = new LoginAssertRequest();
+//        loginAssertRequest.setRequestNo(UUID.randomUUID().toString());
+//        loginAssertRequest.setPartnerId("test");
+//        loginAssertRequest.setService("loginAssert");
+//        LoginAssertResponse loginAssertResponse =
+//                openApiClient.send(loginAssertRequest, LoginAssertResponse.class);
+//        assertThat(loginAssertResponse).isNotNull();
+//        assertThat(loginAssertResponse.isSuccess()).isTrue();
+//        assertThat(loginAssertResponse.getAccessKey()).isEqualTo(response.getAccessKey());
 
         //测试认证服务
 
-        ExpiredBody expiredBody=new ExpiredBody();
-        String body="sdfdsfdfdfsd";
+        ExpiredBody expiredBody = new ExpiredBody();
+        String body = "sdfdsfdfdfsd";
         //设置请求参数
         expiredBody.setBody(body);
         //请求有效期
         expiredBody.setExpireDate(new Date());
-        AuthRequest authRequest=new AuthRequest();
+        AuthRequest authRequest = new AuthRequest();
         authRequest.setRequestNo(UUID.randomUUID().toString());
         authRequest.setService("auth");
         authRequest.setPartnerId("test");
@@ -247,7 +245,7 @@ public class OpenApiTest extends AbstractApiServieTests {
      */
     @Test
     public void testForm() throws Exception {
-        CreateOrderRequest request = new CreateOrderRequest();
+        OrderCreateRequest request = new OrderCreateRequest();
         request.setRequestNo(UUID.randomUUID().toString());
         request.setService("createOrder");
         request.setTitle("同步请求创建订单");

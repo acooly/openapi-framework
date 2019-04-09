@@ -4,14 +4,8 @@
 		<@includePage path="/docs/common/meta.html"/>
 		<@includePage path="/docs/common/include.html"/>
         <link rel="stylesheet" type="text/css" href="/portal/style/css/api.css"/>
-        <link rel="stylesheet" type="text/css" href="/portal/js/jquery.json-viewer/json-viewer/jquery.json-viewer.css"/>
         <link href="/plugin/tooltipster/css/tooltipster.bundle.css" rel="stylesheet">
         <link href="/plugin/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-shadow.min.css" rel="stylesheet">
-        <script type="text/javascript" src="/portal/js/clipboard.min.js" ></script>
-        <script type="text/javascript" src="/portal/js/jquery.json-viewer/json-viewer/jquery.json-viewer.js" ></script>
-        <script type="text/javascript" src="/plugin/baiduTemplate.js"></script>
-        <script type="text/javascript" src="/portal/script/apidoc.js" ></script>
-
     </head>
 	<body>
 		<!--顶部-->
@@ -21,9 +15,8 @@
         <div class="crumb">
             <div class="w1190">
             <span class="layui-breadcrumb">
-              <a href="/docs/apischeme/index.html">文档中心</a>
-              <a href="/docs/apidoc/index.html?schemeId=${apiScheme.id}">${apiScheme.name}</a>
-              <a><cite id="apidoc_nav_name"></cite></a>
+              <a href="/docs/scheme/index.html">API文档</a>
+                <a><cite>${apiScheme.title}</cite></a>
             </span>
             </div>
         </div>
@@ -43,6 +36,8 @@
 		</div>
 		<!--end-->
 
+        <!-- 隐藏:metadata元数据渲染容器 -->
+        <div class="apidoc-metadata" style="display: none;" id="apidoc_metadata_container"></div>
         <!--右侧定位导航-->
         <div id="apidoc_content_menu" class="doc-content-dir"></div>
 
@@ -54,16 +49,16 @@
     <div class="doc-header">
         <div class="doc-header-title"><i class="layui-icon">&#xe62a;</i> <%=entity.title%></div>
         <div class="doc-header-more">
-            <button onclick="location.href='/docs/apidebug/index.html?service=<%=entity.name%>'" class="layui-btn layui-btn-small layui-btn-radius">
-                <i class="layui-icon">&#xe63c;</i> 点此联调
-            </button>
-            <button onclick="window.open('/docs/apidoc/metadata.html?id=<%=entity.id%>')" class="layui-btn layui-btn-small layui-btn-radius">
-                <i class="layui-icon">&#xe63c;</i> 下载元数据
+            <#--<button onclick="location.href='/docs/apidebug/index.html?service=<%=entity.name%>'" class="layui-btn layui-btn-small layui-btn-radius">-->
+                <#--<i class="layui-icon">&#xe64e;</i> 点此联调-->
+            <#--</button>-->
+            <button onclick="showMetaData('<%=entity.id%>','<%=entity.serviceNo%>')" class="layui-btn layui-btn-small layui-btn-radius">
+                <i class="layui-icon">&#xe63c;</i> 元数据
             </button>
         </div>
     </div>
     <div class="doc-subject">
-        <span>服务名：<%=entity.service%></span>
+        <span>服务名：<%=entity.name%></span>
         <span class="ml20">版本号：<span class="layui-badge layui-bg-gray"><%=entity.version%></span></span>
         <span class="ml20">通讯模式：<a href="javascript:;"><%=data.allServiceTypes[entity.serviceType]%></a></span>
     </div>
@@ -166,27 +161,16 @@
                 </div>
                 <div class="switch-content" id="apidoc_demo_container"></div>
             </div>
-
-        <#--<div class="switch">-->
-            <#--<div class="switch-title">-->
-                <#--<a name="apidoc_demo">元数据</a>-->
-            <#--</div>-->
-            <#--<div class="switch-content">-->
-                <#--<pre id="json-renderer"></pre>-->
-            <#--</div>-->
-        <#--</div>-->
-
-
     </div>
 </script>
 
 <script id="apidoc_demo_template" type="text/html">
 <% for(var i=0;i<rows.length;i++){ var e=rows[i]; %>
-<pre class="layui-code" lay-title="<%=e.messageType%>">
-<%=e.header%>
-
-<%=e.body%>
-</pre>
+<div class="api-demo-message">
+    <div class="title"><%=e.messageType%></div>
+    <pre><%=e.header%></pre>
+    <div class="body" id="apidoc_demo_<%=e.messageType%>"></div>
+</div>
 <%}%>
 
 </script>
@@ -231,17 +215,13 @@
     </div>
 </script>
 
-
-
-
+<script type="text/javascript" src="/plugin/baiduTemplate.js"></script>
+<script type="text/javascript" src="/portal/script/apidoc.js" ></script>
+<script type="text/javascript" src="/plugin/jsonview/jquery.jsonview.min.js" ></script>
 <script src="/plugin/tooltipster/js/tooltipster.bundle.js"></script>
 <script src="/plugin/tooltipster/js/tooltipster-scrollableTip.js"></script>
 
 <script>
-
-
-
-
     $(function(){
         var defApidocId = "${apidocId}";
         if(!defApidocId || defApidocId == ''){

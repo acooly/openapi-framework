@@ -1,23 +1,22 @@
-/*
- * www.yiji.com Inc.
- * Copyright (c) 2015 All Rights Reserved.
- */
-
 package com.acooly.openapi.apidoc.generator.parser;
 
-
-
-import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
-
-import java.util.List;
+import com.acooly.openapi.apidoc.generator.ApiDocModule;
 
 /**
- * API文档自动生成 接口定义
+ * 通用解析接口
  *
  * @author zhangpu
+ * @date 2019-01-13 19:02
  */
-public interface ApiDocParser {
+public interface ApiDocParser<T> {
 
-    List<ApiDocService> parse();
+    /**
+     * 解析
+     *
+     * @return
+     */
+    T parse();
 
+
+    ApiDocModule getModule();
 }

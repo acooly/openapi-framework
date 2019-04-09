@@ -23,7 +23,9 @@ import java.util.Map;
  */
 public enum SchemeTypeEnum implements Messageable {
 
-    common("common", "通用"),
+    common("common", "系统默认"),
+
+    auto("auto", "自动生成"),
 
     custom("custom", "自定义");
 

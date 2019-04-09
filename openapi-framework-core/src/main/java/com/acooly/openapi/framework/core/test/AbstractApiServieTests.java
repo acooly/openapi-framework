@@ -1,5 +1,6 @@
 package com.acooly.openapi.framework.core.test;
 
+import com.acooly.core.utils.Assert;
 import com.acooly.openapi.framework.client.OpenApiClient;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.message.ApiMessage;
@@ -12,7 +13,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 import java.util.Map;
 

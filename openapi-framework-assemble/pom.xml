@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.acooly</groupId>
         <artifactId>openapi-framework</artifactId>
-        <version>4.2.0-SNAPSHOT</version>
+        <version>4.2.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>openapi-framework-assemble</artifactId>
@@ -19,33 +19,31 @@
 
     <dependencies>
 
-        <!-- 服务集成 -->
+        <!-- 模块集成 -->
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-mock</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-test</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-service-impl</artifactId>
-            <version>${project.version}</version>
+            <artifactId>openapi-framework-notify</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-extensions</artifactId>
-            <version>${project.version}</version>
         </dependency>
+
+
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-taglibs</artifactId>
@@ -65,40 +63,42 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-jpa</artifactId>
-            <version>${parent.version}</version>
+            <version>${acooly.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-dubbo</artifactId>
-            <version>${parent.version}</version>
+            <version>${acooly.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-security</artifactId>
-            <version>${parent.version}</version>
+            <version>${acooly.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-threadpool</artifactId>
-            <version>${parent.version}</version>
+            <version>${acooly.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-web</artifactId>
-            <version>${parent.version}</version>
+            <version>${acooly.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>4.3.18.RELEASE</version>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-configuration-processor</artifactId>
+            <version>${acooly.version}</version>
+            <optional>true</optional>
         </dependency>
-
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
+
     </dependencies>
 
     <build>

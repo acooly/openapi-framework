@@ -10,6 +10,7 @@ package com.acooly.openapi.apidoc.persist.service;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
@@ -22,10 +23,40 @@ import java.util.List;
  */
 public interface ApiDocSchemeService extends EntityService<ApiDocScheme> {
 
+    /**
+     * 创建默认scheme
+     *
+     * @return
+     */
     ApiDocScheme createDefault();
 
+    /**
+     * 按方案类型查询
+     *
+     * @param schemeType
+     * @return
+     */
     List<ApiDocScheme> findBySchemeType(SchemeTypeEnum schemeType);
 
 
+    /**
+     * 合并
+     *
+     * @param apiDocSchemes
+     */
+    void merge(List<ApiDocScheme> apiDocSchemes);
 
+    JSONObject getSelectSchemeList(String schemeNo);
+
+    /**
+     * 置顶
+     * @param id
+     */
+    void moveTop(Long id);
+
+    /**
+     * 上移
+     * @param id
+     */
+    void moveUp(Long id);
 }

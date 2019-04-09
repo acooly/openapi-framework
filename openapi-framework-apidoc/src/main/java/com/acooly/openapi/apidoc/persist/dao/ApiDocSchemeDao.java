@@ -24,8 +24,14 @@ import java.util.List;
 public interface ApiDocSchemeDao extends EntityMybatisDao<ApiDocScheme> {
 
 
-    @Select("select * from api_doc_scheme where scheme_type = #{schemeType}")
+    @Select("select * from api_doc_scheme where scheme_type = #{schemeType}  order by sort_time desc")
     List<ApiDocScheme> findBySchemeType(@Param("schemeType") SchemeTypeEnum schemeType);
+
+    @Select("select * from api_doc_scheme order by sort_time desc")
+    List<ApiDocScheme> findAll();
+
+    @Select("select * from api_doc_scheme where sort_time >= #{sortTime} and id != #{id} limit 1")
+    ApiDocScheme findBeforeOne(@Param("sortTime") Long sortTime, @Param("id") Long id);
 
 
 }

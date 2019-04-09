@@ -72,9 +72,12 @@ function loadMessageDemos(id) {
     var renderTo = 'apidoc_demo_container';
     var jsonData = {id: id};
     baidu.template.ESCAPE = false;
-    $.acooly.portal.ajaxRender(url, jsonData, renderTo, template, null, function () {
-        layui.use('code', function () {
-            layui.code({encode: false, about: false});
+    $.acooly.portal.ajaxRender(url, jsonData, renderTo, template, null, function (result) {
+        // layui.use('code', function () {
+        //     layui.code({encode: false, about: false});
+        // });
+        $(result.rows).each(function (i, e) {
+            $("#apidoc_demo_" + e.messageType).JSONView(e.body);
         });
     });
 }
@@ -87,10 +90,10 @@ function loadMessageDemos(id) {
  */
 function demoFormatter(item) {
     var demo = item.demo;
-    if(!demo || demo == ''){
+    if (!demo || demo == '') {
         return demo;
     }
-    if(!isJSON(demo)){
+    if (!isJSON(demo)) {
         return demo;
     }
     try {
@@ -107,13 +110,13 @@ function demoFormatter(item) {
 function isJSON(str) {
     if (typeof str == 'string') {
         try {
-            var obj=JSON.parse(str);
-            if(str.indexOf('{') == 0 || str.indexOf('[') == 0){
+            var obj = JSON.parse(str);
+            if (str.indexOf('{') == 0 || str.indexOf('[') == 0) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
-        } catch(e) {
+        } catch (e) {
             return false;
         }
     }
@@ -128,19 +131,19 @@ function dataTypeFormatter(item) {
     var dataType = item.dataType;
     var min = item.min;
     var max = item.max;
-    if((min == null || min == '') && (min == null || min == '')){
+    if ((min == null || min == '') && (min == null || min == '')) {
         return dataType;
     }
 
-    if(min == max){
+    if (min == max) {
         return dataType + "(" + min + ")";
     }
 
-    if((min == null || min == '') && max != null && max != ''){
+    if ((min == null || min == '') && max != null && max != '') {
         return dataType + "(" + max + ")";
     }
 
-    if((max == null || max == '') && min != null && min != ''){
+    if ((max == null || max == '') && min != null && min != '') {
         return dataType + "(" + min + "-?)";
     }
 
@@ -166,7 +169,7 @@ function descnFormatter(item) {
     var descn = item.descn;
     try {
         var itemData = JSON.parse(descn);
-        if(itemData.context == null || itemData.context.length == 0){
+        if (itemData.context == null || itemData.context.length == 0) {
             return itemData.content;
         }
         itemData.id = item.name + item.id;
@@ -177,3 +180,26 @@ function descnFormatter(item) {
         return descn;
     }
 }
+
+/**
+ * 查看API文档的元数据
+ */
+function showMetaData(id,serviceNo) {
+    $.acooly.portal.ajax("/docs/apidoc/metadata.html", {id: id}, function (result) {
+        layer.open({
+            type: 1,
+            title: "元数据: " + serviceNo,
+            area: ['800px', '600px'],
+            shadeClose: true,
+            content: '<div class="apidoc-metadata" id="apidoc_metadata_' + id + '"></div>',
+            success: function (layero, index) {
+                $('#apidoc_metadata_' + id).JSONView(result, {collapsed: true, nl2br: true, recursive_collapser: true});
+            },
+            btn: ['下载', '关闭'],
+            yes: function (index, layero) {
+                window.open('/docs/apidoc/metadata.html?serviceNo=' + serviceNo);
+            }
+        });
+    });
+}
+

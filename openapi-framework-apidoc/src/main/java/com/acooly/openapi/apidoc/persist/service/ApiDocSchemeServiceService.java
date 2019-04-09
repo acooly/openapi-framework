@@ -27,5 +27,7 @@ public interface ApiDocSchemeServiceService extends EntityService<ApiDocSchemeSe
 
     List<ApiDocService> findSchemeApiDocServices(String schemeNo);
 
+    void deleteSchemeService(String schemeNo, String serviceNo);
+
 
 }

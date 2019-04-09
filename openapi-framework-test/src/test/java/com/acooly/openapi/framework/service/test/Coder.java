@@ -25,7 +25,7 @@ public class Coder {
     if (StringUtils.isBlank(service.getGenerateConfiguration().getRootPackage())) {
       service.getGenerateConfiguration().setRootPackage(getRootPackage());
     }
-    service.generateTable("api_tenant","api_auth");
+    service.generateTable("api_qa_classify","api_qa_question");
   }
 
   public static String getProjectPath() {

@@ -6,83 +6,58 @@
 package com.acooly.openapi.apidoc.generator;
 
 import com.acooly.core.utils.Collections3;
-import com.acooly.openapi.apidoc.ApiDocContext;
 import com.acooly.openapi.apidoc.ApiDocProperties;
 import com.acooly.openapi.apidoc.generator.output.ApiDocOutputer;
 import com.acooly.openapi.apidoc.generator.output.ApiDocOutputerFactory;
-import com.acooly.openapi.apidoc.generator.output.ApiOutputerTypeEnum;
 import com.acooly.openapi.apidoc.generator.parser.ApiDocParser;
-import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
-import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeService;
-import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
-import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
-import com.google.common.collect.Lists;
+import com.acooly.openapi.apidoc.generator.parser.ApiDocParserFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * Apidoc生成器实现
+ *
  * @author zhangpu on 2015/1/29.
  */
 @Service("apiDocBuilder")
 @Slf4j
 public class ApiDocGeneratorImpl implements ApiDocGenerator {
 
-    private static final Logger logger = LoggerFactory.getLogger(ApiDocGeneratorImpl.class);
-    List<String> packageList = Lists.newArrayList();
-
     @Autowired
-    private ApiDocParser apiDocParser;
+    private ApiDocParserFactory apiDocParserFactory;
 
     @Autowired
     private ApiDocOutputerFactory apiDocOutputerFactory;
-
-    @Autowired
-    private ApiDocServiceService apiDocServiceService;
-
-    @Autowired
-    private ApiDocSchemeServiceService apiDocSchemeServiceService;
-
-    @Autowired
-    private ApiDocSchemeService apiDocSchemeService;
 
     @Autowired
     private ApiDocProperties apiDocProperties;
 
     @Override
     public void build() {
-        List<ApiDocService> docs = doParse();
 
-        List<String> outputerTypes =  apiDocProperties.getOutputTypes();
-        if(Collections3.isEmpty(outputerTypes)){
-            outputerTypes = Lists.newArrayList(ApiOutputerTypeEnum.console.code());
+        Collection<ApiDocParser> apiDocParsers = apiDocParserFactory.getApiDocParsers();
+        if (Collections3.isEmpty(apiDocParsers)) {
+            log.info("没有注册的ApiDocParser存在，退出自动生成文档");
+            return;
         }
-        ApiOutputerTypeEnum apiOutputerTypeEnum = null;
-        for(String outputTypeCode : outputerTypes){
-            apiOutputerTypeEnum = ApiOutputerTypeEnum.find(outputTypeCode);
-            if(apiOutputerTypeEnum == null){
+
+        Set<ApiDocOutputer> apiDocOutputers = null;
+        for (ApiDocParser apiDocParser : apiDocParsers) {
+            apiDocOutputers = apiDocOutputerFactory.getOutputers(apiDocParser.getModule());
+            if (Collections3.isEmpty(apiDocOutputers)) {
+                log.warn("模块:{} 没有对应的输出实现。", apiDocParser.getModule());
                 continue;
             }
-            doOutput(apiDocOutputerFactory.getOutputer(apiOutputerTypeEnum), docs, null);
-        }
-    }
-
-
-    protected List<ApiDocService> doParse() {
-        return apiDocParser.parse();
-    }
-
-
-    protected void doOutput(ApiDocOutputer outputer, List<ApiDocService> docs, ApiDocContext apidocContext) {
-        try {
-            outputer.output(docs, apidocContext);
-        } catch (Exception e) {
-            logger.error("ApiOutpuer处理异常: outpuer:{},message:{}", outputer.getType(), e.getMessage());
+            Object object = apiDocParser.parse();
+            apiDocOutputers.forEach(e -> {
+                if (apiDocProperties.getOutputTypes().contains(e.getType().code())) {
+                    e.output(object);
+                }
+            });
         }
     }
 

@@ -5,7 +5,9 @@
 
 package com.acooly.openapi.apidoc.generator.output;
 
+import com.acooly.openapi.apidoc.generator.ApiDocModule;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
@@ -13,8 +15,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by zhangpu on 2015/2/26.
@@ -25,18 +27,14 @@ public class ApiDocOutputerFactory implements ApplicationContextAware, Initializ
 
     private ApplicationContext applicationContext;
 
-    private Map<String, ApiDocOutputer> registers = Maps.newHashMap();
+    private Map<ApiDocModule, Set<ApiDocOutputer>> registers = Maps.newHashMap();
 
-    public Collection<ApiDocOutputer> getOutputers() {
-        return registers.values();
+    public Map<ApiDocModule, Set<ApiDocOutputer>> getOutputers() {
+        return registers;
     }
 
-    public ApiDocOutputer getOutputer(ApiOutputerTypeEnum apiOutputerEnum) {
-        ApiDocOutputer outpuer = registers.get(apiOutputerEnum.name());
-        if (outpuer == null) {
-            throw new RuntimeException("不支持的outpuer实现:" + apiOutputerEnum);
-        }
-        return outpuer;
+    public Set<ApiDocOutputer> getOutputers(ApiDocModule apiDocModule) {
+        return registers.get(apiDocModule);
     }
 
     @Override
@@ -54,10 +52,14 @@ public class ApiDocOutputerFactory implements ApplicationContextAware, Initializ
         if (outputers == null || outputers.isEmpty()) {
             return;
         }
-        for (Map.Entry<String, ApiDocOutputer> entry : outputers.entrySet()) {
-            registers.put(entry.getValue().getType().name(), entry.getValue());
+        for (ApiDocOutputer apiDocOutputer : outputers.values()) {
+            if (registers.get(apiDocOutputer.getModule()) == null) {
+                registers.put(apiDocOutputer.getModule(), Sets.newHashSet());
+            }
+            registers.get(apiDocOutputer.getModule()).add(apiDocOutputer);
         }
         log.debug("Registed Ouputers:" + registers);
     }
+
 
 }

@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.acooly</groupId>
         <artifactId>openapi-framework</artifactId>
-        <version>4.2.0-SNAPSHOT</version>
+        <version>4.2.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>openapi-framework-test</artifactId>
@@ -18,48 +18,60 @@
 
     <dependencies>
 
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-apidoc</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
-
-        <!-- 服务集成 -->
+        <!-- 服务集成(最小) -->
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
+
+        <!-- OpenApi自动文档 -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-apidoc</artifactId>
+        </dependency>
+
+        <!-- 接口MOCK（后台根据接口名称配置mock报文） -->
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-mock</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-test</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-service-impl</artifactId>
-            <version>${project.version}</version>
-
-        </dependency>
+        <!-- OpenApi扩展，目前扩展了流控 -->
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-extensions</artifactId>
-            <version>${project.version}</version>
+        </dependency>
+
+        <!-- OpenApi notify -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-notify</artifactId>
+        </dependency>
+
+        <!-- OpenApi client -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-client</artifactId>
         </dependency>
 
 
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-common</artifactId>
+            <version>${acooly.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-common-facade</artifactId>
+            <version>${acooly.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-test</artifactId>
-            <version>${project.version}</version>
+            <version>${acooly.version}</version>
         </dependency>
 
         <dependency>
@@ -75,7 +87,7 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-coder</artifactId>
-            <version>4.2.0-SNAPSHOT</version>
+            <version>${acooly.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

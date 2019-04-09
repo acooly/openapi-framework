@@ -10,12 +10,15 @@
 package com.acooly.openapi.apidoc.portal;
 
 import com.acooly.core.utils.Collections3;
+import com.acooly.core.utils.Strings;
 import com.acooly.module.cms.domain.Content;
 import com.acooly.module.cms.service.ContentService;
 import com.acooly.openapi.apidoc.ApiDocProperties;
 import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
+import com.acooly.openapi.apidoc.persist.entity.ApiDocSchemeDesc;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
+import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeDescService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
 import com.acooly.openapi.apidoc.portal.dto.SchemeDto;
@@ -24,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +37,7 @@ import java.util.List;
  * @author zhangpu 2017-10-11 00:00
  */
 @Controller
-@RequestMapping("/docs/apischeme")
+@RequestMapping("/docs/scheme")
 public class ApiDocSchemePortalController extends AbstractPortalController {
 
     @Autowired
@@ -47,6 +51,9 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
 
     @Autowired
     private ApiDocProperties apiDocProperties;
+
+    @Autowired
+    private ApiDocSchemeDescService apiDocSchemeDescService;
 
     /**
      * scheme首页（文档中心首页）
@@ -95,7 +102,7 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
         } catch (Exception e) {
             handleException("", e, request);
         }
-        return "/docs/apidoc/apischeme";
+        return "/docs/apidoc/scheme";
     }
 
     @RequestMapping("content")
@@ -124,16 +131,18 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
 
 
     protected void doLoadSchemeMenus(HttpServletRequest request, HttpServletResponse response, Model model) {
-        if (apiDocProperties.isShowCommon()) {
-            //通用解决方案
-            List<SchemeDto> commonSchemes = loadSchemeList(request, SchemeTypeEnum.common);
-            model.addAttribute("commonSchemes", commonSchemes);
+        List<SchemeDto> schemes = loadSchemeList(request, null);
+        List<SchemeDto> showSchemes = Lists.newArrayList();
+        if (!apiDocProperties.isDefaultSchemeShow()) {
+            for(SchemeDto s:schemes){
+                if(s.getSchemeTypeEnum() != SchemeTypeEnum.common){
+                    showSchemes.add(s);
+                }
+            }
+        }else{
+            showSchemes.addAll(schemes);
         }
-        //自定义解决方案
-        List<SchemeDto> customSchemes = loadSchemeList(request, SchemeTypeEnum.custom);
-        model.addAttribute("customSchemes", customSchemes);
-
-
+        model.addAttribute("showSchemes", showSchemes);
     }
 
 
@@ -145,6 +154,7 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
             List<Content> contents = null;
             for (ApiDocScheme scheme : schemes) {
                 schemeDto = new SchemeDto(scheme.getId(), scheme.getTitle(), scheme.getSchemeNo());
+                schemeDto.setSchemeTypeEnum(scheme.getSchemeType());
                 contents = contentService.topByTypeCode(scheme.getSchemeNo(), 100);
                 if (Collections3.isNotEmpty(contents)) {
                     for (Content content : contents) {
@@ -166,6 +176,13 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
         model.addAttribute("schemeName", apiScheme.getTitle());
         model.addAttribute("schemeId", id);
         model.addAttribute("apiScheme", apiScheme);
+
+
+        ApiDocSchemeDesc apiDocSchemeDesc = apiDocSchemeDescService.findBySchemeNo(apiScheme.getSchemeNo());
+        if(apiDocSchemeDesc != null && Strings.isNotBlank(apiDocSchemeDesc.getSchemeDesc())) {
+            apiDocSchemeDesc.setSchemeDesc(HtmlUtils.htmlUnescape(apiDocSchemeDesc.getSchemeDesc()));
+            model.addAttribute("apiSchemeDesc", apiDocSchemeDesc);
+        }
     }
 
 }

@@ -4456,7 +4456,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	} catch (err) {}
 	/* NOP */
 
-	/* istanbul ignore if: tested but not covered in istanbul due to dist build  */
+	/* istanbul ignore if: tested but not covered in istanbul due to jsonview build  */
 	if (!SourceNode) {
 	  SourceNode = function (line, column, srcFile, chunks) {
 	    this.src = '';

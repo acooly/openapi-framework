@@ -22,7 +22,7 @@ import com.acooly.core.utils.enums.Messageable;
  */
 public enum ApiDocSchemeSchemeTypeEnum implements Messageable {
 
-	common("common", "通用"),
+	common("auto", "通用"),
 
 	custom("custom", "自定义"),
 

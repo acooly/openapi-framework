@@ -24,31 +24,38 @@ import static com.acooly.openapi.apidoc.ApiDocProperties.PREFIX;
 /**
  * @author qiubo@yiji.com
  */
+
+@Slf4j
 @Configuration
 @ConfigurationProperties(prefix = PREFIX)
 @Data
-@Slf4j
 @Validated
 public class ApiDocProperties {
     public static final String PREFIX = "acooly.openapi.apidoc";
+
+    public static final String DEF_SCHEME_NO = "SYSTEM";
+    public static final String DEF_SCHEME_TITLE = "所有服务";
+    public static final String DEF_SCHEME_AUTHOR = "acooly";
+
     private boolean enable;
 
     /**
      * 是否将所有服务加入都通用解决方案中，true：加入，false:不加（默认）
      */
-    private boolean intoCommon = true;
+    private boolean defaultSchemeEnable = true;
 
     /**
      * 是否现实通用服务方案（所有API）
      */
-    private boolean showCommon = true;
+    private boolean defaultSchemeShow = true;
 
     /**
-     * 版权信息
+     * 指定输出类型，多选：database,console,pdf,html等，默认database
      */
-    private String copyright = "Copyright@acooly";
+    private List<String> outputTypes = Lists.newArrayList("database");
 
-    private String logo = "/portal/images/logo.png";
+
+    private Portal portal = new Portal();
 
 
     private String gateway = "";
@@ -56,6 +63,21 @@ public class ApiDocProperties {
     private String testGateway = "http://localhost:8090/gateway.do";
 
 
-    private List<String> outputTypes = Lists.newArrayList("database");
+    @Data
+    public static class Portal {
+
+        private String title = "Acooly-OpenApi 开放平台";
+
+        /**
+         * 版权信息
+         */
+        private String copyright = "@ Copyright Acooly 2019";
+
+        /**
+         * LOGO
+         */
+        private String logo = "/portal/images/logo/logo-acooly-white.png";
+    }
+
 
 }
