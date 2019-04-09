@@ -24,9 +24,11 @@ public class Servlets {
 
     public static void writeResponse(HttpServletResponse response, String data, String contentType) {
         response.setCharacterEncoding("UTF-8");
+
         if (Strings.isBlank(contentType)) {
-            response.setContentType(MediaType.JSON_UTF_8.toString());
+            contentType = MediaType.JSON_UTF_8.toString();
         }
+        response.setContentType(contentType);
         try (OutputStream output = response.getOutputStream();
              InputStream input = new ByteArrayInputStream(data.getBytes(Charset.forName("UTF-8")));) {
             IOUtils.copy(input, output);
