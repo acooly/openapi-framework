@@ -15,6 +15,9 @@ import java.util.Map;
  * @author zhangpu
  */
 public enum ApiProtocol implements Messageable {
+
+  HTTP_FORM_JSON("HTTP_FORM_JSON", "HTTP_FORM_JSON报文"),
+
   JSON("JSON", "JSON报文"),
 
   XML("XML", "XML报文");
