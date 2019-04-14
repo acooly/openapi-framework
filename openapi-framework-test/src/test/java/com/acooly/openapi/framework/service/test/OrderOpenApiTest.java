@@ -62,7 +62,7 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
         request.setRequestNo(Ids.getDid());
         request.setMerchOrderNo(Ids.getDid());
         request.setService("orderCreate");
-        request.setTitle("同步请求创建订单");
+        request.setTitle("同步请求创建订单\uD83D\uDC3E一休哥\uD83D\uDC3E ");
         request.setAmount(amount);
         request.setPayeeUserId("12345678900987654321");
         request.setPayerUserId(payerUserId);

@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Slf4j
 public abstract class AbstractApiClientService {
 
-    @Autowired
+    @Autowired(required = false)
     protected OpenApiClient openApiClient;
 
     protected <T extends ApiResponse> T request(ApiRequest request, Class<T> clazz) {
