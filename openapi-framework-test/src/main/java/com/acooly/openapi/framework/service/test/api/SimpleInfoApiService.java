@@ -29,5 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 public class SimpleInfoApiService extends BaseApiService<ApiRequest, ApiResponse> {
     @Override
     protected void doService(ApiRequest request, ApiResponse response) {
+
     }
 }
