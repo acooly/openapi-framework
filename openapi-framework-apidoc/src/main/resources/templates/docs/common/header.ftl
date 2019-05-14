@@ -8,9 +8,9 @@
             <li class="layui-nav-item">
                 <a href="javascript:;">文档中心</a>
                 <dl class="layui-nav-child"> <!-- 二级菜单 -->
-                    <dd><a href="#">网关架构</a></dd>
-                    <dd><a href="#">服务开发</a></dd>
-                    <dd><a href="#">接入开发</a></dd>
+                    <#--<dd><a href="#">网关架构</a></dd>-->
+                    <dd><a target="_blank" href="http://acooly.cn/docs/component/openapi-framework-common.html">开发指南</a></dd>
+                    <dd><a target="_blank" href="http://acooly.cn/docs/component/openapi-framework-client.html">开发SDK</a></dd>
                 </dl>
             </li>
         <li class="layui-nav-item">

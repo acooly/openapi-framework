@@ -91,7 +91,11 @@
                         </tr>
                         </thead>
                         <tr>
-                            <td colspan="7">公共参数: <a href="/docs/apischeme/spec.html#<%=e.messageType%>" target="_blank">公共<%=e.messageType%>报文</a></td>
+                            <%
+                            var anchor;
+                            if(e.messageType == 'Request'){ anchor = 'toc421'; }else if(e.messageType == 'Response'){ anchor = 'toc422'; }else{ anchor = 'toc423'; }
+                            %>
+                            <td colspan="7">公共参数: <a href="http://acooly.cn/docs/component/openapi-framework-common.html#<%=anchor%>" target="_blank">公共<%=e.messageType%>报文</a></td>
                         </tr>
                         <%
                         if(e.apiDocItems && e.apiDocItems.length > 0){
