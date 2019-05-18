@@ -7,6 +7,9 @@
  */
 package com.acooly.openapi.framework.core.log;
 
+import com.acooly.openapi.framework.common.enums.ApiProtocol;
+import com.acooly.openapi.framework.common.message.ApiMessage;
+
 import java.util.Map;
 
 /**
@@ -16,7 +19,14 @@ import java.util.Map;
  */
 public interface OpenApiLoggerHandler {
 
-  void log(String label, Map<String, ?> data);
+    void log(String label, Map<String, ?> data);
 
-  void log(String label, String msg);
+    void log(String label, String msg);
+
+    void log(String label, ApiMessage apiMessage);
+    void log(ApiMessage apiMessage);
+
+    default ApiProtocol getProtocol() {
+        return ApiProtocol.JSON;
+    }
 }

@@ -51,6 +51,15 @@ public class OpenAPIProperties {
     private Boolean enablePerfLog = true;
 
     /**
+     * 日志脱敏
+     */
+    private Boolean logSafety = false;
+
+    private String logSafetyIgnores;
+
+    private String logSafetyMasks;
+
+    /**
      * 是否在api中存储非查询类请求
      */
     private Boolean saveOrder = true;

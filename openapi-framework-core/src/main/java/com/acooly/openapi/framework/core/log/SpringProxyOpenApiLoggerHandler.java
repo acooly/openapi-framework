@@ -8,6 +8,7 @@
 package com.acooly.openapi.framework.core.log;
 
 import com.acooly.integration.bean.AbstractSpringProxyBean;
+import com.acooly.openapi.framework.common.message.ApiMessage;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -19,16 +20,26 @@ import java.util.Map;
  */
 @Component("openApiLoggerHandler")
 public class SpringProxyOpenApiLoggerHandler
-    extends AbstractSpringProxyBean<OpenApiLoggerHandler, DefaultOpenApiLoggerHandler>
-    implements OpenApiLoggerHandler {
+        extends AbstractSpringProxyBean<OpenApiLoggerHandler, DefaultOpenApiLoggerHandler>
+        implements OpenApiLoggerHandler {
 
-  @Override
-  public void log(String label, Map<String, ?> data) {
-    getTarget().log(label, data);
-  }
+    @Override
+    public void log(String label, Map<String, ?> data) {
+        getTarget().log(label, data);
+    }
 
-  @Override
-  public void log(String label, String msg) {
-    getTarget().log(label, msg);
-  }
+    @Override
+    public void log(String label, String msg) {
+        getTarget().log(label, msg);
+    }
+
+    @Override
+    public void log(String label, ApiMessage apiMessage) {
+        getTarget().log(label, apiMessage);
+    }
+
+    @Override
+    public void log(ApiMessage apiMessage) {
+        getTarget().log(apiMessage);
+    }
 }

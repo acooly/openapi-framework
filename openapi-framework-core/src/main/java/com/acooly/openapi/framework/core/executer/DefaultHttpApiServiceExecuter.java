@@ -26,6 +26,7 @@ public class DefaultHttpApiServiceExecuter extends HttpApiServiceExecuter {
     @Resource
     private EventPublisher eventPublisher;
 
+    @Override
     protected void doInitApiContext(ApiContext apiContext, HttpServletRequest orignalRequest, HttpServletResponse orignalResponse) {
         apiContext.setOrignalRequest(orignalRequest);
         apiContext.setOrignalResponse(orignalResponse);
