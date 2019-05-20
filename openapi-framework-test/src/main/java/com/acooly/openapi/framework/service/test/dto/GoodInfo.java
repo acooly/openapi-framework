@@ -29,22 +29,22 @@ public class GoodInfo extends InfoBase {
 
     @NotEmpty
     @Size(max = 63)
-    @OpenApiField(desc = "商品名称", demo = "牛肉干")
+    @OpenApiField(desc = "商品名称", demo = "牛肉干", ordinal = 1)
     private String name;
 
     @NotNull
-    @OpenApiField(desc = "商品类型")
+    @OpenApiField(desc = "商品类型", ordinal = 2)
     private GoodType goodType;
 
     @Size(min = 1)
-    @OpenApiField(desc = "商品数量", demo = "1")
+    @OpenApiField(desc = "商品数量", demo = "1", ordinal = 3)
     private int quantity;
 
     @MoneyConstraint(min = 1)
-    @OpenApiField(desc = "价格", demo = "120.00")
+    @OpenApiField(desc = "价格", demo = "120.00", ordinal = 4)
     private Money price;
 
     @HttpUrl(blankable = true)
-    @OpenApiField(desc = "介绍网址", demo = "http://www.merchant.com/goods.html")
+    @OpenApiField(desc = "介绍网址", demo = "http://www.merchant.com/goods.html", ordinal = 5)
     private String referUrl;
 }

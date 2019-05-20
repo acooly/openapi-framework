@@ -23,29 +23,39 @@ public abstract class ApiMessage extends InfoBase {
 
     @NotEmpty
     @Size(min = 8, max = 64)
-    @OpenApiField(desc = "请求流水号", constraint = "商户请求号，全局唯一。建议规则为：商户前缀+唯一标识")
+    @OpenApiField(desc = "请求流水号", constraint = "商户请求号，全局唯一。建议规则为：商户前缀+唯一标识"
+            , ordinal = ApiConstants.ORDINAL_MIN)
+//    @JSONField(ordinal = ApiConstants.ORDINAL_MIN)
     private String requestNo;
 
     @NotEmpty
-    @OpenApiField(desc = "Api服务名", constraint = "必填")
+    @OpenApiField(desc = "Api服务名", constraint = "必填", ordinal = ApiConstants.ORDINAL_MIN + 1)
+//    @JSONField(ordinal = ApiConstants.ORDINAL_MIN + 1)
     private String service;
 
     @NotEmpty
-    @OpenApiField(desc = "商户ID", constraint = "必填")
-    private String partnerId;
-
-    @NotEmpty
-    @OpenApiField(desc = "服务版本", constraint = "必填")
+    @OpenApiField(desc = "服务版本", constraint = "必填", ordinal = ApiConstants.ORDINAL_MIN + 2)
+//    @JSONField(ordinal = ApiConstants.ORDINAL_MIN + 2)
     private String version = ApiConstants.VERSION_DEFAULT;
 
-    @OpenApiField(desc = "报文协议", constraint = "定义报文体的协议，默认JSON")
+
+    @NotEmpty
+    @OpenApiField(desc = "商户ID", constraint = "必填", ordinal = ApiConstants.ORDINAL_MAX - 3)
+//    @JSONField(ordinal = ApiConstants.ORDINAL_MAX - 3)
+    private String partnerId;
+
+    @OpenApiField(desc = "报文协议", constraint = "定义报文体的协议，默认JSON", ordinal = ApiConstants.ORDINAL_MAX - 2)
+//    @JSONField(ordinal = ApiConstants.ORDINAL_MAX - 2)
     private ApiProtocol protocol = ApiProtocol.JSON;
 
     @Size(max = 128)
-    @OpenApiField(desc = "会话参数", constraint = "调用端的API调用会话参数，请求参数任何合法值，在响应时会回传给调用端")
+    @OpenApiField(desc = "会话参数", constraint = "调用端的API调用会话参数，请求参数任何合法值，在响应时会回传给调用端"
+            , ordinal = ApiConstants.ORDINAL_MAX - 1)
+//    @JSONField(ordinal = ApiConstants.ORDINAL_MAX - 1)
     private String context;
 
-    @OpenApiField(desc = "扩展参数", constraint = "扩展参数")
+    @OpenApiField(desc = "扩展参数", constraint = "扩展参数", ordinal = ApiConstants.ORDINAL_MAX)
+//    @JSONField(ordinal = ApiConstants.ORDINAL_MAX)
     private Map<String, String> ext = Maps.newHashMap();
 
     /**

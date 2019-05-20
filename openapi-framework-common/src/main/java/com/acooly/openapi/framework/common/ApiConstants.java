@@ -58,6 +58,10 @@ public final class ApiConstants {
     public static final String BUILDIN_APIDOC_CODE = "build-in";
     public static final String BUILDIN_APIDOC_NAME = "系统服务";
 
+
+    public static final int ORDINAL_MAX = 100000;
+    public static final int ORDINAL_MIN = -100000;
+
     private ApiConstants() {
         super();
     }

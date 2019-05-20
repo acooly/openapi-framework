@@ -10,6 +10,8 @@
  */
 package com.acooly.openapi.framework.common.annotation;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.lang.annotation.*;
 
 /**
@@ -22,31 +24,37 @@ import java.lang.annotation.*;
 @Documented
 public @interface OpenApiField {
 
-  /**
-   * 字段标题信息
-   *
-   * @return
-   */
-  String desc() default "";
+    /**
+     * 字段标题信息
+     *
+     * @return
+     */
+    String desc() default "";
 
-  /**
-   * 字段描述信息
-   *
-   * @return
-   */
-  String constraint() default "";
+    /**
+     * 字段描述信息
+     *
+     * @return
+     */
+    String constraint() default "";
 
-  /**
-   * 字段样子
-   *
-   * @return
-   */
-  String demo() default "";
+    /**
+     * 字段样子
+     *
+     * @return
+     */
+    String demo() default "";
 
-  /**
-   * 字段需要加密(AES)
-   *
-   * @return
-   */
-  boolean security() default false;
+    /**
+     * 字段需要加密(AES)
+     *
+     * @return
+     */
+    boolean security() default false;
+
+    /**
+     * 排序，按数字升序
+     * @return
+     */
+    int ordinal() default 0;
 }
