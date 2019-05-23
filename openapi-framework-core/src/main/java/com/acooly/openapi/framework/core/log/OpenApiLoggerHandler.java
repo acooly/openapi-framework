@@ -23,8 +23,7 @@ public interface OpenApiLoggerHandler {
 
     void log(String label, String msg);
 
-    void log(String label, ApiMessage apiMessage);
-    void log(ApiMessage apiMessage);
+    void log(String label, ApiMessage apiMessage, String msg);
 
     default ApiProtocol getProtocol() {
         return ApiProtocol.JSON;

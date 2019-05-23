@@ -31,74 +31,78 @@ import java.util.Map;
  * <p>Created by zhangpu on 2015/11/19.
  */
 public abstract class AbstractResponseMarshall<T, S extends ApiResponse>
-    implements ApiMarshall<T, S> {
+        implements ApiMarshall<T, S> {
 
-  @Resource protected OpenApiLoggerHandler openApiLoggerHandler;
-  @Resource private ApiMarshallCryptService apiMarshallCryptService;
-  @Resource protected ApiAuthentication apiAuthentication;
+    @Resource
+    protected OpenApiLoggerHandler openApiLoggerHandler;
+    @Resource
+    private ApiMarshallCryptService apiMarshallCryptService;
+    @Resource
+    protected ApiAuthentication apiAuthentication;
 
-  @Override
-  public T marshall(ApiResponse response) {
-    ApiContext apiContext = ApiContextHolder.getApiContext();
-    ObjectAccessor<ApiResponse> objectAccessor = ObjectAccessor.of(response);
-    for (Map.Entry<String, Field> entry :
-        objectAccessor.getClassMeta().getSecurityfieldMap().entrySet()) {
-      String value = objectAccessor.getPropertyValue(entry.getKey());
-      String encrypt =
-          apiMarshallCryptService.encrypt(entry.getKey(), value, apiContext.getAccessKey());
-      objectAccessor.setPropertyValue(entry.getKey(), encrypt);
-    }
-    T result = doMarshall(response);
-    doLogger(response, result);
-    apiContext.setResponseBody((String) result);
-    if (!Strings.isNullOrEmpty(apiContext.getAccessKey())) {
-      String sign =
-          apiAuthentication.signature(
-              (String) result, apiContext.getAccessKey(), apiContext.getSignType().name());
-      if(!Strings.isNullOrEmpty(sign)){
-        if (apiContext.getOrignalResponse() != null ) {
-          apiContext
-                  .getOrignalResponse()
-                  .setHeader(ApiConstants.SIGN_TYPE, apiContext.getSignType().name());
-          apiContext.getOrignalResponse().setHeader(ApiConstants.SIGN, sign);
+    @Override
+    public T marshall(ApiResponse response) {
+        ApiContext apiContext = ApiContextHolder.getApiContext();
+        ObjectAccessor<ApiResponse> objectAccessor = ObjectAccessor.of(response);
+        for (Map.Entry<String, Field> entry :
+                objectAccessor.getClassMeta().getSecurityfieldMap().entrySet()) {
+            String value = objectAccessor.getPropertyValue(entry.getKey());
+            String encrypt =
+                    apiMarshallCryptService.encrypt(entry.getKey(), value, apiContext.getAccessKey());
+            objectAccessor.setPropertyValue(entry.getKey(), encrypt);
         }
-        apiContext.setResponseSign(sign);
-      }
+        T result = doMarshall(response);
+        doLogger(response, result);
+        apiContext.setResponseBody((String) result);
+        if (!Strings.isNullOrEmpty(apiContext.getAccessKey())) {
+            String sign =
+                    apiAuthentication.signature(
+                            (String) result, apiContext.getAccessKey(), apiContext.getSignType().name());
+            if (!Strings.isNullOrEmpty(sign)) {
+                if (apiContext.getOrignalResponse() != null) {
+                    apiContext
+                            .getOrignalResponse()
+                            .setHeader(ApiConstants.SIGN_TYPE, apiContext.getSignType().name());
+                    apiContext.getOrignalResponse().setHeader(ApiConstants.SIGN, sign);
+                }
+                apiContext.setResponseSign(sign);
+            }
+        }
+        return result;
     }
-    return result;
-  }
 
-  abstract T doMarshall(ApiResponse response);
-  /**
-   * 日志
-   *
-   * @param apiResponse
-   * @param marshallData
-   */
-  protected void doLogger(ApiResponse apiResponse, T marshallData) {
-    if (marshallData.getClass().isAssignableFrom(String.class)) {
-      openApiLoggerHandler.log(getLogLabel(apiResponse), (String) marshallData);
-    } else if (marshallData.getClass().isAssignableFrom(Map.class)) {
-      openApiLoggerHandler.log(getLogLabel(apiResponse), (Map) marshallData);
-    } else {
-      openApiLoggerHandler.log(getLogLabel(apiResponse), marshallData.toString());
+    abstract T doMarshall(ApiResponse response);
+
+    /**
+     * 日志
+     *
+     * @param apiResponse
+     * @param marshallData
+     */
+    protected void doLogger(ApiResponse apiResponse, T marshallData) {
+        if (marshallData.getClass().isAssignableFrom(String.class)) {
+            openApiLoggerHandler.log(getLogLabel(apiResponse), apiResponse, (String) marshallData);
+        } else if (marshallData.getClass().isAssignableFrom(Map.class)) {
+            openApiLoggerHandler.log(getLogLabel(apiResponse), (Map) marshallData);
+        } else {
+            openApiLoggerHandler.log(getLogLabel(apiResponse), marshallData.toString());
+        }
     }
-  }
 
-  protected String getLogLabel(ApiResponse apiResponse) {
-    String labelPostfix =
-        (StringUtils.isNotBlank(apiResponse.getService())
-            ? "[" + apiResponse.getService() + "]:"
-            : ":");
-    if (ApiNotify.class.isAssignableFrom(apiResponse.getClass())) {
-      return "异步通知" + labelPostfix;
-    } else {
-      return "服务响应" + labelPostfix;
+    protected String getLogLabel(ApiResponse apiResponse) {
+        String labelPostfix =
+                (StringUtils.isNotBlank(apiResponse.getService())
+                        ? "[" + apiResponse.getService() + "]:"
+                        : ":");
+        if (ApiNotify.class.isAssignableFrom(apiResponse.getClass())) {
+            return "异步通知" + labelPostfix;
+        } else {
+            return "服务响应" + labelPostfix;
+        }
     }
-  }
 
-  @Override
-  public ApiProtocol getProtocol() {
-    return ApiProtocol.JSON;
-  }
+    @Override
+    public ApiProtocol getProtocol() {
+        return ApiProtocol.JSON;
+    }
 }

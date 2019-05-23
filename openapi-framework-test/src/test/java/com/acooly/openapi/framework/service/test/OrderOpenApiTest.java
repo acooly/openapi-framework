@@ -5,6 +5,7 @@ import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.utils.Ids;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
+import com.acooly.openapi.framework.core.log.SafetyLog;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
@@ -15,6 +16,7 @@ import com.acooly.openapi.framework.service.test.response.OrderCreateResponse;
 import com.acooly.openapi.framework.service.test.response.PayOrderResponse;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.io.ByteStreams;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -47,6 +49,12 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
 
     String payerUserId = "09876543211234567890";
     Money amount = Money.amout("200");
+
+
+    @Test
+    public void testSafetyProperties(){
+        System.out.println(SafetyLog.getSafetyProperties(OrderCreateRequest.class));
+    }
 
     /**
      * 同步请求

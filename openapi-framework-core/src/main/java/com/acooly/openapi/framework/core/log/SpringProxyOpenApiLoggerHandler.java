@@ -34,12 +34,8 @@ public class SpringProxyOpenApiLoggerHandler
     }
 
     @Override
-    public void log(String label, ApiMessage apiMessage) {
-        getTarget().log(label, apiMessage);
+    public void log(String label, ApiMessage apiMessage, String msg) {
+        getTarget().log(label, apiMessage, msg);
     }
 
-    @Override
-    public void log(ApiMessage apiMessage) {
-        getTarget().log(apiMessage);
-    }
 }

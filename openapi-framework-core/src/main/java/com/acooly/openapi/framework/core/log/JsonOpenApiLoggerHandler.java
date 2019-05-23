@@ -7,7 +7,6 @@
  */
 package com.acooly.openapi.framework.core.log;
 
-import com.acooly.core.utils.ToString;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
@@ -22,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Set;
@@ -102,17 +100,10 @@ public class JsonOpenApiLoggerHandler implements OpenApiLoggerHandler {
     }
 
     @Override
-    public void log(ApiMessage apiMessage) {
-        log(getLogLabel(apiMessage), apiMessage);
-    }
-
-    @Override
-    public void log(String label, ApiMessage apiMessage) {
-
+    public void log(String label, ApiMessage apiMessage, String msg) {
 
 
     }
-
 
 
     protected String getLogLabel(ApiMessage apiMessage) {

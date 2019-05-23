@@ -14,6 +14,7 @@ import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.message.ApiMessage;
 import com.acooly.openapi.framework.core.OpenAPIProperties;
+import com.acooly.openapi.framework.core.util.Pair;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -27,9 +28,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * OpenApi统一日志默认实现
@@ -64,57 +68,28 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
 
     @Override
     public void log(String label, String msg) {
+        log(label, null, msg);
+    }
 
+
+    @Override
+    public void log(String label, ApiMessage apiMessage, String msg) {
         if (openAPIProperties.getLogSafety()) {
-            try {
-                JSONObject jsonObject = JSON.parseObject(msg);
-                Map map = safetyJSONObject(jsonObject);
-                msg = JSON.toJSONString(map);
-            } catch (Exception e) {
-                // 不是jSON，ignore
+            if (isJson(msg)) {
+                if (apiMessage == null) {
+                    msg = safetyJson(msg, null);
+                } else {
+                    msg = safetyJson(msg, SafetyLog.getSafetyProperties(apiMessage.getClass()));
+                }
+
             }
         }
-
         if (isSep()) {
             apiQuerylogger.info(StringUtils.trimToEmpty(label) + msg);
         } else {
             logger.info(StringUtils.trimToEmpty(label) + msg);
         }
-    }
 
-
-    protected Map safetyJSONObject(JSONObject jsonObject) {
-        Map<Object, Object> newMap = Maps.newHashMap();
-        for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
-            if (entry.getValue() instanceof JSONObject) {
-                newMap.put(entry.getKey(), safetyJSONObject((JSONObject) entry.getValue()));
-            } else if (entry.getValue() instanceof JSONArray) {
-                newMap.put(entry.getKey(), safetyJSONArray((JSONArray) entry.getValue()));
-            } else {
-                if (needIgnore(entry.getKey())) {
-                    continue;
-                } else if (needMask(entry.getKey())) {
-                    newMap.put(entry.getKey(), ToString.mask(String.valueOf(entry.getValue())));
-                } else {
-                    newMap.put(entry.getKey(), entry.getValue());
-                }
-            }
-        }
-        return newMap;
-    }
-
-    protected List safetyJSONArray(JSONArray jsonArray) {
-        List<Object> list = Lists.newArrayList();
-        for (Object obj : jsonArray) {
-            if (obj instanceof JSONObject) {
-                list.add(safetyJSONObject((JSONObject) obj));
-            } else if (obj instanceof JSONArray) {
-                list.add(safetyJSONArray((JSONArray) obj));
-            } else {
-                list.add(obj);
-            }
-        }
-        return list;
     }
 
 
@@ -155,15 +130,6 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
         }
     }
 
-    @Override
-    public void log(String label, ApiMessage apiMessage) {
-
-    }
-
-    @Override
-    public void log(ApiMessage apiMessage) {
-
-    }
 
     private boolean isSep() {
         if (!openAPIProperties.getQueryLogSeparationEnable()) {
@@ -180,6 +146,10 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
     }
 
     protected boolean needMask(String key) {
+        return needMask(key, null);
+    }
+
+    protected boolean needMask(String key, Map<String, Annotation> safetyProperties) {
         boolean needToMask = false;
         for (String maskKey : getMasks()) {
             if (StringUtils.containsIgnoreCase(key, maskKey)) {
@@ -187,10 +157,21 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
                 break;
             }
         }
+
+        if (safetyProperties != null) {
+            Annotation annotation = safetyProperties.get(key);
+            if (annotation != null && ToString.Maskable.class.isAssignableFrom(annotation.getClass())) {
+                needToMask = true;
+            }
+        }
         return needToMask;
     }
 
     protected boolean needIgnore(String key) {
+        return needIgnore(key, null);
+    }
+
+    protected boolean needIgnore(String key, Map<String, Annotation> safetyProperties) {
         boolean needToIgnore = false;
         for (String k : getIgnores()) {
             if (StringUtils.containsIgnoreCase(key, k)) {
@@ -198,11 +179,18 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
                 break;
             }
         }
+
+        if (safetyProperties != null) {
+            Annotation annotation = safetyProperties.get(key);
+            if (annotation != null && ToString.Invisible.class.isAssignableFrom(annotation.getClass())) {
+                needToIgnore = true;
+            }
+        }
         return needToIgnore;
     }
 
     protected String doMask(Object object) {
-        return ToString.toString(object);
+        return ToString.mask(object.toString());
     }
 
     protected String doMaskIgnore(Object object) {
@@ -246,6 +234,61 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
     }
 
 
+    private boolean isJson(String json) {
+        try {
+            JSON.parse(json);
+            if ((Strings.startsWith(json, "[")
+                    && Strings.endsWith(json, "]")) || (Strings.startsWith(json, "{")
+                    && Strings.endsWith(json, "}"))) {
+                return true;
+            }
+        } catch (Exception e) {
+            //ig
+        }
+        return false;
+    }
+
+    private String safetyJson(String json, Map<String, Annotation> safetyProperties) {
+        Pattern pattern = Pattern.compile("\"(.*?)\":\"(.*?)\"");
+        Matcher matcher = pattern.matcher(json);
+        String str = null;
+        while (matcher.find()) {
+            str = matcher.group();
+            Pair<String, String> pair = getJsonPair(str);
+            if (needIgnore(pair.getF(), safetyProperties)) {
+                json = Strings.replace(json, str, "\"" + pair.getF() + "\":\"" + doMaskIgnore(pair.getS()) + "\"");
+            } else if (needMask(pair.getF(), safetyProperties)) {
+                json = Strings.replace(json, str, "\"" + pair.getF() + "\":\"" + doMask(pair.getS()) + "\"");
+            }
+        }
+        return json;
+    }
+
+    private Pair<String, String> getJsonPair(String str) {
+        String[] keyPair = Strings.split(str, ":");
+        String key = null;
+        String val = null;
+        if (keyPair.length > 0) {
+            key = keyPair[0];
+            if (Strings.startsWith(key, "\"")) {
+                key = Strings.removeStart(key, "\"");
+            }
+            if (Strings.endsWith(key, "\"")) {
+                key = Strings.removeEnd(key, "\"");
+            }
+        }
+        if (keyPair.length > 1) {
+            val = keyPair[1];
+            if (Strings.startsWith(val, "\"")) {
+                val = Strings.removeStart(val, "\"");
+            }
+            if (Strings.endsWith(val, "\"")) {
+                val = Strings.removeEnd(val, "\"");
+            }
+        }
+        return Pair.build(key, val);
+    }
+
     public void setMaskKeys(String maskKeys) {
         this.maskKeys = maskKeys;
     }
@@ -254,4 +297,17 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
         this.ignoreKeys = ignoreKeys;
     }
 
+
+    public static void main(String[] args) {
+        String json = "{\"amount\":\"[Ignore]\",\"buyerCertNo\":\"330702********5014\",\"buyerUserId\":\"09876543211234567890\"," +
+                "\"buyeryEmail\":\"qiuboboy@qq.com\",\"buyeryMobileNo\":\"138*****453\",\"context\":\"778b7e37-fd45-47a4-9be9-a36d8af7e465\",\"ext\":{\"xx\":\"oo\"}," +
+                "\"goodsInfos\":[{\"goodType\":\"actual\",\"name\":\"[Ignore]\",\"price\":\"400.00\",\"quantity\":0,\"referUrl\":\"http://acooly.cn/tianzi\"}],\"merchOrderNo\":\"19052318200108200001\",\"partnerId\":\"test\",\"password\":\"[Ignore]\",\"payeeUserId\":\"[Ignore]\",\"payerUserId\":\"09876543211234567890\",\"protocol\":\"JSON\",\"requestNo\":\"19052318200108200000\",\"service\":\"orderCreate\",\"title\":\"同步请求创建******哥\uD83D\uDC3E \",\"version\":\"1.0\"}";
+
+        Pattern pattern = Pattern.compile("(\".*?\":\\[}.*?,)|(\".*?\":.*?,)|(\".*?\":\".*?\")");
+        Matcher matcher = pattern.matcher(json);
+        while (matcher.find()) {
+            System.out.println(matcher.group(1));
+        }
+
+    }
 }

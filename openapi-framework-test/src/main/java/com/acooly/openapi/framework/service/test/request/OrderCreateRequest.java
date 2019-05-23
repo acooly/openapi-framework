@@ -1,6 +1,7 @@
 package com.acooly.openapi.framework.service.test.request;
 
 import com.acooly.core.utils.Money;
+import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.validate.jsr303.CertNo;
 import com.acooly.core.utils.validate.jsr303.MobileNo;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
@@ -33,6 +34,7 @@ public class OrderCreateRequest extends ApiRequest {
     @NotEmpty
     @Size(max = 64)
     @OpenApiField(desc = "标题", demo = "特色牛肉干", ordinal = 2)
+    @ToString.Maskable
     private String title;
 
     @OpenApiField(desc = "金额", constraint = "单笔金额最小1元，最大10000元", demo = "120.00", ordinal = 3)
@@ -60,6 +62,7 @@ public class OrderCreateRequest extends ApiRequest {
     private String buyerCertNo;
 
     @NotEmpty
+    @ToString.Invisible
     @Size(min = 20, max = 20)
     @OpenApiField(desc = "卖家用户ID", demo = "201603080912340002", ordinal = 9)
     private String payeeUserId;

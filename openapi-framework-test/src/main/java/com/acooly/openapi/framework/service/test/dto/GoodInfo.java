@@ -9,6 +9,7 @@ package com.acooly.openapi.framework.service.test.dto;
 
 import com.acooly.core.common.facade.InfoBase;
 import com.acooly.core.utils.Money;
+import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.validate.jsr303.HttpUrl;
 import com.acooly.core.utils.validate.jsr303.MoneyConstraint;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
@@ -44,6 +45,7 @@ public class GoodInfo extends InfoBase {
     @OpenApiField(desc = "价格", demo = "120.00", ordinal = 4)
     private Money price;
 
+    @ToString.Invisible
     @HttpUrl(blankable = true)
     @OpenApiField(desc = "介绍网址", demo = "http://www.merchant.com/goods.html", ordinal = 5)
     private String referUrl;
