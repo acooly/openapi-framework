@@ -47,7 +47,7 @@ public class DefaultHttpApiServiceExecuter extends HttpApiServiceExecuter {
     private void logRequestData(ApiContext apiContext) {
         String serviceName = apiContext.getServiceName();
         String labelPostfix = (StringUtils.isNotBlank(serviceName) ? "[" + serviceName + "]:" : ":");
-        openApiLoggerHandler.log("服务请求" + labelPostfix, apiContext.getRequestBody());
+        openApiLoggerHandler.log("服务请求" + labelPostfix, apiContext.getRequest(), apiContext.getRequestBody());
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})

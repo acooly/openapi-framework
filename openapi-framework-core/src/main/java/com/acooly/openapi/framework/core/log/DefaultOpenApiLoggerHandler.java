@@ -14,22 +14,16 @@ import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.message.ApiMessage;
 import com.acooly.openapi.framework.core.OpenAPIProperties;
-import com.acooly.openapi.framework.core.util.Pair;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -47,17 +41,18 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
     public static final String DEF_IGNORE_KEYS = "password,pass,passwd";
     private static final Logger logger = LoggerFactory.getLogger("ParamsLogger");
     private static final Logger apiQuerylogger = LoggerFactory.getLogger("API-QUERY");
-    /**
-     * 需要mask的参数key，多个使用（逗号）分隔(兼容V3)
-     */
-    @Value("${system.logger.maskkeys:''}")
-    private String maskKeys;
 
     /**
-     * 需要忽略的参数key，多个使用（逗号）分隔(兼容V3)
+     * json正则解析表达式.
+     * 1、group1-3:数组"xxx":[]
+     * 2、group4-6:对象"xxx":{}
+     * 3、group7-9:非数字"xxx":"yyy"
+     * 4、group10-12:数字"xxx":yyy
      */
-    @Value("${system.logger.ignorekeys:''}")
-    private String ignoreKeys;
+    private static final String JSON_REGEX = "(\"([^\"]+)\":(\\[.*?\\]))|" +
+            "(\"([^\"]+)\":(\\{.*?\\}))|" +
+            "(\"([^\"]+)\":\"([^\"]+)\")|" +
+            "(\"([^\"]+)\":([^\",,^\\}]+))";
 
     private Set<String> masks;
     private Set<String> ignores;
@@ -74,6 +69,7 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
 
     @Override
     public void log(String label, ApiMessage apiMessage, String msg) {
+        long start = System.currentTimeMillis();
         if (openAPIProperties.getLogSafety()) {
             if (isJson(msg)) {
                 if (apiMessage == null) {
@@ -81,9 +77,10 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
                 } else {
                     msg = safetyJson(msg, SafetyLog.getSafetyProperties(apiMessage.getClass()));
                 }
-
+                logger.debug("safety-log: {}ms", (System.currentTimeMillis() - start));
             }
         }
+
         if (isSep()) {
             apiQuerylogger.info(StringUtils.trimToEmpty(label) + msg);
         } else {
@@ -194,7 +191,7 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
     }
 
     protected String doMaskIgnore(Object object) {
-        return "[Ignore]";
+        return "<Ignore>";
     }
 
     protected Set<String> getMasks() {
@@ -202,13 +199,10 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
             synchronized (this) {
                 if (masks == null) {
                     masks = Sets.newHashSet(StringUtils.split(DEF_MASK_KEYS, ","));
-                    if (StringUtils.isNotBlank(maskKeys)) {
-                        masks.addAll(Sets.newHashSet(StringUtils.split(maskKeys, ",")));
-                    }
                     if (Strings.isNoneBlank(openAPIProperties.getLogSafetyMasks())) {
                         masks.addAll(Sets.newHashSet(StringUtils.split(openAPIProperties.getLogSafetyMasks(), ",")));
                     }
-                    logger.info("初始化加载 mask keys：{}", masks);
+                    logger.info("初始化全局 safetylog-mask keys：{}", masks);
                 }
             }
         }
@@ -220,13 +214,10 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
             synchronized (this) {
                 if (ignores == null) {
                     ignores = Sets.newHashSet(StringUtils.split(DEF_IGNORE_KEYS, ","));
-                    if (StringUtils.isNotBlank(ignoreKeys)) {
-                        ignores.addAll(Sets.newHashSet(StringUtils.split(ignoreKeys, ",")));
-                    }
                     if (StringUtils.isNotBlank(openAPIProperties.getLogSafetyIgnores())) {
                         ignores.addAll(Sets.newHashSet(StringUtils.split(openAPIProperties.getLogSafetyIgnores(), ",")));
                     }
-                    logger.info("初始化加载 ignore keys：{}", ignores);
+                    logger.info("初始化全局 safetylog-ignore keys：{}", ignores);
                 }
             }
         }
@@ -249,65 +240,35 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
     }
 
     private String safetyJson(String json, Map<String, Annotation> safetyProperties) {
-        Pattern pattern = Pattern.compile("\"(.*?)\":\"(.*?)\"");
+        if (Strings.isBlank(json)) {
+            return Strings.trimToEmpty(json);
+        }
+        Pattern pattern = Pattern.compile(JSON_REGEX);
         Matcher matcher = pattern.matcher(json);
         String str = null;
         while (matcher.find()) {
-            str = matcher.group();
-            Pair<String, String> pair = getJsonPair(str);
-            if (needIgnore(pair.getF(), safetyProperties)) {
-                json = Strings.replace(json, str, "\"" + pair.getF() + "\":\"" + doMaskIgnore(pair.getS()) + "\"");
-            } else if (needMask(pair.getF(), safetyProperties)) {
-                json = Strings.replace(json, str, "\"" + pair.getF() + "\":\"" + doMask(pair.getS()) + "\"");
+            if (Strings.isNotBlank(matcher.group(1))) {
+                // 数组集合，递归处理
+                json = Strings.replace(json, matcher.group(1), "\"" + matcher.group(2) + "\":" + safetyJson(matcher.group(3), safetyProperties));
+            } else if (Strings.isNotBlank(matcher.group(4))) {
+                json = Strings.replace(json, matcher.group(4), "\"" + matcher.group(5) + "\":" + safetyJson(matcher.group(6), safetyProperties));
+            } else if (Strings.isNotBlank(matcher.group(7))) {
+                str = matcher.group(7);
+                json = safetyReplace(json, matcher.group(7), matcher.group(8), matcher.group(9), false, safetyProperties);
+            } else if (Strings.isNotBlank(matcher.group(10))) {
+                str = matcher.group(10);
+                json = safetyReplace(json, matcher.group(10), matcher.group(11), matcher.group(12), true, safetyProperties);
             }
         }
         return json;
     }
 
-    private Pair<String, String> getJsonPair(String str) {
-        String[] keyPair = Strings.split(str, ":");
-        String key = null;
-        String val = null;
-        if (keyPair.length > 0) {
-            key = keyPair[0];
-            if (Strings.startsWith(key, "\"")) {
-                key = Strings.removeStart(key, "\"");
-            }
-            if (Strings.endsWith(key, "\"")) {
-                key = Strings.removeEnd(key, "\"");
-            }
+    private String safetyReplace(String json, String str, String key, String value, boolean isNumber, Map<String, Annotation> safetyProperties) {
+        if (needIgnore(key, safetyProperties)) {
+            json = Strings.replace(json, str, "\"" + key + "\":" + (isNumber ? doMask(value) : "\"" + doMaskIgnore(value) + "\""));
+        } else if (needMask(key, safetyProperties)) {
+            json = Strings.replace(json, str, "\"" + key + "\":" + (isNumber ? doMask(value) : "\"" + doMask(value) + "\""));
         }
-        if (keyPair.length > 1) {
-            val = keyPair[1];
-            if (Strings.startsWith(val, "\"")) {
-                val = Strings.removeStart(val, "\"");
-            }
-            if (Strings.endsWith(val, "\"")) {
-                val = Strings.removeEnd(val, "\"");
-            }
-        }
-        return Pair.build(key, val);
-    }
-
-    public void setMaskKeys(String maskKeys) {
-        this.maskKeys = maskKeys;
-    }
-
-    public void setIgnoreKeys(String ignoreKeys) {
-        this.ignoreKeys = ignoreKeys;
-    }
-
-
-    public static void main(String[] args) {
-        String json = "{\"amount\":\"[Ignore]\",\"buyerCertNo\":\"330702********5014\",\"buyerUserId\":\"09876543211234567890\"," +
-                "\"buyeryEmail\":\"qiuboboy@qq.com\",\"buyeryMobileNo\":\"138*****453\",\"context\":\"778b7e37-fd45-47a4-9be9-a36d8af7e465\",\"ext\":{\"xx\":\"oo\"}," +
-                "\"goodsInfos\":[{\"goodType\":\"actual\",\"name\":\"[Ignore]\",\"price\":\"400.00\",\"quantity\":0,\"referUrl\":\"http://acooly.cn/tianzi\"}],\"merchOrderNo\":\"19052318200108200001\",\"partnerId\":\"test\",\"password\":\"[Ignore]\",\"payeeUserId\":\"[Ignore]\",\"payerUserId\":\"09876543211234567890\",\"protocol\":\"JSON\",\"requestNo\":\"19052318200108200000\",\"service\":\"orderCreate\",\"title\":\"同步请求创建******哥\uD83D\uDC3E \",\"version\":\"1.0\"}";
-
-        Pattern pattern = Pattern.compile("(\".*?\":\\[}.*?,)|(\".*?\":.*?,)|(\".*?\":\".*?\")");
-        Matcher matcher = pattern.matcher(json);
-        while (matcher.find()) {
-            System.out.println(matcher.group(1));
-        }
-
+        return json;
     }
 }
