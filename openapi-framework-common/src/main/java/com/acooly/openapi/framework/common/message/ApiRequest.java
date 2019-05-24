@@ -14,17 +14,20 @@ import org.springframework.beans.BeanUtils;
 public class ApiRequest extends ApiMessage {
 
 
-  /** 参数校验,校验失败请抛出RuntimeException */
-  @Override
-  public void check() throws RuntimeException {}
-
-  public <T extends OrderBase> T toOrder(Class<T> clazz) {
-    T t = BeanUtils.instantiate(clazz);
-    t.setGid(MDC.get("gid"));
-    BeanCopier.copy(this, t);
-    if (t instanceof BizOrderBase) {
-      ((BizOrderBase) t).setBizOrderNo(Ids.oid());
+    /**
+     * 参数校验,校验失败请抛出RuntimeException
+     */
+    public void check() throws RuntimeException {
     }
-    return t;
-  }
+
+
+    public <T extends OrderBase> T toOrder(Class<T> clazz) {
+        T t = BeanUtils.instantiate(clazz);
+        t.setGid(MDC.get("gid"));
+        BeanCopier.copy(this, t);
+        if (t instanceof BizOrderBase) {
+            ((BizOrderBase) t).setBizOrderNo(Ids.oid());
+        }
+        return t;
+    }
 }

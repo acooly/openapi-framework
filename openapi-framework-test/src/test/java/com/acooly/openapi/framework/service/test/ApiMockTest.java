@@ -2,7 +2,7 @@ package com.acooly.openapi.framework.service.test;
 
 import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
-import com.acooly.openapi.framework.service.domain.LoginRequest;
+import com.acooly.openapi.framework.common.message.builtin.LoginRequest;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
 import com.acooly.openapi.framework.service.test.request.OrderCreateRequest;

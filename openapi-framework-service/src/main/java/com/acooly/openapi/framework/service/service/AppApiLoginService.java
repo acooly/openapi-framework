@@ -3,7 +3,7 @@ package com.acooly.openapi.framework.service.service;
 
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.service.domain.LoginDto;
-import com.acooly.openapi.framework.service.domain.LoginRequest;
+import com.acooly.openapi.framework.common.message.builtin.LoginRequest;
 
 /**
  * @author zhangpu
