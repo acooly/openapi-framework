@@ -10,6 +10,7 @@
  */
 package com.acooly.openapi.framework.core.service.factory;
 
+import com.acooly.core.common.boot.Env;
 import com.acooly.core.utils.Assert;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.ApiDocNote;
@@ -130,23 +131,22 @@ public class ApiServiceFactoryImpl
             Assert.notNull(apiNotifyBean);
         }
         if (apiServiceAnnotation.responseType() != SYN) {
-            Assert.isAssignable(
-                    ApiAsyncRequest.class,
-                    requestClazz,
+            Assert.isAssignable(ApiAsyncRequest.class, requestClazz,
                     "异步服务" + curApiService + "请求对象必须为ApiAsyncRequest及其子类");
         }
-
-        ApiDocType apiDocType = AnnotationUtils.findAnnotation(curApiService.getClass(), ApiDocType.class);
-        if (apiDocType == null) {
-            logger.info("未加载openapi服务[{}] {}:{} 未标记@ApiDocType，请告诉Apidoc应该放到那个菜单",
-                    apiServiceAnnotation.desc(), apiServiceAnnotation.name(), apiServiceAnnotation.version());
-            return false;
-        }
-        ApiDocNote apiDocNote = AnnotationUtils.findAnnotation(curApiService.getClass(), ApiDocNote.class);
-        if (apiDocNote == null) {
-            logger.info("未加载openapi服务[{}] {}:{} 未标记@ApiDocNote，请告诉客户端这个接口做什么的，什么场景用，是否有特别注意的？",
-                    apiServiceAnnotation.desc(), apiServiceAnnotation.name(), apiServiceAnnotation.version());
-            return false;
+        if (!Env.isOnline()) {
+            ApiDocType apiDocType = AnnotationUtils.findAnnotation(curApiService.getClass(), ApiDocType.class);
+            if (apiDocType == null) {
+                logger.info("未加载openapi服务[{}] {}:{} 未标记@ApiDocType，请告诉Apidoc应该放到那个菜单",
+                        apiServiceAnnotation.desc(), apiServiceAnnotation.name(), apiServiceAnnotation.version());
+                return false;
+            }
+            ApiDocNote apiDocNote = AnnotationUtils.findAnnotation(curApiService.getClass(), ApiDocNote.class);
+            if (apiDocNote == null) {
+                logger.info("未加载openapi服务[{}] {}:{} 未标记@ApiDocNote，请告诉客户端这个接口做什么的，什么场景用，是否有特别注意的？",
+                        apiServiceAnnotation.desc(), apiServiceAnnotation.name(), apiServiceAnnotation.version());
+                return false;
+            }
         }
         return true;
     }
