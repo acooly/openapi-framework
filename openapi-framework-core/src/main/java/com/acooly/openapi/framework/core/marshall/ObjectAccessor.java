@@ -73,9 +73,26 @@ public class ObjectAccessor<T> {
           field -> {
             OpenApiField openApiField = field.getAnnotation(OpenApiField.class);
             if (openApiField == null) {
-              logger.warn("发现没有标注OpenApiField的字段{}", field);
+              logger.warn("发现没有标注OpenApiField的字段 {}", field);
               return;
             }
+            if(Strings.isNullOrEmpty(openApiField.desc())){
+              logger.warn("发现OpenApiField的desc未设置，字段 {}", field);
+              return;
+            }
+            if(Strings.isNullOrEmpty(openApiField.constraint())){
+              logger.warn("发现OpenApiField的constraint未设置，字段 {}", field);
+              return;
+            }
+            if(Strings.isNullOrEmpty(openApiField.demo())){
+              logger.warn("发现OpenApiField的demo未设置，字段 {}", field);
+              return;
+            }
+            if(openApiField.ordinal() == 0){
+              logger.warn("发现OpenApiField的ordinal未设置，字段 {}", field);
+              return;
+            }
+
             if (!filedMap.containsKey(field.getName())) {
               filedMap.put(field.getName(), field);
               if (openApiField.security()) {
@@ -85,6 +102,7 @@ public class ObjectAccessor<T> {
                   throw new AppConfigException(field + "标注了需要加密，字段类型必须为String");
                 }
               }
+
             }
           });
       classMeta = new ClassMeta(filedMap, securityfieldMap);

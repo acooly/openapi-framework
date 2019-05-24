@@ -12,6 +12,8 @@ package com.acooly.openapi.framework.core.service.factory;
 
 import com.acooly.core.utils.Assert;
 import com.acooly.openapi.framework.common.ApiConstants;
+import com.acooly.openapi.framework.common.annotation.ApiDocNote;
+import com.acooly.openapi.framework.common.annotation.ApiDocType;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.common.message.ApiAsyncRequest;
@@ -31,6 +33,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -83,16 +86,16 @@ public class ApiServiceFactoryImpl
         OpenApiService openApiService = getOpenApiServiceAnnotation(curApiService);
         if (openApiService == null) {
             throw new RuntimeException(
-                    "openapi服务"
-                            + curApiService.getClass()
-                            + "必须要标记com.acooly.openapi.framework.core.meta.OpenApiService注解");
+                    "openapi服务" + curApiService.getClass() + "必须要标记com.acooly.openapi.framework.core.meta.OpenApiService注解");
         }
         if (!openAPIProperties.getLogin().isEnable()) {
             if (openApiService.name().equals(ApiConstants.LOGIN_SERVICE_NAME)) {
                 return;
             }
         }
-        checkApiService(curApiService);
+        if (!checkApiService(curApiService)) {
+            return;
+        }
         if (servicesMap.containsKey(openApiService.name())) {
             Iterator<ApiService> iterator = servicesMap.get(openApiService.name()).iterator();
             while (iterator.hasNext()) {
@@ -116,7 +119,7 @@ public class ApiServiceFactoryImpl
         ObjectAccessor.of(curApiService.getResponseBean());
     }
 
-    private void checkApiService(ApiService curApiService) {
+    private boolean checkApiService(ApiService curApiService) {
         Class requestClazz = GenericsUtils.getSuperClassGenricType(curApiService.getClass(), 0);
         Class responseClazz = GenericsUtils.getSuperClassGenricType(curApiService.getClass(), 1);
         Assert.isAssignable(ApiRequest.class, requestClazz);
@@ -132,6 +135,20 @@ public class ApiServiceFactoryImpl
                     requestClazz,
                     "异步服务" + curApiService + "请求对象必须为ApiAsyncRequest及其子类");
         }
+
+        ApiDocType apiDocType = AnnotationUtils.findAnnotation(curApiService.getClass(), ApiDocType.class);
+        if (apiDocType == null) {
+            logger.info("未加载openapi服务[{}] {}:{} 未标记@ApiDocType，请告诉Apidoc应该放到那个菜单",
+                    apiServiceAnnotation.desc(), apiServiceAnnotation.name(), apiServiceAnnotation.version());
+            return false;
+        }
+        ApiDocNote apiDocNote = AnnotationUtils.findAnnotation(curApiService.getClass(), ApiDocNote.class);
+        if (apiDocNote == null) {
+            logger.info("未加载openapi服务[{}] {}:{} 未标记@ApiDocNote，请告诉客户端这个接口做什么的，什么场景用，是否有特别注意的？",
+                    apiServiceAnnotation.desc(), apiServiceAnnotation.name(), apiServiceAnnotation.version());
+            return false;
+        }
+        return true;
     }
 
     /**

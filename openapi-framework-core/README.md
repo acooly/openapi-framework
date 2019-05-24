@@ -50,6 +50,69 @@ acooly.openapi.login.secretKeyDynamic=true
 ```
 >注意：流控的功能和配置在openapi-framework-extensions模块组件中，这里不重复介绍。
 
+## 特性
+
+### 日志脱敏
+日志脱敏特性设计为在报文进入（请求）后和报文发出（响应/通知）前对目标报文（例如JSON字符串）进行脱敏处理。框架采用正则匹配替换模式对目标属性值进行脱敏处理，脱敏的方式包括忽略和Mask两种方式。
+
+* 参数开关支持（`acooly.openapi.logSafety=false|true`,默认false关闭）
+* 支持全局参数配置忽略和Mask（`acooly.openapi.logSafetyIgnores/logSafetyMasks=xxx,yyy,zzz`）
+* 支持在报文上字段上配置忽略(`@ToString.Invisible`)或Mask（`@ToString.Maskable`）,忽略优先。
+* 支持多级属性脱敏（子对象，子集合）
+
+全局配置案例：
+
+```ini
+acooly.openapi.logSafety=true
+acooly.openapi.logSafetyIgnores=amount,name
+acooly.openapi.logSafetyMasks=payeeUserId,buyeryMobileNo,buyerCertNo
+```
+
+报文配置案例：
+
+```java
+@NotEmpty
+@Size(max = 64)
+@OpenApiField(desc = "标题", demo = "特色牛肉干", ordinal = 2)
+@ToString.Maskable
+private String title;
+    
+@NotEmpty
+@ToString.Invisible
+@Size(min = 20, max = 20)
+@OpenApiField(desc = "卖家用户ID", demo = "201603080912340002", ordinal = 9)
+private String payeeUserId;
+```
+
+### 流控
+
+OpenApi框架对流控的支持模式为多级（parentId,service两级）控流（非整流模式），当流量超过流控配置则拒绝请求。
+
+* 支持多组配置，每个请求需要通过所有组的check才能通过流控正常请求。
+* 策略配置支持： “*”
+
+具体配置如下：
+
+```ini
+## 全局所有服务秒级流控1000请求
+acooly.openapi.rates[0].partner-id=*
+acooly.openapi.rates[0].method=*
+acooly.openapi.rates[0].interval=1000
+acooly.openapi.rates[0].max-requests=1000
+
+## 全局queryUser服务秒级流控100请求
+acooly.openapi.rates[1].partner-id=*
+acooly.openapi.rates[1].method=queryUser
+acooly.openapi.rates[1].interval=1000
+acooly.openapi.rates[1].max-requests=100
+
+## 商户(2019089021212230001)的queryUser服务秒级流控100请求
+acooly.openapi.rates[2].partner-id=2019089021212230001
+acooly.openapi.rates[2].method=queryUser
+acooly.openapi.rates[2].interval=1000
+acooly.openapi.rates[2].max-requests=10
+```
+
 ## 工程规划
 
 如果目标项目需要提供网关服务，目前情况下，加载依赖配置即可正常开发openApi服务提供服务。这里推荐一个工程结构规划，编译项目管理和报文复用。
@@ -91,9 +154,10 @@ openapi框架提供的Api服务开发模式比较简单，基于接口报文定�
 	* 分页查询请求报文需继承PageApiRequest(extends AppRequest)，增加页号和页大小
 	* 异步接口请求报文需继承ApiAsyncRequest(extends AppRequest)，增加回调地址和通知地址
 * 报文内定义的所有数据项必须编写@OpenApiField文档，用于生成自动文档，否则框架不会序列化并启动时警告。
-	* desc：表示字段中文名称，必填；
-	* constraint：表示字段说明，可选，如果为空则为解析为desc
-	* demo: 字段demo，必填
+	* desc：表示字段中文名称，必填；**（你不填试试，除非你不想用这个接口）**
+	* constraint：表示字段说明，可选，如果为空则为解析为desc **（你不填试试，除非你不想用这个接口）**
+	* demo: 字段demo，必填 **（你不填试试，除非你不想用这个接口）**
+	* ordinal: 文档顺序，必填**（你不填试试，除非你不想用这个接口）**
 	* security：是否加密字段数据，可选，默认为false
 * 报文内定义的所有数据项必须编写JSR303的验证注释，否则框架不会序列化并启动时警告
 * 推荐使用的数据项数据类型为：String, Integer, Long, Money(金额或2位小数), Enum。其他类型不推荐但可以支持（如：decimal,boolean等）。
@@ -146,7 +210,7 @@ public class WithdrawRequest extends ApiAsyncRequest {
 	* responseType: 服务类型，默认：SYN,可选为SYN,ASYN和REDIRECT（不推荐）
 	* busiType: 业务类型，可选：Trade（默认），Manage和Query，框架默认情况下，Query类型不持久化请求数据，以提高效率。
 	* owner: 标记服务提供者或开发人员，便于管理。
-* **文档标记：**主要用于文档自动化生成。包括：@ApiDocType：标记文档的scheme分类方案，@ApiDocNote接口说明，支持HTML。
+* **文档标记：**主要用于文档自动化生成。包括：@ApiDocType：标记文档的scheme分类方案，@ApiDocNote接口说明，支持HTML。**（你不填试试，除非你不想用这个接口）**
 * **逻辑实现：**接口的逻辑实现请覆写doService方法实现，调用逻辑处理。回填response.
 * **异常处理：**doService方法内部可选进行异常处理，因为框架已提供了统一的基于BusinessException的异常处理。也就是说你的内容业务服务或openapi服务内如果手动抛出异常，请使用BusinessExcetion或其子类。
 * 
