@@ -26,13 +26,13 @@ public interface ApiDocItemDao extends EntityMybatisDao<ApiDocItem> {
     @Select("select * from api_doc_item where item_no = #{itemNo}")
     ApiDocItem findByItemNo(@Param("itemNo") String itemNo);
 
-    @Select("select * from api_doc_item where message_no = #{messageNo}")
+    @Select("select * from api_doc_item where message_no = #{messageNo} order by sort_time")
     List<ApiDocItem> findByMessageNo(@Param("messageNo") String messageNo);
 
-    @Select("select * from api_doc_item where message_no = #{messageNo} and parent_no is null")
+    @Select("select * from api_doc_item where message_no = #{messageNo} and parent_no is null order by sort_time")
     List<ApiDocItem> findByMessageNoTop(@Param("messageNo") String messageNo);
 
-    @Select("select * from api_doc_item where message_no = #{messageNo} and parent_no = #{parentNo}")
+    @Select("select * from api_doc_item where message_no = #{messageNo} and parent_no = #{parentNo} order by sort_time")
     List<ApiDocItem> findByMessageNoAndParentNo(@Param("messageNo") String messageNo, @Param("parentNo") String parentNo);
 
     @Select("select * from api_doc_item where id in #{itemIds}")

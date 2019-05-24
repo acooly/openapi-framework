@@ -2,6 +2,7 @@ package com.acooly.openapi.framework.core.marshall;
 
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.exception.AppConfigException;
+import com.acooly.core.utils.Types;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.convert.ApiServiceConversionService;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
@@ -87,12 +88,10 @@ public class ObjectAccessor<T> {
                                 logger.warn("发现OpenApiField的desc未设置，字段 {}", field);
                                 return;
                             }
-                            if (Strings.isNullOrEmpty(openApiField.constraint())) {
-                                logger.warn("发现OpenApiField的constraint未设置，字段 {}", field);
-                                return;
-                            }
-                            if (Strings.isNullOrEmpty(openApiField.demo())) {
-                                logger.warn("发现OpenApiField的demo未设置，字段 {}", field);
+                            if (Strings.isNullOrEmpty(openApiField.demo()) &&
+                                    (Types.isBaseType(field.getType()) ||
+                                            Types.isMoney(field.getType()))) {
+                                logger.warn("发现OpenApiField的demo未设置，基础类型字段 {}", field);
                                 return;
                             }
                             if (openApiField.ordinal() == 0) {

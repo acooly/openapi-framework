@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -191,6 +192,7 @@ public class ApiDocItemServiceImpl extends EntityServiceImpl<ApiDocItem, ApiDocI
     private List<ApiDocItem> doMarshalTree(List<ApiDocItem> apiDocItems) {
 
         List<ApiDocItem> result = Lists.newLinkedList();
+        Comparator<ApiDocItem> comparator = Comparator.nullsLast(Comparator.comparing(ApiDocItem::getSortTime));
         try {
             Map<String, ApiDocItem> dtoMap = Maps.newHashMap();
             for (ApiDocItem apiDocItem : apiDocItems) {
@@ -203,12 +205,11 @@ public class ApiDocItemServiceImpl extends EntityServiceImpl<ApiDocItem, ApiDocI
                 } else {
                     if (dtoMap.get(node.getParentNo()) != null) {
                         dtoMap.get(node.getParentNo()).addChild(node);
-                        Collections.sort(dtoMap.get(node.getParentNo()).getChildren(),
-                                new ApiDocItem.ApiDocItemComparator());
+                        Collections.sort(dtoMap.get(node.getParentNo()).getChildren(), comparator);
                     }
                 }
             }
-            Collections.sort(result, new ApiDocItem.ApiDocItemComparator());
+            Collections.sort(result, comparator);
         } catch (Exception e) {
             throw new BusinessException("组装消息字段树失败：" + e.getMessage());
         }

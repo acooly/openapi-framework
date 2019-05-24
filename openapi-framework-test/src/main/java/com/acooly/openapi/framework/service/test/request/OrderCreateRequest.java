@@ -33,7 +33,7 @@ public class OrderCreateRequest extends ApiRequest {
 
     @NotEmpty
     @Size(max = 64)
-    @OpenApiField(desc = "标题", demo = "特色牛肉干", ordinal = 2)
+    @OpenApiField(desc = "标题", constraint = "标题", demo = "特色牛肉干", ordinal = 2)
     @ToString.Maskable
     private String title;
 
@@ -72,7 +72,10 @@ public class OrderCreateRequest extends ApiRequest {
     @OpenApiField(desc = "交易密码", demo = "!QAZ@WSX", security = true, ordinal = 10)
     private String password;
 
-    @OpenApiField(desc = "商品信息", ordinal = 11)
+    @OpenApiField(desc = "单个商品", ordinal = 11)
+    private GoodInfo goodsInfo;
+
+    @OpenApiField(desc = "商品信息", ordinal = 12)
     private List<GoodInfo> goodsInfos;
 
 }

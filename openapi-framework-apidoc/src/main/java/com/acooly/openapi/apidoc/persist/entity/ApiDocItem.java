@@ -194,7 +194,7 @@ public class ApiDocItem extends AbstractEntity {
         public int compare(ApiDocItem node1, ApiDocItem node2) {
             long orderTime1 = node1.getSortTime();
             long orderTime2 = node2.getSortTime();
-            return orderTime1 > orderTime2 ? -1 : (orderTime1 == orderTime2 ? 0 : 1);
+            return orderTime1 > orderTime2 ? 1 : (orderTime1 == orderTime2 ? 0 : -1);
         }
     }
 

@@ -5,7 +5,9 @@
 
 package com.acooly.openapi.apidoc.generator.parser.impl;
 
+import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.Types;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.openapi.apidoc.enums.*;
 import com.acooly.openapi.apidoc.generator.ApiDocModule;
@@ -29,6 +31,7 @@ import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.service.domain.ApiMetaService;
 import com.acooly.openapi.framework.service.service.ApiMetaServiceService;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -41,6 +44,7 @@ import javax.validation.constraints.NotNull;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Slf4j
@@ -144,11 +148,11 @@ public class ApiDocParserImpl extends OpenApiDocParserSupport implements ApiDocP
         messageDoc.setServiceNo(apiDocService.getServiceNo());
         messageDoc.setMessageType(doParseMessageType(clazz));
         messageDoc.setMessageNo(messageDoc.getServiceNo() + "_" + messageDoc.getMessageType().code());
-        messageDoc.setApiDocItems(doParseMessageItem(clazz, messageDoc.getMessageNo(), null, null));
+        messageDoc.setApiDocItems(doParseMessageItem(clazz, messageDoc.getMessageNo(), Maps.newHashMap(), null));
         return messageDoc;
     }
 
-    protected List<ApiDocItem> doParseMessageItem(final Class<?> clazz, String messageNo, List<Class> ignores, String parentNo) {
+    protected List<ApiDocItem> doParseMessageItem(final Class<?> clazz, String messageNo, Map<Class, List<ApiDocItem>> ignores, String parentNo) {
         List<ApiDocItem> apiItems = Lists.newArrayList();
         Class<?> cc = clazz;
         while (cc != null && cc != ApiRequest.class && cc != ApiResponse.class && cc != ApiNotify.class && cc != Object.class) {
@@ -162,9 +166,12 @@ public class ApiDocParserImpl extends OpenApiDocParserSupport implements ApiDocP
                     log.warn("报文:{}，属性:{} 为标记OpenApiField，忽略解析", cc.getName(), field.getName());
                     continue;
                 }
-                ApiDocItem item = null;
-                item = doParseItem(field);
+
+                ApiDocItem item = doParseItem(field);
                 item.setItemNo(ApiDocs.genItemNo(messageNo, parentNo, item.getName()));
+                item.setMessageNo(messageNo);
+                item.setParentNo(parentNo);
+                apiItems.add(item);
                 Class<?> subItemType = null;
                 if (ApiDataTypeUtils.isCollection(field)) {
                     // 集合或数组
@@ -177,21 +184,14 @@ public class ApiDocParserImpl extends OpenApiDocParserSupport implements ApiDocP
                     subItemType = field.getType();
                 }
 
-                if (subItemType != null) {
-                    if (ignores == null) {
-                        ignores = Lists.newArrayList();
-                    }
-                    if (!ignores.contains(subItemType)) {
-                        ignores.add(subItemType);
-                        item.setChildren(doParseMessageItem(subItemType, messageNo, ignores, item.getItemNo()));
-                    }
+                if (subItemType != null && !subItemType.equals(clazz)) {
+                    item.setChildren(doParseMessageItem(subItemType, messageNo, ignores, item.getItemNo()));
                 }
-                item.setMessageNo(messageNo);
-                item.setParentNo(parentNo);
-                apiItems.add(item);
+
             }
             cc = cc.getSuperclass();
         }
+
 
         return apiItems;
     }
@@ -207,7 +207,7 @@ public class ApiDocParserImpl extends OpenApiDocParserSupport implements ApiDocP
         // 字段中文名
         String title = Strings.isBlankDefault(openApiField.desc(), field.getName());
         // 字段说明
-        String descn = doParseApiDocItemDescn(field);
+        ApiDocItemContext descn = doParseApiDocItemDescn(field);
         // 是否加密
         ApiEncryptstatusEnum apiEncryptstatus = openApiField.security() ? ApiEncryptstatusEnum.yes : ApiEncryptstatusEnum.no;
 
@@ -216,6 +216,11 @@ public class ApiDocParserImpl extends OpenApiDocParserSupport implements ApiDocP
 
         // 报文demo
         String demo = openApiField.demo();
+        if (Strings.isBlank(demo)) {
+            if (Types.isEnum(field.getType())) {
+                demo = Collections3.getFirst(descn.getContext().keySet());
+            }
+        }
 
         // 填写状态（必须，可选，条件可选）
         FieldStatus fieldStatus = doParseApiDocItemStatus(field);
@@ -223,8 +228,11 @@ public class ApiDocParserImpl extends OpenApiDocParserSupport implements ApiDocP
         // 数据长度
         ApiDataSize apiDataSize = ApiDataTypeUtils.getApiDataSize(field);
 
-        ApiDocItem apiDocItem = new ApiDocItem(field.getName(), title, descn, apiDataSize.getMin(), apiDataSize.getMax(),
+        ApiDocItem apiDocItem = new ApiDocItem(field.getName(), title, descn.toJson(), apiDataSize.getMin(), apiDataSize.getMax(),
                 dataType, demo, fieldStatus, apiEncryptstatus);
+
+        apiDocItem.setSortTime(Long.valueOf(openApiField.ordinal()));
+
         return apiDocItem;
     }
 
@@ -234,7 +242,7 @@ public class ApiDocParserImpl extends OpenApiDocParserSupport implements ApiDocP
      * @param field
      * @return
      */
-    private String doParseApiDocItemDescn(Field field) {
+    private ApiDocItemContext doParseApiDocItemDescn(Field field) {
         OpenApiField openApiField = field.getAnnotation(OpenApiField.class);
         // 字段中文名
         String title = Strings.isBlankDefault(openApiField.desc(), field.getName());
@@ -252,7 +260,7 @@ public class ApiDocParserImpl extends OpenApiDocParserSupport implements ApiDocP
                 apiDocItemMemo.put(messageable.code(), messageable.message());
             }
         }
-        return apiDocItemMemo.toJson();
+        return apiDocItemMemo;
     }
 
 

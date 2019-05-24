@@ -83,6 +83,7 @@ public class ApiDocs {
                 .append(apiDocItem.getDataType().code())
                 .append(Strings.trimToEmpty(apiDocItem.getDemo()))
                 .append(apiDocItem.getStatus().code())
+                .append(apiDocItem.getSortTime())
                 .append(apiDocItem.getEncryptstatus().code());
         return DigestUtils.md5Hex(waitToSign.toString().getBytes());
     }
