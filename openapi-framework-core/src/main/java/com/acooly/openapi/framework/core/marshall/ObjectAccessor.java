@@ -77,26 +77,24 @@ public class ObjectAccessor<T> {
             ReflectionUtils.doWithFields(
                     this.target.getClass(),
                     field -> {
+                        if (Modifier.isStatic(field.getModifiers())) {
+                            return;
+                        }
                         OpenApiField openApiField = field.getAnnotation(OpenApiField.class);
                         if (openApiField == null) {
                             logger.warn("发现没有标注OpenApiField的字段 {}", field);
                             return;
                         }
-                        // 非Online环境
+                        // 非Online环境,目前仅警告
                         if (!Env.isOnline()) {
                             if (Strings.isNullOrEmpty(openApiField.desc())) {
                                 logger.warn("发现OpenApiField的desc未设置，字段 {}", field);
-                                return;
                             }
-                            if (Strings.isNullOrEmpty(openApiField.demo()) &&
-                                    (Types.isBaseType(field.getType()) ||
-                                            Types.isMoney(field.getType()))) {
+                            if (Strings.isNullOrEmpty(openApiField.demo()) && Types.isBaseType(field.getType())) {
                                 logger.warn("发现OpenApiField的demo未设置，基础类型字段 {}", field);
-                                return;
                             }
                             if (openApiField.ordinal() == 0) {
                                 logger.warn("发现OpenApiField的ordinal未设置，字段 {}", field);
-                                return;
                             }
                         }
                         if (!filedMap.containsKey(field.getName())) {

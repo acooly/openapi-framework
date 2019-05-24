@@ -23,8 +23,8 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2019-04-14 14:14
  */
 @Slf4j
-@ApiDocType(code = "", name = "")
-@ApiDocNote("")
+@ApiDocType(code = "test", name = "测试")
+@ApiDocNote("特殊字符专用简单测试")
 @OpenApiService(name = "simpleInfo", desc = "", responseType = ResponseType.SYN, owner = "zhangpu", busiType = ApiBusiType.Trade)
 public class SimpleInfoApiService extends BaseApiService<ApiRequest, ApiResponse> {
     @Override

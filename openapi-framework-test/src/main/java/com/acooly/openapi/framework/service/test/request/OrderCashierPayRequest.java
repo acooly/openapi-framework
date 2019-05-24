@@ -22,15 +22,15 @@ public class OrderCashierPayRequest extends ApiAsyncRequest {
 
     @NotEmpty
     @Size(max = 64)
-    @OpenApiField(desc = "订单号", constraint = "商户订单号，唯一标志一笔交易", demo = "20912213123sdf")
+    @OpenApiField(desc = "订单号", constraint = "商户订单号，唯一标志一笔交易", demo = "20912213123sdf", ordinal = 1)
     private String merchOrderNo;
 
     @NotNull
-    @OpenApiField(desc = "支付金额")
+    @OpenApiField(desc = "支付金额", demo = "200.01", ordinal = 2)
     private Money amount;
 
     @NotEmpty
-    @OpenApiField(desc = "买家用户ID")
+    @OpenApiField(desc = "买家用户ID", demo = "23412341234", ordinal = 3)
     private String payerUserId;
 
 }

@@ -3,7 +3,6 @@ package com.acooly.openapi.framework.service.test.response;
 import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.service.test.enums.OrderPayStatus;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -23,15 +22,15 @@ public class OrderCashierPayRedirect extends ApiResponse {
 
     @NotEmpty
     @Size(max = 64)
-    @OpenApiField(desc = "订单号", constraint = "商户订单号，唯一标志一笔交易", demo = "20912213123sdf")
+    @OpenApiField(desc = "订单号", constraint = "商户订单号，唯一标志一笔交易", demo = "20912213123sdf", ordinal = 1)
     private String merchOrderNo;
 
     @NotNull
-    @OpenApiField(desc = "支付金额")
+    @OpenApiField(desc = "支付金额", ordinal = 2)
     private Money amount;
 
     @NotEmpty
-    @OpenApiField(desc = "买家用户ID")
+    @OpenApiField(desc = "买家用户ID", demo = "12312312312", ordinal = 3)
     private String payerUserId;
 
 }

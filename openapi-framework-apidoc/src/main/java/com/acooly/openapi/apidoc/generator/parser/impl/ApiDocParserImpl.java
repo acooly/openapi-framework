@@ -220,6 +220,9 @@ public class ApiDocParserImpl extends OpenApiDocParserSupport implements ApiDocP
             if (Types.isEnum(field.getType())) {
                 demo = Collections3.getFirst(descn.getContext().keySet());
             }
+            if (Types.isMoney(field.getType())) {
+                demo = "200.00";
+            }
         }
 
         // 填写状态（必须，可选，条件可选）

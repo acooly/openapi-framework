@@ -23,14 +23,14 @@ import java.util.function.BiConsumer;
 public abstract class PageApiResponse<T> extends ApiResponse {
 
     @NotNull
-    @OpenApiField(desc = "总行数")
+    @OpenApiField(desc = "总行数", demo = "200", ordinal = 1)
     private long totalRows = 0;
 
     @NotNull
-    @OpenApiField(desc = "总页数")
+    @OpenApiField(desc = "总页数", constraint = "总行数/页大小", demo = "10", ordinal = 2)
     private long totalPages = 0;
 
-    @OpenApiField(desc = "页数据", constraint = "当totalRows大于0时，rows不为空")
+    @OpenApiField(desc = "页数据", constraint = "当totalRows大于0时，rows不为空", ordinal = 3)
     private List<T> rows = Lists.newArrayList();
 
     public void append(T t) {

@@ -14,27 +14,27 @@ import javax.validation.constraints.NotNull;
  */
 public class PayOrderRequest extends ApiAsyncRequest {
 
-  @NotNull
-  @OpenApiField(desc = "金额")
-  private Money amount;
+    @NotNull
+    @OpenApiField(desc = "金额", ordinal = 1)
+    private Money amount;
 
-  @NotEmpty
-  @OpenApiField(desc = "买家用户ID")
-  private String payerUserId;
+    @NotEmpty
+    @OpenApiField(desc = "买家用户ID", demo = "1212121212", ordinal = 2)
+    private String payerUserId;
 
-  public Money getAmount() {
-    return amount;
-  }
+    public Money getAmount() {
+        return amount;
+    }
 
-  public void setAmount(Money amount) {
-    this.amount = amount;
-  }
+    public void setAmount(Money amount) {
+        this.amount = amount;
+    }
 
-  public String getPayerUserId() {
-    return payerUserId;
-  }
+    public String getPayerUserId() {
+        return payerUserId;
+    }
 
-  public void setPayerUserId(String payerUserId) {
-    this.payerUserId = payerUserId;
-  }
+    public void setPayerUserId(String payerUserId) {
+        this.payerUserId = payerUserId;
+    }
 }

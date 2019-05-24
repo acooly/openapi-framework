@@ -19,14 +19,14 @@ public class WithdrawResponse extends ApiResponse {
 
     @NotEmpty
     @Size(max = 64)
-    @OpenApiField(desc = "订单号", constraint = "商户订单号，唯一标志一笔交易", demo = "20912213123sdf")
+    @OpenApiField(desc = "订单号", constraint = "商户订单号，唯一标志一笔交易", demo = "20912213123sdf", ordinal = 1)
     private String merchOrderNo;
 
     /**
      * 提现交易号
      */
     @Length(max = 20, min = 20, message = "提现交易号长度为20字符")
-    @OpenApiField(desc = "提现交易号", constraint = "提现的服务器端唯一编码", demo = "11111111112222222222")
+    @OpenApiField(desc = "提现交易号", constraint = "提现的服务器端唯一编码", demo = "11111111112222222222", ordinal = 2)
     private String tradeNo;
 
     public String getTradeNo() {

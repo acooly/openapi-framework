@@ -25,19 +25,19 @@ public class OrderCashierPayNotify extends ApiNotify {
 
     @NotEmpty
     @Size(max = 64)
-    @OpenApiField(desc = "订单号", constraint = "商户订单号，唯一标志一笔交易", demo = "20912213123sdf")
+    @OpenApiField(desc = "订单号", constraint = "商户订单号，唯一标志一笔交易", demo = "20912213123sdf", ordinal = 1)
     private String merchOrderNo;
 
     @NotNull
-    @OpenApiField(desc = "支付金额")
+    @OpenApiField(desc = "支付金额", ordinal = 2)
     private Money amount;
 
     @NotEmpty
-    @OpenApiField(desc = "买家用户ID")
+    @OpenApiField(desc = "买家用户ID", demo = "1212121212", ordinal = 3)
     private String payerUserId;
 
     @NotNull
-    @OpenApiField(desc = "状态")
+    @OpenApiField(desc = "状态", ordinal = 4)
     private OrderPayStatus payStatus;
 
 }

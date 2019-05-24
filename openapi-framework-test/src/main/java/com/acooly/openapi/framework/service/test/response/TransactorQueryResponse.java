@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class TransactorQueryResponse extends ApiResponse {
 
-  @OpenApiField(desc = "经营人信息列表", constraint = "经营人信息列表")
+  @OpenApiField(desc = "经营人信息列表", constraint = "经营人信息列表",ordinal = 1)
   private List<TransactorInfo> transactorInfoList;
 
   public List<TransactorInfo> getTransactorInfoList() {
