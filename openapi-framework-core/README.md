@@ -154,10 +154,10 @@ openapi框架提供的Api服务开发模式比较简单，基于接口报文定�
 	* 分页查询请求报文需继承PageApiRequest(extends AppRequest)，增加页号和页大小
 	* 异步接口请求报文需继承ApiAsyncRequest(extends AppRequest)，增加回调地址和通知地址
 * 报文内定义的所有数据项必须编写@OpenApiField文档，用于生成自动文档，否则框架不会序列化并启动时警告。
-	* desc：表示字段中文名称，必填；**（你不填试试，除非你不想用这个接口）**
-	* constraint：表示字段说明，可选，如果为空则为解析为desc **（你不填试试，除非你不想用这个接口）**
-	* demo: 字段demo，必填 **（你不填试试，除非你不想用这个接口）**
-	* ordinal: 文档顺序，必填**（你不填试试，除非你不想用这个接口）**
+	* desc：[必选] 表示字段中文名称，必填；**（你不填试试，除非你不想用这个接口）**
+	* constraint：表示字段说明，可选，如果为空则为解析为desc 
+	* demo: [必选] 字段demo，必填 **（你不填试试，除非你不想用这个接口）**
+	* ordinal: [必选] 文档顺序，必填**（你不填试试，除非你不想用这个接口）**
 	* security：是否加密字段数据，可选，默认为false
 * 报文内定义的所有数据项必须编写JSR303的验证注释，否则框架不会序列化并启动时警告
 * 推荐使用的数据项数据类型为：String, Integer, Long, Money(金额或2位小数), Enum。其他类型不推荐但可以支持（如：decimal,boolean等）。
@@ -175,23 +175,23 @@ public class WithdrawRequest extends ApiAsyncRequest {
 
     @NotEmpty
     @Size(max = 64)
-    @OpenApiField(desc = "订单号", constraint = "商户订单号，唯一标志一笔交易", demo = "20912213123sdf")
+    @OpenApiField(desc = "订单号", constraint = "商户订单号，唯一标志一笔交易", demo = "20912213123sdf", oridnal = 1)
     private String merchOrderNo;
 
     @NotEmpty
     @Length(max = 20, min = 20, message = "提现用户ID为必选项，长度为20字符")
-    @OpenApiField(desc = "提现用户ID", constraint = "提现用户ID", demo = "20198982938272827232")
+    @OpenApiField(desc = "提现用户ID", constraint = "提现用户ID", demo = "20198982938272827232", oridnal = 2)
     private String userId;
 
     @NotNull(message = "提现金额是必选项，格式为保留两位小数的元，如: 2.00,200.05")
-    @OpenApiField(desc = "提现金额", constraint = "提现金额，格式为保留两位小数的元，如: 2.00,200.05", demo = "200.15")
+    @OpenApiField(desc = "提现金额", constraint = "提现金额，格式为保留两位小数的元，如: 2.00,200.05", demo = "200.15", oridnal = 3)
     private Money amount;
 
-    @OpenApiField(desc = "到账方式", constraint = "可选值：<li>0: T+0</li><li>1: T+1</li><li>2: T+2</li>", demo = "1")
+    @OpenApiField(desc = "到账方式", constraint = "可选值：<li>0: T+0</li><li>1: T+1</li><li>2: T+2</li>", demo = "1", ordinal = 4)
     @Max(1)
     private Integer delay = 1;
 
-    @OpenApiField(desc = "业务类型", demo = "BUSI2")
+    @OpenApiField(desc = "业务类型", demo = "BUSI2",ordinal = 5)
     private BusiTypeEnum busiType = BusiTypeEnum.BUSI2;
     
     //...
@@ -210,7 +210,7 @@ public class WithdrawRequest extends ApiAsyncRequest {
 	* responseType: 服务类型，默认：SYN,可选为SYN,ASYN和REDIRECT（不推荐）
 	* busiType: 业务类型，可选：Trade（默认），Manage和Query，框架默认情况下，Query类型不持久化请求数据，以提高效率。
 	* owner: 标记服务提供者或开发人员，便于管理。
-* **文档标记：**主要用于文档自动化生成。包括：@ApiDocType：标记文档的scheme分类方案，@ApiDocNote接口说明，支持HTML。**（你不填试试，除非你不想用这个接口）**
+* **文档标记：**主要用于文档自动化生成。包括：@ApiDocType：标记文档的scheme分类方案，@ApiDocNote接口说明，支持HTML。
 * **逻辑实现：**接口的逻辑实现请覆写doService方法实现，调用逻辑处理。回填response.
 * **异常处理：**doService方法内部可选进行异常处理，因为框架已提供了统一的基于BusinessException的异常处理。也就是说你的内容业务服务或openapi服务内如果手动抛出异常，请使用BusinessExcetion或其子类。
 * 
