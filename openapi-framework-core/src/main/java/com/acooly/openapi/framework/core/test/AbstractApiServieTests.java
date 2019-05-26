@@ -38,7 +38,6 @@ public abstract class AbstractApiServieTests {
     protected String version = "1.0";
     protected String notifyUrl = "";
     protected String returnUrl = "";
-    protected OpenApiClient openApiClient = new OpenApiClient(gatewayUrl, accessKey, secretKey);
     protected boolean showLog = true;
 
     protected static Map<String, String> marshall(ApiMessage message) {
@@ -63,6 +62,7 @@ public abstract class AbstractApiServieTests {
         if (Strings.isNullOrEmpty(request.getRequestNo())) {
             request.setRequestNo(Ids.getDid());
         }
+        OpenApiClient openApiClient = new OpenApiClient(gatewayUrl, accessKey, secretKey);
         return openApiClient.send(request, clazz);
     }
 
