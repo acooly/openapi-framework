@@ -131,7 +131,7 @@ function dataTypeFormatter(item) {
     var dataType = item.dataType;
     var min = item.min || 0;
     var max = item.max;
-    console.info(min,max);
+    console.info(min, max);
     if (min == 0 && (max == null || max == 0)) {
         return dataType;
     }
@@ -173,13 +173,17 @@ function descnFormatter(item) {
         if (itemData.context == null || itemData.context.length == 0) {
             return itemData.content;
         }
-        itemData.id = item.name + item.id;
+        itemData.id = item.name + item.id + "_" + randomFrom(1, 100);
         var content = baidu.template("apidoc_options_template", itemData);
         return content;
     } catch (e) {
         // 非json
         return descn;
     }
+}
+
+function randomFrom(lowerValue, upperValue) {
+    return Math.floor(Math.random() * (upperValue - lowerValue + 1) + lowerValue);
 }
 
 /**

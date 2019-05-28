@@ -125,7 +125,49 @@
                                             var subItem = item.children[k];
                                         %>
                                         <tr>
-                                            <td><%=subItem.name%></td>
+                                            <td>
+                                                <%
+                                                    if(subItem.children != null && subItem.children.length > 0){
+                                                        console.info("subItem",subItem);
+                                                %>
+
+                                                <a href="javascript:;" onclick="openSubMessage('<%=subItem.name%>','<%=subItem.name%>_<%=subItem.id%>')"><%=subItem.name%></a>
+                                                <div style="display: none;" id="<%=subItem.name%>_<%=subItem.id%>">
+                                                    <div style="padding: 0 10px;">
+                                                        <table class="layui-table">
+                                                            <thead>
+                                                            <tr>
+                                                                <th style="width:120px;">参数</th>
+                                                                <th style="width:120px;">参数名称</th>
+                                                                <th style="width:60px;">类型</th>
+                                                                <th style="width:50px;">必填</th>
+                                                                <th style="width:50px;">加密</th>
+                                                                <th style="width:200px;">参数说明</th>
+                                                                <th>示例</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <%
+                                                            for(var l=0; l<subItem.children.length; l++){
+                                                            var subSubItem = subItem.children[l];
+                                                            %>
+                                                            <tr>
+                                                                <td><%=subSubItem.name%></td>
+                                                                <td><%=subSubItem.title%></td>
+                                                                <td><%=dataTypeFormatter(subSubItem) %></td>
+                                                                <td><%=data.allStatuss[subSubItem.status] %></td>
+                                                                <td><%=securityFormatter(subSubItem) %></td>
+                                                                <td class="hover-details"><%=descnFormatter(subSubItem)%></td>
+                                                                <td><%=demoFormatter(subSubItem)%></td>
+                                                            </tr>
+                                                            <%}%>
+                                                            </table>
+                                                    </div>
+                                                </div>
+
+                                            <% }else{ %>
+                                                <%=subItem.name%>
+                                            <% } %>
+                                            </td>
                                             <td><%=subItem.title%></td>
                                             <td><%=dataTypeFormatter(subItem) %></td>
                                             <td><%=data.allStatuss[subItem.status] %></td>
