@@ -129,9 +129,10 @@ function isJSON(str) {
  */
 function dataTypeFormatter(item) {
     var dataType = item.dataType;
-    var min = item.min;
+    var min = item.min || 0;
     var max = item.max;
-    if ((min == null || min == '') && (min == null || min == '')) {
+    console.info(min,max);
+    if (min == 0 && (max == null || max == 0)) {
         return dataType;
     }
 
@@ -139,11 +140,11 @@ function dataTypeFormatter(item) {
         return dataType + "(" + min + ")";
     }
 
-    if ((min == null || min == '') && max != null && max != '') {
+    if (min == 0 && max != null && max > 0) {
         return dataType + "(" + max + ")";
     }
 
-    if ((max == null || max == '') && min != null && min != '') {
+    if ((max == null || max == 0) && min > 0) {
         return dataType + "(" + min + "-?)";
     }
 
@@ -184,7 +185,7 @@ function descnFormatter(item) {
 /**
  * 查看API文档的元数据
  */
-function showMetaData(id,serviceNo) {
+function showMetaData(id, serviceNo) {
     $.acooly.portal.ajax("/docs/apidoc/metadata.html", {id: id}, function (result) {
         layer.open({
             type: 1,
