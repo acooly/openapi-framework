@@ -131,7 +131,6 @@ function dataTypeFormatter(item) {
     var dataType = item.dataType;
     var min = item.min || 0;
     var max = item.max;
-    console.info(min, max);
     if (min == 0 && (max == null || max == 0)) {
         return dataType;
     }

@@ -128,7 +128,6 @@
                                             <td>
                                                 <%
                                                     if(subItem.children != null && subItem.children.length > 0){
-                                                        console.info("subItem",subItem);
                                                 %>
 
                                                 <a href="javascript:;" onclick="openSubMessage('<%=subItem.name%>','<%=subItem.name%>_<%=subItem.id%>')"><%=subItem.name%></a>
