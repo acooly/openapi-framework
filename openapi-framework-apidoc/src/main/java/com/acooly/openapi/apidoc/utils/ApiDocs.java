@@ -10,11 +10,17 @@
 package com.acooly.openapi.apidoc.utils;
 
 import com.acooly.core.utils.Strings;
+import com.acooly.openapi.apidoc.enums.MessageTypeEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocItem;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
+import com.acooly.openapi.framework.common.ApiConstants;
+import com.acooly.openapi.framework.common.enums.ResponseType;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
+
+import java.util.Map;
 
 /**
  * @author zhangpu 2017-12-11 00:07
@@ -88,5 +94,37 @@ public class ApiDocs {
         return DigestUtils.md5Hex(waitToSign.toString().getBytes());
     }
 
+
+    protected Map<String, Object> buildCommonMessage(ApiDocService apiDocService, ApiDocMessage apiDocMessage, String requestNo) {
+        Map<String, Object> header = Maps.newHashMap();
+        header.put(ApiConstants.PARTNER_ID, ApiConstants.TEST_ACCESS_KEY);
+        header.put(ApiConstants.CONTEXT, "");
+        MessageTypeEnum messageType = apiDocMessage.getMessageType();
+        if (messageType == MessageTypeEnum.Request) {
+            if (apiDocService.getServiceType() == ResponseType.REDIRECT) {
+                header.put(ApiConstants.RETURN_URL, "https://www.xxx.com/retrueUrl");
+                header.put(ApiConstants.NOTIFY_URL, "https://www.xxx.com/notifyUrl");
+            }
+            if (apiDocService.getServiceType() == ResponseType.ASNY) {
+                header.put(ApiConstants.NOTIFY_URL, "https://www.xxx.com/notifyUrl");
+            }
+        } else if (messageType == MessageTypeEnum.Response) {
+            header.put("success", true);
+            header.put("detail", "请求成功");
+            if (apiDocService.getServiceType() == ResponseType.ASNY) {
+                header.put(ApiConstants.CODE, "PROCESSING");
+                header.put(ApiConstants.MESSAGE, "正在处理中");
+            } else {
+                header.put(ApiConstants.CODE, "SUCCESS");
+                header.put(ApiConstants.MESSAGE, "处理成功");
+            }
+        } else {
+            header.put(ApiConstants.CODE, "SUCCESS");
+            header.put(ApiConstants.MESSAGE, "处理成功");
+        }
+
+
+        return header;
+    }
 
 }
