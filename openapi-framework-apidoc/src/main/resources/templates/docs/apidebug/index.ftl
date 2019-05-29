@@ -32,31 +32,21 @@
             <form id="debugForm" class="layui-form" action="#" method="post">
             <!-- 核心参数 -->
             <div style="background-color: #f4f5f9;border-bottom: 1px solid #eee; padding: 2px 0;">
-                <div class="layui-row">
-                    <div class="layui-col-md3">
+                <div class="layui-row" style="padding: 0 10px;">
+                    <div class="layui-col-md4">
                         <label class="layui-form-label">环境：</label>
                         <div class="layui-input-block">
                             <input type="radio" name="env" value="snet" title="联调" checked>
                             <input type="radio" name="env" value="online" title="生产">
                         </div>
                     </div>
-                    <div class="layui-col-md3">
+                    <div class="layui-col-md4">
                         <label class="layui-form-label">商户号：</label>
-                        <div class="layui-input-block"><input type="text" name="partnerId" required  lay-verify="required" placeholder="请输入商户号" autocomplete="off" class="layui-input"></div>
+                        <div class="layui-input-block"><input type="text" name="partnerId" required  lay-verify="required" value="${testAccessKey}" placeholder="请输入商户号" autocomplete="off" class="layui-input"></div>
                     </div>
-                    <div class="layui-col-md3">
+                    <div class="layui-col-md4">
                         <label class="layui-form-label">秘钥：</label>
-                        <div class="layui-input-block"><input type="text" name="secretKey" required  lay-verify="required" placeholder="请输入商户秘钥" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-col-md3">
-                        <label class="layui-form-label">签名：</label>
-                        <div class="layui-input-block">
-                            <select name="signType" lay-verify="required">
-                                <option value="MD5">MD5</option>
-                                <option value="SHA1">SHA1</option>
-                                <option value="SHA2">SHA2</option>
-                            </select>
-                        </div>
+                        <div class="layui-input-block"><input type="text" name="secretKey" required  lay-verify="required" value="${testSecretKey}" placeholder="请输入商户秘钥" autocomplete="off" class="layui-input"></div>
                     </div>
                 </div>
             </div>
@@ -67,7 +57,7 @@
                     <div class="layui-col-md12 console" style="padding: 0;">
                         <div style="margin-left: 300px;">
                             <label class="layui-form-label" >服务：</label>
-                            <div class="layui-input-inline" style="width: 200px"><input type="text" name="request_service" id="service" placeholder="请输入服务名" required  lay-verify="required" autocomplete="off" class="layui-input"></div>
+                            <div class="layui-input-inline" style="width: 200px"><input type="text" name="request_service" id="service" placeholder="请输入服务名" value="${service}" required  lay-verify="required" autocomplete="off" class="layui-input"></div>
                             <div class="layui-input-inline" style="width: 50px"><input type="text" name="request_version" id="version" value="1.0" placeholder="版本号" autocomplete="off" class="layui-input"></div>
                             <button class="layui-btn layui-btn-small layui-btn-normal" type="button" onclick="loadApidoc()">加载</button>
                             <div class="layui-input-inline"></div>
@@ -141,16 +131,17 @@
     </div>
 
 <%
-for(var i=0;i<entity.messageDocs.length;i++){
-  var e=entity.messageDocs[i];
+for(var i=0;i<entity.apiDocMessages.length;i++){
+  var e=entity.apiDocMessages[i];
+  console.info("message:",e);
   if(e.messageType == 'Request'){
-    for(var j=0;j<e.apiItems.length;j++){
-        var m=e.apiItems[j];
+    for(var j=0;j<e.apiDocItems.length;j++){
+        var m=e.apiDocItems[j];
         if(m.children == null || m.children.length == 0){
 %>
 <div class="layui-form-item">
     <label class="layui-form-label">
-        <a href="javascript:;" onclick="$.acooly.layui.tips('<%=parseDescn(m)%>',this)"><%=m.name%></a>：
+        <a href="javascript:;" title="<%=m.title%>" onclick="$.acooly.layui.tips('<%=parseDescn(m)%>',this)"><%=m.name%></a>：
     </label>
     <div class="layui-input-inline">
         <%
@@ -158,7 +149,7 @@ for(var i=0;i<entity.messageDocs.length;i++){
         if(options != null){ %>
         <select name="request_<%=m.name%>">
             <%for(var key in options){ var val = options[key];%>
-            <option value="<%=val%>"><%=key%>:<%=val%></option>
+            <option value="<%=key%>"><%=key%>:<%=val%></option>
             <%}%>
         </select>
         <%}else{%>
@@ -200,7 +191,7 @@ for(var i=0;i<entity.messageDocs.length;i++){
     <div class="layui-input-inline"><input type="text" name="request_returnUrl" autocomplete="off" class="layui-input"></div>
 </div>
 <%}%>
-<%if(entity.serviceType == 'REDIRECT'){%>
+<%if(entity.serviceType == 'REDIRECT' || entity.serviceType == 'NOTIFY'){%>
 <div class="layui-form-item">
     <label class="layui-form-label">notifyUrl：</label>
     <div class="layui-input-inline"><input type="text" name="request_notifyUrl" autocomplete="off" class="layui-input"></div>
@@ -270,7 +261,7 @@ for(var i=0;i<entity.messageDocs.length;i++){
         var descn = item.descn;
         try {
             var itemData = JSON.parse(descn);
-            return itemData.data;
+            return itemData.context;
         } catch (e) {
             return null;
         }
@@ -280,7 +271,7 @@ for(var i=0;i<entity.messageDocs.length;i++){
         var descn = item.descn;
         try {
             var itemData = JSON.parse(descn);
-            descn = itemData.name;
+            descn = itemData.content;
         } catch (e) {}
         //descn  = descn + " " + item.
         return descn;

@@ -57,6 +57,8 @@ public class ApiDebugPortalController extends AbstractPortalController {
     @Override
     public String index(HttpServletRequest request, HttpServletResponse response, Model model) {
         model.addAttribute("service", request.getParameter("service"));
+        model.addAttribute("testAccessKey",ApiConstants.TEST_ACCESS_KEY);
+        model.addAttribute("testSecretKey",ApiConstants.TEST_SECRET_KEY);
         return "/docs/apidebug/index";
     }
 
