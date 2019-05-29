@@ -268,11 +268,11 @@
 
 <script>
     $(function(){
-        var defApidocId = "${apidocId}";
-        if(!defApidocId || defApidocId == ''){
-            defApidocId = "${apiDocs[0].id}";
+        var serviceNo = "${serviceNo}";
+        if(!serviceNo || serviceNo == ''){
+            serviceNo = "${apiDocs[0].serviceNo}";
         }
-        loadData(defApidocId);
+        loadData(serviceNo);
     });
 
 </script>

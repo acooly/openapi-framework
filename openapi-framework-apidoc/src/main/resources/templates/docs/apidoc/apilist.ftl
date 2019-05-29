@@ -45,7 +45,7 @@
                         <tbody>
                         <#list apis as e>
                         <tr>
-                            <td><a href="/docs/apidoc/index.html?apiId=${e.id}&schemeId=${schemeId}">${e.service}</a></td>
+                            <td><a href="/docs/apidoc/scheme/${schemeId}/${e.service}.html">${e.service}</a></td>
                             <td>${e.version}</td>
                             <td>${e.serviceType}</td>
                             <td>${e.serviceName}</td>

@@ -50,7 +50,7 @@
                         <tbody>
                         <#list apis as e>
                         <tr>
-                            <td><a target="_blank" href="/docs/apidoc/index.html?apidocId=${e.id}&schemeId=${schemeId}">${e.name}</a></td>
+                            <td><a href="/docs/apidoc/scheme/${schemeId}/${e.serviceNo}.html">${e.name}</a></td>
                             <td>${e.version}</td>
                             <td>${e.serviceType}</td>
                             <td>${e.title}</td>

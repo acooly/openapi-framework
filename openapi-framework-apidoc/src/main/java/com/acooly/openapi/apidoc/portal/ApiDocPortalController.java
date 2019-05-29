@@ -12,6 +12,8 @@ package com.acooly.openapi.apidoc.portal;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.common.web.support.JsonResult;
+import com.acooly.core.utils.Collections3;
+import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.enums.FieldStatus;
 import com.acooly.openapi.apidoc.enums.MessageTypeEnum;
@@ -20,11 +22,13 @@ import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
+import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -64,18 +68,54 @@ public class ApiDocPortalController extends AbstractPortalController {
     @Override
     public String index(HttpServletRequest request, HttpServletResponse response, Model model) {
         try {
-            long schemeId = Long.parseLong(request.getParameter("schemeId"));
-            String apidocId = request.getParameter("apidocId");
-            ApiDocScheme apiScheme = apiDocSchemeService.get(schemeId);
-            model.addAttribute("apiScheme", apiScheme);
-            model.addAttribute("apidocId", apidocId);
-            model.addAllAttributes(referenceData(request));
+            Long schemeId = Servlets.getLongParameter("schemeId");
+            doSchemeApi(schemeId, null, request, response, model);
         } catch (Exception e) {
             handleException("", e, request);
         }
         return "/docs/apidoc/apidoc";
     }
 
+    @RequestMapping("scheme/{id}")
+    public String scheme(@PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response, Model model) {
+        try {
+            doSchemeApi(id, null, request, response, model);
+        } catch (Exception e) {
+            handleException("", e, request);
+        }
+        return "/docs/apidoc/apidoc";
+    }
+
+    @RequestMapping("scheme/{id}/{serviceNo}")
+    public String scheme(@PathVariable("id") Long id, @PathVariable("serviceNo") String serviceNo,
+                         HttpServletRequest request, HttpServletResponse response, Model model) {
+        try {
+            doSchemeApi(id, serviceNo, request, response, model);
+        } catch (Exception e) {
+            handleException("", e, request);
+        }
+        return "/docs/apidoc/apidoc";
+    }
+
+    protected void doSchemeApi(Long id, String serviceNo, HttpServletRequest request, HttpServletResponse response, Model model) {
+        ApiDocScheme apiScheme = apiDocSchemeService.get(id);
+        if (Strings.isBlank(serviceNo)) {
+            serviceNo = Servlets.getParameter("serviceNo");
+        }
+        if (!Strings.contains(serviceNo, "_")) {
+            serviceNo = serviceNo + "_" + ApiConstants.VERSION_DEFAULT;
+        }
+        if (Strings.isBlank(serviceNo)) {
+            List<ApiDocService> apiDocServices = apiDocSchemeServiceService.findSchemeApiDocServices(apiScheme.getSchemeNo());
+            if (Collections3.isNotEmpty(apiDocServices)) {
+                serviceNo = Collections3.getFirst(apiDocServices).getServiceNo();
+            }
+        }
+
+        model.addAttribute("serviceNo", serviceNo);
+        model.addAttribute("apiScheme", apiScheme);
+        model.addAllAttributes(referenceData(request));
+    }
 
     /**
      * apidoc 菜单

@@ -1,20 +1,25 @@
-function loadData(id) {
+function loadData(serviceNo) {
     var url = '/docs/apidoc/apidoc.html';
     var template = 'apidoc_template';
     var renderTo = 'dataCont';
-    var jsonData = {id: id};
+    var jsonData = {serviceNo: serviceNo};
     baidu.template.ESCAPE = false;
     $.acooly.portal.ajaxRender(url, jsonData, renderTo, template, null, function (result) {
         // 选中菜单
-        selectMenu(id);
+        selectMenu(result.entity.id);
         $('#apidoc_nav_name').html(result.entity.serviceName);
         // 示例报文
-        loadMessageDemos(id);
+        loadMessageDemos(result.entity.id);
         // 浮动目录渲染
         initDir(result)
         //设置提示效果
         initTooltip();
     });
+}
+
+function selectMenu(id){
+    $('.doc-menu ul li').removeClass("item-this");
+    $('#apidoc_api_'+id).addClass("item-this");
 }
 
 /**

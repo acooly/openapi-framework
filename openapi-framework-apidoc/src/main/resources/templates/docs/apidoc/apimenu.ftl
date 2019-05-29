@@ -6,7 +6,7 @@
     <ul>
     <#list apidocs as e>
         <li id="apidoc_api_${e.id}">
-            <a href="javascript:;" title="${e.title}" onclick="loadData(${e.id})"><div>${e.name}</div></a>
+            <a href="javascript:;" title="${e.title}" onclick="loadData('${e.serviceNo}')"><div>${e.name}</div></a>
         </li>
     </#list>
     </ul>
@@ -27,9 +27,6 @@
         }
     });
 
-    function selectMenu(id){
-        $('.doc-menu ul li').removeClass("item-this");
-        $('#apidoc_api_'+id).addClass("item-this");
-    }
+
 
 </script>
