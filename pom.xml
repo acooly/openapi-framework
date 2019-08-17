@@ -5,18 +5,16 @@
     <!-- 继承基础配置,核心依赖包，编译选项和插件配 -->
     <parent>
         <groupId>com.acooly</groupId>
-        <artifactId>acooly-parent</artifactId>
-        <version>4.2.0-SNAPSHOT</version>
+        <artifactId>acooly-app-parent</artifactId>
+        <version>5.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>openapi-framework</artifactId>
-    <version>4.2.1-SNAPSHOT</version>
+    <version>5.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-
 
     <name>openapi-framework</name>
     <properties>
         <caffeine.version>2.6.2</caffeine.version>
-        <acooly.version>4.2.0-SNAPSHOT</acooly.version>
     </properties>
 
 
@@ -91,13 +89,11 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-core</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-common-facade</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
 
         <dependency>
@@ -130,7 +126,6 @@
         <module>openapi-framework-facade</module>
         <module>openapi-framework-common</module>
         <module>openapi-framework-service</module>
-        <module>openapi-framework-service-impl</module>
         <module>openapi-framework-apidoc</module>
         <module>openapi-framework-extensions</module>
         <module>openapi-framework-mock</module>

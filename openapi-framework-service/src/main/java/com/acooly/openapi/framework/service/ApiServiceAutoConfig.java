@@ -1,7 +1,6 @@
 package com.acooly.openapi.framework.service;
 
-import com.acooly.core.common.dao.dialect.DatabaseType;
-import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
+import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
 import com.acooly.module.mybatis.EntityMybatisDao;
 import com.acooly.openapi.framework.service.service.AuthInfoRealmManageService;
 import com.acooly.openapi.framework.service.service.impl.DefaultAuthInfoRealmManageService;
@@ -24,23 +23,22 @@ import java.util.List;
         , markerInterface = EntityMybatisDao.class)
 public class ApiServiceAutoConfig {
     @Bean
-    public AbstractDatabaseScriptIniter openapiManageScriptIniter() {
-        return new AbstractDatabaseScriptIniter() {
+    public StandardDatabaseScriptIniter openapiManageScriptIniter() {
+        return new StandardDatabaseScriptIniter() {
+
             @Override
-            public String getEvaluateSql(DatabaseType databaseType) {
-                return "SELECT count(*) FROM api_tenant";
+            public String getEvaluateTable() {
+                return "api_tenant";
             }
 
             @Override
-            public List<String> getInitSqlFile(DatabaseType databaseType) {
-                if (databaseType == DatabaseType.mysql) {
-                    return Lists.newArrayList(
-                            "META-INF/database/mysql/openapi.sql",
-                            "META-INF/database/mysql/openapi-initTest.sql",
-                            "META-INF/database/mysql/openapi-urls.sql");
-                } else {
-                    throw new UnsupportedOperationException("还不支持oracle");
-                }
+            public String getComponentName() {
+                return "openapi";
+            }
+
+            @Override
+            public List<String> getInitSqlFile() {
+                return Lists.newArrayList("openapi", "openapi-initTest", "openapi-urls");
             }
         };
     }
