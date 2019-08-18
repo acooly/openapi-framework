@@ -15,6 +15,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 /**
  * @author qiubo@yiji.com
  */
+// todo: 5.x新版本中，合并alert的数据表结构。
 public class ApiDocComponentInitializer implements ComponentInitializer {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
