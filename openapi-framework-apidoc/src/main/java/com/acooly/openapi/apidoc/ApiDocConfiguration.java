@@ -9,8 +9,7 @@
  */
 package com.acooly.openapi.apidoc;
 
-import com.acooly.core.common.dao.dialect.DatabaseType;
-import com.acooly.core.common.dao.support.AbstractDatabaseScriptIniter;
+import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
 import com.google.common.collect.Lists;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -24,7 +23,7 @@ import java.util.List;
 import static com.acooly.openapi.apidoc.ApiDocProperties.PREFIX;
 
 /**
- * @author qiubo@yiji.com
+ * @author zhangpu@acooly.cn
  */
 @Configuration
 @EnableConfigurationProperties({ApiDocProperties.class})
@@ -34,19 +33,24 @@ import static com.acooly.openapi.apidoc.ApiDocProperties.PREFIX;
 public class ApiDocConfiguration {
 
     @Bean
-    public AbstractDatabaseScriptIniter ApiDocScriptIniter() {
-        return new AbstractDatabaseScriptIniter() {
+    public StandardDatabaseScriptIniter ApiDocScriptIniter() {
+        return new StandardDatabaseScriptIniter() {
+
             @Override
-            public String getEvaluateSql(DatabaseType databaseType) {
-                return "SELECT count(*) FROM api_doc_item";
+            public String getEvaluateTable() {
+                return "api_doc_item";
             }
 
             @Override
-            public List<String> getInitSqlFile(DatabaseType databaseType) {
-                return Lists.newArrayList("META-INF/database/mysql/apidoc.sql",
-                        "META-INF/database/mysql/apidoc_urls.sql");
+            public String getComponentName() {
+                return "apidoc";
+            }
+
+            @Override
+            public List<String> getInitSqlFile() {
+                return Lists.newArrayList("apidoc", "apidoc_urls");
             }
         };
     }
-    
+
 }

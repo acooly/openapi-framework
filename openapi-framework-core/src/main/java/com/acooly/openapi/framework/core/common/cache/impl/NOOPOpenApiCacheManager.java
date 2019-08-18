@@ -10,10 +10,10 @@
  */
 package com.acooly.openapi.framework.core.common.cache.impl;
 
-import com.acooly.openapi.framework.core.common.cache.CacheManager;
+import com.acooly.openapi.framework.core.common.cache.OpenApiCacheManager;
 
 /** @author qiubo@qq.com */
-public class NOOPCacheManager implements CacheManager {
+public class NOOPOpenApiCacheManager implements OpenApiCacheManager {
   @Override
   public void add(String key, Object value) {}
 

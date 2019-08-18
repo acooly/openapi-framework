@@ -2,19 +2,18 @@ package com.acooly.openapi.framework.core.common.cache.impl;
 
 import com.acooly.module.config.entity.AppConfig;
 import com.acooly.module.config.service.impl.AppConfigManager;
-import com.acooly.openapi.framework.core.common.cache.CacheManager;
+import com.acooly.openapi.framework.core.common.cache.OpenApiCacheManager;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * @author qiuboboy@qq.com
  * @date 2018-07-23 16:16
  */
-public class ConfigCacheManager implements CacheManager, InitializingBean {
+public class ConfigOpenApiCacheManager implements OpenApiCacheManager, InitializingBean {
     private static final String NAME_SPACE = "openapi.cache.";
 
     @Autowired
@@ -23,7 +22,7 @@ public class ConfigCacheManager implements CacheManager, InitializingBean {
 
     private Integer defaultTimeout;
 
-    public ConfigCacheManager(Integer defaultTimeout) {
+    public ConfigOpenApiCacheManager(Integer defaultTimeout) {
         this.defaultTimeout = defaultTimeout;
     }
 

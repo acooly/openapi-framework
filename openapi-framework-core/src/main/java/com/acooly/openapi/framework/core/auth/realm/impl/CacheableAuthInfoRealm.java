@@ -9,7 +9,7 @@ package com.acooly.openapi.framework.core.auth.realm.impl;
 import com.acooly.openapi.framework.core.auth.permission.Permission;
 import com.acooly.openapi.framework.core.auth.permission.PermissionResolver;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
-import com.acooly.openapi.framework.core.common.cache.CacheManager;
+import com.acooly.openapi.framework.core.common.cache.OpenApiCacheManager;
 import com.acooly.openapi.framework.core.exception.impl.ApiServiceAuthenticationException;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -30,18 +30,18 @@ import java.util.Set;
 public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
   protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  @Autowired private CacheManager cacheManager;
+  @Autowired private OpenApiCacheManager openApiCacheManager;
 
   @Resource PermissionResolver permissionResolver;
 
   @Override
   public Object getAuthenticationInfo(String accessKey) {
     String key = authenticationKey(accessKey);
-    Object value = cacheManager.get(key);
+    Object value = openApiCacheManager.get(key);
     if (value == null) {
       value = getSecretKey(accessKey);
       if (value != null) {
-        cacheManager.add(key, value);
+        openApiCacheManager.add(key, value);
       } else {
         throw new ApiServiceAuthenticationException("获取认证信息失败或不存在");
       }
@@ -53,7 +53,7 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
   @Override
   public Object getAuthorizationInfo(String accessKey) {
     String key = authorizationKey(accessKey);
-    List<Permission> value = (List<Permission>) cacheManager.get(key);
+    List<Permission> value = (List<Permission>) openApiCacheManager.get(key);
     if (value == null) {
       Set<String> permStrList = getAuthorizedServices(accessKey);
       // 如果没有查询到权限信息,不设置缓存,有可能是网络或者权限系统内部错误
@@ -67,7 +67,7 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
         }
       }
       value = perms;
-      cacheManager.add(key, value);
+      openApiCacheManager.add(key, value);
     }
     return value;
   }
@@ -81,8 +81,8 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
   }
 
   public void removeCache(String accessKey) {
-    cacheManager.cleanup(authenticationKey(accessKey));
-    cacheManager.cleanup(authorizationKey(accessKey));
+    openApiCacheManager.cleanup(authenticationKey(accessKey));
+    openApiCacheManager.cleanup(authorizationKey(accessKey));
   }
 
   public abstract String getSecretKey(String accessKey);

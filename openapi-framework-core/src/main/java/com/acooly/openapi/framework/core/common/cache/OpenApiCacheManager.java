@@ -11,7 +11,7 @@ package com.acooly.openapi.framework.core.common.cache;
  * @author zhangpu
  * @date 2014年6月27日
  */
-public interface CacheManager {
+public interface OpenApiCacheManager {
 
 
     /**
