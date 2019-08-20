@@ -40,4 +40,11 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
         super.update(o);
         eventBus.publish(new ApiAuthUpdateEvent(o));
     }
+
+
+    @Override
+    public void remove(ApiAuth o) throws BusinessException {
+        super.remove(o);
+        eventBus.publish(new ApiAuthUpdateEvent(o));
+    }
 }
