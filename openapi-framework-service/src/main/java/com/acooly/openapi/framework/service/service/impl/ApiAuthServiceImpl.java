@@ -37,8 +37,9 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
 
     @Override
     public void update(ApiAuth o) throws BusinessException {
+        ApiAuth oldApiAuth = this.get(o.getId());
         super.update(o);
-        eventBus.publish(new ApiAuthUpdateEvent(o));
+        eventBus.publish(new ApiAuthUpdateEvent(oldApiAuth));
     }
 
 
