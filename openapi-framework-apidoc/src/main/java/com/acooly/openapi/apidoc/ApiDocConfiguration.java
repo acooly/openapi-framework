@@ -10,9 +10,10 @@
 package com.acooly.openapi.apidoc;
 
 import com.acooly.core.common.dao.support.StandardDatabaseScriptIniter;
+import com.acooly.module.mybatis.EntityMybatisDao;
 import com.google.common.collect.Lists;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -29,7 +30,7 @@ import static com.acooly.openapi.apidoc.ApiDocProperties.PREFIX;
 @EnableConfigurationProperties({ApiDocProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.openapi.apidoc")
-@EntityScan(basePackages = "com.acooly.openapi.apidoc.persist.entity")
+@MapperScan(basePackages = "com.acooly.openapi.apidoc.persist.dao", markerInterface = EntityMybatisDao.class)
 public class ApiDocConfiguration {
 
     @Bean
