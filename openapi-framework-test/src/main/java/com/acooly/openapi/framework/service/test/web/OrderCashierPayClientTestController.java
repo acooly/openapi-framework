@@ -74,7 +74,7 @@ public class OrderCashierPayClientTestController {
     @ResponseBody
     public Object mockReturnUrl(HttpServletRequest request) {
         Map<String, String> data = Servlets.getHeaders(request, "x-api");
-        data.put(ApiConstants.ACCESS_KEY, getServletParameter(request, ApiConstants.ACCESS_KEY));
+        data.put(ApiConstants.X_API_ACCESS_KEY, getServletParameter(request, ApiConstants.X_API_ACCESS_KEY));
         data.put(ApiConstants.SIGN_TYPE, getServletParameter(request, ApiConstants.SIGN_TYPE));
         data.put(ApiConstants.SIGN, getServletParameter(request, ApiConstants.SIGN));
         data.put("body", getBody(request));
@@ -86,7 +86,7 @@ public class OrderCashierPayClientTestController {
     @RequestMapping("notifyUrl")
     public void mockNotifyUrl(HttpServletRequest request, HttpServletResponse response) {
         Map<String, String> data = Servlets.getHeaders(request, "x-api");
-        data.put(ApiConstants.ACCESS_KEY, getServletParameter(request, ApiConstants.ACCESS_KEY));
+        data.put(ApiConstants.X_API_ACCESS_KEY, getServletParameter(request, ApiConstants.X_API_ACCESS_KEY));
         data.put(ApiConstants.SIGN_TYPE, getServletParameter(request, ApiConstants.SIGN_TYPE));
         data.put(ApiConstants.SIGN, getServletParameter(request, ApiConstants.SIGN));
         data.put("body", getBody(request));

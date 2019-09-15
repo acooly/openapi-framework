@@ -7,7 +7,7 @@ import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
 

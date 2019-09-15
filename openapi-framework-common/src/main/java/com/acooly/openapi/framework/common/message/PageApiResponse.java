@@ -2,7 +2,7 @@ package com.acooly.openapi.framework.common.message;
 
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.facade.PageResult;
-import com.acooly.core.utils.GenericsUtils;
+import com.acooly.core.utils.Reflections;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.google.common.collect.Lists;
@@ -42,7 +42,7 @@ public abstract class PageApiResponse<T> extends ApiResponse {
     }
 
     public <U> void setPageResult(PageResult<U> pageResult, BiConsumer<U, T> consumer) {
-        Class<?> responseClass = GenericsUtils.getSuperClassGenricType(getClass(), 0);
+        Class<?> responseClass = Reflections.getSuperClassGenricType(getClass());
         PageInfo<U> pageInfo = pageResult.getDto();
         List<T> rows = Lists.newArrayList();
         for (U dto : pageInfo.getPageResults()) {

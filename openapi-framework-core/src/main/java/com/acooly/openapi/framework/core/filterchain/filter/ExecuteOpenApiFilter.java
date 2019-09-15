@@ -1,5 +1,14 @@
-package com.acooly.openapi.framework.core.executer;
+/**
+ * openapi-framework
+ * <p>
+ * Copyright 2014 Acooly.cn, Inc. All rights reserved.
+ *
+ * @author zhangpu
+ * @date 2019-09-06 11:13
+ */
+package com.acooly.openapi.framework.core.filterchain.filter;
 
+import com.acooly.module.filterchain.FilterChain;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.event.dto.AfterServiceExecuteEvent;
@@ -11,56 +20,39 @@ import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.core.listener.multicaster.EventPublisher;
 import com.google.common.base.Strings;
-import org.apache.commons.lang3.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author qiubo@yiji.com
+ * 组织请求报文为报文对象
+ *
+ * @author zhangpu
+ * @date 2019-09-06 11:13
  */
+@Slf4j
 @Component
-public class DefaultHttpApiServiceExecuter extends HttpApiServiceExecuter {
+public class ExecuteOpenApiFilter extends AbstractOpenApiFilter {
+
     @Resource
     private EventPublisher eventPublisher;
 
     @Override
-    protected void doInitApiContext(ApiContext apiContext, HttpServletRequest orignalRequest, HttpServletResponse orignalResponse) {
-        apiContext.setOrignalRequest(orignalRequest);
-        apiContext.setOrignalResponse(orignalResponse);
-        try {
-            apiContext.init();
-            ApiService apiService = apiServiceFactory.getApiService(apiContext.getServiceName(), apiContext.getServiceVersion());
-            apiContext.setApiService(apiService);
-            ApiRequest apiRequest = apiService.getRequestBean();
-            ApiResponse apiResponse = apiService.getResponseBean();
-            apiContext.setRequest(apiRequest);
-            apiContext.setResponse(apiResponse);
-            prepareResponse(apiContext);
-        } finally {
-            logRequestData(apiContext);
-        }
+    public void doInternalFilter(ApiContext context, FilterChain<ApiContext> filterChain) {
+        doExceute(context);
     }
 
-    private void logRequestData(ApiContext apiContext) {
-        String serviceName = apiContext.getServiceName();
-        String labelPostfix = (StringUtils.isNotBlank(serviceName) ? "[" + serviceName + "]:" : ":");
-        openApiLoggerHandler.log("服务请求" + labelPostfix, apiContext.getRequest(), apiContext.getRequestBody());
-    }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    @Override
-    protected void doExceute(ApiContext apiContext) {
-        ApiService apiService = apiContext.getApiService();
-        ApiRequest apiRequest = apiContext.getRequest();
-        ApiResponse apiResponse = apiContext.getResponse();
+    protected void doExceute(ApiContext context) {
+        ApiService apiService = context.getApiService();
+        ApiRequest apiRequest = context.getRequest();
+        ApiResponse apiResponse = context.getResponse();
         try {
-            publishBeforeServiceExecuteEvent(apiContext);
-            apiService.service(apiContext);
+            publishBeforeServiceExecuteEvent(context);
+            apiService.service(context);
             // 如果是跳转接口，必须设置redirect的检查
-            if (apiContext.isRedirect() && Strings.isNullOrEmpty(apiService.getRedirectUrl())) {
+            if (context.isRedirect() && Strings.isNullOrEmpty(apiService.getRedirectUrl())) {
                 throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, "跳转接口必须设置下层RedirectUrl");
             }
         } catch (Throwable ex) {
@@ -70,6 +62,7 @@ public class DefaultHttpApiServiceExecuter extends HttpApiServiceExecuter {
             publishAfterServiceExecuteEvent(apiResponse, apiRequest, apiService);
         }
     }
+
 
     private void publishBeforeServiceExecuteEvent(ApiContext apiContext) {
         if (eventPublisher.canPublishEvent(apiContext.getApiService())) {
@@ -92,5 +85,10 @@ public class DefaultHttpApiServiceExecuter extends HttpApiServiceExecuter {
         if (eventPublisher.canPublishEvent(apiService)) {
             eventPublisher.publishEvent(new AfterServiceExecuteEvent(apiRequest, apiResponse), apiService);
         }
+    }
+
+    @Override
+    public int getOrder() {
+        return 10;
     }
 }

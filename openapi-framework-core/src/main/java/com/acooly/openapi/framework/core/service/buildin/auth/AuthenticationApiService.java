@@ -3,7 +3,6 @@ package com.acooly.openapi.framework.core.service.buildin.auth;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.ApiDocNote;
 import com.acooly.openapi.framework.common.annotation.ApiDocType;
-import com.acooly.openapi.framework.common.annotation.OpenApiNote;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ResponseType;

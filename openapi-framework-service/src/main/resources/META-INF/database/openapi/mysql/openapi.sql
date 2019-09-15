@@ -32,6 +32,7 @@ CREATE TABLE `api_notify_message` (
   `request_no` varchar(40) DEFAULT NULL,
   `merch_order_no` varchar(40) DEFAULT NULL,
   `message_type` varchar(16) NOT NULL,
+  `protocol` varchar(40) DEFAULT NULL COMMENT '报文协议',
   `service` varchar(32) DEFAULT NULL,
   `version` varchar(8) DEFAULT NULL,
   `url` varchar(255) NOT NULL,

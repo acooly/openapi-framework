@@ -16,10 +16,10 @@ import com.acooly.openapi.framework.service.test.enums.GoodType;
 import com.acooly.openapi.framework.service.test.notify.PayOrderNotify;
 import com.acooly.openapi.framework.service.test.request.OrderCreateRequest;
 import com.acooly.openapi.framework.service.test.request.PayOrderRequest;
-import com.acooly.openapi.framework.service.test.request.WithdrawRequest;
+import com.acooly.openapi.framework.service.test.request.WithdrawApiRequest;
 import com.acooly.openapi.framework.service.test.response.OrderCreateResponse;
 import com.acooly.openapi.framework.service.test.response.PayOrderResponse;
-import com.acooly.openapi.framework.service.test.response.WithdrawResponse;
+import com.acooly.openapi.framework.service.test.response.WithdrawApiResponse;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
@@ -97,7 +97,7 @@ public class OpenApiTest extends AbstractApiServieTests {
         OrderCreateRequest request = new OrderCreateRequest();
         request.setPartnerId("test");
         request.setRequestNo(UUID.randomUUID().toString());
-        request.setService("createOrder");
+        request.setService("orderCreate");
         request.setTitle("同步请求创建订单");
         request.setPayeeUserId("12345678900987654321");
         request.setPayerUserId("09876543211234567890");
@@ -119,7 +119,7 @@ public class OpenApiTest extends AbstractApiServieTests {
     public void testSync_ParamCheckError() throws Exception {
         OrderCreateRequest request = new OrderCreateRequest();
         request.setRequestNo(UUID.randomUUID().toString());
-        request.setService("createOrder");
+        request.setService("orderCreate");
         request.setTitle("同步请求创建订单");
         request.setPayeeUserId("12345678900987654321");
         request.setPayerUserId("09876543211234567890");
@@ -161,12 +161,12 @@ public class OpenApiTest extends AbstractApiServieTests {
      */
     @Test
     public void testRedirect() throws Exception {
-        WithdrawRequest request = new WithdrawRequest();
+        WithdrawApiRequest request = new WithdrawApiRequest();
         request.setRequestNo(UUID.randomUUID().toString());
         request.setService("withdraw");
         request.setAmount(new Money("100"));
         request.setContext(content);
-        WithdrawResponse response = request(request, WithdrawResponse.class);
+        WithdrawApiResponse response = request(request, WithdrawApiResponse.class);
         log.info("{}", response);
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isFalse();
@@ -174,7 +174,7 @@ public class OpenApiTest extends AbstractApiServieTests {
 
         request.setNotifyUrl("http://www.baidu.com");
         request.setReturnUrl("http://www.baidu.com");
-        response = request(request, WithdrawResponse.class);
+        response = request(request, WithdrawApiResponse.class);
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isTrue();
         assertThat(response.getContext()).isEqualTo(content);
@@ -261,7 +261,7 @@ public class OpenApiTest extends AbstractApiServieTests {
         request.ext("xx", "oo");
         String body = JsonMarshallor.INSTANCE.marshall(request);
         Map<String, String> requestHeader = Maps.newTreeMap();
-        requestHeader.put(ApiConstants.ACCESS_KEY, accessKey);
+        requestHeader.put(ApiConstants.X_API_ACCESS_KEY, accessKey);
         requestHeader.put(ApiConstants.SIGN_TYPE, "MD5");
         requestHeader.put(ApiConstants.SIGN, sign(body));
         if (showLog) {

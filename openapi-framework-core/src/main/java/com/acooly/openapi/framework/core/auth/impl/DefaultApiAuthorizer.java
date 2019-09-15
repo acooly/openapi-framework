@@ -23,16 +23,23 @@ import java.util.List;
 @Component
 public class DefaultApiAuthorizer implements ApiAuthorizer {
 
-  @Override
-  public void authorize(ApiContext apiContext, List<Permission> permissionList) {
-    String resource=apiContext.getPartnerId() + ":" + apiContext.getServiceName();
-    if (permissionList != null) {
-      for (Permission perm : permissionList) {
-        if (perm.implies(resource)) {
-          return;
+    @Override
+    public void authorize(ApiContext apiContext, List<Permission> permissionList) {
+        String resource = apiContext.getPartnerId() + ":" + apiContext.getServiceName();
+        if (!hasPermission(permissionList, resource)) {
+            throw new ApiServiceAuthorizationException("服务[" + apiContext.getServiceName() + "]未授权");
         }
-      }
     }
-    throw new ApiServiceAuthorizationException("服务[" + apiContext.getServiceName() + "]未授权");
-  }
+
+
+    protected boolean hasPermission(List<Permission> permissionList, String resource) {
+        if (permissionList != null) {
+            for (Permission perm : permissionList) {
+                if (perm.implies(resource)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

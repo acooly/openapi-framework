@@ -9,8 +9,8 @@ package com.acooly.openapi.framework.common.utils;
 
 import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.io.Streams;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 
@@ -244,7 +244,7 @@ public class RSA {
         } catch (Exception e) {
             throw new RuntimeException("privateKey decrypt fail:" + e.getMessage());
         } finally {
-            IOUtils.closeQuietly(out);
+            Streams.close(out);
         }
     }
 
@@ -294,7 +294,7 @@ public class RSA {
         } catch (Exception e) {
             throw new RuntimeException("通过keystore加载私钥失败:" + e.getMessage());
         } finally {
-            IOUtils.closeQuietly(in);
+            Streams.close(in);
         }
     }
 
@@ -444,7 +444,7 @@ public class RSA {
         } catch (Exception e) {
             throw new RuntimeException("加载公钥文件内容失败:" + e.getMessage());
         } finally {
-            IOUtils.closeQuietly(in);
+            Streams.close(in);
         }
     }
 
@@ -464,7 +464,7 @@ public class RSA {
         } catch (Exception e) {
             throw new RuntimeException("加载公钥文件内容失败:" + e.getMessage());
         } finally {
-            IOUtils.closeQuietly(in);
+            Streams.close(in);
         }
     }
 
@@ -494,7 +494,7 @@ public class RSA {
         } catch (Exception e) {
             throw new RuntimeException("通过keystore加载证书公钥失败:" + e.getMessage());
         } finally {
-            IOUtils.closeQuietly(in);
+            Streams.close(in);
         }
     }
 

@@ -14,5 +14,10 @@ import com.acooly.openapi.framework.service.domain.NotifyMessage;
  */
 public interface NotifyMessageSendDispatcher {
 
+    /**
+     * 分发通知到具体的通知实现
+     *
+     * @param notifyMessage
+     */
     void dispatch(NotifyMessage notifyMessage);
 }

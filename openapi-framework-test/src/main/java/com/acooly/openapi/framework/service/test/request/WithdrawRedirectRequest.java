@@ -6,7 +6,7 @@ import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 

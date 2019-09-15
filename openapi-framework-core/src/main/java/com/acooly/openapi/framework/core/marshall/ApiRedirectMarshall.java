@@ -7,6 +7,7 @@
  */
 package com.acooly.openapi.framework.core.marshall;
 
+import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 
 /**
@@ -18,6 +19,9 @@ import com.acooly.openapi.framework.common.message.ApiResponse;
  */
 public interface ApiRedirectMarshall<T, S extends ApiResponse> extends ApiMarshall<T, S> {
 
-  @Override
-  T marshall(S source);
+
+    @Override
+    default ApiMessageType getApiMessageType() {
+        return ApiMessageType.Return;
+    }
 }

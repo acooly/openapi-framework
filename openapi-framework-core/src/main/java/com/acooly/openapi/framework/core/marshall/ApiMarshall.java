@@ -7,6 +7,7 @@
  */
 package com.acooly.openapi.framework.core.marshall;
 
+import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
 
 /**
@@ -16,7 +17,29 @@ import com.acooly.openapi.framework.common.enums.ApiProtocol;
  */
 public interface ApiMarshall<T, S> {
 
-  T marshall(S source);
+    /**
+     * 解析
+     *
+     * @param source
+     * @return
+     */
+    T marshall(S source);
 
-  ApiProtocol getProtocol();
+    /**
+     * 标记协议
+     *
+     * @return
+     */
+    default ApiProtocol getProtocol() {
+        return ApiProtocol.JSON;
+    }
+
+    /**
+     * 报文类型
+     *
+     * @return
+     */
+    ApiMessageType getApiMessageType();
+
+
 }

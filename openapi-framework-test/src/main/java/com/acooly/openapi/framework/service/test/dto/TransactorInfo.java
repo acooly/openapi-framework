@@ -14,7 +14,7 @@ import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.service.test.enums.TransactorType;
 import com.acooly.openapi.framework.service.test.enums.UserAuthEnum;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 

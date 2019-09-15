@@ -24,7 +24,7 @@ import com.acooly.openapi.framework.common.message.ApiResponse;
 public interface ApiService<O extends ApiRequest, R extends ApiResponse>
         extends OpenApiEventPublisher<ServiceEvent> {
 
-    void service(ApiContext apiContext);
+    void service(ApiContext context);
 
     ApiNotify handleNotify(OrderDto orderInfo, Object data);
 

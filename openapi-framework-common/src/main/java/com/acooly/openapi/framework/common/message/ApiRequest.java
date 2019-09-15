@@ -17,12 +17,13 @@ public class ApiRequest extends ApiMessage {
     /**
      * 参数校验,校验失败请抛出RuntimeException
      */
+    @Override
     public void check() throws RuntimeException {
     }
 
 
     public <T extends OrderBase> T toOrder(Class<T> clazz) {
-        T t = BeanUtils.instantiate(clazz);
+        T t = BeanUtils.instantiateClass(clazz);
         t.setGid(MDC.get("gid"));
         BeanCopier.copy(this, t);
         if (t instanceof BizOrderBase) {

@@ -8,7 +8,7 @@ import com.acooly.openapi.framework.common.enums.DeviceType;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
 

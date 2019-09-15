@@ -30,8 +30,7 @@ import java.util.Map;
  *
  * <p>Created by zhangpu on 2015/11/19.
  */
-public abstract class AbstractResponseMarshall<T, S extends ApiResponse>
-        implements ApiMarshall<T, S> {
+public abstract class AbstractResponseMarshall<T, S extends ApiResponse> implements ApiMarshall<T, S> {
 
     @Resource
     protected OpenApiLoggerHandler openApiLoggerHandler;
@@ -42,30 +41,26 @@ public abstract class AbstractResponseMarshall<T, S extends ApiResponse>
 
     @Override
     public T marshall(ApiResponse response) {
-        ApiContext apiContext = ApiContextHolder.getApiContext();
+        ApiContext context = ApiContextHolder.getContext();
         ObjectAccessor<ApiResponse> objectAccessor = ObjectAccessor.of(response);
         for (Map.Entry<String, Field> entry :
                 objectAccessor.getClassMeta().getSecurityfieldMap().entrySet()) {
             String value = objectAccessor.getPropertyValue(entry.getKey());
-            String encrypt =
-                    apiMarshallCryptService.encrypt(entry.getKey(), value, apiContext.getAccessKey());
+            String encrypt = apiMarshallCryptService.encrypt(entry.getKey(), value, context.getAccessKey());
             objectAccessor.setPropertyValue(entry.getKey(), encrypt);
         }
         T result = doMarshall(response);
         doLogger(response, result);
-        apiContext.setResponseBody((String) result);
-        if (!Strings.isNullOrEmpty(apiContext.getAccessKey())) {
-            String sign =
-                    apiAuthentication.signature(
-                            (String) result, apiContext.getAccessKey(), apiContext.getSignType().name());
+        context.setResponseBody((String) result);
+        if (!Strings.isNullOrEmpty(context.getAccessKey())) {
+            String sign = apiAuthentication.signature(
+                    (String) result, context.getAccessKey(), context.getSignType().name());
             if (!Strings.isNullOrEmpty(sign)) {
-                if (apiContext.getOrignalResponse() != null) {
-                    apiContext
-                            .getOrignalResponse()
-                            .setHeader(ApiConstants.SIGN_TYPE, apiContext.getSignType().name());
-                    apiContext.getOrignalResponse().setHeader(ApiConstants.SIGN, sign);
+                if (context.getHttpResponse() != null) {
+                    context.getHttpResponse().setHeader(ApiConstants.SIGN_TYPE, context.getSignType().name());
+                    context.getHttpResponse().setHeader(ApiConstants.SIGN, sign);
                 }
-                apiContext.setResponseSign(sign);
+                context.setResponseSign(sign);
             }
         }
         return result;

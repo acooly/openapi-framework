@@ -11,28 +11,27 @@ import java.util.regex.Pattern;
 public final class ApiConstants {
     public static final String PERFORMANCE_LOGGER = "com.acooly.framework.openapi_PERFORMANCE_LOGGER";
 
+
+    public static final String X_API_PROTCOL = "x-api-protocol";
+    public static final String X_API_ACCESS_KEY = "x-api-accessKey";
+    public static final String X_API_SIGN = "x-api-sign";
+    public static final String X_API_SIGN_TYPE = "x-api-signType";
+
+    public static final String SIGN = "sign";
+    public static final String SIGN_TYPE = "signType";
     public static final String REQUEST_NO = "requestNo";
     public static final String PARTNER_ID = "partnerId";
-    public static final String ACCESS_KEY = "x-api-accessKey";
-    public static final String SIGN = "x-api-sign";
-    public static final String SIGN_TYPE = "x-api-signType";
     public static final String SERVICE = "service";
     public static final String NOTIFY_URL = "notifyUrl";
     public static final String RETURN_URL = "returnUrl";
-
-    @Deprecated
-    public static final String RESULT_CODE = "resultCode";
-    @Deprecated
-    public static final String RESULT_MESSAGE = "resultMessage";
-
+    public static final String PROTOCOL = "protocol";
+    public static final String VERSION = "version";
 
     public static final String CODE = "code";
     public static final String MESSAGE = "message";
     public static final String DETAIL = "detail";
-
     public static final String SUCCESS = "success";
-    public static final String PROTOCOL = "protocol";
-    public static final String VERSION = "version";
+
     public static final String GID = "gid";
     public static final String CONTEXT = "context";
 

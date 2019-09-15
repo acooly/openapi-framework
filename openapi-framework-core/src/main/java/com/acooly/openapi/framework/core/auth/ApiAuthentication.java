@@ -16,8 +16,10 @@ import java.util.Map;
  */
 public interface ApiAuthentication {
 
-  void authenticate(ApiContext apiContext);
+    void authenticate(ApiContext apiContext);
 
-  String signature(Map<String, String> response);
-  String signature(String body, String accessKey, String signType);
+    String signature(Map<String, String> response);
+
+    String signature(String body, String accessKey, String signType);
+
 }

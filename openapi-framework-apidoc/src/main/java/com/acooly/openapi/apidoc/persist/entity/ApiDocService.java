@@ -1,9 +1,9 @@
 /*
-* acooly.cn Inc.
-* Copyright (c) 2017 All Rights Reserved.
-* create by acooly
-* date:2017-12-05
-*/
+ * acooly.cn Inc.
+ * Copyright (c) 2017 All Rights Reserved.
+ * create by acooly
+ * date:2017-12-05
+ */
 package com.acooly.openapi.apidoc.persist.entity;
 
 
@@ -15,10 +15,10 @@ import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.annotation.Signed;
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;

@@ -12,7 +12,7 @@ import com.acooly.core.utils.Strings;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

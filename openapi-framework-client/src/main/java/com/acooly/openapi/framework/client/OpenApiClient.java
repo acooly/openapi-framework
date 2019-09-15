@@ -167,9 +167,9 @@ public class OpenApiClient {
 
         String body = JsonMarshallor.INSTANCE.marshall(request);
         Map<String, String> requestHeader = Maps.newTreeMap();
-        requestHeader.put(ApiConstants.ACCESS_KEY, accessKey);
-        requestHeader.put(ApiConstants.SIGN_TYPE, signType);
-        requestHeader.put(ApiConstants.SIGN, sign(body));
+        requestHeader.put(ApiConstants.X_API_ACCESS_KEY, accessKey);
+        requestHeader.put(ApiConstants.X_API_SIGN_TYPE, signType);
+        requestHeader.put(ApiConstants.X_API_SIGN, sign(body));
 
         MessageResult result = new MessageResult();
         result.setUrl(this.getGatewayUrl());

@@ -6,7 +6,7 @@
 */
 package com.acooly.openapi.framework.service.web;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.openapi.framework.common.enums.SecretType;
 import com.acooly.openapi.framework.common.enums.SignType;
 import com.acooly.openapi.framework.service.domain.ApiTenant;
@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "/manage/module/openapi/apiTenant")
-public class ApiTenantManagerController extends AbstractJQueryEntityController<ApiTenant, ApiTenantService> {
+public class ApiTenantManagerController extends AbstractJsonEntityController<ApiTenant, ApiTenantService> {
 	
 
 	{

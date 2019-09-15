@@ -69,13 +69,13 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
 
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public final void service(ApiContext apiContext) {
+    public final void service(ApiContext context) {
         try {
-            if (apiContext.getOpenApiService().busiType() != ApiBusiType.Query
+            if (context.getOpenApiService().busiType() != ApiBusiType.Query
                     && openAPIProperties.getSaveOrder()) {
-                saveOrder(apiContext);
+                saveOrder(context);
             }
-            doService((O) apiContext.getRequest(), (R) apiContext.getResponse());
+            doService((O) context.getRequest(), (R) context.getResponse());
         } catch (Exception e) {
             throw e;
         }
@@ -100,12 +100,12 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
      *
      * @param orderInfo      原始订单信息
      * @param apiNotifyOrder 外部调用过来准备推送的数据
-     * @param apiNotify      准备发给cs的推送内容对象
+     * @param apiNotify      准备发的推送内容对象
      */
     protected void customizeApiNotify(
             OrderDto orderInfo, ApiNotifyOrder apiNotifyOrder, ApiNotify apiNotify) {
     }
-    
+
     /**
      * 异步通知entity默认使用基类，API业务服务可以根据需求定义ApiNotify子类，然后在ApiService中覆写该方法返回子类的类型，
      * handleNotify抽象实现会自动填充完成通知对象组装

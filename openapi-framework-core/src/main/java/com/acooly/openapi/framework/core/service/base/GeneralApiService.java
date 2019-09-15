@@ -48,7 +48,7 @@ public abstract class GeneralApiService<O extends ApiRequest, R extends ApiRespo
             if (requestClazz.equals(Object.class)) {
                 return (O) new ApiRequest();
             } else {
-                return BeanUtils.instantiate(requestClazz);
+                return BeanUtils.instantiateClass(requestClazz);
             }
         } catch (Exception e) {
             throw new RuntimeException("实例化Request对象失败:" + requestClazz.toString());
@@ -64,7 +64,7 @@ public abstract class GeneralApiService<O extends ApiRequest, R extends ApiRespo
             if (responseClazz.equals(Object.class)) {
                 return (R) new ApiResponse();
             } else {
-                return BeanUtils.instantiate(responseClazz);
+                return BeanUtils.instantiateClass(responseClazz);
             }
         } catch (Exception e) {
             throw new RuntimeException("实例化Response对象失败:" + responseClazz.toString());

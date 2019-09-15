@@ -1,7 +1,7 @@
 package com.acooly.openapi.framework.service.web;
 
 import com.acooly.core.common.dao.support.PageInfo;
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.core.common.web.MappingMethod;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.openapi.framework.common.enums.TaskStatus;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/manage/openapi/notifyMessage")
-public class NotifyMessageManagerController extends AbstractJQueryEntityController {
+public class NotifyMessageManagerController extends AbstractJsonEntityController {
 
   @Autowired private NotifyMessageService notifyMessageService;
 

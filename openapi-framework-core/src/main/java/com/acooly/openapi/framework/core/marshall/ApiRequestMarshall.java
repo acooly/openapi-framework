@@ -7,16 +7,20 @@
  */
 package com.acooly.openapi.framework.core.marshall;
 
+import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiRequest;
+import com.acooly.openapi.framework.common.context.ApiContext;
 
 /**
  * 请求报文组装接口
  *
- * @author zhangpu
  * @param <T>
+ * @author zhangpu
  */
-public interface ApiRequestMarshall<T extends ApiRequest, S> extends ApiMarshall<T, S> {
+public interface ApiRequestMarshall<T extends ApiRequest, S extends ApiContext> extends ApiMarshall<T, S> {
 
-  @Override
-  T marshall(S source);
+    @Override
+    default ApiMessageType getApiMessageType() {
+        return ApiMessageType.Request;
+    }
 }

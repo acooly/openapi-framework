@@ -102,7 +102,7 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
     public void testNotify() throws Exception {
         CountDownLatch doneSignal = new CountDownLatch(1);
 
-        int port = 10090;
+        int port = 8089;
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/", new TestHandler(doneSignal));
         server.setExecutor(null); // creates a default executor

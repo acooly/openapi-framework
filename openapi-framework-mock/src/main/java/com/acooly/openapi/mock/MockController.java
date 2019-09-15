@@ -1,6 +1,5 @@
 package com.acooly.openapi.mock;
 
-import com.acooly.openapi.framework.service.service.ApiMetaServiceService;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
@@ -8,6 +7,7 @@ import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.common.utils.Servlets;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
+import com.acooly.openapi.framework.service.service.ApiMetaServiceService;
 import com.acooly.openapi.mock.dao.ApiMockDao;
 import com.acooly.openapi.mock.entity.ApiMock;
 import com.alibaba.fastjson.JSON;
@@ -40,8 +40,8 @@ public class MockController {
     public void testFtl(HttpServletRequest request, HttpServletResponse response) {
         ApiContext apiContext = new ApiContext();
         ApiContextHolder.setApiContext(apiContext);
-        apiContext.setOrignalRequest(request);
-        apiContext.setOrignalResponse(response);
+        apiContext.setHttpRequest(request);
+        apiContext.setHttpResponse(response);
         apiContext.init();
         List<ApiMock> apiMocks = apiMockDao.findByServiceNameAndVersion(apiContext.getServiceName(), apiContext.getServiceVersion());
         String responseBody;
@@ -73,10 +73,8 @@ public class MockController {
                     apiAuthentication.signature(
                             responseBody, apiContext.getAccessKey(), apiContext.getSignType().name());
             if (!Strings.isNullOrEmpty(sign)) {
-                apiContext
-                        .getOrignalResponse()
-                        .setHeader(ApiConstants.SIGN_TYPE, apiContext.getSignType().name());
-                apiContext.getOrignalResponse().setHeader(ApiConstants.SIGN, sign);
+                apiContext.getHttpResponse().setHeader(ApiConstants.SIGN_TYPE, apiContext.getSignType().name());
+                apiContext.getHttpResponse().setHeader(ApiConstants.SIGN, sign);
             }
             apiContext.setResponseSign(sign);
         }

@@ -28,26 +28,27 @@ import java.util.Map;
 @Component
 public class JsonApiRequestMarshall implements ApiRequestMarshall<ApiRequest, ApiContext> {
 
-  private static JsonMarshallor jsonMarshallor = JsonMarshallor.INSTANCE;
+    private static JsonMarshallor jsonMarshallor = JsonMarshallor.INSTANCE;
 
-  @Autowired private ApiMarshallCryptService apiMarshallCryptService;
+    @Autowired
+    private ApiMarshallCryptService apiMarshallCryptService;
 
-  @Override
-  public ApiRequest marshall(ApiContext apiContext) {
-    String requestBody = apiContext.getRequestBody();
-    ApiRequest parsed = jsonMarshallor.parse(requestBody, apiContext.getRequest().getClass());
-    ObjectAccessor objectAccessor = ObjectAccessor.of(parsed);
-    for (Map.Entry<String, Field> entry :
-        objectAccessor.getClassMeta().getSecurityfieldMap().entrySet()) {
-      String value = objectAccessor.getPropertyValue(entry.getKey());
-      value = apiMarshallCryptService.decrypt(entry.getKey(), value, apiContext.getAccessKey());
-      objectAccessor.setPropertyValue(entry.getKey(), value);
+    @Override
+    public ApiRequest marshall(ApiContext context) {
+        String requestBody = context.getRequestBody();
+        ApiRequest parsed = jsonMarshallor.parse(requestBody, context.getRequest().getClass());
+        ObjectAccessor objectAccessor = ObjectAccessor.of(parsed);
+        for (Map.Entry<String, Field> entry :
+                objectAccessor.getClassMeta().getSecurityfieldMap().entrySet()) {
+            String value = objectAccessor.getPropertyValue(entry.getKey());
+            value = apiMarshallCryptService.decrypt(entry.getKey(), value, context.getAccessKey());
+            objectAccessor.setPropertyValue(entry.getKey(), value);
+        }
+        return parsed;
     }
-    return parsed;
-  }
 
-  @Override
-  public ApiProtocol getProtocol() {
-    return ApiProtocol.JSON;
-  }
+    @Override
+    public ApiProtocol getProtocol() {
+        return ApiProtocol.JSON;
+    }
 }

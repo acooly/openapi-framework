@@ -4,7 +4,7 @@ import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.service.test.enums.TransactorType;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * 查询经营人 请求报文

@@ -63,9 +63,6 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
             // 获取订单信息
             apiNotifyOrder.check();
             OrderDto orderInfo = getOrderInfo(apiNotifyOrder.getGid(), apiNotifyOrder.getPartnerId());
-            if (orderInfo == null) {
-                throw new ApiServiceException(ApiServiceResultCode.NOTIFY_ERROR, "GID对应的原始请求订单不存在");
-            }
             if (StringUtils.isBlank(orderInfo.getNotifyUrl())) {
                 throw new ApiServiceException(ApiServiceResultCode.NOTIFY_ERROR, "notifyUrl为空，不发送通知。");
             }
@@ -75,29 +72,25 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
             ApiContextHolder.getApiContext().setAccessKey(orderInfo.getAccessKey());
             ApiContextHolder.getApiContext().setPartnerId(apiNotifyOrder.getPartnerId());
             ApiContextHolder.getApiContext().setSignType(SignTypeEnum.valueOf(orderInfo.getSignType()));
-
             // 查找对应服务并调用异步业务处理
             ApiService apiService = apiServiceFactory.getApiService(orderInfo.getService(), orderInfo.getVersion());
             ApiNotify apiNotify = apiService.handleNotify(orderInfo, apiNotifyOrder);
             ApiContextHolder.getApiContext().setApiService(apiService);
             ApiContextHolder.getApiContext().setResponse(apiNotify);
-            // 组装报文
             String notifyBody = (String) apiNotifyMarshall.marshall(apiNotify);
-            // 删除框架的签名，交给CS系统发送时签名
             String callerNotifyUrl = apiNotifyOrder.getParameter(ApiConstants.NOTIFY_URL);
             String notifyUrl = StringUtils.isNotBlank(callerNotifyUrl) ? callerNotifyUrl : orderInfo.getNotifyUrl();
 
             NotifySendMessage notifySendMessage = new NotifySendMessage();
             notifySendMessage.setGid(apiNotifyOrder.getGid());
+            notifySendMessage.setRequestNo(apiNotify.getRequestNo());
             notifySendMessage.setPartnerId(apiNotify.getPartnerId());
             notifySendMessage.setService(apiNotify.getService());
             notifySendMessage.setVersion(apiNotify.getVersion());
             notifySendMessage.setUrl(notifyUrl);
-            notifySendMessage.setRequestNo(apiNotify.getRequestNo());
+            notifySendMessage.setProtocol(apiNotify.getProtocol());
             notifySendMessage.setParameter(ApiConstants.BODY, notifyBody);
             notifySendMessage.setParameter(ApiConstants.SIGN, ApiContextHolder.getApiContext().getResponseSign());
-            //fixme
-//      notifySendMessage.setParameter(ApiConstants.PARTNER_ID, orderInfo.getPartnerId());
             notifySendMessage.setParameter(ApiConstants.SIGN_TYPE, orderInfo.getSignType());
             apiNotifySender.send(notifySendMessage);
         } catch (ApiServiceException ase) {
@@ -185,8 +178,9 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
     private OrderDto getOrderInfo(String gid, String partnerId) {
         OrderDto orderInfo = orderInfoService.findByGid(gid, partnerId);
         if (orderInfo == null) {
-            throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, "请求的原始订单不存在");
+            throw new ApiServiceException(ApiServiceResultCode.OBJECT_NOT_EXIST, "请求的原始订单不存在");
         }
         return orderInfo;
     }
+
 }

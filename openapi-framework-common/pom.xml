@@ -20,5 +20,11 @@
             <artifactId>httpclient</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-filterchain</artifactId>
+            <version>${acooly.version}</version>
+        </dependency>
+
     </dependencies>
 </project>

@@ -22,23 +22,23 @@ import java.util.Date;
 @Getter
 @Setter
 public class OrderDto extends InfoBase {
-  private Long id;
+    private Long id;
 
-  private String gid;
+    private String gid;
 
-  private String requestNo;
+    private String requestNo;
 
-  private String partnerId;
-  private String service;
-  private String version;
-  private String signType;
-  private String returnUrl;
-  private String notifyUrl;
-  private ApiProtocol protocol;
-  private String businessInfo;
-  private Date rawAddTime;
-  private Date rawUpdateTime;
+    private String partnerId;
+    private String service;
+    private String version;
+    private String signType;
+    private String returnUrl;
+    private String notifyUrl;
+    private ApiProtocol protocol = ApiProtocol.JSON;
+    private String businessInfo;
+    private Date rawAddTime;
+    private Date rawUpdateTime;
 
-  private String accessKey;
-  private String context;
+    private String accessKey;
+    private String context;
 }

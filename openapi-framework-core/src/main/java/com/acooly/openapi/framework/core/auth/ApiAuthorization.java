@@ -14,5 +14,5 @@ import com.acooly.openapi.framework.common.context.ApiContext;
  */
 public interface ApiAuthorization {
 
-  void authorize(ApiContext apiContext);
+    void authorize(ApiContext context);
 }

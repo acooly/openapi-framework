@@ -49,12 +49,12 @@ public class ApiNotifyResult extends ResultBase {
         Map<String, String> data = Maps.newHashMap();
         data.put(ApiConstants.SIGN, this.sign);
         data.put(ApiConstants.SIGN_TYPE, this.signType);
-        data.put(ApiConstants.ACCESS_KEY, this.accessKey);
+        data.put(ApiConstants.X_API_ACCESS_KEY, this.accessKey);
         data.put(ApiConstants.BODY, this.body);
         StringBuilder sb = new StringBuilder();
 
         sb.append(ApiConstants.BODY).append("=").append(Encodes.urlEncode(this.body)).append("&")
-                .append(ApiConstants.ACCESS_KEY).append("=").append(this.accessKey).append("&")
+                .append(ApiConstants.X_API_ACCESS_KEY).append("=").append(this.accessKey).append("&")
                 .append(ApiConstants.SIGN_TYPE).append("=").append(this.accessKey).append("&")
                 .append(ApiConstants.SIGN).append("=").append(this.sign);
         return sb.toString();

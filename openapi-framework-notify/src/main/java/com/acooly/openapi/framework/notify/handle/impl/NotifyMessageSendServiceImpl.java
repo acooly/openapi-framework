@@ -7,6 +7,8 @@
  */
 package com.acooly.openapi.framework.notify.handle.impl;
 
+import com.acooly.core.common.exception.BusinessException;
+import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.notify.OpenApiNotifyProperties;
 import com.acooly.openapi.framework.notify.handle.NotifyMessageSendDispatcher;
 import com.acooly.openapi.framework.notify.handle.NotifyMessageSendService;
@@ -18,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * @author zhangpu
@@ -33,8 +34,6 @@ public class NotifyMessageSendServiceImpl implements NotifyMessageSendService {
     @Resource
     protected NotifyMessageService notifyMessageService;
 
-    private ScheduledExecutorService retryService;
-
     @Autowired
     private OpenApiNotifyProperties openApiNotifyProperties;
 
@@ -43,8 +42,11 @@ public class NotifyMessageSendServiceImpl implements NotifyMessageSendService {
         try {
             notifyMessageService.insert(notifyMessage);
             notifyMessageSendDispatcher.dispatch(notifyMessage);
+        } catch (BusinessException be) {
+            throw be;
         } catch (Exception e) {
-            throw new RuntimeException("发送异步通知失败:" + e.getMessage());
+            log.warn("异步通知发送 失败:", e);
+            throw new BusinessException(ApiServiceResultCode.INTERNAL_ERROR, e.getMessage());
         }
     }
 
@@ -64,33 +66,4 @@ public class NotifyMessageSendServiceImpl implements NotifyMessageSendService {
             log.warn("异步通知任务 失败：{}", e.getMessage());
         }
     }
-//
-//    private void autoNotifyMessageAtFixRate() {
-//        if (retryService == null) {
-//            retryService =
-//                    Executors.newScheduledThreadPool(
-//                            1,
-//                            r -> {
-//                                Thread thread = new Thread(r);
-//                                thread.setName("NOTIFY-MESSAGE-RETRY-TASK");
-//                                thread.setDaemon(true);
-//                                return thread;
-//                            });
-//
-//            ShutdownHooks.addShutdownHook(() -> retryService.shutdown(), "notifyMessageShutdownHook");
-//
-//            // 启动后1分钟开始执行,间隔2分钟执行一次
-//            retryService.scheduleAtFixedRate(
-//                    () -> this.autoNotifyMessage(), 60, 2 * 60, TimeUnit.SECONDS);
-//        }
-//    }
-
-//    @Override
-//    public void afterPropertiesSet() throws Exception {
-//        try {
-//            autoNotifyMessageAtFixRate();
-//        } catch (Exception e) {
-//            log.error("The retry notify  scheduling init failed", e);
-//        }
-//    }
 }

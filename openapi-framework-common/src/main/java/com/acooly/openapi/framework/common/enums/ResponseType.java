@@ -25,38 +25,45 @@ import java.util.function.Consumer;
  */
 public enum ResponseType implements Consumer<ApiContext> {
 
-  /** 请求直接响应 */
-  SYN("同步服务") {
-    @Override
-    public void accept(ApiContext apiContext) {}
-  },
-  /** 请求需要异步通知确认 */
-  ASNY("异步服务") {
-    @Override
-    public void accept(ApiContext apiContext) {
-      ApiAsyncRequest request = (ApiAsyncRequest) apiContext.getRequest();
-      ApiUtils.checkOpenAPIUrl(request.getNotifyUrl(), ApiConstants.NOTIFY_URL);
+    /**
+     * 请求直接响应
+     */
+    SYN("同步服务") {
+        @Override
+        public void accept(ApiContext context) {
+        }
+    },
+    /**
+     * 请求需要异步通知确认
+     */
+    ASNY("异步服务") {
+        @Override
+        public void accept(ApiContext apiContext) {
+            ApiAsyncRequest request = (ApiAsyncRequest) apiContext.getRequest();
+            ApiUtils.checkOpenAPIUrl(request.getNotifyUrl(), ApiConstants.NOTIFY_URL);
+        }
+    },
+    /**
+     * 请求响应为重定向
+     */
+    REDIRECT("重定向服务") {
+        @Override
+        public void accept(ApiContext apiContext) {
+            ApiAsyncRequest request = (ApiAsyncRequest) apiContext.getRequest();
+            if (StringUtils.isNotEmpty(request.getNotifyUrl())) {
+                ApiUtils.checkOpenAPIUrl(request.getNotifyUrl(), ApiConstants.NOTIFY_URL);
+            }
+            ApiUtils.checkOpenAPIUrl(request.getReturnUrl(), ApiConstants.RETURN_URL);
+        }
+    };
+
+    private String msg;
+
+    ResponseType(String msg) {
+        this.msg = msg;
     }
-  },
-  /** 请求响应为重定向 */
-  REDIRECT("重定向服务") {
-    @Override
-    public void accept(ApiContext apiContext) {
-      ApiAsyncRequest request = (ApiAsyncRequest) apiContext.getRequest();
-      if (StringUtils.isNotEmpty(request.getNotifyUrl())) {
-        ApiUtils.checkOpenAPIUrl(request.getNotifyUrl(), ApiConstants.NOTIFY_URL);
-      }
-      ApiUtils.checkOpenAPIUrl(request.getReturnUrl(), ApiConstants.RETURN_URL);
+
+    public String getMsg() {
+        return msg;
     }
-  };
-
-  private String msg;
-
-  ResponseType(String msg) {
-    this.msg = msg;
-  }
-
-  public String getMsg() {
-    return msg;
-  }
 }

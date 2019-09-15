@@ -7,7 +7,7 @@ import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
 import java.util.Map;
