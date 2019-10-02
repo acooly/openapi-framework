@@ -102,14 +102,12 @@ public class ApiDocItem extends AbstractEntity {
      * 字段描述
      */
     @Signed
-    @Size(max = 512)
     private String descn;
 
     /**
      * 字段示例
      */
     @Signed
-    @Size(max = 512)
     private String demo;
 
     /**

@@ -81,7 +81,7 @@ CREATE TABLE `api_doc_item` (
   `min` int(11) DEFAULT '0' COMMENT '最小长度',
   `max` int(11) DEFAULT NULL COMMENT '最大长度',
   `data_type` varchar(16) NOT NULL COMMENT '数据类型',
-  `descn` varchar(1024) DEFAULT NULL COMMENT '字段描述',
+  `descn` text DEFAULT NULL COMMENT '字段描述',
   `demo` varchar(1024) DEFAULT NULL COMMENT '字段示例',
   `status` varchar(16) NOT NULL DEFAULT '' COMMENT '可选状态',
   `encryptStatus` varchar(16) DEFAULT NULL COMMENT '是否加密{yes:需要,no:无需}',
