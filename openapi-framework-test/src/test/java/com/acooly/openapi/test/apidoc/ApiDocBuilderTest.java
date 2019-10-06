@@ -7,7 +7,7 @@
  * 修订记录:
  * zhangpu@acooly.cn 2018-01-02 15:23 创建
  */
-package com.acooly.openapi.apidoc;
+package com.acooly.openapi.test.apidoc;
 
 import com.acooly.core.common.boot.Apps;
 import com.acooly.module.test.AppTestBase;

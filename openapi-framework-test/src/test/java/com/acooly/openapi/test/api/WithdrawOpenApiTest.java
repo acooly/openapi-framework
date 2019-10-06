@@ -1,4 +1,4 @@
-package com.acooly.openapi.framework.service.test;
+package com.acooly.openapi.test.api;
 
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.enums.ResultStatus;
@@ -88,7 +88,6 @@ public class WithdrawOpenApiTest extends AbstractApiServieTests {
         int status = httpRequest.code();
         String body = httpRequest.body();
         log.info("通知调用结果：{}", body);
-
     }
 
 

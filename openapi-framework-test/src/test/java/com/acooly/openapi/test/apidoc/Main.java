@@ -1,9 +1,8 @@
-package com.acooly.openapi.apidoc;
+package com.acooly.openapi.test.apidoc;
 
 import com.acooly.core.common.BootApp;
 import com.acooly.core.common.boot.Apps;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
 /**

@@ -6,7 +6,7 @@
  * @author zhangpu
  * @date 2019-04-14 14:46
  */
-package com.acooly.openapi.framework.service.test;
+package com.acooly.openapi.test.api;
 
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;

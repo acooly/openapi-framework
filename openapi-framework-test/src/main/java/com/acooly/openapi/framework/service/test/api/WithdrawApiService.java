@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApiDocType(code = "test", name = "测试")
 @ApiDocNote("测试异步接口。<li>1、client -> 同步请求 -> gateway</li><li>2、gateway -> 异步通知（notifyUrl） -> client</li>")
-@OpenApiService(name = "withdraw", desc = "测试：提现", responseType = ResponseType.ASNY, busiType = ApiBusiType.Trade, owner = "zhangpu")
+@OpenApiService(name = "withdraw", desc = "测试：提现异步接口", responseType = ResponseType.ASNY, busiType = ApiBusiType.Trade, owner = "zhangpu")
 public class WithdrawApiService extends AbstractAsyncApiService<WithdrawApiRequest, WithdrawApiResponse, WithdrawApiNotify> {
 
     /**

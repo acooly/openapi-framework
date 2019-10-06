@@ -6,7 +6,7 @@
  * @author zhangpu
  * @date 2019-05-18 19:29
  */
-package com.com.alibaba.fastjson.serializer;
+package com.acooly.openapi.test.misc;
 
 import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
