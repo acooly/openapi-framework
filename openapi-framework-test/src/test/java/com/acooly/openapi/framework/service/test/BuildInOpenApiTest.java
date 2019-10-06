@@ -99,7 +99,7 @@ public class BuildInOpenApiTest extends AbstractApiServieTests {
             String requestBody = new String(ByteStreams.toByteArray(t.getRequestBody()), Charsets.UTF_8);
             PayOrderNotify payOrderNotify =
                     JsonMarshallor.INSTANCE.parse(requestBody, PayOrderNotify.class);
-            log.info("notify requestBody:\n{}", payOrderNotify);
+            log.info("asyncNotify requestBody:\n{}", payOrderNotify);
             assertThat(payOrderNotify.getContext()).isEqualTo(content);
             String sign = t.getRequestHeaders().get(ApiConstants.SIGN).get(0);
             assertThat(sign).isNotEmpty();

@@ -10,13 +10,12 @@ import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
 import com.acooly.openapi.framework.service.test.notify.PayOrderNotify;
-import com.acooly.openapi.framework.service.test.request.OrderCreateRequest;
+import com.acooly.openapi.framework.service.test.request.OrderCreateApiRequest;
 import com.acooly.openapi.framework.service.test.request.PayOrderRequest;
-import com.acooly.openapi.framework.service.test.response.OrderCreateResponse;
+import com.acooly.openapi.framework.service.test.response.OrderCreateApiResponse;
 import com.acooly.openapi.framework.service.test.response.PayOrderResponse;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.io.ByteStreams;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -53,7 +52,7 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
 
     @Test
     public void testSafetyProperties(){
-        System.out.println(SafetyLog.getSafetyProperties(OrderCreateRequest.class));
+        System.out.println(SafetyLog.getSafetyProperties(OrderCreateApiRequest.class));
     }
 
     /**
@@ -66,7 +65,7 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
      */
     @Test
     public void testOrderCreateSync() throws Exception {
-        OrderCreateRequest request = new OrderCreateRequest();
+        OrderCreateApiRequest request = new OrderCreateApiRequest();
         request.setRequestNo(Ids.getDid());
         request.setMerchOrderNo(Ids.getDid());
         request.setService("orderCreate");
@@ -90,7 +89,7 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
 
         request.setGoodsInfos(goodInfos);
         request.ext("xx", "oo");
-        OrderCreateResponse response = request(request, OrderCreateResponse.class);
+        OrderCreateApiResponse response = request(request, OrderCreateApiResponse.class);
         log.info("{}", response);
         log.info("订单号: {}", request.getMerchOrderNo());
         assertThat(response).isNotNull();
@@ -135,7 +134,7 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
             String requestBody = new String(ByteStreams.toByteArray(t.getRequestBody()), Charsets.UTF_8);
             PayOrderNotify payOrderNotify =
                     JsonMarshallor.INSTANCE.parse(requestBody, PayOrderNotify.class);
-            log.info("notify requestBody:\n{}", payOrderNotify);
+            log.info("asyncNotify requestBody:\n{}", payOrderNotify);
             assertThat(payOrderNotify.getContext()).isEqualTo(content);
             String sign = t.getRequestHeaders().get(ApiConstants.SIGN).get(0);
             assertThat(sign).isNotEmpty();

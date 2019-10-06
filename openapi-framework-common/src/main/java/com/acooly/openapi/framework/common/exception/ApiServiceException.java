@@ -15,91 +15,105 @@ import com.acooly.core.utils.enums.Messageable;
  * @author zhangpu
  * @author Bohr.Qiu <qiubo@qq.com>
  */
-public class ApiServiceException extends RuntimeException {
+public class ApiServiceException extends RuntimeException implements Messageable {
 
-  /** UID */
-  private static final long serialVersionUID = 4741339021195297955L;
+    /**
+     * UID
+     */
+    private static final long serialVersionUID = 4741339021195297955L;
 
-  private String resultCode;
-  private String resultMessage;
-  private String detail;
+    private String resultCode;
+    private String resultMessage;
+    private String detail;
 
-  public ApiServiceException() {
-    super();
-  }
+    public ApiServiceException() {
+        super();
+    }
 
-  /**
-   * @param resultCode
-   * @param resultMessage
-   * @param detail
-   */
-  public ApiServiceException(String resultCode, String resultMessage, String detail) {
-    super(resultCode + ":" + resultMessage + ":" + detail);
-    this.resultCode = resultCode;
-    this.resultMessage = resultMessage;
-    this.detail = detail;
-  }
+    /**
+     * @param resultCode
+     * @param resultMessage
+     * @param detail
+     */
+    public ApiServiceException(String resultCode, String resultMessage, String detail) {
+        super(resultCode + ":" + resultMessage + ":" + detail);
+        this.resultCode = resultCode;
+        this.resultMessage = resultMessage;
+        this.detail = detail;
+    }
 
-  /**
-   * @param resultCode
-   * @param resultMessage
-   */
-  public ApiServiceException(String resultCode, String resultMessage) {
-    this(resultCode, resultMessage, null);
-  }
 
-  public ApiServiceException(Messageable apiServiceResultCode) {
-    this(apiServiceResultCode, (String) null);
-  }
+    /**
+     * @param resultCode
+     * @param resultMessage
+     */
+    public ApiServiceException(String resultCode, String resultMessage) {
+        this(resultCode, resultMessage, null);
+    }
 
-  public ApiServiceException(Messageable apiServiceResultCode, Throwable cause) {
-    super(apiServiceResultCode.code() + ":" + apiServiceResultCode.message(), cause);
-  }
+    public ApiServiceException(Messageable apiServiceResultCode) {
+        this(apiServiceResultCode, (String) null);
+    }
 
-  public ApiServiceException(Messageable apiServiceResultCode, String detail) {
-    this(apiServiceResultCode.code(), apiServiceResultCode.message(), detail);
-  }
+    public ApiServiceException(Messageable apiServiceResultCode, Throwable cause) {
+        super(apiServiceResultCode.code() + ":" + apiServiceResultCode.message(), cause);
+    }
 
-  public String getDetail() {
-    return detail;
-  }
+    public ApiServiceException(Messageable apiServiceResultCode, String detail) {
+        this(apiServiceResultCode.code(), apiServiceResultCode.message(), detail);
+    }
 
-  public void setDetail(String detail) {
-    this.detail = detail;
-  }
+    public String getDetail() {
+        return detail;
+    }
 
-  public String getResultCode() {
-    return resultCode;
-  }
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
 
-  public void setResultCode(String resultCode) {
-    this.resultCode = resultCode;
-  }
+    public String getResultCode() {
+        return resultCode;
+    }
 
-  public String getResultMessage() {
-    return resultMessage;
-  }
+    public void setResultCode(String resultCode) {
+        this.resultCode = resultCode;
+    }
 
-  public void setResultMessage(String resultMessage) {
-    this.resultMessage = resultMessage;
-  }
+    public String getResultMessage() {
+        return resultMessage;
+    }
 
-  @Override
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder
-        .append("{resultCode:")
-        .append(resultCode)
-        .append(", resultMessage:")
-        .append(resultMessage)
-        .append(", detail:")
-        .append(detail)
-        .append("}");
-    return builder.toString();
-  }
+    public void setResultMessage(String resultMessage) {
+        this.resultMessage = resultMessage;
+    }
 
-  @Override
-  public synchronized Throwable fillInStackTrace() {
-    return this;
-  }
+
+    @Override
+    public String code() {
+        return this.resultCode;
+    }
+
+    @Override
+    public String message() {
+        return this.resultMessage;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder
+                .append("{resultCode:")
+                .append(resultCode)
+                .append(", resultMessage:")
+                .append(resultMessage)
+                .append(", detail:")
+                .append(detail)
+                .append("}");
+        return builder.toString();
+    }
+
+    @Override
+    public synchronized Throwable fillInStackTrace() {
+        return this;
+    }
 }

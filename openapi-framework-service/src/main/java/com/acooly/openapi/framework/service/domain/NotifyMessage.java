@@ -18,7 +18,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Id;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
@@ -38,20 +38,25 @@ public class NotifyMessage extends LinkedHashMapParameterize<String, String>
 
     @Id
     private Long id;
-    @NotEmpty
+    @NotBlank
     private String gid;
-    @NotEmpty
+    private String requestNo;
+    @NotBlank
     private String partnerId;
     @NotNull
     private MessageType messageType = MessageType.HTTP;
-    @NotEmpty
+    @NotBlank
     @HttpUrl
     private String url;
+    @NotBlank
+    private String signType;
+
+    private String sign;
 
     /**
      * 发送的内容
      */
-    @NotEmpty
+    @NotBlank
     private String content;
     /**
      * 协议（用于选择通知的具体实现）
@@ -72,7 +77,6 @@ public class NotifyMessage extends LinkedHashMapParameterize<String, String>
      */
     private String respInfo;
 
-    private String requestNo;
 
     private String merchOrderNo;
 

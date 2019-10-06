@@ -11,21 +11,32 @@ import java.util.regex.Pattern;
 public final class ApiConstants {
     public static final String PERFORMANCE_LOGGER = "com.acooly.framework.openapi_PERFORMANCE_LOGGER";
 
-
-    public static final String X_API_PROTCOL = "x-api-protocol";
+    /**
+     * http头方式传入的参数名称，内部会转换为统一的协议key(去除前缀x-api-)
+     */
+    public static final String X_HEAD_PREFIX = "x-api-";
+    public static final String X_API_PROTOCOL = "x-api-protocol";
     public static final String X_API_ACCESS_KEY = "x-api-accessKey";
     public static final String X_API_SIGN = "x-api-sign";
     public static final String X_API_SIGN_TYPE = "x-api-signType";
 
+    /**
+     * 框架内部统一的协议key
+     */
+    public static final String PROTOCOL = "protocol";
+    public static final String ACCESS_KEY = "accessKey";
     public static final String SIGN = "sign";
     public static final String SIGN_TYPE = "signType";
+
     public static final String REQUEST_NO = "requestNo";
     public static final String PARTNER_ID = "partnerId";
     public static final String SERVICE = "service";
+    public static final String VERSION = "version";
     public static final String NOTIFY_URL = "notifyUrl";
     public static final String RETURN_URL = "returnUrl";
-    public static final String PROTOCOL = "protocol";
-    public static final String VERSION = "version";
+
+
+    public static final String MERCH_ORDER_NO = "merchOrderNo";
 
     public static final String CODE = "code";
     public static final String MESSAGE = "message";

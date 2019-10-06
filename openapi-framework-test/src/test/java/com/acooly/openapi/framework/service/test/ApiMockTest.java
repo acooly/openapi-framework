@@ -5,8 +5,8 @@ import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.common.message.builtin.LoginRequest;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
-import com.acooly.openapi.framework.service.test.request.OrderCreateRequest;
-import com.acooly.openapi.framework.service.test.response.OrderCreateResponse;
+import com.acooly.openapi.framework.service.test.request.OrderCreateApiRequest;
+import com.acooly.openapi.framework.service.test.response.OrderCreateApiResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.google.common.collect.Lists;
@@ -32,7 +32,7 @@ public class ApiMockTest extends AbstractApiServieTests {
 
     @Test
     public void testSync() throws Exception {
-        OrderCreateRequest request = new OrderCreateRequest();
+        OrderCreateApiRequest request = new OrderCreateApiRequest();
         request.setRequestNo("2");
         request.setService("createOrder");
         request.setTitle("同步请求创建订单");
@@ -55,7 +55,7 @@ public class ApiMockTest extends AbstractApiServieTests {
         }
         request.setGoodsInfos(goodInfos);
         request.ext("xx", "oo");
-        OrderCreateResponse response = request(request, OrderCreateResponse.class);
+        OrderCreateApiResponse response = request(request, OrderCreateApiResponse.class);
         log.info("{}", response);
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isTrue();
@@ -70,6 +70,6 @@ public class ApiMockTest extends AbstractApiServieTests {
 
     @Test
     public void test1() {
-        OrderCreateResponse response=new OrderCreateResponse();
+        OrderCreateApiResponse response=new OrderCreateApiResponse();
     }
 }

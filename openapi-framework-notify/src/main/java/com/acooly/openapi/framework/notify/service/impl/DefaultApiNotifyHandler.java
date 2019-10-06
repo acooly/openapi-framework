@@ -7,26 +7,25 @@
  */
 package com.acooly.openapi.framework.notify.service.impl;
 
-import com.acooly.core.utils.Ids;
+import com.acooly.core.utils.Asserts;
+import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;
+import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
+import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.dto.OrderDto;
-import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
-import com.acooly.openapi.framework.common.enums.SignType;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.common.message.ApiNotify;
-import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.core.marshall.ApiNotifyMarshall;
 import com.acooly.openapi.framework.core.service.factory.ApiServiceFactory;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
-import com.acooly.openapi.framework.notify.dto.NotifySendMessage;
+import com.acooly.openapi.framework.notify.handle.NotifyMessageSendService;
 import com.acooly.openapi.framework.notify.service.ApiNotifyHandler;
-import com.acooly.openapi.framework.notify.service.ApiNotifySender;
+import com.acooly.openapi.framework.service.domain.NotifyMessage;
 import com.acooly.openapi.framework.service.service.OrderInfoService;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -52,47 +51,32 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
     @Resource
     protected ApiNotifyMarshall apiNotifyMarshall;
     @Resource
-    protected ApiNotifySender apiNotifySender;
-    @Autowired
-    protected AuthInfoRealm authInfoRealm;
+    private NotifyMessageSendService notifyMessageSendService;
 
     @Override
-    public void notify(ApiNotifyOrder apiNotifyOrder) {
+    public void asyncNotify(ApiNotifyOrder apiNotifyOrder) {
         MDC.put(ApiConstants.GID, apiNotifyOrder.getGid());
         try {
             // 获取订单信息
             apiNotifyOrder.check();
             OrderDto orderInfo = getOrderInfo(apiNotifyOrder.getGid(), apiNotifyOrder.getPartnerId());
-            if (StringUtils.isBlank(orderInfo.getNotifyUrl())) {
-                throw new ApiServiceException(ApiServiceResultCode.NOTIFY_ERROR, "notifyUrl为空，不发送通知。");
-            }
-
-            ApiContextHolder.init();
-            ApiContextHolder.getApiContext().setGid(apiNotifyOrder.getGid());
-            ApiContextHolder.getApiContext().setAccessKey(orderInfo.getAccessKey());
-            ApiContextHolder.getApiContext().setPartnerId(apiNotifyOrder.getPartnerId());
-            ApiContextHolder.getApiContext().setSignType(SignTypeEnum.valueOf(orderInfo.getSignType()));
             // 查找对应服务并调用异步业务处理
-            ApiService apiService = apiServiceFactory.getApiService(orderInfo.getService(), orderInfo.getVersion());
-            ApiNotify apiNotify = apiService.handleNotify(orderInfo, apiNotifyOrder);
-            ApiContextHolder.getApiContext().setApiService(apiService);
-            ApiContextHolder.getApiContext().setResponse(apiNotify);
-            String notifyBody = (String) apiNotifyMarshall.marshall(apiNotify);
-            String callerNotifyUrl = apiNotifyOrder.getParameter(ApiConstants.NOTIFY_URL);
-            String notifyUrl = StringUtils.isNotBlank(callerNotifyUrl) ? callerNotifyUrl : orderInfo.getNotifyUrl();
-
-            NotifySendMessage notifySendMessage = new NotifySendMessage();
-            notifySendMessage.setGid(apiNotifyOrder.getGid());
-            notifySendMessage.setRequestNo(apiNotify.getRequestNo());
-            notifySendMessage.setPartnerId(apiNotify.getPartnerId());
-            notifySendMessage.setService(apiNotify.getService());
-            notifySendMessage.setVersion(apiNotify.getVersion());
-            notifySendMessage.setUrl(notifyUrl);
-            notifySendMessage.setProtocol(apiNotify.getProtocol());
-            notifySendMessage.setParameter(ApiConstants.BODY, notifyBody);
-            notifySendMessage.setParameter(ApiConstants.SIGN, ApiContextHolder.getApiContext().getResponseSign());
-            notifySendMessage.setParameter(ApiConstants.SIGN_TYPE, orderInfo.getSignType());
-            apiNotifySender.send(notifySendMessage);
+            ApiNotify apiNotify = doExcecuteService(apiNotifyOrder, orderInfo);
+            ApiContextHolder.getContext().setAsyncNotify(true);
+            ApiMessageContext messageContext = doMarshall(apiNotify);
+            String notifyUrl = getNotifyUrl(apiNotifyOrder, orderInfo);
+            NotifyMessage notifyMessage = new NotifyMessage();
+            notifyMessage.setGid(apiNotifyOrder.getGid());
+            notifyMessage.setRequestNo(orderInfo.getRequestNo());
+            notifyMessage.setPartnerId(orderInfo.getPartnerId());
+            notifyMessage.setService(orderInfo.getService());
+            notifyMessage.setVersion(orderInfo.getVersion());
+            notifyMessage.setProtocol(orderInfo.getProtocol());
+            notifyMessage.setSignType(messageContext.getSignType());
+            notifyMessage.setSign(messageContext.getSign());
+            notifyMessage.setUrl(notifyUrl);
+            notifyMessage.setContent(messageContext.getBody());
+            notifyMessageSendService.sendNotifyMessage(notifyMessage);
         } catch (ApiServiceException ase) {
             logger.warn("异步通知 失败:", ase);
             throw ase;
@@ -104,70 +88,66 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
         }
     }
 
+
     @Override
-    public void send(ApiNotifyOrder apiNotifyOrder) {
+    public ApiMessageContext syncNotify(ApiNotifyOrder apiNotifyOrder) {
         MDC.put(ApiConstants.GID, apiNotifyOrder.getGid());
         try {
             // 获取订单信息
             apiNotifyOrder.check();
-            OrderDto orderInfo = new OrderDto();
-            orderInfo.setGid(apiNotifyOrder.getGid());
-            orderInfo.setPartnerId(apiNotifyOrder.getPartnerId());
-            orderInfo.setNotifyUrl(apiNotifyOrder.getParameter(ApiConstants.NOTIFY_URL));
-            orderInfo.setProtocol(ApiProtocol.JSON);
-            orderInfo.setRequestNo(Ids.oid());
-            orderInfo.setService(apiNotifyOrder.getParameter(ApiConstants.SERVICE));
-            orderInfo.setVersion(apiNotifyOrder.getParameter(ApiConstants.VERSION));
-            orderInfo.setSignType(SignType.MD5.code());
-            if (StringUtils.isBlank(orderInfo.getNotifyUrl())) {
-                throw new ApiServiceException(ApiServiceResultCode.NOTIFY_ERROR, "notifyUrl为空，不发送通知。");
-            }
-
-            if (StringUtils.isBlank(orderInfo.getService())) {
-                throw new ApiServiceException(ApiServiceResultCode.NOTIFY_ERROR, "service为空，不发送通知。");
-            }
-
-            if (StringUtils.isBlank(orderInfo.getVersion())) {
-                throw new ApiServiceException(ApiServiceResultCode.NOTIFY_ERROR, "version为空，不发送通知。");
-            }
-            ApiContextHolder.init();
-            ApiContextHolder.getApiContext().setGid(apiNotifyOrder.getGid());
-            ApiContextHolder.getApiContext().setPartnerId(apiNotifyOrder.getPartnerId());
-            ApiContextHolder.getApiContext().setAccessKey(orderInfo.getAccessKey());
-            ApiContextHolder.getApiContext().setSignType(SignTypeEnum.valueOf(orderInfo.getSignType()));
-
+            OrderDto orderInfo = getOrderInfo(apiNotifyOrder.getGid(), apiNotifyOrder.getPartnerId());
             // 查找对应服务并调用异步业务处理
-            ApiService apiService = apiServiceFactory.getApiService(orderInfo.getService(), orderInfo.getVersion());
-            ApiNotify apiNotify = apiService.handleNotify(orderInfo, apiNotifyOrder);
-            ApiContextHolder.getApiContext().setApiService(apiService);
-            ApiContextHolder.getApiContext().setResponse(apiNotify);
-            // 组装报文
-            String notifyBody = (String) apiNotifyMarshall.marshall(apiNotify);
-            // 组装发送
-            NotifySendMessage notifySendMessage = new NotifySendMessage();
-            notifySendMessage.setGid(apiNotifyOrder.getGid());
-            notifySendMessage.setPartnerId(apiNotify.getPartnerId());
-            notifySendMessage.setService(apiNotify.getService());
-            notifySendMessage.setVersion(apiNotify.getVersion());
-            notifySendMessage.setUrl(orderInfo.getNotifyUrl());
-            notifySendMessage.setRequestNo(apiNotify.getRequestNo());
-            notifySendMessage.setParameter(ApiConstants.BODY, notifyBody);
-            notifySendMessage.setParameter(
-                    ApiConstants.SIGN, ApiContextHolder.getApiContext().getResponseSign());
-            //fixme
-//      notifySendMessage.setParameter(ApiConstants.PARTNER_ID, orderInfo.getPartnerId());
-            notifySendMessage.setParameter(ApiConstants.SIGN_TYPE, orderInfo.getSignType());
-            apiNotifySender.send(notifySendMessage);
+            ApiNotify apiNotify = doExcecuteService(apiNotifyOrder, orderInfo);
+            ApiContextHolder.getContext().setAsyncNotify(false);
+            ApiMessageContext messageContext = doMarshall(apiNotify);
+            String returnUrl = getReturnUrl(apiNotifyOrder, orderInfo);
+            messageContext.setUrl(returnUrl);
+            return messageContext;
         } catch (ApiServiceException ase) {
-            logger.warn("异步通知 失败:", ase);
             throw ase;
         } catch (Exception e) {
-            logger.warn("异步通知 失败:", e);
+            logger.warn("同步通知 失败:", e);
             throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, "处理失败,请查openApi日志堆栈");
         } finally {
             MDC.clear();
         }
     }
+
+    protected ApiNotify doExcecuteService(ApiNotifyOrder apiNotifyOrder, OrderDto orderInfo) {
+        ApiService apiService = apiServiceFactory.getApiService(orderInfo.getService(), orderInfo.getVersion());
+        initApiContext(orderInfo, apiService);
+        return apiService.handleNotify(orderInfo, apiNotifyOrder);
+    }
+
+    protected ApiMessageContext doMarshall(ApiNotify apiNotify) {
+        return (ApiMessageContext) apiNotifyMarshall.marshall(apiNotify);
+    }
+
+    protected void initApiContext(OrderDto orderInfo, ApiService apiService) {
+        ApiContext context = ApiContextHolder.getContext();
+        context.setGid(orderInfo.getGid());
+        context.setAccessKey(orderInfo.getAccessKey());
+        context.setPartnerId(orderInfo.getPartnerId());
+        context.setSignType(SignTypeEnum.valueOf(orderInfo.getSignType()));
+        context.setApiProtocol(orderInfo.getProtocol());
+        context.setApiService(apiService);
+    }
+
+
+    protected String getNotifyUrl(ApiNotifyOrder apiNotifyOrder, OrderDto orderInfo) {
+        String callerUrl = apiNotifyOrder.getParameter(ApiConstants.NOTIFY_URL);
+        String url = Strings.defaultString(callerUrl, orderInfo.getNotifyUrl());
+        Asserts.notEmpty(url, "异步通知地址不能为空");
+        return url;
+    }
+
+    protected String getReturnUrl(ApiNotifyOrder apiNotifyOrder, OrderDto orderInfo) {
+        String callerUrl = apiNotifyOrder.getParameter(ApiConstants.RETURN_URL);
+        String url = Strings.defaultString(callerUrl, orderInfo.getReturnUrl());
+        Asserts.notEmpty(url, "同步通知地址不能为空");
+        return url;
+    }
+
 
     /**
      * 通过GID获取请求订单信息

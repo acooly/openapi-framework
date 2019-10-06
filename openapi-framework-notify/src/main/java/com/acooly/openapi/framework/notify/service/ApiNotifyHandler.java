@@ -7,6 +7,7 @@
  */
 package com.acooly.openapi.framework.notify.service;
 
+import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 
 /**
@@ -18,7 +19,19 @@ import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
  */
 public interface ApiNotifyHandler {
 
-    void notify(ApiNotifyOrder apiNotifyOrder);
+    /**
+     * 异步通知处理
+     *
+     * @param apiNotifyOrder
+     */
+    void asyncNotify(ApiNotifyOrder apiNotifyOrder);
 
-    void send(ApiNotifyOrder apiNotifyOrder);
+    /**
+     * 同步通知处理
+     *
+     * @param apiNotifyOrder
+     * @return
+     */
+    ApiMessageContext syncNotify(ApiNotifyOrder apiNotifyOrder);
+
 }

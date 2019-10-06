@@ -67,6 +67,8 @@ public class NotifyMessageDaoImpl extends AbstractJdbcTemplateDao implements Not
                     notifyMessage.setMerchOrderNo(rs.getString(17));
                     String protocol = rs.getString(18);
                     notifyMessage.setProtocol(Strings.isNotBlank(protocol) ? ApiProtocol.valueOf(protocol) : ApiProtocol.JSON);
+                    notifyMessage.setSignType(rs.getString(19));
+                    notifyMessage.setSign(rs.getString(20));
                     return notifyMessage;
                 }
             };
@@ -74,7 +76,7 @@ public class NotifyMessageDaoImpl extends AbstractJdbcTemplateDao implements Not
     private String getSelectSql() {
         return "select id,gid,partner_id as partnerId,message_type as messageType,service,version,url,content,send_count as sendCount,"
                 + "next_send_time as nextSendTime,status,execute_status as executeStatus,create_time as createTime,update_time as updateTime,"
-                + "resp_info as respInfo,request_no as requestNo, merch_order_no as merchOrderNo,protocol from "
+                + "resp_info as respInfo,request_no as requestNo, merch_order_no as merchOrderNo,protocol,sign_type as signType,sign from "
                 + TABLE_NAME;
     }
 
@@ -136,12 +138,10 @@ public class NotifyMessageDaoImpl extends AbstractJdbcTemplateDao implements Not
                         + "("
                         + (getDbType() == DbType.oracle ? "id," : "")
                         + "gid,partner_id,message_type,service,version,url,content,send_count,next_send_time,status,execute_status,"
-                        + "create_time,update_time,resp_info,request_no,merch_order_no,protocol) "
+                        + "create_time,update_time,resp_info,request_no,merch_order_no,protocol,sign_type,sign) "
                         + " values("
                         + (getDbType() == DbType.oracle ? "seq_api_notify_message.nextval," : "")
-                        + "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-        notifyMessage.setContent(JSON.toJSONString(notifyMessage.getParameters()));
+                        + "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(
@@ -172,6 +172,8 @@ public class NotifyMessageDaoImpl extends AbstractJdbcTemplateDao implements Not
                         ps.setString(15, notifyMessage.getRequestNo());
                         ps.setString(16, notifyMessage.getMerchOrderNo());
                         ps.setString(17, notifyMessage.getProtocol().code());
+                        ps.setString(18, notifyMessage.getSignType());
+                        ps.setString(19, notifyMessage.getSign());
                         return ps;
                     }
                 },

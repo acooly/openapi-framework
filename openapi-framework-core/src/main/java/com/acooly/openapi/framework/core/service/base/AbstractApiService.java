@@ -57,6 +57,9 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
     public final ApiNotify handleNotify(OrderDto orderInfo, Object data) {
         ApiNotifyOrder apiNotifyOrder = (ApiNotifyOrder) data;
         ApiNotify apiNotify = getApiNotifyBean();
+        if (apiNotifyOrder.getNotifyMessage() != null) {
+            BeanCopier.copy(apiNotifyOrder.getNotifyMessage(), apiNotify);
+        }
         BeanCopier.copy(orderInfo, apiNotify, "notifyUrl", "returnUrl");
         ObjectAccessor<ApiNotify> objectAccessor = ObjectAccessor.of(apiNotify);
         for (Map.Entry<String, String> entry : apiNotifyOrder.getParameters().entrySet()) {

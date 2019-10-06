@@ -14,10 +14,10 @@ import com.acooly.openapi.framework.common.message.builtin.LoginResponse;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
 import com.acooly.openapi.framework.service.test.notify.PayOrderNotify;
-import com.acooly.openapi.framework.service.test.request.OrderCreateRequest;
+import com.acooly.openapi.framework.service.test.request.OrderCreateApiRequest;
 import com.acooly.openapi.framework.service.test.request.PayOrderRequest;
 import com.acooly.openapi.framework.service.test.request.WithdrawApiRequest;
-import com.acooly.openapi.framework.service.test.response.OrderCreateResponse;
+import com.acooly.openapi.framework.service.test.response.OrderCreateApiResponse;
 import com.acooly.openapi.framework.service.test.response.PayOrderResponse;
 import com.acooly.openapi.framework.service.test.response.WithdrawApiResponse;
 import com.github.kevinsawicki.http.HttpRequest;
@@ -62,7 +62,7 @@ public class OpenApiTest extends AbstractApiServieTests {
      */
     @Test
     public void testSync() throws Exception {
-        OrderCreateRequest request = new OrderCreateRequest();
+        OrderCreateApiRequest request = new OrderCreateApiRequest();
         request.setRequestNo(UUID.randomUUID().toString());
         request.setService("orderCreate");
         request.setTitle("同步请求创建订单");
@@ -85,7 +85,7 @@ public class OpenApiTest extends AbstractApiServieTests {
         }
         request.setGoodsInfos(goodInfos);
         request.ext("xx", "oo");
-        OrderCreateResponse response = request(request, OrderCreateResponse.class);
+        OrderCreateApiResponse response = request(request, OrderCreateApiResponse.class);
         log.info("{}", response);
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isTrue();
@@ -94,7 +94,7 @@ public class OpenApiTest extends AbstractApiServieTests {
 
     @Test
     public void testSync1() throws Exception {
-        OrderCreateRequest request = new OrderCreateRequest();
+        OrderCreateApiRequest request = new OrderCreateApiRequest();
         request.setPartnerId("test");
         request.setRequestNo(UUID.randomUUID().toString());
         request.setService("orderCreate");
@@ -108,7 +108,7 @@ public class OpenApiTest extends AbstractApiServieTests {
         request.setPassword("12312312");
         request.setContext(content);
         OpenApiClient openApiClient = new OpenApiClient("http://127.0.0.1:8089/gateway.do", TEST_ACCESS_KEY, TEST_SECRET_KEY);
-        OrderCreateResponse response = openApiClient.send(request, OrderCreateResponse.class);
+        OrderCreateApiResponse response = openApiClient.send(request, OrderCreateApiResponse.class);
         log.info("{}", response);
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isTrue();
@@ -117,7 +117,7 @@ public class OpenApiTest extends AbstractApiServieTests {
 
     @Test
     public void testSync_ParamCheckError() throws Exception {
-        OrderCreateRequest request = new OrderCreateRequest();
+        OrderCreateApiRequest request = new OrderCreateApiRequest();
         request.setRequestNo(UUID.randomUUID().toString());
         request.setService("orderCreate");
         request.setTitle("同步请求创建订单");
@@ -140,7 +140,7 @@ public class OpenApiTest extends AbstractApiServieTests {
         }
         request.setGoodsInfos(goodInfos);
         request.ext("xx", "oo");
-        OrderCreateResponse response = request(request, OrderCreateResponse.class);
+        OrderCreateApiResponse response = request(request, OrderCreateApiResponse.class);
         log.info("{}", response);
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isFalse();
@@ -245,7 +245,7 @@ public class OpenApiTest extends AbstractApiServieTests {
      */
     @Test
     public void testForm() throws Exception {
-        OrderCreateRequest request = new OrderCreateRequest();
+        OrderCreateApiRequest request = new OrderCreateApiRequest();
         request.setRequestNo(UUID.randomUUID().toString());
         request.setService("createOrder");
         request.setTitle("同步请求创建订单");
@@ -311,7 +311,7 @@ public class OpenApiTest extends AbstractApiServieTests {
             String requestBody = new String(ByteStreams.toByteArray(t.getRequestBody()), Charsets.UTF_8);
             PayOrderNotify payOrderNotify =
                     JsonMarshallor.INSTANCE.parse(requestBody, PayOrderNotify.class);
-            log.info("notify requestBody:\n{}", payOrderNotify);
+            log.info("asyncNotify requestBody:\n{}", payOrderNotify);
             assertThat(payOrderNotify.getContext()).isEqualTo(content);
             String sign = t.getRequestHeaders().get(ApiConstants.SIGN).get(0);
             assertThat(sign).isNotEmpty();

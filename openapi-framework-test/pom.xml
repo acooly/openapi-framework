@@ -43,7 +43,7 @@
             <artifactId>openapi-framework-extensions</artifactId>
         </dependency>
 
-        <!-- OpenApi notify -->
+        <!-- OpenApi asyncNotify -->
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-notify</artifactId>

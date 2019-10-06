@@ -10,6 +10,7 @@ package com.acooly.openapi.framework.notify.handle.impl;
 
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;
+import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.enums.TaskExecuteStatus;
 import com.acooly.openapi.framework.common.enums.TaskStatus;
 import com.acooly.openapi.framework.notify.OpenApiNotifyProperties;
@@ -18,6 +19,7 @@ import com.acooly.openapi.framework.service.domain.NotifyMessage;
 import com.acooly.openapi.framework.service.service.NotifyMessageService;
 import com.github.kevinsawicki.http.HttpRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.entity.ContentType;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
@@ -111,18 +113,20 @@ public abstract class AbstractNotifyMessageSendHandler implements NotifyMessageS
             respInfo = Strings.substring(respInfo, 0, 128);
         }
         notifyMessage.setRespInfo(respInfo);
-        log.debug("notify save: notifyMessage:{}", notifyMessage);
+        log.debug("asyncNotify save: notifyMessage:{}", notifyMessage);
         notifyMessageService.updateStatus(notifyMessage);
         MDC.clear();
     }
 
     /**
-     * 发送返回结果
+     * 组装发送内容
+     * 如果需要，可以在此进行再次签名处理
      *
      * @param notifyMessage
      * @return
      */
     protected abstract HttpRequest doRequest(NotifyMessage notifyMessage);
+
 
     protected boolean isSuccess(String result) {
         if (result == null) {

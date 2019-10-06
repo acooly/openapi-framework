@@ -34,7 +34,7 @@ public class ExceptionHandlerOpenApiFilter extends AbstractOpenApiFilter {
             return;
         }
         if (context.getResponse() == null) {
-            context.initResponse();
+            context.prevHandleResponse();
         }
         apiServiceExceptionHander.handleApiServiceException(context.getRequest(),
                 context.getResponse(), context.getException());
@@ -42,6 +42,6 @@ public class ExceptionHandlerOpenApiFilter extends AbstractOpenApiFilter {
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE - 1;
+        return Ordered.LOWEST_PRECEDENCE - 2;
     }
 }

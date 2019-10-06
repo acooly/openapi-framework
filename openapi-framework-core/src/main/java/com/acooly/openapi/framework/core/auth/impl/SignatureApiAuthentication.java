@@ -47,15 +47,21 @@ public class SignatureApiAuthentication implements ApiAuthentication {
                     throw new ApiServiceException(notSupport);
                 }
             }
-            Signer<ApiContext> signer = signerFactory.getSigner(apiContext.getSignType());
-            signer.verify(
-                    requestSign, (String) authInfoRealm.getAuthenticationInfo(accessKey), apiContext.getRequestBody());
+
+            verify(apiContext.getRequestBody(), accessKey, apiContext.getSignType(), requestSign);
         } catch (ApiServiceException asae) {
             throw asae;
         } catch (Exception e) {
             logger.warn("签名认证异常", e);
             throw new ApiServiceAuthenticationException();
         }
+    }
+
+
+    @Override
+    public void verify(String body, String accessKey, SignTypeEnum signType, String verifySign) {
+        Signer<ApiContext> signer = signerFactory.getSigner(signType);
+        signer.verify(verifySign, (String) authInfoRealm.getAuthenticationInfo(accessKey), body);
     }
 
     /**
@@ -84,10 +90,7 @@ public class SignatureApiAuthentication implements ApiAuthentication {
             } catch (ApiServiceAuthenticationException e) {
                 return null;
             }
-            String sign =
-                    signerFactory
-                            .getSigner(SignTypeEnum.valueOf(signType))
-                            .sign(body, secretKey);
+            String sign = signerFactory.getSigner(SignTypeEnum.valueOf(signType)).sign(body, secretKey);
             return sign;
         } catch (ApiServiceException asae) {
             throw asae;

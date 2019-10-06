@@ -16,7 +16,7 @@ import com.acooly.openapi.framework.common.utils.Reflections;
 import com.acooly.openapi.framework.common.utils.json.MoneySerializer;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
-import com.acooly.openapi.framework.service.test.request.OrderCreateRequest;
+import com.acooly.openapi.framework.service.test.request.OrderCreateApiRequest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.PropertyNamingStrategy;
 import com.alibaba.fastjson.annotation.JSONType;
@@ -44,7 +44,7 @@ public class JsonOrderTest {
 
     @Test
     public void test2() {
-        OrderCreateRequest request = new OrderCreateRequest();
+        OrderCreateApiRequest request = new OrderCreateApiRequest();
         request.setRequestNo(Ids.getDid());
         request.setMerchOrderNo(Ids.getDid());
         request.setService("orderCreate");
@@ -77,7 +77,7 @@ public class JsonOrderTest {
 //        ext.put("a", "b");
 //        apiMessage.setExt(ext);
 
-        OrderCreateRequest request = orderCreate();
+        OrderCreateApiRequest request = orderCreate();
         SerializeConfig serializeConfig = SerializeConfig.getGlobalInstance();
         serializeConfig.put(Money.class, MoneySerializer.INSTANCE);
 
@@ -104,8 +104,8 @@ public class JsonOrderTest {
         return new JavaBeanSerializer(beanInfo);
     }
 
-    private OrderCreateRequest orderCreate() {
-        OrderCreateRequest request = new OrderCreateRequest();
+    private OrderCreateApiRequest orderCreate() {
+        OrderCreateApiRequest request = new OrderCreateApiRequest();
         request.setRequestNo(Ids.getDid());
         request.setMerchOrderNo(Ids.getDid());
         request.setService("orderCreate");

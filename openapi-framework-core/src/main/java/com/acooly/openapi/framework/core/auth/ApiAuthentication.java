@@ -5,6 +5,7 @@
 package com.acooly.openapi.framework.core.auth;
 
 import com.acooly.openapi.framework.common.context.ApiContext;
+import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 
 import java.util.Map;
 
@@ -21,5 +22,7 @@ public interface ApiAuthentication {
     String signature(Map<String, String> response);
 
     String signature(String body, String accessKey, String signType);
+
+    void verify(String body, String accessKey, SignTypeEnum signType, String verifySign);
 
 }

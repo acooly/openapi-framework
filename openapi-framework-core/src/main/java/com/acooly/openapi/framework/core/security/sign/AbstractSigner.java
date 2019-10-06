@@ -38,4 +38,5 @@ public abstract class AbstractSigner implements Signer<ApiContext> {
 
 
     protected abstract String doSign(String waitToSignStr, String key);
+    
 }

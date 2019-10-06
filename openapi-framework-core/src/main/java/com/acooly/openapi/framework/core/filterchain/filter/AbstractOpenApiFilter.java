@@ -43,9 +43,9 @@ public abstract class AbstractOpenApiFilter implements Filter<ApiContext> {
                 return;
             }
             doInternalFilter(context, filterChain);
-            log.debug("filter success: {}", this.getClass().getSimpleName());
+            log.debug("filter execute success: {}", this.getClass().getSimpleName());
         } catch (Exception e) {
-            log.warn("filter: {}, error: {}", this.getClass().getSimpleName(), e.getMessage());
+            log.warn("filter execute failure: {}, error: {}", this.getClass().getSimpleName(), e.getMessage());
             context.setError(true);
             ApiServiceException apiServiceException;
             if (ApiServiceException.class.isAssignableFrom(e.getClass())) {

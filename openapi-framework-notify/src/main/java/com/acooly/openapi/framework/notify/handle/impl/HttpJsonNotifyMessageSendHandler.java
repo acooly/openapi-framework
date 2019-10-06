@@ -8,15 +8,13 @@
 package com.acooly.openapi.framework.notify.handle.impl;
 
 import com.acooly.openapi.framework.common.ApiConstants;
+import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.notify.handle.NotifyMessageSendHandler;
 import com.acooly.openapi.framework.service.domain.NotifyMessage;
 import com.github.kevinsawicki.http.HttpRequest;
-import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.entity.ContentType;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 /**
  * JSON协议的HTTP通知实现
@@ -27,26 +25,36 @@ import java.util.Map;
 @Component
 public class HttpJsonNotifyMessageSendHandler extends AbstractNotifyMessageSendHandler implements NotifyMessageSendHandler {
 
+
     @Override
     protected HttpRequest doRequest(NotifyMessage notifyMessage) {
-        Map<String, String> requestHeaders = Maps.newHashMap();
-        requestHeaders.put(ApiConstants.X_API_SIGN_TYPE, notifyMessage.getParameter(ApiConstants.SIGN_TYPE));
-        requestHeaders.put(ApiConstants.X_API_SIGN, notifyMessage.getParameter(ApiConstants.SIGN));
-        requestHeaders.put(ApiConstants.X_API_PROTCOL, notifyMessage.getProtocol().code());
-        requestHeaders.put(ApiConstants.X_API_ACCESS_KEY, notifyMessage.getPartnerId());
-        String body = notifyMessage.getParameter(ApiConstants.BODY);
-        log.info("通知地址:{}", notifyMessage.getUrl());
-        log.info("通知报文头:{}", requestHeaders);
-        log.info("通知报文体:{}", body);
-        HttpRequest httpRequest = HttpRequest.post(notifyMessage.getUrl())
+        ApiMessageContext messageContext = doMessage(notifyMessage);
+        log.info("通知地址:{}", messageContext.getUrl());
+        log.info("通知报文头:{}", messageContext.getHeaders());
+        log.info("通知报文体:{}", messageContext.getBody());
+        HttpRequest httpRequest = HttpRequest.post(messageContext.getUrl())
                 .connectTimeout(openApiNotifyProperties.getConnTimeout())
                 .readTimeout(openApiNotifyProperties.getReadTimeout())
                 .trustAllCerts()
                 .trustAllHosts()
-                .headers(requestHeaders)
+                .headers(messageContext.getHeaders())
                 .followRedirects(false)
                 .contentType(ContentType.APPLICATION_JSON.toString())
-                .send(body);
+                .send(messageContext.getBody());
         return httpRequest;
     }
+
+
+    protected ApiMessageContext doMessage(NotifyMessage notifyMessage) {
+        ApiMessageContext messageContext = new ApiMessageContext();
+        messageContext.header(ApiConstants.X_API_SIGN_TYPE, notifyMessage.getSignType());
+        messageContext.header(ApiConstants.X_API_SIGN, notifyMessage.getSign());
+        messageContext.header(ApiConstants.X_API_PROTOCOL, notifyMessage.getProtocol().code());
+        messageContext.header(ApiConstants.X_API_ACCESS_KEY, notifyMessage.getPartnerId());
+        messageContext.setBody(notifyMessage.getContent());
+        messageContext.setUrl(notifyMessage.getUrl());
+        return messageContext;
+    }
+
+
 }
