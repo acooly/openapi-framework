@@ -11,9 +11,7 @@ import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -54,7 +52,6 @@ public class OrderCreateApiRequest extends ApiRequest {
     @OpenApiField(desc = "买家手机号码", demo = "13676455680", ordinal = 6)
     private String buyeryMobileNo;
 
-    @Email
     @OpenApiField(desc = "买家电子邮件", demo = "wangsa@gooogle.com", ordinal = 7)
     private String buyeryEmail;
 

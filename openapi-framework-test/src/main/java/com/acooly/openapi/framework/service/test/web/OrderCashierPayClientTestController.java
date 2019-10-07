@@ -62,7 +62,12 @@ public class OrderCashierPayClientTestController extends AbstractStandardEntityC
      */
     private OrderCreateApiRequest getOrderCreateApiRequest(HttpServletRequest httpRequest) {
         OrderCreateApiRequest request = new OrderCreateApiRequest();
-        bindNotValidator(httpRequest, request);
+        try {
+            bindNotValidator(httpRequest, request);
+        } catch (Exception e) {
+            //ig;
+        }
+
         request.setService("orderCreate");
         request.setRequestNo(Ids.getDid());
         request.setPayerUserId(request.getPayeeUserId());

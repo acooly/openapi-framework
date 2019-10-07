@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotBlank;
 import java.io.Serializable;
 
 /**

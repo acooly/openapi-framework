@@ -6,7 +6,7 @@
 */
 package com.acooly.openapi.apidoc.web;
 
-import com.acooly.core.common.web.AbstractJsonEntityController;
+import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.openapi.apidoc.persist.entity.ApiQaClassify;
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 @RequestMapping(value = "/manage/apidoc/apiQaClassify")
-public class ApiQaClassifyManagerController extends AbstractJsonEntityController<ApiQaClassify, ApiQaClassifyService> {
+public class ApiQaClassifyManagerController extends AbstractJQueryEntityController<ApiQaClassify, ApiQaClassifyService> {
 
 
 	{

@@ -6,7 +6,7 @@
 */
 package com.acooly.openapi.apidoc.web;
 
-import com.acooly.core.common.web.AbstractJsonEntityController;
+import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.openapi.apidoc.enums.ApiEncryptstatusEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocItem;
 import com.acooly.openapi.apidoc.persist.service.ApiDocItemService;
@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "/manage/openapi/apiDocItem")
-public class ApiDocItemManagerController extends AbstractJsonEntityController<ApiDocItem, ApiDocItemService> {
+public class ApiDocItemManagerController extends AbstractJQueryEntityController<ApiDocItem, ApiDocItemService> {
 	
 
 	{

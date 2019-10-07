@@ -18,7 +18,7 @@ import lombok.Setter;
 
 import javax.annotation.Signed;
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Comparator;

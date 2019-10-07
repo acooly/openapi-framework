@@ -7,7 +7,7 @@
 package com.acooly.openapi.framework.service.web;
 
 import com.acooly.core.common.view.ViewResult;
-import com.acooly.core.common.web.AbstractJsonEntityController;
+import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Ids;
 import com.acooly.openapi.framework.common.enums.SignType;
@@ -34,7 +34,7 @@ import java.util.Date;
  */
 @Controller
 @RequestMapping(value = "/manage/module/openapi/apiAuth")
-public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAuth, ApiAuthService> {
+public class ApiAuthManagerController extends AbstractJQueryEntityController<ApiAuth, ApiAuthService> {
 
 
     {

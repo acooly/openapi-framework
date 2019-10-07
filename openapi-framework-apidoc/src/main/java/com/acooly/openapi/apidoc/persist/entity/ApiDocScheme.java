@@ -13,7 +13,7 @@ import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
-import javax.validation.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;

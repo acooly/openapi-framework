@@ -11,7 +11,7 @@ import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.utils.Strings;
 import lombok.Getter;
 import lombok.Setter;
-import javax.validation.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

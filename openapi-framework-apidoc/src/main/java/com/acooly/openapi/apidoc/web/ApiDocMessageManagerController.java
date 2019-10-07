@@ -6,7 +6,7 @@
 */
 package com.acooly.openapi.apidoc.web;
 
-import com.acooly.core.common.web.AbstractJsonEntityController;
+import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
 import com.acooly.openapi.apidoc.persist.enums.ApiDocMessageMessageTypeEnum;
 import com.acooly.openapi.apidoc.persist.service.ApiDocMessageService;
@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "/manage/openapi/apiDocMessage")
-public class ApiDocMessageManagerController extends AbstractJsonEntityController<ApiDocMessage, ApiDocMessageService> {
+public class ApiDocMessageManagerController extends AbstractJQueryEntityController<ApiDocMessage, ApiDocMessageService> {
 	
 
 	{

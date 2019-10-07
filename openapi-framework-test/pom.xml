@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.acooly</groupId>
         <artifactId>openapi-framework</artifactId>
-        <version>5.0.0-SNAPSHOT</version>
+        <version>4.2.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>openapi-framework-test</artifactId>

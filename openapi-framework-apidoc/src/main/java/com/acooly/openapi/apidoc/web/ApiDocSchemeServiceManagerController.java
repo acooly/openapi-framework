@@ -6,7 +6,7 @@
 */
 package com.acooly.openapi.apidoc.web;
 
-import com.acooly.core.common.web.AbstractJsonEntityController;
+import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping(value = "/manage/openapi/apiDocSchemeService")
-public class ApiDocSchemeServiceManagerController extends AbstractJsonEntityController<ApiDocSchemeService, ApiDocSchemeServiceService> {
+public class ApiDocSchemeServiceManagerController extends AbstractJQueryEntityController<ApiDocSchemeService, ApiDocSchemeServiceService> {
 	
 
 	{

@@ -5,7 +5,7 @@ import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.utils.Dates;
 import lombok.Getter;
 import lombok.Setter;
-import javax.validation.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

@@ -7,7 +7,7 @@
 package com.acooly.openapi.apidoc.web;
 
 import com.acooly.core.common.dao.support.PageInfo;
-import com.acooly.core.common.web.AbstractJsonEntityController;
+import com.acooly.core.common.web.AbstractJQueryEntityController;
 import com.acooly.core.common.web.MappingMethod;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.common.web.support.JsonResult;
@@ -44,7 +44,7 @@ import java.util.Map;
 @Slf4j
 @Controller
 @RequestMapping(value = "/manage/apidoc/apiDocScheme")
-public class ApiDocSchemeManagerController extends AbstractJsonEntityController<ApiDocScheme, ApiDocSchemeService> {
+public class ApiDocSchemeManagerController extends AbstractJQueryEntityController<ApiDocScheme, ApiDocSchemeService> {
 
 
     {
