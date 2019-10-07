@@ -9,6 +9,7 @@ package com.acooly.openapi.framework.facade.result;
 
 import com.acooly.core.common.facade.ResultBase;
 import com.acooly.core.utils.Encodes;
+import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;
 import org.apache.commons.lang3.StringUtils;
 
@@ -21,6 +22,7 @@ public class ApiNotifyResult extends ResultBase {
      * serialVersionUID
      */
     private static final long serialVersionUID = -348730141776307996L;
+    private String protocol;
     private String sign;
     private String signType;
     private String accessKey;
@@ -42,6 +44,10 @@ public class ApiNotifyResult extends ResultBase {
                 .append(ApiConstants.ACCESS_KEY).append("=").append(this.accessKey).append("&")
                 .append(ApiConstants.SIGN_TYPE).append("=").append(this.signType).append("&")
                 .append(ApiConstants.SIGN).append("=").append(this.sign);
+
+        if (Strings.isNotBlank(this.protocol)) {
+            sb.append("&").append(ApiConstants.PROTOCOL).append("=").append(this.protocol);
+        }
         return sb.toString();
     }
 
@@ -116,5 +122,13 @@ public class ApiNotifyResult extends ResultBase {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getProtocol() {
+        return protocol;
+    }
+
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
     }
 }

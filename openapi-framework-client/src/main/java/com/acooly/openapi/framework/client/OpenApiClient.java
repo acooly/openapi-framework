@@ -99,105 +99,31 @@ public class OpenApiClient {
         return (T) response;
     }
 
-    public ApiMessageContext parseResponse(HttpRequest httpRequest) {
-        ApiMessageContext context = new ApiMessageContext();
-        if (httpRequest.code() == 302) {
-            String location = httpRequest.header("Location");
-            context.setUrl(location);
-            Map<String, String> queryStringMap = Splitter.on("&").withKeyValueSeparator("=").split(Strings.substringAfter(location, "?"));
-            context.setParameters(queryStringMap);
-            context.setBody(Encodes.urlDecode(queryStringMap.get(ApiConstants.BODY)));
-        } else {
-            context.setHeaders(getApiHeaders(httpRequest));
-            context.setBody(httpRequest.body());
-        }
-        return context;
-    }
-
-    public ApiMessageContext parseRequest(ApiRequest request) {
-        ApiMessageContext context = new ApiMessageContext();
-        doDefaultVal(request);
-        doSecurity(request, CryptoType.encrypt);
-        if (request.getProtocol() == ApiProtocol.JSON) {
-            String body = JsonMarshallor.INSTANCE.marshall(request);
-            context.setBody(body);
-            context.header(ApiConstants.X_API_ACCESS_KEY, accessKey);
-            context.header(ApiConstants.X_API_SIGN_TYPE, signType);
-            context.header(ApiConstants.X_API_SIGN, sign(body));
-            context.header(ApiConstants.X_API_PROTOCOL, ApiProtocol.JSON.code());
-            if (showLog) {
-                log.info("请求-> body:{},header:{} ", context.getBody(), context.getHeaders());
-            }
-        } else {
-            Map<String, String> data = ObjectAccessor.of(request).getAllDataExcludeTransient();
-            data.put(ApiConstants.SIGN_TYPE, signType);
-            data.put("sign", sign(OpenApis.getWaitForSignString(data)));
-            context.setParameters(data);
-            if (showLog) {
-                log.info("请求-> {}", context.getParameters());
-            }
-        }
-        return context;
-    }
-
 
     /**
      * 解析报文
+     * 专用于客户端跳转请求的报文解析，获取redirectUrl
      *
      * @param request
      * @return
      */
-    @Deprecated
-    public MessageResult parse(ApiRequest request) {
-        if (com.google.common.base.Strings.isNullOrEmpty(request.getVersion())) {
-            request.setVersion(DEFAULT_VERSION);
+    public ApiMessageContext parse(ApiRequest request) {
+        doDefaultVal(request);
+        doSecurity(request, CryptoType.encrypt);
+        ApiMessageContext context = new ApiMessageContext();
+        if (request.getProtocol() == ApiProtocol.JSON) {
+            String body = JsonMarshallor.INSTANCE.marshall(request);
+            context.parameter(ApiConstants.BODY, Encodes.urlEncode(body));
+            context.parameter(ApiConstants.PROTOCOL, ApiProtocol.JSON.code());
+            context.parameter(ApiConstants.ACCESS_KEY, accessKey);
+            context.parameter(ApiConstants.SIGN_TYPE, signType);
+            context.parameter(ApiConstants.SIGN, sign(body));
+            context.setBody(body);
+        } else {
         }
-        if (com.google.common.base.Strings.isNullOrEmpty(request.getPartnerId())) {
-            request.setPartnerId(this.accessKey);
-        }
-        Assert.hasText(request.getService(), "service不能为空");
-        request.check();
+        context.setUrl(this.getGatewayUrl());
 
-
-        List<Field> fields = securityFieldsMap.get(request.getClass());
-        if (fields == null) {
-            List<Field> fieldList = Lists.newArrayList();
-            for (Field field : request.getClass().getDeclaredFields()) {
-                OpenApiField annotation = field.getAnnotation(OpenApiField.class);
-                if (annotation != null && annotation.security()) {
-                    field.setAccessible(true);
-                    fieldList.add(field);
-                }
-            }
-            fields = fieldList;
-            securityFieldsMap.put(request.getClass(), fields);
-        }
-
-        if (fields.size() != 0) {
-            fields.forEach(field -> {
-                try {
-                    Object o = field.get(request);
-                    if (o != null) {
-                        String encrypt = encrypt(o.toString());
-                        field.set(request, encrypt);
-                    }
-                } catch (Exception e) {
-                    throw new AppConfigException(e);
-                }
-            });
-        }
-
-        String body = JsonMarshallor.INSTANCE.marshall(request);
-        Map<String, String> requestHeader = Maps.newTreeMap();
-        requestHeader.put(ApiConstants.X_API_ACCESS_KEY, accessKey);
-        requestHeader.put(ApiConstants.X_API_SIGN_TYPE, signType);
-        requestHeader.put(ApiConstants.X_API_SIGN, sign(body));
-
-        MessageResult result = new MessageResult();
-        result.setUrl(this.getGatewayUrl());
-        result.setBody(body);
-        result.setHeaders(requestHeader);
-        return result;
+        return context;
     }
 
 
@@ -250,6 +176,50 @@ public class OpenApiClient {
         byte[] securityKey = secretKey.substring(0, 16).getBytes();
         return Cryptos.aesDecrypt(encrytText.getBytes(), securityKey);
     }
+
+
+    protected ApiMessageContext parseResponse(HttpRequest httpRequest) {
+        ApiMessageContext context = new ApiMessageContext();
+        if (httpRequest.code() == 302) {
+            String location = httpRequest.header("Location");
+            context.setUrl(location);
+            Map<String, String> queryStringMap = Splitter.on("&").withKeyValueSeparator("=").split(Strings.substringAfter(location, "?"));
+            context.setParameters(queryStringMap);
+            context.setBody(Encodes.urlDecode(queryStringMap.get(ApiConstants.BODY)));
+        } else {
+            context.setHeaders(getApiHeaders(httpRequest));
+            context.setBody(httpRequest.body());
+        }
+        return context;
+    }
+
+    protected ApiMessageContext parseRequest(ApiRequest request) {
+        ApiMessageContext context = new ApiMessageContext();
+        doDefaultVal(request);
+        doSecurity(request, CryptoType.encrypt);
+        if (request.getProtocol() == ApiProtocol.JSON) {
+            String body = JsonMarshallor.INSTANCE.marshall(request);
+            context.setBody(body);
+            context.header(ApiConstants.X_API_ACCESS_KEY, accessKey);
+            context.header(ApiConstants.X_API_SIGN_TYPE, signType);
+            context.header(ApiConstants.X_API_SIGN, sign(body));
+            context.header(ApiConstants.X_API_PROTOCOL, ApiProtocol.JSON.code());
+            if (showLog) {
+                log.info("请求-> body:{},header:{} ", context.getBody(), context.getHeaders());
+            }
+        } else {
+            Map<String, String> data = ObjectAccessor.of(request).getAllDataExcludeTransient();
+            data.put(ApiConstants.SIGN_TYPE, signType);
+            data.put("sign", sign(OpenApis.getWaitForSignString(data)));
+            context.setParameters(data);
+            if (showLog) {
+                log.info("请求-> {}", context.getParameters());
+            }
+        }
+        context.setUrl(this.gatewayUrl);
+        return context;
+    }
+
 
     private Map<String, String> getApiHeaders(HttpRequest httpRequest) {
         Map<String, String> apiHeaders = Maps.newHashMap();

@@ -66,6 +66,9 @@ public class ApiMessageContext extends InfoBase {
     }
 
     public String getProtocol() {
+        if (getValue(ApiConstants.PROTOCOL) != null) {
+            return getValue(ApiConstants.PROTOCOL);
+        }
         // 先从新协议头获取，如果没有设置则默认为老协议
         for (String key : this.headers.keySet()) {
             if (Strings.startsWithIgnoreCase(key, ApiConstants.X_HEAD_PREFIX)
@@ -81,10 +84,14 @@ public class ApiMessageContext extends InfoBase {
         int index = 0;
         for (Map.Entry<String, String> entry : this.parameters.entrySet()) {
             sb.append(index == 0 ? "?" : "&");
-            sb.append(entry.getKey()).append(entry.getValue());
+            sb.append(entry.getKey()).append("=").append(entry.getValue());
             index = index + 1;
         }
         return sb.toString();
+    }
+
+    public String buildRedirectUrl() {
+        return buildRedirectUrl(this.url);
     }
 
     public ApiMessageContext header(String key, String value) {

@@ -22,6 +22,6 @@ public interface ApiRedirectMarshall<T, S extends ApiResponse> extends ApiMarsha
 
     @Override
     default ApiMessageType getApiMessageType() {
-        return ApiMessageType.Return;
+        return ApiMessageType.Redirect;
     }
 }

@@ -74,8 +74,8 @@ public class OrderCashierPayServerTestController extends AbstractStandardEntityC
             log.info("收银台 显示界面: {}", "/openapi/test/cashier/serverCashier");
             // 传值到界面
             model.addAttribute("entity", redirect);
-            model.addAttribute("gid",messageContext.getGid());
-            model.addAttribute("partnerId",messageContext.getPartnerId());
+            model.addAttribute("gid", messageContext.getGid());
+            model.addAttribute("partnerId", messageContext.getPartnerId());
         } catch (Exception e) {
             // 如果验签失败（非法请求），则直接跳回。
             final OrderCashierPayNotify notify = new OrderCashierPayNotify();
@@ -172,9 +172,9 @@ public class OrderCashierPayServerTestController extends AbstractStandardEntityC
         // 调用OpenApi解析返回报文
         ApiNotifyResult apiNotifyResult = openApiRemoteService.syncReturn(order);
         // 4、直接跳转到客户端URL
-        String retrunUrl = apiNotifyResult.getCompleteReturnUrl();
-        log.info("收银台 同步通知 returnUrl: {}", retrunUrl);
-        Servlets.redirect(response, retrunUrl);
+        String returnUrl = apiNotifyResult.getCompleteReturnUrl();
+        log.info("收银台 同步通知 returnUrl: {}", returnUrl);
+        Servlets.redirect(response, returnUrl);
         return order;
     }
 

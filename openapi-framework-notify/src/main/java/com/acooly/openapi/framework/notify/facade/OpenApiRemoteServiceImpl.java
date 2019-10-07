@@ -17,8 +17,6 @@ import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import com.acooly.openapi.framework.facade.order.ApiVerifyOrder;
 import com.acooly.openapi.framework.facade.result.ApiNotifyResult;
 import com.acooly.openapi.framework.notify.service.ApiNotifyHandler;
-import com.acooly.openapi.framework.service.service.AuthInfoRealmService;
-import com.acooly.openapi.framework.service.service.OrderInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -66,6 +64,7 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
         try {
             apiNotifyOrder.check();
             ApiMessageContext context = apiNotifyHandler.syncNotify(apiNotifyOrder);
+            result.setProtocol(context.getProtocol());
             result.setSign(context.getSign());
             result.setSignType(context.getSignType());
             result.setAccessKey(context.getAccessKey());

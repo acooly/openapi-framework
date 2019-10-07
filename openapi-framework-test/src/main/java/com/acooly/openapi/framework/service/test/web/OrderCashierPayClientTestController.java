@@ -3,7 +3,6 @@ package com.acooly.openapi.framework.service.test.web;
 import com.acooly.core.common.web.AbstractStandardEntityController;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Servlets;
-import com.acooly.openapi.framework.client.MessageResult;
 import com.acooly.openapi.framework.client.OpenApiClient;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.utils.Ids;
@@ -97,11 +96,11 @@ public class OrderCashierPayClientTestController extends AbstractStandardEntityC
         apiRequest.setPayerUserId(payerUserId);
         apiRequest.setReturnUrl("http://127.0.0.1:8089/openapi/test/orderCashierPay/client/returnUrl.html");
         apiRequest.setNotifyUrl("http://127.0.0.1:8089/openapi/test/orderCashierPay/client/notifyUrl.html");
-        MessageResult messageResult = openApiClient.parse(apiRequest);
+        ApiMessageContext messageContext = openApiClient.parse(apiRequest);
         // 可以传参到页面通过页面POST提交（URL:messageResult.getUrl(), Post参数：messageResult.getAllParameters()）
         // 或则这里直接redirect
-
-        com.acooly.openapi.framework.common.utils.Servlets.redirect(response, messageResult.getUrl() + "?" + messageResult.getQueryString());
+        String redirectUrl = messageContext.buildRedirectUrl();
+        Servlets.redirect(response, redirectUrl);
     }
 
     @RequestMapping("returnUrl")
@@ -117,7 +116,7 @@ public class OrderCashierPayClientTestController extends AbstractStandardEntityC
         } catch (Exception e) {
             log.info("客户端 接收同步通知 验签失败！");
         }
-        return messageContext;
+        return messageContext.getParameters();
     }
 
 
