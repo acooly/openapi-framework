@@ -66,17 +66,11 @@ public class ApiMessageContext extends InfoBase {
     }
 
     public String getProtocol() {
+        // 只有显示传入协议，才已协议为准（v4以下报文体中默认protocol=HTTP_FORM_JSON）
         if (getValue(ApiConstants.PROTOCOL) != null) {
             return getValue(ApiConstants.PROTOCOL);
         }
-        // 先从新协议头获取，如果没有设置则默认为老协议
-        for (String key : this.headers.keySet()) {
-            if (Strings.startsWithIgnoreCase(key, ApiConstants.X_HEAD_PREFIX)
-                    && Strings.isNoneBlank(this.getHeader(key))) {
-                return ApiProtocol.JSON.code();
-            }
-        }
-        return ApiProtocol.HTTP_FORM_JSON.code();
+        return ApiProtocol.JSON.code();
     }
 
     public String buildRedirectUrl(String redirectUrl) {

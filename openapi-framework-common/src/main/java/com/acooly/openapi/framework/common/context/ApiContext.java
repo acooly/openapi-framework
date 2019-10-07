@@ -10,6 +10,7 @@
  */
 package com.acooly.openapi.framework.common.context;
 
+import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
@@ -40,6 +41,8 @@ import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -103,7 +106,7 @@ public class ApiContext extends Context {
 
     private String sign;
 
-    private SignTypeEnum signType;
+    private SignTypeEnum signType = SignTypeEnum.MD5;
 
     private String accessKey;
 
@@ -195,8 +198,8 @@ public class ApiContext extends Context {
         this.requestNo = getParameterNoBlank(ApiConstants.REQUEST_NO);
         this.userAgent = getParameter(HttpHeaders.USER_AGENT);
         this.context = getParameter(ApiConstants.CONTEXT);
-
     }
+
 
     /**
      * 初始化响应信息
