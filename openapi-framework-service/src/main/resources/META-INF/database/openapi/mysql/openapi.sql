@@ -69,7 +69,7 @@ CREATE TABLE `api_auth` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `access_key` varchar(45) NOT NULL COMMENT '访问帐号',
   `secret_key` varchar(45) NOT NULL COMMENT '访问秘钥',
-  `permissions` varchar(512) COMMENT '访问权限',
+  `permissions` varchar(1024) COMMENT '访问权限',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `comments` varchar(128) DEFAULT NULL COMMENT '备注',

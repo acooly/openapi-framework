@@ -54,23 +54,23 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
             LoginDto dto = appApiLoginService.login(request, ApiContextHolder.getApiContext());
             response.setCustomerId(dto.getCustomerId());
             String accessKey = request.getPartnerId() + "#" + request.getUsername();
-            String sercretKey = authInfoRealmManageService.getSercretKey(accessKey);
-            if (Strings.isNullOrEmpty(sercretKey)) {
-                sercretKey = RandomStringUtils.randomAlphanumeric(32);
-                authInfoRealmManageService.createAuthenticationInfo(accessKey, sercretKey);
+            String secretKey = authInfoRealmManageService.getSercretKey(accessKey);
+            if (Strings.isNullOrEmpty(secretKey)) {
+                secretKey = RandomStringUtils.randomAlphanumeric(32);
+                authInfoRealmManageService.createAuthenticationInfo(accessKey, secretKey);
                 String defaultAuthorizationInfo = request.getPartnerId() + ":*";
                 authInfoRealmManageService.createAuthorizationInfo(accessKey, defaultAuthorizationInfo);
             } else {
                 if (openAPIProperties.getLogin().isSecretKeyDynamic()) {
-                    sercretKey = RandomStringUtils.randomAlphanumeric(32);
-                    authInfoRealmManageService.updateAuthenticationInfo(accessKey, sercretKey);
+                    secretKey = RandomStringUtils.randomAlphanumeric(32);
+                    authInfoRealmManageService.updateAuthenticationInfo(accessKey, secretKey);
                     cacheableAuthInfoRealm.removeCache(accessKey);
                 }
             }
             response.getExt().putAll(dto.getExt());
             response.setCustomerId(dto.getCustomerId());
             response.setAccessKey(accessKey);
-            response.setSecretKey(sercretKey);
+            response.setSecretKey(secretKey);
         } catch (Exception e) {
             if (e instanceof BusinessException) {
                 throw (BusinessException) e;
