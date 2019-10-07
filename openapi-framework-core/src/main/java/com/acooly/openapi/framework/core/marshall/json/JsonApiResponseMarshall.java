@@ -10,7 +10,6 @@ package com.acooly.openapi.framework.core.marshall.json;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
-import com.acooly.openapi.framework.common.message.ApiMessage;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.core.marshall.ApiResponseMarshall;
@@ -21,7 +20,7 @@ import org.springframework.stereotype.Component;
  *
  * @author zhangpu
  */
-@Component
+@Component("jsonApiResponseMarshall")
 public class JsonApiResponseMarshall extends AbstractJsonResponseMarshall<ApiMessageContext, ApiResponse>
         implements ApiResponseMarshall<ApiMessageContext, ApiResponse> {
 

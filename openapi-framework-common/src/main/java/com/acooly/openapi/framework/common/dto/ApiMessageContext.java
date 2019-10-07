@@ -8,12 +8,11 @@
  */
 package com.acooly.openapi.framework.common.dto;
 
+import com.acooly.core.common.facade.InfoBase;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
-import com.acooly.openapi.framework.common.utils.Encodes;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +25,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public class ApiMessageContext {
+public class ApiMessageContext extends InfoBase {
     /**
      * 头
      */
@@ -49,7 +48,7 @@ public class ApiMessageContext {
     public String getGid() {
         return getValue(ApiConstants.GID);
     }
-    
+
     public String getPartnerId() {
         return getValueDefault(ApiConstants.PARTNER_ID, getAccessKey());
     }
@@ -69,7 +68,8 @@ public class ApiMessageContext {
     public String getProtocol() {
         // 先从新协议头获取，如果没有设置则默认为老协议
         for (String key : this.headers.keySet()) {
-            if (Strings.startsWithIgnoreCase(key, ApiConstants.X_HEAD_PREFIX)) {
+            if (Strings.startsWithIgnoreCase(key, ApiConstants.X_HEAD_PREFIX)
+                    && Strings.isNoneBlank(this.getHeader(key))) {
                 return ApiProtocol.JSON.code();
             }
         }
@@ -77,16 +77,20 @@ public class ApiMessageContext {
     }
 
     public String buildRedirectUrl(String redirectUrl) {
-        StringBuilder sb = new StringBuilder(redirectUrl)
-                .append("?").append(ApiConstants.BODY).append("=").append(Encodes.urlEncode(this.getBody()))
-                .append("&").append(ApiConstants.ACCESS_KEY).append("=").append(getAccessKey())
-                .append("&").append(ApiConstants.SIGN_TYPE).append("=").append(getSignType())
-                .append("&").append(ApiConstants.SIGN).append("=").append(getSign())
-                .append("&").append(ApiConstants.GID).append("=").append(ApiContextHolder.getApiContext().getGid());
+        StringBuilder sb = new StringBuilder(redirectUrl);
+        int index = 0;
+        for (Map.Entry<String, String> entry : this.parameters.entrySet()) {
+            sb.append(index == 0 ? "?" : "&");
+            sb.append(entry.getKey()).append(entry.getValue());
+            index = index + 1;
+        }
         return sb.toString();
     }
 
     public ApiMessageContext header(String key, String value) {
+        if (Strings.isBlank(value)) {
+            return this;
+        }
         return put(this.headers, key, value);
     }
 

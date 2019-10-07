@@ -75,9 +75,6 @@ public class ApiContext extends Context {
 
     private Exception exception;
 
-    /**
-     * 交易级内部ID
-     */
     private String gid;
 
     private OpenApiService openApiService;
@@ -160,8 +157,6 @@ public class ApiContext extends Context {
         MDC.put(ApiConstants.GID, gid);
         // 预解析报文
         doPrevHandleRequest();
-
-
         // 设置LOG的MDC
         MDC.put(ApiConstants.REQUEST_NO, this.requestNo);
         this.stopWatch = new Slf4JStopWatch(serviceName, perlogger);
@@ -175,12 +170,15 @@ public class ApiContext extends Context {
         this.apiRequestContext = OpenApis.getApiRequestContext(this.httpRequest);
         this.putAll(apiRequestContext.headersToParameters());
         this.putAll(apiRequestContext.getParameters());
-        this.requestBody = apiRequestContext.getBody();
         this.apiProtocol = ApiProtocol.find(apiRequestContext.getProtocol());
         if (this.apiProtocol == ApiProtocol.JSON) {
+            this.requestBody = apiRequestContext.getBody();
             throwIfBlank(requestBody, "报文内容为空");
             JSONObject jsonObject = (JSONObject) JSON.parse(requestBody);
             this.putAll(jsonObject);
+        } else if (this.apiProtocol == ApiProtocol.HTTP_FORM_JSON) {
+            // 老协议，则组装参数为requestBody，用于后续签名认证
+            this.requestBody = OpenApis.getWaitForSignString(apiRequestContext.getParameters());
         }
 
         this.accessKey = getParameterNoBlank(ApiConstants.ACCESS_KEY, ApiConstants.PARTNER_ID);

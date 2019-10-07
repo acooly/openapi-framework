@@ -29,6 +29,7 @@ public final class ApiConstants {
     public static final String SIGN_TYPE = "signType";
 
     public static final String REQUEST_NO = "requestNo";
+    public static final String ORDER_NO = "orderNo";
     public static final String PARTNER_ID = "partnerId";
     public static final String SERVICE = "service";
     public static final String VERSION = "version";
@@ -42,6 +43,13 @@ public final class ApiConstants {
     public static final String MESSAGE = "message";
     public static final String DETAIL = "detail";
     public static final String SUCCESS = "success";
+
+    /**
+     * v3老协议
+     */
+    public static final String RESULT_CODE = "resultCode";
+    public static final String RESULT_MESSAGE = "resultMessage";
+    public static final String RESULT_DETAIL = "resultDetail";
 
     public static final String GID = "gid";
     public static final String CONTEXT = "context";

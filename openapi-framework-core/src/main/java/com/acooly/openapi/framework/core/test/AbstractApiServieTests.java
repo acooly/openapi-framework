@@ -1,12 +1,13 @@
 package com.acooly.openapi.framework.core.test;
 
 import com.acooly.core.utils.Assert;
+import com.acooly.core.utils.Profiles;
 import com.acooly.openapi.framework.client.OpenApiClient;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.message.ApiMessage;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.utils.Ids;
-import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
+import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -27,7 +28,9 @@ import static com.acooly.openapi.framework.common.ApiConstants.TEST_SECRET_KEY;
  */
 @Slf4j
 public abstract class AbstractApiServieTests {
-
+    static {
+        Profiles.setProfile(Profiles.Profile.sdev);
+    }
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     protected String signType = SignTypeEnum.MD5.toString();
     protected String gatewayUrl = "http://127.0.0.1:8089/gateway.do";

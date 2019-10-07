@@ -1,10 +1,13 @@
+/*
+ * www.yiji.com Inc.
+ * Copyright (c) 2014 All Rights Reserved
+ */
 package com.acooly.openapi.test.api;
 
 import com.acooly.core.utils.Money;
-import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.utils.Ids;
-import com.acooly.openapi.framework.core.log.SafetyLog;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
+import com.acooly.openapi.framework.core.test.AbstractApiServieTests4;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
 import com.acooly.openapi.framework.service.test.request.OrderCreateApiRequest;
@@ -19,38 +22,19 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * 以order为案例，测试同步，异步和跳转
- *
  * @author zhangpu
- * @date 2019-01-27
  */
 @Slf4j
-public class OrderOpenApiTest extends AbstractApiServieTests {
+public class OrderOpenApiTest4 extends AbstractApiServieTests4 {
 
-    static String content = UUID.randomUUID().toString();
-
-
+    String content = UUID.randomUUID().toString();
     String payerUserId = "09876543211234567890";
     Money amount = Money.amout("200.01");
 
-
     @Test
-    public void testSafetyProperties() {
-        System.out.println(SafetyLog.getSafetyProperties(OrderCreateApiRequest.class));
-    }
-
-    /**
-     * 同步请求(JSON协议)
-     * <p>
-     * 1. 请求参数序列化为json，放在http body中传输
-     * 2. 安全校验相关参数支持放在http header或者url中
-     * 3. 响应安全校验信息放在http header中
-     * 4. 响应体为json
-     */
-    @Test
-    public void testOrderCreateSync() throws Exception {
+    public void testCreateOrder() throws Exception {
+        service = "createOrder";
         OrderCreateApiRequest request = new OrderCreateApiRequest();
-        request.setProtocol(ApiProtocol.JSON);
         request.setRequestNo(Ids.getDid());
         request.setMerchOrderNo(Ids.getDid());
         request.setService("orderCreate");
@@ -62,7 +46,7 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
         request.setBuyeryEmail("qiuboboy@qq.com");
         request.setBuyeryMobileNo("13898765453");
         request.setBuyerCertNo("330702194706165014");
-        request.setPassword("12312312");
+        request.setPassword(encrypt("12312312"));
         request.setContext(content);
         List<GoodInfo> goodInfos = Lists.newArrayList();
         GoodInfo goodInfo = new GoodInfo();
@@ -73,7 +57,7 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
         goodInfos.add(goodInfo);
 
         request.setGoodsInfos(goodInfos);
-        request.ext("xx", "oo");
+//        request.ext("xx", "oo");
         OrderCreateApiResponse response = request(request, OrderCreateApiResponse.class);
         log.info("{}", response);
         log.info("订单号: {}", request.getMerchOrderNo());
@@ -81,5 +65,6 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
         assertThat(response.isSuccess()).isTrue();
         assertThat(response.getContext()).isEqualTo(content);
     }
+
 
 }

@@ -8,7 +8,7 @@
  * qiubo@qq.com 2017-07-25 02:04 创建
  *
  */
-package com.acooly.openapi.framework.core.exception.impl;
+package com.acooly.openapi.framework.common.exception;
 
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;

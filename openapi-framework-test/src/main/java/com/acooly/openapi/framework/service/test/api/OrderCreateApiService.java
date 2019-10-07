@@ -27,6 +27,7 @@ public class OrderCreateApiService extends BaseApiService<OrderCreateApiRequest,
     @Override
     protected void doService(OrderCreateApiRequest request, OrderCreateApiResponse response) {
         log.info("OrderCreateApiService doService request: {}", request);
+        response.setExt(request.getExt());
         response.setTestMoney(request.getAmount());
         response.setGoodInfos(request.getGoodsInfos());
         response.setStatus(SimpleStatus.enable);

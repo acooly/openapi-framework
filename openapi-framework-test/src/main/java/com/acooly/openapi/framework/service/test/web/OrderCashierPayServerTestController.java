@@ -67,7 +67,7 @@ public class OrderCashierPayServerTestController extends AbstractStandardEntityC
             }
 
             // 3、do business，根据拿到的redirect报文进行业务操作
-            // 这里需要对跳转过来的参数进行解析，可以选择JSON.parse，这里简单使用OpenApi的工具处理
+            // 这里需要对跳转过来的参数进行解析，可以选择JSON.parseRequest，这里简单使用OpenApi的工具处理
             // 请引用对应的openapi-message模块，已找到你需要的Redirect对象
             OrderCashierPayApiRedirect redirect = OpenApis.parseMessage(messageContext.getBody(), OrderCashierPayApiRedirect.class);
             log.info("收银台 解析参数: {}", redirect);

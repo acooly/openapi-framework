@@ -13,12 +13,12 @@ import com.acooly.module.filterchain.FilterChain;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.core.marshall.ApiResponseMarshall;
+import com.acooly.openapi.framework.core.marshall.ApiMarshallFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -31,8 +31,8 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class ResponseOpenApiFilter extends AbstractOpenApiFilter {
 
-    @Autowired
-    private ApiResponseMarshall apiResponseMarshall;
+    @Resource
+    protected ApiMarshallFactory apiMarshallFactory;
 
     @Override
     public void doFilter(ApiContext context, FilterChain<ApiContext> filterChain) {
@@ -43,7 +43,8 @@ public class ResponseOpenApiFilter extends AbstractOpenApiFilter {
 
     protected void doResponse(ApiContext context) {
         ApiResponse apiResponse = context.getResponse();
-        ApiMessageContext result = (ApiMessageContext) apiResponseMarshall.marshall(apiResponse);
+        ApiMessageContext result = (ApiMessageContext) apiMarshallFactory.getResponseMarshall(context.getApiProtocol())
+                .marshall(apiResponse);
         HttpServletResponse response = context.getHttpResponse();
         Servlets.setHeaders(response, result.getHeaders());
         Servlets.writeResponse(response, result.getBody());

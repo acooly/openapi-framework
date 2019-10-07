@@ -38,12 +38,7 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
     @Resource
     private ApiNotifyHandler apiNotifyHandler;
     @Resource
-    private OrderInfoService orderInfoService;
-    @Resource
     private ApiAuthentication apiAuthentication;
-
-    @Resource
-    private AuthInfoRealmService authInfoRealmService;
 
     /**
      * 异步通知处理

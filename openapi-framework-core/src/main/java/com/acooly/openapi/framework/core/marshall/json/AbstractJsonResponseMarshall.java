@@ -18,7 +18,7 @@ import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
 import com.acooly.openapi.framework.core.log.OpenApiLoggerHandler;
 import com.acooly.openapi.framework.core.marshall.ApiMarshall;
-import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
+import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
 import com.acooly.openapi.framework.core.marshall.crypt.ApiMarshallCryptService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

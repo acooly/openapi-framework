@@ -124,7 +124,7 @@ public class ApiDocParserImpl extends OpenApiDocParserSupport implements ApiDocP
             apiDocService.setApiDocMessages(mds);
             return apiDocService;
         } catch (Exception e) {
-            log.warn("parse service fail: {}", meta.getServiceName(), e);
+            log.warn("parseRequest service fail: {}", meta.getServiceName(), e);
         }
         return null;
     }

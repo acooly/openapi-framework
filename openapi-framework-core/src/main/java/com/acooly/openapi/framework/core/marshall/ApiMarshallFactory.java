@@ -32,5 +32,34 @@ public interface ApiMarshallFactory {
         return (ApiRequestMarshall) getApiMarshall(apiProtocol, ApiMessageType.Request);
     }
 
+    /**
+     * 获取响应解析实现
+     *
+     * @param apiProtocol
+     * @return
+     */
+    default ApiResponseMarshall getResponseMarshall(ApiProtocol apiProtocol) {
+        return (ApiResponseMarshall) getApiMarshall(apiProtocol, ApiMessageType.Response);
+    }
+
+    /**
+     * 获取通知解析实现
+     *
+     * @param apiProtocol
+     * @return
+     */
+    default ApiNotifyMarshall getNotifyMarshall(ApiProtocol apiProtocol) {
+        return (ApiNotifyMarshall) getApiMarshall(apiProtocol, ApiMessageType.Notify);
+    }
+
+    /**
+     * 获取跳转解析实现
+     *
+     * @param apiProtocol
+     * @return
+     */
+    default ApiRedirectMarshall getRedirectMarshall(ApiProtocol apiProtocol) {
+        return (ApiRedirectMarshall) getApiMarshall(apiProtocol, ApiMessageType.Redirect);
+    }
 
 }

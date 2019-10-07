@@ -14,12 +14,13 @@ import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.dto.OrderDto;
+import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.common.message.ApiNotify;
-import com.acooly.openapi.framework.core.marshall.ApiNotifyMarshall;
+import com.acooly.openapi.framework.core.marshall.ApiMarshallFactory;
 import com.acooly.openapi.framework.core.service.factory.ApiServiceFactory;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import com.acooly.openapi.framework.notify.handle.NotifyMessageSendService;
@@ -49,7 +50,7 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
     @Autowired
     protected ApiServiceFactory apiServiceFactory;
     @Resource
-    protected ApiNotifyMarshall apiNotifyMarshall;
+    protected ApiMarshallFactory apiMarshallFactory;
     @Resource
     private NotifyMessageSendService notifyMessageSendService;
 
@@ -120,7 +121,8 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
     }
 
     protected ApiMessageContext doMarshall(ApiNotify apiNotify) {
-        return (ApiMessageContext) apiNotifyMarshall.marshall(apiNotify);
+        return (ApiMessageContext) apiMarshallFactory.getNotifyMarshall(
+                ApiContextHolder.getContext().getApiProtocol()).marshall(apiNotify);
     }
 
     protected void initApiContext(OrderDto orderInfo, ApiService apiService) {
@@ -129,7 +131,7 @@ public class DefaultApiNotifyHandler implements ApiNotifyHandler {
         context.setAccessKey(orderInfo.getAccessKey());
         context.setPartnerId(orderInfo.getPartnerId());
         context.setSignType(SignTypeEnum.valueOf(orderInfo.getSignType()));
-        context.setApiProtocol(orderInfo.getProtocol());
+        context.setApiProtocol(orderInfo.getProtocol() == null ? ApiProtocol.JSON : orderInfo.getProtocol());
         context.setApiService(apiService);
     }
 

@@ -2,7 +2,7 @@ package com.acooly.openapi.framework.core.auth.impl;
 
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.utils.enums.Messageable;
-import com.acooly.openapi.framework.common.ApiConstants;
+import com.acooly.openapi.framework.common.OpenApis;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
@@ -66,30 +66,16 @@ public class SignatureApiAuthentication implements ApiAuthentication {
 
     /**
      * 签名
-     *
-     * @param response
      */
     @Override
-    public String signature(Map<String, String> response) {
-        String signType = response.get(ApiConstants.SIGN_TYPE);
-        // fixme
-        //    String partnerId = response.get(ApiConstants.PARTNER_ID);
-        //    return signature(response, partnerId, signType);
-        return null;
+    public String signature(Map<String, String> response, String accessKey, String signType) {
+        return signature(OpenApis.getWaitForSignString(response), accessKey, signType);
     }
 
     @Override
     public String signature(String body, String accessKey, String signType) {
         try {
-            if (accessKey == null) {
-                return "";
-            }
-            String secretKey = null;
-            try {
-                secretKey = (String) authInfoRealm.getAuthenticationInfo(accessKey);
-            } catch (ApiServiceAuthenticationException e) {
-                return null;
-            }
+            String secretKey = (String) authInfoRealm.getAuthenticationInfo(accessKey);
             String sign = signerFactory.getSigner(SignTypeEnum.valueOf(signType)).sign(body, secretKey);
             return sign;
         } catch (ApiServiceException asae) {

@@ -1,4 +1,4 @@
-package com.acooly.openapi.framework.core.marshall;
+package com.acooly.openapi.framework.common.utils.json;
 
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.common.exception.AppConfigException;
@@ -7,8 +7,7 @@ import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.convert.ApiServiceConversionService;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
-import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
-import com.acooly.openapi.framework.core.exception.impl.ApiServiceParamFormatException;
+import com.acooly.openapi.framework.common.exception.ApiServiceParamFormatException;
 import com.alibaba.fastjson.JSONException;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
@@ -239,9 +238,7 @@ public class ObjectAccessor<T> {
             } else {
                 logger.error("属性{}设置失败", field.getType(), cfe);
             }
-            throw new ApiServiceParamFormatException(
-                    field.getName(),
-                    newValue,
+            throw new ApiServiceParamFormatException(field.getName(), newValue,
                     field.getType().getSimpleName() + (enumOptions != null ? enumOptions : ""));
         } catch (ApiServiceParamFormatException ex) {
             throw ex;

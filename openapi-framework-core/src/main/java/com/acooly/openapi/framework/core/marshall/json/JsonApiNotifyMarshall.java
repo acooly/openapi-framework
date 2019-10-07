@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  * @author zhangpu
  * @date 2019-10-05
  */
-@Component
+@Component("jsonApiNotifyMarshall")
 public class JsonApiNotifyMarshall extends AbstractJsonResponseMarshall<ApiMessageContext, ApiNotify>
         implements ApiNotifyMarshall<ApiMessageContext, ApiNotify> {
 

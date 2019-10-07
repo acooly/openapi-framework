@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static com.acooly.openapi.framework.common.ApiConstants.BODY;
 
@@ -28,6 +30,10 @@ import static com.acooly.openapi.framework.common.ApiConstants.BODY;
 @Slf4j
 public class OpenApis {
 
+
+    public static String getRequestNo(Map<String, String> requestData) {
+        return requestData.getOrDefault(ApiConstants.REQUEST_NO, ApiConstants.ORDER_NO);
+    }
 
     /**
      * 解析报文体
@@ -78,5 +84,30 @@ public class OpenApis {
         return context;
     }
 
+
+    /**
+     * 生成待签字符串
+     *
+     * @param params
+     * @return
+     */
+    public static String getWaitForSignString(Map<String, String> params) {
+        String waitToSignStr = null;
+        Map<String, String> sortedMap = new TreeMap<>(params);
+        if (sortedMap.containsKey("sign")) {
+            sortedMap.remove("sign");
+        }
+        StringBuilder stringToSign = new StringBuilder();
+        if (sortedMap.size() > 0) {
+            for (Map.Entry<String, String> entry : sortedMap.entrySet()) {
+                if (entry.getValue() != null) {
+                    stringToSign.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+                }
+            }
+            stringToSign.deleteCharAt(stringToSign.length() - 1);
+            waitToSignStr = stringToSign.toString();
+        }
+        return waitToSignStr;
+    }
 
 }

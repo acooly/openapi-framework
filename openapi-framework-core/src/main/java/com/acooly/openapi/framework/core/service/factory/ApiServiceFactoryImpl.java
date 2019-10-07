@@ -22,7 +22,7 @@ import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.core.OpenAPIProperties;
-import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
+import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
 import com.acooly.openapi.framework.core.service.route.ServiceRouter;
 import com.acooly.openapi.framework.core.util.GenericsUtils;
 import com.google.common.collect.HashMultimap;

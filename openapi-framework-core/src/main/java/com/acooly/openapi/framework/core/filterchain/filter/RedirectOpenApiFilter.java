@@ -14,7 +14,7 @@ import com.acooly.module.filterchain.FilterChain;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.core.marshall.ApiRedirectMarshall;
+import com.acooly.openapi.framework.core.marshall.ApiMarshallFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 public class RedirectOpenApiFilter extends AbstractOpenApiFilter {
 
     @Autowired
-    private ApiRedirectMarshall apiRedirectMarshall;
+    private ApiMarshallFactory apiMarshallFactory;
 
     @Override
     public void doFilter(ApiContext context, FilterChain<ApiContext> filterChain) {
@@ -44,7 +44,8 @@ public class RedirectOpenApiFilter extends AbstractOpenApiFilter {
 
     protected void doRedirect(ApiContext context) {
         ApiResponse apiResponse = context.getResponse();
-        ApiMessageContext result = (ApiMessageContext) apiRedirectMarshall.marshall(apiResponse);
+        ApiMessageContext result = (ApiMessageContext) apiMarshallFactory.getRedirectMarshall(context.getApiProtocol())
+                .marshall(apiResponse);
         HttpServletResponse response = context.getHttpResponse();
         Servlets.setHeaders(response, result.getHeaders());
         String redirectUrl = context.getRedirectUrl();

@@ -7,12 +7,12 @@
  */
 package com.acooly.openapi.framework.core.marshall.json;
 
+import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
-import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.core.marshall.ApiRequestMarshall;
-import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
+import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
 import com.acooly.openapi.framework.core.marshall.crypt.ApiMarshallCryptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ import java.util.Map;
  * @author zhangpu： 增加对部分隐私加密信息解密功能
  * @author zhangpu 重构接口抽象框架
  */
-@Component
+@Component("jsonApiRequestMarshall")
 public class JsonApiRequestMarshall implements ApiRequestMarshall<ApiRequest, ApiContext> {
 
     private static JsonMarshallor jsonMarshallor = JsonMarshallor.INSTANCE;
