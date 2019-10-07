@@ -7,6 +7,7 @@
  */
 package com.acooly.openapi.framework.core.marshall.formjson;
 
+import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.core.marshall.ApiNotifyMarshall;
 import com.google.common.collect.Maps;
@@ -18,17 +19,28 @@ import java.util.Map;
  * @author zhangpu
  */
 @Component("httpFormJsonNotifyMarshall")
-public class HttpFormJsonNotifyMarshall extends AbstractHttpFormJsonResponseMarshall<Map<String, String>, ApiNotify>
-        implements ApiNotifyMarshall<Map<String, String>, ApiNotify> {
+public class HttpFormJsonNotifyMarshall extends AbstractHttpFormJsonResponseMarshall<ApiMessageContext, ApiNotify>
+        implements ApiNotifyMarshall<ApiMessageContext, ApiNotify> {
+
 
     @Override
-    protected Map<String, String> doMarshall(Map<String, Object> responseData) {
-        return Maps.transformEntries(responseData, new Maps.EntryTransformer<String, Object, String>() {
-            @Override
-            public String transformEntry(String key, Object value) {
-                return String.valueOf(value);
-            }
-        });
+    protected ApiMessageContext doMarshall(Map<String, Object> responseData) {
+        Map<String, String> map = Maps.transformValues(responseData, v -> String.valueOf(v));
+        ApiMessageContext messageContext = new ApiMessageContext();
+        messageContext.setParameters(map);
+        messageContext.setBody(buildPostBody(map));
+        return messageContext;
     }
 
+
+    protected String buildPostBody(Map<String, String> map) {
+        if (map == null || map.size() == 0) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        map.forEach((k, v) -> {
+            sb.append(k).append("=").append(v).append("&");
+        });
+        return sb.substring(0, sb.length() - 1);
+    }
 }
