@@ -7,6 +7,7 @@
  */
 package com.acooly.openapi.framework.core.marshall.formjson;
 
+import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.context.ApiContext;
@@ -16,13 +17,11 @@ import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
 import com.acooly.openapi.framework.core.log.OpenApiLoggerHandler;
 import com.acooly.openapi.framework.core.marshall.ApiMarshall;
-import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
 import com.acooly.openapi.framework.core.marshall.crypt.ApiMarshallCryptService;
-import com.google.common.base.Strings;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Field;
@@ -99,7 +98,7 @@ public abstract class AbstractHttpFormJsonResponseMarshall<T, S extends ApiRespo
      */
     protected String getLogLabel(ApiResponse apiResponse) {
         String labelPostfix =
-                (StringUtils.isNotBlank(apiResponse.getService())
+                (Strings.isNotBlank(apiResponse.getService())
                         ? "[" + apiResponse.getService() + "]:"
                         : ":");
         if (ApiContextHolder.getApiContext().isRedirect()) {
@@ -120,7 +119,7 @@ public abstract class AbstractHttpFormJsonResponseMarshall<T, S extends ApiRespo
      */
     protected void doEncrypt(ApiResponse apiResponse, Map<String, String> responseData) {
         String partnerId = apiResponse.getPartnerId();
-        if (Strings.isNullOrEmpty(partnerId)) {
+        if (Strings.isBlank(partnerId)) {
             return;
         }
         String key = null;
@@ -128,7 +127,7 @@ public abstract class AbstractHttpFormJsonResponseMarshall<T, S extends ApiRespo
         for (Map.Entry<String, String> entry : responseData.entrySet()) {
             key = entry.getKey();
             value = entry.getValue();
-            if (value instanceof String && !Strings.isNullOrEmpty((String) value) && isSecurityField(apiResponse, key)) {
+            if (value instanceof String && !Strings.isBlank((String) value) && isSecurityField(apiResponse, key)) {
                 responseData.put(key, apiMarshallCryptService.encrypt(key, (String) value, partnerId));
             }
         }
@@ -158,7 +157,7 @@ public abstract class AbstractHttpFormJsonResponseMarshall<T, S extends ApiRespo
         String partnerId = apiResponse.getPartnerId();
         String resultCode = apiResponse.getCode();
         doBeforeMarshall(apiResponse, signData);
-        if (Strings.isNullOrEmpty(signType) || Strings.isNullOrEmpty(partnerId)) {
+        if (Strings.isBlank(signType) || Strings.isBlank(partnerId)) {
             return;
         }
         // 服务认证失败
@@ -186,9 +185,14 @@ public abstract class AbstractHttpFormJsonResponseMarshall<T, S extends ApiRespo
     protected void doBeforeMarshall(ApiResponse apiResponse, Map data) {
         data.put(ApiConstants.SIGN_TYPE, getApiContext().getSignType().code());
         data.put(ApiConstants.RESULT_CODE, data.remove(ApiConstants.CODE));
+        String resultCode = (String) data.get(ApiConstants.RESULT_CODE);
+        if (Strings.equals(resultCode, ApiServiceResultCode.SUCCESS.code())
+                || Strings.equals(resultCode, ApiServiceResultCode.PROCESSING.code())
+        ) {
+            data.put(ApiConstants.RESULT_CODE, "EXECUTE_" + resultCode);
+        }
         data.put(ApiConstants.RESULT_MESSAGE, data.remove(ApiConstants.MESSAGE));
         data.put(ApiConstants.RESULT_DETAIL, data.remove(ApiConstants.DETAIL));
-
     }
 
     protected ApiContext getApiContext() {

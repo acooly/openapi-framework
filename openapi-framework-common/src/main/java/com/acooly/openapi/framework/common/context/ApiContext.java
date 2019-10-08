@@ -10,7 +10,6 @@
  */
 package com.acooly.openapi.framework.common.context;
 
-import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
@@ -41,8 +40,6 @@ import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -174,12 +171,13 @@ public class ApiContext extends Context {
         this.putAll(apiRequestContext.headersToParameters());
         this.putAll(apiRequestContext.getParameters());
         this.apiProtocol = ApiProtocol.find(apiRequestContext.getProtocol());
+
         if (this.apiProtocol == ApiProtocol.JSON) {
             this.requestBody = apiRequestContext.getBody();
             throwIfBlank(requestBody, "报文内容为空");
             JSONObject jsonObject = (JSONObject) JSON.parse(requestBody);
             this.putAll(jsonObject);
-        } else if (this.apiProtocol == ApiProtocol.HTTP_FORM_JSON) {
+        } else {
             // 老协议，则组装参数为requestBody，用于后续签名认证
             this.requestBody = OpenApis.getWaitForSignString(apiRequestContext.getParameters());
         }
