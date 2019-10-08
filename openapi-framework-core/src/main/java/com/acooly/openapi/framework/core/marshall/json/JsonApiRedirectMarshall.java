@@ -7,6 +7,7 @@
  */
 package com.acooly.openapi.framework.core.marshall.json;
 
+import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.context.ApiContext;
@@ -15,7 +16,6 @@ import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.core.marshall.ApiRedirectMarshall;
-import com.acooly.openapi.framework.core.util.Encodes;
 import org.springframework.stereotype.Component;
 
 /**

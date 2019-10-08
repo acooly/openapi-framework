@@ -2,7 +2,7 @@ package com.acooly.openapi.test.api;
 
 import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
-import com.acooly.openapi.framework.common.utils.Ids;
+import com.acooly.core.utils.Ids;
 import com.acooly.openapi.framework.core.log.SafetyLog;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
@@ -51,7 +51,7 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
     public void testOrderCreateSync() throws Exception {
         OrderCreateApiRequest request = new OrderCreateApiRequest();
         // 可修改协议，目前支持：HTTP_FORM_JSON，JSON
-        request.setProtocol(ApiProtocol.HTTP_FORM_JSON);
+        request.setProtocol(ApiProtocol.JSON);
         request.setRequestNo(Ids.getDid());
         request.setMerchOrderNo(Ids.getDid());
         request.setService("orderCreate");

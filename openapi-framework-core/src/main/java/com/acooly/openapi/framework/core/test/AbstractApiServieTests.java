@@ -1,12 +1,12 @@
 package com.acooly.openapi.framework.core.test;
 
 import com.acooly.core.utils.Assert;
+import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Profiles;
 import com.acooly.openapi.framework.client.OpenApiClient;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.message.ApiMessage;
 import com.acooly.openapi.framework.common.message.ApiRequest;
-import com.acooly.openapi.framework.common.utils.Ids;
 import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;

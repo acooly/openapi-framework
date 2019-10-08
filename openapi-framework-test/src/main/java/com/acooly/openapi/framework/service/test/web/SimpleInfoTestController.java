@@ -14,7 +14,7 @@ import com.acooly.core.utils.Servlets;
 import com.acooly.openapi.framework.client.OpenApiClient;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.common.utils.Ids;
+import com.acooly.core.utils.Ids;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

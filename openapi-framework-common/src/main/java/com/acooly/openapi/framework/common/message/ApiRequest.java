@@ -2,8 +2,8 @@ package com.acooly.openapi.framework.common.message;
 
 import com.acooly.core.common.facade.BizOrderBase;
 import com.acooly.core.common.facade.OrderBase;
+import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.mapper.BeanCopier;
-import com.acooly.openapi.framework.common.utils.Ids;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.MDC;

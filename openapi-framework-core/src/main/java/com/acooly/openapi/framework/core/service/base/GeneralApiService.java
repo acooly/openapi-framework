@@ -4,6 +4,7 @@
  */
 package com.acooly.openapi.framework.core.service.base;
 
+import com.acooly.core.utils.Reflections;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.event.dto.ServiceEvent;
@@ -13,7 +14,6 @@ import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.core.listener.ApiListener;
 import com.acooly.openapi.framework.core.listener.OpenApiEventMulticaster;
 import com.acooly.openapi.framework.core.listener.multicaster.ServiceEventMulticaster;
-import com.acooly.openapi.framework.core.util.GenericsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -42,7 +42,7 @@ public abstract class GeneralApiService<O extends ApiRequest, R extends ApiRespo
     @Override
     public O getRequestBean() {
         if (requestClazz == null) {
-            requestClazz = GenericsUtils.getSuperClassGenricType(getClass(), 0);
+            requestClazz = Reflections.getSuperClassGenricType(getClass());
         }
         try {
             if (requestClazz.equals(Object.class)) {
@@ -58,7 +58,7 @@ public abstract class GeneralApiService<O extends ApiRequest, R extends ApiRespo
     @Override
     public R getResponseBean() {
         if (responseClazz == null) {
-            responseClazz = GenericsUtils.getSuperClassGenricType(getClass(), 1);
+            responseClazz = Reflections.getSuperClassGenricType(getClass(), 1);
         }
         try {
             if (responseClazz.equals(Object.class)) {

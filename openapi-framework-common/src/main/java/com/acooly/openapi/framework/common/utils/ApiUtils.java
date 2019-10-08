@@ -12,6 +12,7 @@ package com.acooly.openapi.framework.common.utils;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import java.util.Map;
@@ -23,36 +24,51 @@ import java.util.Map;
  */
 public final class ApiUtils {
 
-  private static UrlValidator httpUrlValidator = null;
+    private static UrlValidator httpUrlValidator = null;
 
-  static {
-    String[] schemes = {"http", "https"};
-    httpUrlValidator = new UrlValidator(schemes);
-  }
-
-  private ApiUtils() {}
-
-  public static boolean isHttpUrl(String str) {
-
-    return httpUrlValidator.isValid(str);
-  }
-
-  public static void checkOpenAPIUrl(String str, String name) {
-    if (Strings.isBlank(str)) {
-      throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, name + "不能为空");
+    static {
+        String[] schemes = {"http", "https"};
+        httpUrlValidator = new UrlValidator(schemes);
     }
-    if (isHttpUrl(str)) {
-      if (str.contains("?")) {
-        throw new ApiServiceException(
-            ApiServiceResultCode.PARAMETER_ERROR, "必须传入格式正确的" + name + "参数,请求参数不能包含?");
-      }
-    } else {
-      throw new ApiServiceException(
-          ApiServiceResultCode.PARAMETER_ERROR, "必须传入格式正确的" + name + "参数");
-    }
-  }
 
-  public static String getParameter(Map<String, String> requestData, String key) {
-    return requestData.get(key);
-  }
+    private ApiUtils() {
+    }
+
+    public static boolean isHttpUrl(String str) {
+
+        return httpUrlValidator.isValid(str);
+    }
+
+    public static void checkOpenAPIUrl(String str, String name) {
+        if (Strings.isBlank(str)) {
+            throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, name + "不能为空");
+        }
+        if (isHttpUrl(str)) {
+            if (str.contains("?")) {
+                throw new ApiServiceException(
+                        ApiServiceResultCode.PARAMETER_ERROR, "必须传入格式正确的" + name + "参数,请求参数不能包含?");
+            }
+        } else {
+            throw new ApiServiceException(
+                    ApiServiceResultCode.PARAMETER_ERROR, "必须传入格式正确的" + name + "参数");
+        }
+    }
+
+    public static String getParameter(Map<String, String> requestData, String key) {
+        return requestData.get(key);
+    }
+
+    public static boolean isJson(String json) {
+        try {
+            JSON.parse(json);
+            String first = Strings.substring(json, 0, 1);
+            String last = Strings.substring(json, json.length() - 1, json.length());
+            return (Strings.contains("[{", first) && Strings.contains("]}", last));
+        } catch (Exception e) {
+            //ig
+        }
+        return false;
+    }
+
+
 }

@@ -4,7 +4,7 @@ import com.acooly.core.utils.Money;
 import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
-import com.acooly.openapi.framework.common.utils.Ids;
+import com.acooly.core.utils.Ids;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.service.test.request.WithdrawApiRequest;
 import com.acooly.openapi.framework.service.test.response.WithdrawApiResponse;

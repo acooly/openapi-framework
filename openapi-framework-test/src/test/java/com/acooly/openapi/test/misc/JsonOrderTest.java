@@ -9,10 +9,10 @@
 package com.acooly.openapi.test.misc;
 
 import com.acooly.core.utils.Money;
+import com.acooly.core.utils.Reflections;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.utils.DataTypeUtils;
-import com.acooly.openapi.framework.common.utils.Ids;
-import com.acooly.openapi.framework.common.utils.Reflections;
+import com.acooly.core.utils.Ids;
 import com.acooly.openapi.framework.common.utils.json.MoneySerializer;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;

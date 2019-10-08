@@ -26,6 +26,7 @@ import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.common.utils.ApiUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
@@ -171,10 +172,9 @@ public class ApiContext extends Context {
         this.putAll(apiRequestContext.headersToParameters());
         this.putAll(apiRequestContext.getParameters());
         this.apiProtocol = ApiProtocol.find(apiRequestContext.getProtocol());
-
-        if (this.apiProtocol == ApiProtocol.JSON) {
+        
+        if (Strings.isNoneBlank(apiRequestContext.getBody()) && ApiUtils.isJson(apiRequestContext.getBody())) {
             this.requestBody = apiRequestContext.getBody();
-            throwIfBlank(requestBody, "报文内容为空");
             JSONObject jsonObject = (JSONObject) JSON.parse(requestBody);
             this.putAll(jsonObject);
         } else {

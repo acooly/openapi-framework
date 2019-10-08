@@ -11,16 +11,15 @@ package com.acooly.openapi.apidoc.portal;
 
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Ids;
+import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.net.HttpResult;
-import com.acooly.core.utils.net.Https;
 import com.acooly.module.safety.Safes;
 import com.acooly.module.safety.signature.SignTypeEnum;
 import com.acooly.openapi.apidoc.generator.ApiDocGenerator;
 import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.common.utils.Servlets;
 import com.alibaba.fastjson.JSON;
+import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +56,8 @@ public class ApiDebugPortalController extends AbstractPortalController {
     @Override
     public String index(HttpServletRequest request, HttpServletResponse response, Model model) {
         model.addAttribute("service", request.getParameter("service"));
-        model.addAttribute("testAccessKey",ApiConstants.TEST_ACCESS_KEY);
-        model.addAttribute("testSecretKey",ApiConstants.TEST_SECRET_KEY);
+        model.addAttribute("testAccessKey", ApiConstants.TEST_ACCESS_KEY);
+        model.addAttribute("testSecretKey", ApiConstants.TEST_SECRET_KEY);
         return "/docs/apidebug/index";
     }
 
@@ -91,8 +90,8 @@ public class ApiDebugPortalController extends AbstractPortalController {
             String requestMessage = Servlets.buildQueryString(data);
             result.appendData("requestData", data);
             result.appendData("requestMessage", requestMessage);
-            HttpResult httpResult = Https.getInstance().post(apiDocProperties.getTestGateway(), data, "UTF-8");
-            result.appendData("responseMessage", JSON.toJSONString(JSON.parse(httpResult.getBody()), true));
+            HttpRequest httpRequest = HttpRequest.post(apiDocProperties.getTestGateway()).form(data);
+            result.appendData("responseMessage", JSON.toJSONString(JSON.parse(httpRequest.body()), true));
 
             result.appendData(referenceData(request));
         } catch (Exception e) {

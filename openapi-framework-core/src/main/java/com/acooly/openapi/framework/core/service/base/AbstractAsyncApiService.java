@@ -4,10 +4,10 @@
  */
 package com.acooly.openapi.framework.core.service.base;
 
+import com.acooly.core.utils.Reflections;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.core.util.GenericsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -30,7 +30,7 @@ public abstract class AbstractAsyncApiService<O extends ApiRequest, R extends Ap
     @Override
     public N getApiNotifyBean() {
         if (notifyClazz == null) {
-            notifyClazz = GenericsUtils.getSuperClassGenricType(getClass(), 2);
+            notifyClazz = Reflections.getSuperClassGenricType(getClass(), 2);
         }
         try {
             if (notifyClazz.equals(Object.class)) {

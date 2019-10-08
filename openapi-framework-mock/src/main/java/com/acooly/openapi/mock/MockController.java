@@ -1,11 +1,11 @@
 package com.acooly.openapi.mock;
 
+import com.acooly.core.utils.Servlets;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.common.utils.Servlets;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
 import com.acooly.openapi.framework.service.service.ApiMetaServiceService;
 import com.acooly.openapi.mock.dao.ApiMockDao;

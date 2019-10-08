@@ -1,9 +1,9 @@
 package com.acooly.openapi.framework.service.test.web;
 
 import com.acooly.core.common.facade.ResultBase;
+import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.common.utils.Servlets;
 import com.acooly.openapi.framework.facade.api.OpenApiRemoteService;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import com.google.common.collect.Maps;
