@@ -209,6 +209,7 @@ public class OpenApiClient {
                 log.info("请求-> body:{},header:{} ", context.getBody(), context.getHeaders());
             }
         } else {
+            request.setProtocol(null);
             Map<String, String> data = ObjectAccessor.of(request).getAllDataExcludeTransient();
             data.put(ApiConstants.SIGN_TYPE, signType);
             data.put("sign", sign(OpenApis.getWaitForSignString(data)));

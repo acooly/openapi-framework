@@ -70,7 +70,13 @@ public class ApiMessageContext extends InfoBase {
         if (getValue(ApiConstants.PROTOCOL) != null) {
             return getValue(ApiConstants.PROTOCOL);
         }
-        return ApiProtocol.JSON.code();
+
+        // 头里面包含：x-api-sign 或者 参数里面包含: body(临时)，后调整跳转报文的协议也为x-api-开头
+        if (Strings.isNoneBlank(getHeader(ApiConstants.X_API_SIGN)) || Strings.isNoneBlank(getParameter(ApiConstants.BODY))) {
+            return ApiProtocol.JSON.code();
+        }
+
+        return ApiProtocol.HTTP_FORM_JSON.code();
     }
 
     public String buildRedirectUrl(String redirectUrl) {
