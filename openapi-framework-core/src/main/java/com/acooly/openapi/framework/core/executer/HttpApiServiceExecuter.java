@@ -10,6 +10,8 @@ package com.acooly.openapi.framework.core.executer;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.core.filterchain.OpenApiFilterChain;
+import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 /**
  * 服务执行HTTP实现
@@ -24,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author zhangpu
  */
 @Component
+@Slf4j
 public class HttpApiServiceExecuter
         implements ApiServiceExecuter<HttpServletRequest, HttpServletResponse> {
 
@@ -34,6 +38,8 @@ public class HttpApiServiceExecuter
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, String[]> requestParamsMap =  request.getParameterMap();
+        log.info("原始请求报文：{}", JSON.toJSONString(requestParamsMap));
         ApiContext context = ApiContextHolder.getApiContext();
         context.setHttpRequest(request);
         context.setHttpResponse(response);
