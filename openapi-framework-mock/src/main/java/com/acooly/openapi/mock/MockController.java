@@ -67,7 +67,6 @@ public class MockController {
                 responseBody = apiMock.getResponse();
             }
         }
-        apiContext.setResponseBody(responseBody);
         if (!Strings.isNullOrEmpty(apiContext.getAccessKey())) {
             String sign =
                     apiAuthentication.signature(
@@ -76,7 +75,6 @@ public class MockController {
                 apiContext.getHttpResponse().setHeader(ApiConstants.SIGN_TYPE, apiContext.getSignType().name());
                 apiContext.getHttpResponse().setHeader(ApiConstants.SIGN, sign);
             }
-            apiContext.setResponseSign(sign);
         }
         Servlets.writeResponse(response, responseBody);
         return;

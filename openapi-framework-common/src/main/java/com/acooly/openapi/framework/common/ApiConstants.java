@@ -38,7 +38,7 @@ public final class ApiConstants {
 
 
     public static final String MERCH_ORDER_NO = "merchOrderNo";
-
+    public static final String REQUEST_IP = "requestIp";
     public static final String CODE = "code";
     public static final String MESSAGE = "message";
     public static final String DETAIL = "detail";

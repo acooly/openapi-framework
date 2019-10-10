@@ -153,7 +153,8 @@ public abstract class AbstractHttpFormJsonResponseMarshall<T, S extends ApiRespo
      * @param signData
      */
     protected void doSign(ApiResponse apiResponse, Map<String, String> signData) {
-        String signType = getApiContext().getSignType().code();
+        ApiContext context = getApiContext();
+        String signType = context.getSignType().code();
         String partnerId = apiResponse.getPartnerId();
         String resultCode = apiResponse.getCode();
         doBeforeMarshall(apiResponse, signData);
@@ -168,7 +169,9 @@ public abstract class AbstractHttpFormJsonResponseMarshall<T, S extends ApiRespo
         if (resultCode != null && resultCode.equals(ApiServiceResultCode.UNAUTHORIZED_ERROR.getCode())) {
             return;
         }
-        signData.put(ApiConstants.SIGN, apiAuthentication.signature(signData, partnerId, signType));
+        if (context.isSignResponse()) {
+            signData.put(ApiConstants.SIGN, apiAuthentication.signature(signData, partnerId, signType));
+        }
     }
 
     @Override

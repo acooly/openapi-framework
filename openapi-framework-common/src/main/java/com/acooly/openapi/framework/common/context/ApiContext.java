@@ -13,6 +13,7 @@ package com.acooly.openapi.framework.common.context;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.system.IPUtil;
 import com.acooly.module.filterchain.Context;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.OpenApis;
@@ -110,10 +111,12 @@ public class ApiContext extends Context {
 
     private String requestBody;
 
+    private String requestIp;
 
-    private String responseBody;
-
-    private String responseSign;
+    /**
+     * 标记返回报文是否需签名
+     */
+    private boolean signResponse = true;
 
     /**
      * 响应头参数
@@ -171,8 +174,8 @@ public class ApiContext extends Context {
         this.apiRequestContext = OpenApis.getApiRequestContext(this.httpRequest);
         this.putAll(apiRequestContext.headersToParameters());
         this.putAll(apiRequestContext.getParameters());
+
         this.apiProtocol = ApiProtocol.find(apiRequestContext.getProtocol());
-        
         if (Strings.isNoneBlank(apiRequestContext.getBody()) && ApiUtils.isJson(apiRequestContext.getBody())) {
             this.requestBody = apiRequestContext.getBody();
             JSONObject jsonObject = (JSONObject) JSON.parse(requestBody);
@@ -194,8 +197,10 @@ public class ApiContext extends Context {
         this.serviceName = getParameterNoBlank(ApiConstants.SERVICE);
         this.serviceVersion = getParameterDefault(ApiConstants.VERSION, ApiConstants.VERSION_DEFAULT);
         this.requestNo = getParameterNoBlank(ApiConstants.REQUEST_NO);
-        this.userAgent = getParameter(HttpHeaders.USER_AGENT);
         this.context = getParameter(ApiConstants.CONTEXT);
+        // 扩展
+        this.userAgent = getParameter(HttpHeaders.USER_AGENT);
+        this.requestIp = IPUtil.getIpAddr(this.httpRequest);
     }
 
 

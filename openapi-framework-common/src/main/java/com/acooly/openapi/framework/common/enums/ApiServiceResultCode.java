@@ -30,8 +30,10 @@ public enum ApiServiceResultCode implements Messageable {
 
     INTERNAL_ERROR("INTERNAL_ERROR", "内部错误"),
     PARAMETER_ERROR("PARAMETER_ERROR", "参数错误"),
-    UNAUTHENTICATED_ERROR("UNAUTHENTICATED_ERROR", "认证(签名)错误"),
     PARAM_FORMAT_ERROR("PARAM_FORMAT_ERROR", "参数格式错误"),
+
+    ACCESS_KEY_NOT_EXIST("ACCESS_KEY_NOT_EXIST", "访问码非法"),
+    UNAUTHENTICATED_ERROR("UNAUTHENTICATED_ERROR", "认证(签名)错误"),
     REQUEST_NO_NOT_UNIQUE("REQUEST_NO_NOT_UNIQUE", "请求号重复"),
     FIELD_NOT_UNIQUE("FIELD_NOT_UNIQUE", "对象字段重复"),
     TOO_MANY_REQUEST("TOO_MANY_REQUEST", "请求数太多"),
@@ -82,7 +84,7 @@ public enum ApiServiceResultCode implements Messageable {
                 return status;
             }
         }
-        throw new IllegalArgumentException("ApiServiceResultCode not legal:" + code);
+        return null;
     }
 
     /**

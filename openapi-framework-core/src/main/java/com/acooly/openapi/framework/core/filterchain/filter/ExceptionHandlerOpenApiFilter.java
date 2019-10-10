@@ -10,6 +10,8 @@ package com.acooly.openapi.framework.core.filterchain.filter;
 
 import com.acooly.module.filterchain.FilterChain;
 import com.acooly.openapi.framework.common.context.ApiContext;
+import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
+import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.core.exception.ApiServiceExceptionHander;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -36,8 +38,19 @@ public class ExceptionHandlerOpenApiFilter extends AbstractOpenApiFilter {
         if (context.getResponse() == null) {
             context.prevHandleResponse();
         }
+
         apiServiceExceptionHander.handleApiServiceException(context.getRequest(),
                 context.getResponse(), context.getException());
+
+        if (ApiServiceException.class.isAssignableFrom(context.getException().getClass())) {
+            ApiServiceException ase = (ApiServiceException) context.getException();
+            ApiServiceResultCode resultCode = ApiServiceResultCode.findStatus(ase.getResultCode());
+            if (ApiServiceResultCode.ACCESS_KEY_NOT_EXIST == resultCode
+                    || ApiServiceResultCode.SERVICE_NOT_FOUND_ERROR == resultCode) {
+                context.setSignResponse(false);
+            }
+        }
+
     }
 
     @Override

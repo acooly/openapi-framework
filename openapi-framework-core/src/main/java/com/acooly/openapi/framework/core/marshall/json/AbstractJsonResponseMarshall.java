@@ -15,10 +15,10 @@ import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
 import com.acooly.openapi.framework.core.log.OpenApiLoggerHandler;
 import com.acooly.openapi.framework.core.marshall.ApiMarshall;
-import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
 import com.acooly.openapi.framework.core.marshall.crypt.ApiMarshallCryptService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -72,7 +72,7 @@ public abstract class AbstractJsonResponseMarshall<T, S extends ApiResponse> imp
         ApiContext context = ApiContextHolder.getContext();
         if (result.getClass().isAssignableFrom(ApiMessageContext.class)) {
             ApiMessageContext amc = (ApiMessageContext) result;
-            if (Strings.isNotBlank(context.getAccessKey())) {
+            if (Strings.isNotBlank(context.getAccessKey()) && context.isSignResponse()) {
                 String sign = apiAuthentication.signature(amc.getBody(), context.getAccessKey(), context.getSignType().name());
                 amc.header(ApiConstants.X_API_SIGN, sign);
                 amc.header(ApiConstants.X_API_SIGN_TYPE, context.getSignType().code());
