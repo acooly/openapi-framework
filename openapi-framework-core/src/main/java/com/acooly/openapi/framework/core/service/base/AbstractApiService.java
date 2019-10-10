@@ -13,8 +13,8 @@ import com.acooly.openapi.framework.common.message.ApiAsyncRequest;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.core.OpenAPIProperties;
 import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
+import com.acooly.openapi.framework.core.OpenAPIProperties;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import com.acooly.openapi.framework.service.service.OrderInfoService;
 import org.slf4j.Logger;
@@ -135,11 +135,12 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
                 orderInfo.setReturnUrl(((ApiAsyncRequest) request).getReturnUrl());
             }
             orderInfo.setPartnerId(request.getPartnerId());
+            orderInfo.setAccessKey(apiContext.getAccessKey());
             orderInfo.setService(request.getService());
             orderInfo.setVersion(request.getVersion());
             orderInfo.setSignType(apiContext.getSignType().name());
             orderInfo.setContext(request.getContext());
-            orderInfo.setAccessKey(apiContext.getAccessKey());
+            orderInfo.setProtocol(apiContext.getApiProtocol());
             orderInfoService.insert(orderInfo);
         } catch (Exception e) {
             logger.warn("订单写入失败，忽略错误，继续执行服务:" + e.getMessage());

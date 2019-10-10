@@ -70,6 +70,12 @@ public abstract class AbstractHttpFormJsonResponseMarshall<T, S extends ApiRespo
         return responseData;
     }
 
+    /**
+     * marshall
+     *
+     * @param responseData
+     * @return
+     */
     protected abstract T doMarshall(Map<String, Object> responseData);
 
     /**
@@ -157,7 +163,6 @@ public abstract class AbstractHttpFormJsonResponseMarshall<T, S extends ApiRespo
         String signType = context.getSignType().code();
         String partnerId = apiResponse.getPartnerId();
         String resultCode = apiResponse.getCode();
-        doBeforeMarshall(apiResponse, signData);
         if (Strings.isBlank(signType) || Strings.isBlank(partnerId)) {
             return;
         }
@@ -195,7 +200,11 @@ public abstract class AbstractHttpFormJsonResponseMarshall<T, S extends ApiRespo
             data.put(ApiConstants.RESULT_CODE, "EXECUTE_" + resultCode);
         }
         data.put(ApiConstants.RESULT_MESSAGE, data.remove(ApiConstants.MESSAGE));
-        data.put(ApiConstants.RESULT_DETAIL, data.remove(ApiConstants.DETAIL));
+        String removedDetail = (String) data.remove(ApiConstants.DETAIL);
+        if (Strings.isNoneBlank(removedDetail)) {
+            data.put(ApiConstants.RESULT_DETAIL, removedDetail);
+        }
+
     }
 
     protected ApiContext getApiContext() {

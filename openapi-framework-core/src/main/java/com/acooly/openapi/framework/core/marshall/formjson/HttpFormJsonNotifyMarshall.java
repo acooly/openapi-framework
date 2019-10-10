@@ -7,6 +7,7 @@
  */
 package com.acooly.openapi.framework.core.marshall.formjson;
 
+import com.acooly.core.utils.Encodes;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.core.marshall.ApiNotifyMarshall;
@@ -39,7 +40,7 @@ public class HttpFormJsonNotifyMarshall extends AbstractHttpFormJsonResponseMars
         }
         StringBuilder sb = new StringBuilder();
         map.forEach((k, v) -> {
-            sb.append(k).append("=").append(v).append("&");
+            sb.append(k).append("=").append(Encodes.urlEncode(v)).append("&");
         });
         return sb.substring(0, sb.length() - 1);
     }

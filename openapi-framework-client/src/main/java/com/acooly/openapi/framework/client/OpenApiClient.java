@@ -142,6 +142,11 @@ public class OpenApiClient {
             verfiyResult = Strings.equals(messageContext.getSign(), sign(messageContext.getBody()));
         } else {
             // 待补充兼容4.0及以下的FORM_JSON协议
+            Map<String, String> params = messageContext.getParameters();
+            String waitForSign = OpenApis.getWaitForSignString(params);
+            log.info("client waitFormSign: {}", waitForSign);
+            log.info("server sign: {}", messageContext.getSign());
+            verfiyResult = Strings.equals(messageContext.getSign(), sign(waitForSign));
         }
         if (!verfiyResult) {
             throw new ApiServiceException(ApiServiceResultCode.UNAUTHENTICATED_ERROR);
