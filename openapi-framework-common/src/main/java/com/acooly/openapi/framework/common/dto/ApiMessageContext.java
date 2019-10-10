@@ -45,6 +45,17 @@ public class ApiMessageContext extends InfoBase {
      */
     private String url;
 
+
+    public ApiMessageContext() {
+    }
+
+    public ApiMessageContext(ApiMessageContext context) {
+        this.headers = context.getHeaders();
+        this.parameters = context.getParameters();
+        this.body = context.getBody();
+        this.url = context.getUrl();
+    }
+
     public String getGid() {
         return getValue(ApiConstants.GID);
     }

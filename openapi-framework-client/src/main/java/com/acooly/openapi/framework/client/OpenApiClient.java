@@ -7,7 +7,6 @@ import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.security.Cryptos;
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.common.OpenApis;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
@@ -16,6 +15,7 @@ import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiMessage;
 import com.acooly.openapi.framework.common.message.ApiRequest;
+import com.acooly.openapi.framework.common.utils.ApiUtils;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
 import com.github.kevinsawicki.http.HttpRequest;
@@ -70,29 +70,31 @@ public class OpenApiClient {
      * @return 响应对象
      */
     public <T> T send(ApiRequest request, Class<T> clazz) {
-
         ApiMessageContext context = parseRequest(request);
         HttpRequest httpRequest = HttpRequest.post(gatewayUrl);
         if (request.getProtocol() == ApiProtocol.JSON) {
-            httpRequest.headers(context.getHeaders()).contentType("application/json").followRedirects(false).send(context.getBody());
+            httpRequest.headers(context.getHeaders()).contentType(HttpRequest.CONTENT_TYPE_JSON).followRedirects(false).send(context.getBody());
         } else {
             httpRequest.trustAllCerts().trustAllHosts().followRedirects(false).contentType(HttpRequest.CONTENT_TYPE_FORM)
                     .form(context.getParameters());
         }
-
         ApiMessageContext responseContext = parseResponse(httpRequest);
         if (request.getProtocol() == ApiProtocol.JSON) {
+            log.info("响应-> body:{}, header:{}", responseContext.getBody(), responseContext.getHeaders());
             if (!sign(responseContext.getBody()).equals(responseContext.getSign())) {
                 throw new RuntimeException("验证失败");
             }
-            log.info("响应-> body:{}, header:{}", responseContext.getBody(), responseContext.getHeaders());
         } else {
-            // fixme: wait sign
-//            Map<String, String> respData = JsonMarshallor.INSTANCE.parse(responseContext.getBody(), Map.class);
-//            if (!sign(OpenApis.getWaitForSignString(respData)).equals(responseContext.getSign())) {
-//                throw new RuntimeException("验证失败");
-//            }
             log.info("响应-> {}", responseContext.getBody());
+            // fixme
+            Map<String, Object> jsonObject = JsonMarshallor.INSTANCE.parse(responseContext.getBody(), Map.class);
+            Map<String, String> map = Maps.transformValues(jsonObject, v -> (v != null ? v.toString() : null));
+            String waitForSign = ApiUtils.getWaitForSignString(map);
+            log.info("响应[FORM_JSON] waitForSign: {}", waitForSign);
+            if (!sign(ApiUtils.getWaitForSignString(map)).equals(map.get(ApiConstants.SIGN))) {
+                throw new RuntimeException("验证失败");
+            }
+
         }
         ApiMessage response = JsonMarshallor.INSTANCE.parse(responseContext.getBody(), clazz);
         doSecurity(response, CryptoType.decrypt);
@@ -101,7 +103,7 @@ public class OpenApiClient {
 
 
     /**
-     * 解析报文
+     * 跳转请求解析报文
      * 专用于客户端跳转请求的报文解析，获取redirectUrl
      *
      * @param request
@@ -128,27 +130,26 @@ public class OpenApiClient {
 
 
     /**
-     * 验证签名
+     * 跳转接口跳回的验证签名
+     * gateway - redirect -> returnUrl
      *
      * @param request
      * @return
      */
     public ApiMessageContext verify(HttpServletRequest request) {
-        ApiMessageContext messageContext = OpenApis.getApiRequestContext(request);
+        ApiMessageContext messageContext = ApiUtils.getApiRequestContext(request);
         String protocol = messageContext.getProtocol();
-        boolean verfiyResult = true;
+        boolean verifyResult;
         if (Strings.equalsIgnoreCase(protocol, ApiProtocol.JSON.code())) {
             // JSON协议
-            verfiyResult = Strings.equals(messageContext.getSign(), sign(messageContext.getBody()));
+            verifyResult = Strings.equals(messageContext.getSign(), sign(messageContext.getBody()));
         } else {
             // 待补充兼容4.0及以下的FORM_JSON协议
             Map<String, String> params = messageContext.getParameters();
-            String waitForSign = OpenApis.getWaitForSignString(params);
-            log.info("client waitFormSign: {}", waitForSign);
-            log.info("server sign: {}", messageContext.getSign());
-            verfiyResult = Strings.equals(messageContext.getSign(), sign(waitForSign));
+            String waitForSign = ApiUtils.getWaitForSignString(params);
+            verifyResult = Strings.equals(messageContext.getSign(), sign(waitForSign));
         }
-        if (!verfiyResult) {
+        if (!verifyResult) {
             throw new ApiServiceException(ApiServiceResultCode.UNAUTHENTICATED_ERROR);
         }
         return messageContext;
@@ -156,7 +157,6 @@ public class OpenApiClient {
 
 
     public String sign(String body) {
-        System.out.println("body:" + body);
         return DigestUtils.md5Hex(body + secretKey);
     }
 
@@ -217,7 +217,7 @@ public class OpenApiClient {
             request.setProtocol(null);
             Map<String, String> data = ObjectAccessor.of(request).getAllDataExcludeTransient();
             data.put(ApiConstants.SIGN_TYPE, signType);
-            data.put("sign", sign(OpenApis.getWaitForSignString(data)));
+            data.put("sign", sign(ApiUtils.getWaitForSignString(data)));
             context.setParameters(data);
             if (showLog) {
                 log.info("请求-> {}", context.getParameters());

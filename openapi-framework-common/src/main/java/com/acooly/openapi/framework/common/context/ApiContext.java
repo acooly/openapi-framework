@@ -16,7 +16,6 @@ import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.system.IPUtil;
 import com.acooly.module.filterchain.Context;
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.common.OpenApis;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
@@ -171,7 +170,7 @@ public class ApiContext extends Context {
      */
     protected void doPrevHandleRequest() {
         // load和解析请求
-        this.apiRequestContext = OpenApis.getApiRequestContext(this.httpRequest);
+        this.apiRequestContext = ApiUtils.getApiRequestContext(this.httpRequest);
         this.putAll(apiRequestContext.headersToParameters());
         this.putAll(apiRequestContext.getParameters());
 
@@ -182,7 +181,7 @@ public class ApiContext extends Context {
             this.putAll(jsonObject);
         } else {
             // 老协议，则组装参数为requestBody，用于后续签名认证
-            this.requestBody = OpenApis.getWaitForSignString(apiRequestContext.getParameters());
+            this.requestBody = ApiUtils.getWaitForSignString(apiRequestContext.getParameters());
         }
 
         this.accessKey = getParameterNoBlank(ApiConstants.ACCESS_KEY, ApiConstants.PARTNER_ID);
@@ -209,7 +208,7 @@ public class ApiContext extends Context {
      */
     public void prevHandleResponse() {
         // 预处理响应
-        this.apiResponseContext = OpenApis.getApiResponseContext(this.apiRequestContext);
+        this.apiResponseContext = ApiUtils.getApiResponseContext(this.apiRequestContext);
         if (this.response == null) {
             this.response = new ApiResponse();
         }

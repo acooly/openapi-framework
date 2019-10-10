@@ -31,6 +31,7 @@ public abstract class AbstractApiServieTests {
     static {
         Profiles.setProfile(Profiles.Profile.sdev);
     }
+
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     protected String signType = SignTypeEnum.MD5.toString();
     protected String gatewayUrl = "http://127.0.0.1:8089/gateway.do";
@@ -63,7 +64,7 @@ public abstract class AbstractApiServieTests {
         }
         Assert.hasText(request.getService());
         if (Strings.isNullOrEmpty(request.getRequestNo())) {
-            request.setRequestNo(Ids.getDid());
+            request.setRequestNo(Ids.RandomNumberGenerator.getNewString(20));
         }
         OpenApiClient openApiClient = new OpenApiClient(gatewayUrl, accessKey, secretKey);
         return openApiClient.send(request, clazz);

@@ -1,11 +1,11 @@
 package com.acooly.openapi.framework.service.test.web;
 
 import com.acooly.core.common.web.AbstractStandardEntityController;
+import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Servlets;
 import com.acooly.openapi.framework.client.OpenApiClient;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
-import com.acooly.core.utils.Ids;
 import com.acooly.openapi.framework.service.test.request.OrderCashierPayApiRequest;
 import com.acooly.openapi.framework.service.test.request.OrderCreateApiRequest;
 import com.acooly.openapi.framework.service.test.response.OrderCreateApiResponse;
@@ -94,7 +94,7 @@ public class OrderCashierPayClientTestController extends AbstractStandardEntityC
         String merchOrderNo = orderCreateApiRequest.getMerchOrderNo();
         String amount = orderCreateApiRequest.getAmount().toString();
         OrderCashierPayApiRequest apiRequest = new OrderCashierPayApiRequest();
-        apiRequest.setRequestNo(Ids.getDid());
+        apiRequest.setRequestNo(Ids.gid());
         apiRequest.setService("orderCashierPay");
         apiRequest.setMerchOrderNo(merchOrderNo);
         apiRequest.setAmount(Money.amout(amount));

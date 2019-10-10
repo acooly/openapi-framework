@@ -5,13 +5,12 @@ import com.acooly.core.common.facade.ResultBase;
 import com.acooly.core.common.web.AbstractStandardEntityController;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
-import com.acooly.openapi.framework.common.OpenApis;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.message.ApiNotify;
+import com.acooly.openapi.framework.facade.OpenApis;
 import com.acooly.openapi.framework.facade.api.OpenApiRemoteService;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import com.acooly.openapi.framework.facade.order.ApiVerifyOrder;
-import com.acooly.openapi.framework.facade.result.ApiNotifyResult;
 import com.acooly.openapi.framework.service.test.enums.OrderPayStatus;
 import com.acooly.openapi.framework.service.test.response.OrderCashierPayApiRedirect;
 import com.acooly.openapi.framework.service.test.response.OrderCashierPayNotify;
@@ -44,6 +43,8 @@ public class OrderCashierPayServerTestController extends AbstractStandardEntityC
 
     /**
      * 接受跳转请求，验证参数，解析数据并显示收银台界面
+     * <p>
+     * 一步搞定：解析请求，验证请求和解析报文
      *
      * @param request
      * @param response
@@ -52,10 +53,34 @@ public class OrderCashierPayServerTestController extends AbstractStandardEntityC
      */
     @RequestMapping("cashier")
     public String mockCashier(HttpServletRequest request, HttpServletResponse response, Model model) {
+        OpenApis.ApiRedirectContext<OrderCashierPayApiRedirect> context = null;
+        try {
+            // 一步搞定：解析请求，验证请求和解析报文
+            context = OpenApis.redirectParse(request, OrderCashierPayApiRedirect.class, openApiRemoteService);
+            log.info("收银台 显示界面: {}", "/openapi/test/cashier/serverCashier");
+            // 传值到界面
+            model.addAttribute("entity", context.getApiRedirect());
+            model.addAttribute("gid", context.getGid());
+            model.addAttribute("partnerId", context.getPartnerId());
+        } catch (Exception e) {
+            // 如果验签失败（非法请求），则直接跳回或按需显示错误界面。
+            final OrderCashierPayNotify notify = new OrderCashierPayNotify();
+            handleException(response, e, context);
+            redirectBack(response, context, notify);
+        }
+        return "/openapi/test/cashier/serverCashier";
+    }
+
+    /**
+     * 逻辑处理同:cashier方法。
+     * 分三步搞定：解析请求，验证请求和解析报文
+     */
+    @RequestMapping("cashier1")
+    public String mockCashier1(HttpServletRequest request, HttpServletResponse response, Model model) {
         // 1、接收跳转来的请求参数,OpenApis工具类在acooly-openapi-common中
         // 注意：从OpenApi跳转到下层的请求，因为受Redirect协议的限制，没有body体和header头，全部通过QueryString传入值。
         // 下面的ApiMessageContext提供的所有获取关键值的方法都兼容头参数和体参数
-        ApiMessageContext messageContext = OpenApis.getApiRequestContext(request);
+        ApiMessageContext messageContext = OpenApis.redirectParseRequest(request);
         log.info("收银台 接收跳转参数：{}", messageContext.getParameters());
         try {
             // 2、调用OpenApi远程服务验证签名
@@ -69,7 +94,7 @@ public class OrderCashierPayServerTestController extends AbstractStandardEntityC
             // 3、do business，根据拿到的redirect报文进行业务操作
             // 这里需要对跳转过来的参数进行解析，可以选择JSON.parseRequest，这里简单使用OpenApi的工具处理
             // 请引用对应的openapi-message模块，已找到你需要的Redirect对象
-            OrderCashierPayApiRedirect redirect = OpenApis.parseMessage(messageContext.getBody(), OrderCashierPayApiRedirect.class);
+            OrderCashierPayApiRedirect redirect = OpenApis.redirectParseMessage(messageContext.getBody(), OrderCashierPayApiRedirect.class);
             log.info("收银台 解析参数: {}", redirect);
             log.info("收银台 显示界面: {}", "/openapi/test/cashier/serverCashier");
             // 传值到界面
@@ -79,11 +104,7 @@ public class OrderCashierPayServerTestController extends AbstractStandardEntityC
         } catch (Exception e) {
             // 如果验签失败（非法请求），则直接跳回。
             final OrderCashierPayNotify notify = new OrderCashierPayNotify();
-            if (e instanceof BusinessException) {
-                BusinessException be = (BusinessException) e;
-                notify.setCode(be.getCode());
-                notify.setMessage(be.getMessage());
-            }
+            handleException(response, e, messageContext);
             redirectBack(response, messageContext, notify);
         }
         return "/openapi/test/cashier/serverCashier";
@@ -101,7 +122,7 @@ public class OrderCashierPayServerTestController extends AbstractStandardEntityC
     @RequestMapping("cashierPay")
     public String mockCashierPay(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
 
-        ApiMessageContext messageContext = OpenApis.getApiRequestContext(request);
+        ApiMessageContext messageContext = OpenApis.redirectParseRequest(request);
         try {
             // 1、接收支付请求参数。这里直接使用redirect报文作为数据实体，你可以根据实际情况使用交易系统实际的数据实体。
             OrderCashierPayApiRedirect redirect = new OrderCashierPayApiRedirect();
@@ -169,12 +190,7 @@ public class OrderCashierPayServerTestController extends AbstractStandardEntityC
         order.setNotifyMessage(apiNotify);
         order.setGid(messageContext.getGid());
         order.setPartnerId(messageContext.getPartnerId());
-        // 调用OpenApi解析返回报文
-        ApiNotifyResult apiNotifyResult = openApiRemoteService.syncReturn(order);
-        // 4、直接跳转到客户端URL
-        String returnUrl = apiNotifyResult.getCompleteReturnUrl();
-        log.info("收银台 同步通知 returnUrl: {}", returnUrl);
-        Servlets.redirect(response, returnUrl);
+        OpenApis.redirectSendBack(response, order, openApiRemoteService);
         return order;
     }
 

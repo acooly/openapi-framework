@@ -7,12 +7,12 @@
  */
 package com.acooly.openapi.framework.core.marshall.formjson;
 
-import com.acooly.openapi.framework.common.OpenApis;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.message.ApiRequest;
-import com.acooly.openapi.framework.core.marshall.ApiRequestMarshall;
+import com.acooly.openapi.framework.common.utils.ApiUtils;
 import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
+import com.acooly.openapi.framework.core.marshall.ApiRequestMarshall;
 import com.acooly.openapi.framework.core.marshall.crypt.ApiMarshallCryptService;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class HttpFormJsonApiRequestMarshall implements ApiRequestMarshall<ApiReq
             setFieldValue(objectAccessor, partnerId, source, entry.getKey());
         }
         // 特别处理兼容orderNo的老API
-        apiRequest.setRequestNo(OpenApis.getRequestNo(source));
+        apiRequest.setRequestNo(ApiUtils.getRequestNo(source));
         return apiRequest;
     }
 

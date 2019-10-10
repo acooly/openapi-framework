@@ -2,10 +2,10 @@ package com.acooly.openapi.framework.core.auth.impl;
 
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.utils.enums.Messageable;
-import com.acooly.openapi.framework.common.OpenApis;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
+import com.acooly.openapi.framework.common.utils.ApiUtils;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.core.exception.impl.ApiServiceAuthenticationException;
@@ -69,7 +69,7 @@ public class SignatureApiAuthentication implements ApiAuthentication {
      */
     @Override
     public String signature(Map<String, String> response, String accessKey, String signType) {
-        return signature(OpenApis.getWaitForSignString(response), accessKey, signType);
+        return signature(ApiUtils.getWaitForSignString(response), accessKey, signType);
     }
 
     @Override

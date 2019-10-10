@@ -5,12 +5,12 @@ import com.acooly.core.utils.Profiles;
 import com.acooly.core.utils.net.HttpResult;
 import com.acooly.core.utils.security.Cryptos;
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.common.OpenApis;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.message.ApiAsyncRequest;
 import com.acooly.openapi.framework.common.message.ApiMessage;
 import com.acooly.openapi.framework.common.message.ApiRequest;
+import com.acooly.openapi.framework.common.utils.ApiUtils;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
 import com.acooly.openapi.framework.core.security.sign.Md5Signer;
@@ -141,7 +141,7 @@ public abstract class AbstractApiServieTests4 {
             requestData.put(ApiConstants.SIGN_TYPE, SignTypeEnum.MD5.code());
         }
         if (Strings.isNullOrEmpty(requestData.get(ApiConstants.SIGN))) {
-            requestData.put("sign", md5Signer.sign(OpenApis.getWaitForSignString(requestData), key));
+            requestData.put("sign", md5Signer.sign(ApiUtils.getWaitForSignString(requestData), key));
         }
 
         log.info("请求报文: {}", requestData);
