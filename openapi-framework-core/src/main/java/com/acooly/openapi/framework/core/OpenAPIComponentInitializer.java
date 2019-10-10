@@ -30,10 +30,11 @@ public class OpenAPIComponentInitializer implements ComponentInitializer {
         System.setProperty("acooly.mybatis.daoScanPackages.api", "com.acooly.openapi.framework.serviceimpl.manage");
 
         // 启动时新线程同步初始化获取机器码静态变量
-        new Thread(() -> {
-            log.info("ObjectId init start..");
-            ObjectId.get();
-            log.info("ObjectId init end");
-        }, "acooly-init").run();
+        Thread thread = new Thread(() -> {
+            log.info("ObjectId Initialized: " + ObjectId.get().toHexString());
+        });
+        thread.setName("ObjectId-init-thread");
+        thread.start();
+
     }
 }

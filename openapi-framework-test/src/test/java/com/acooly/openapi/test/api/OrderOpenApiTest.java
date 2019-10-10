@@ -52,8 +52,8 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
         OrderCreateApiRequest request = new OrderCreateApiRequest();
         // 可修改协议，目前支持：HTTP_FORM_JSON，JSON
         request.setProtocol(ApiProtocol.HTTP_FORM_JSON);
-        request.setRequestNo(Ids.getDid());
-        request.setMerchOrderNo(Ids.getDid());
+        request.setRequestNo(Ids.gid());
+        request.setMerchOrderNo(Ids.gid());
         request.setService("orderCreate");
         request.setTitle("同步请求创建订单\uD83D\uDC3E一休哥\uD83D\uDC3E ");
         request.setAmount(amount);

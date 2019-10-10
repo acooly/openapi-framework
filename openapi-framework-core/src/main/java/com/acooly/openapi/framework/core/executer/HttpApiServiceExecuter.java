@@ -38,7 +38,6 @@ public class HttpApiServiceExecuter
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        Map<String, String[]> requestParamsMap =  request.getParameterMap();
         ApiContext context = ApiContextHolder.getApiContext();
         context.setHttpRequest(request);
         context.setHttpResponse(response);
