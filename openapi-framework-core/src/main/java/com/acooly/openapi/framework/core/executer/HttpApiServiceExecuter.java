@@ -39,7 +39,6 @@ public class HttpApiServiceExecuter
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         Map<String, String[]> requestParamsMap =  request.getParameterMap();
-        log.info("原始请求报文：{}", JSON.toJSONString(requestParamsMap));
         ApiContext context = ApiContextHolder.getApiContext();
         context.setHttpRequest(request);
         context.setHttpResponse(response);
