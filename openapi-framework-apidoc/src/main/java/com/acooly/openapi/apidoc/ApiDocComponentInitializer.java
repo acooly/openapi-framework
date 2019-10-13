@@ -15,7 +15,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 /**
  * @author qiubo@yiji.com
  */
-// todo: 5.x新版本中，合并alert的数据表结构。
 public class ApiDocComponentInitializer implements ComponentInitializer {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
@@ -34,7 +33,5 @@ public class ApiDocComponentInitializer implements ComponentInitializer {
         setPropertyIfMissing("acooly.ds.dbPatchs.api_doc_item[0].patchSql", "ALTER TABLE `api_doc_item` CHANGE COLUMN `descn` `descn` VARCHAR(1024) NULL DEFAULT NULL COMMENT '字段描述';");
         setPropertyIfMissing("acooly.ds.dbPatchs.api_doc_item[1].columnName", "demo_for_modify");
         setPropertyIfMissing("acooly.ds.dbPatchs.api_doc_item[1].patchSql", "ALTER TABLE `api_doc_item` CHANGE COLUMN `demo` `demo` VARCHAR(1024) NULL DEFAULT NULL COMMENT '字段示例';");
-
-
     }
 }

@@ -1,5 +1,5 @@
 INSERT INTO `sys_resource` (`ID`, `PARENTID`, `NAME`, `TYPE`, `SHOW_STATE`, `ORDER_TIME`, `VALUE`, `SHOW_MODE`, `ICON`, `DESCN`)
-VALUES ('20151126', '2018082114', '开放平台', 'MENU', '0', '2016-11-21 16:27:31', '', '1', 'fa fa-home', NULL);
+VALUES ('20151126', NULL, '开放平台', 'MENU', '0', '2016-11-21 16:27:31', '', '1', 'fa fa-home', NULL);
 INSERT INTO `sys_resource` (`ID`, `PARENTID`, `NAME`, `TYPE`, `SHOW_STATE`, `ORDER_TIME`, `VALUE`, `SHOW_MODE`, `ICON`, `DESCN`) VALUES
 ('201511261', '20151126', '服务管理', 'URL', '0', '2016-09-28 09:42:22', '/manage/apidoc/apiDocService/index.html', '1', 'fa fa-link', NULL);
 INSERT INTO `sys_resource` (`ID`, `PARENTID`, `NAME`, `TYPE`, `SHOW_STATE`, `ORDER_TIME`, `VALUE`, `SHOW_MODE`, `ICON`, `DESCN`) VALUES
