@@ -5,7 +5,7 @@ import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -19,11 +19,11 @@ import java.util.Date;
 @Setter
 public class AuthRequest extends ApiRequest {
     public static final long EXPIRE = 20 * 60 * 1000;
-    @NotEmpty
+    @NotBlank
     @OpenApiField(desc = "访问key", constraint = "标准请求身份的访问码", demo = "ea416ed0759d46a8de58f63a59077499", ordinal = 1)
     private String accessKey;
 
-    @NotEmpty
+    @NotBlank
     @OpenApiField(desc = "对请求参数的签名", constraint = "对expiredBody的签名", demo = "a16ae3c399fbaa81b5d0b4d76ffe1fee", ordinal = 2)
     private String sign;
 
@@ -36,7 +36,7 @@ public class AuthRequest extends ApiRequest {
     @Setter
     public static class ExpiredBody {
 
-        @NotEmpty
+        @NotBlank
         @OpenApiField(desc = "请求参数", constraint = "明文报文", demo = "任意报文xxxxx数据", ordinal = 1)
         private String body;
 

@@ -18,7 +18,7 @@ import lombok.Setter;
 
 import javax.annotation.Signed;
 import javax.persistence.*;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -44,14 +44,14 @@ public class ApiDocService extends AbstractEntity {
      * 服务编号
      */
     @Signed
-    @NotEmpty
+    @NotBlank
     @Size(max = 255)
     private String serviceNo;
 
     /**
      * 服务名称
      */
-    @NotEmpty
+    @NotBlank
     @Size(max = 128)
     private String name;
 
@@ -65,7 +65,7 @@ public class ApiDocService extends AbstractEntity {
      * 服务标题
      */
     @Signed
-    @NotEmpty
+    @NotBlank
     @Size(max = 64)
     private String title;
 

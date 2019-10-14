@@ -6,16 +6,16 @@
     <parent>
         <groupId>com.acooly</groupId>
         <artifactId>acooly-app-parent</artifactId>
-        <version>4.2.0-SNAPSHOT</version>
+        <version>5.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>openapi-framework</artifactId>
-    <version>4.2.2-SNAPSHOT</version>
+    <version>5.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>openapi-framework</name>
     <properties>
         <caffeine.version>2.6.2</caffeine.version>
-        <acooly.version>4.2.0-SNAPSHOT</acooly.version>
+        <acooly.version>5.0.0-SNAPSHOT</acooly.version>
     </properties>
 
 

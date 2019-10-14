@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -41,7 +41,7 @@ public class ApiDocMessage extends AbstractEntity {
      * 消息编号
      * serviceNo+messageType
      */
-    @NotEmpty
+    @NotBlank
     @Size(max = 64)
     private String messageNo;
 

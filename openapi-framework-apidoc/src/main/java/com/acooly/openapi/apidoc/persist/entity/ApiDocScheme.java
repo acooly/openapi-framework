@@ -13,7 +13,7 @@ import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -39,14 +39,14 @@ public class ApiDocScheme extends AbstractEntity {
     /**
      * 方案编码
      */
-    @NotEmpty
+    @NotBlank
     @Size(max = 64)
     private String schemeNo;
 
     /**
      * 标题
      */
-    @NotEmpty
+    @NotBlank
     @Size(max = 64)
     private String title;
 

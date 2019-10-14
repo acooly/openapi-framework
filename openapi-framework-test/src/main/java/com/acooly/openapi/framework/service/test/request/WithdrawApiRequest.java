@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -24,12 +24,12 @@ import javax.validation.constraints.Size;
 @Setter
 public class WithdrawApiRequest extends ApiAsyncRequest {
 
-    @NotEmpty
+    @NotBlank
     @Size(max = 64)
     @OpenApiField(desc = "订单号", constraint = "商户订单号，交易唯一标志", demo = "20912213123sdf", ordinal = 1)
     private String merchOrderNo;
 
-    @NotEmpty
+    @NotBlank
     @Length(max = 20, min = 20, message = "会员编码，固定长度为20字节")
     @OpenApiField(desc = "会员编码", constraint = "提现用户ID", demo = "20198982938272827232", ordinal = 2)
     private String userId;

@@ -12,7 +12,7 @@ package com.acooly.openapi.framework.facade.dto;
 import com.acooly.core.utils.validate.jsr303.HttpUrl;
 import com.acooly.openapi.framework.common.enums.TaskExecuteStatus;
 import com.acooly.openapi.framework.common.enums.TaskStatus;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;

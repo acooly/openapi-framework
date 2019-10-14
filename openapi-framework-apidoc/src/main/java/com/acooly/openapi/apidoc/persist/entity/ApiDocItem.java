@@ -18,7 +18,7 @@ import lombok.Setter;
 
 import javax.annotation.Signed;
 import javax.persistence.*;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Comparator;
@@ -51,7 +51,7 @@ public class ApiDocItem extends AbstractEntity {
      * 报文编码
      */
     @Signed
-    @NotEmpty
+    @NotBlank
     private String messageNo;
 
     /**
@@ -73,7 +73,7 @@ public class ApiDocItem extends AbstractEntity {
      * 字段名称
      */
     @Signed
-    @NotEmpty
+    @NotBlank
     @Size(max = 128)
     private String name;
 
@@ -81,7 +81,7 @@ public class ApiDocItem extends AbstractEntity {
      * 字段标题
      */
     @Signed
-    @NotEmpty
+    @NotBlank
     @Size(max = 128)
     private String title;
 

@@ -10,7 +10,7 @@ package com.acooly.openapi.apidoc.persist.entity;
 import com.acooly.core.common.domain.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -35,7 +35,7 @@ public class ApiQaQuestion extends AbstractEntity {
     private String problem;
 
 	/** 解决方案 */
-	@NotEmpty
+	@NotBlank
     private String solution;
 
 	/** 权重 */

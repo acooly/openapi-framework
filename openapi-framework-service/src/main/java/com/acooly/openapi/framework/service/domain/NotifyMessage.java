@@ -16,7 +16,7 @@ import com.acooly.openapi.framework.common.enums.TaskExecuteStatus;
 import com.acooly.openapi.framework.common.enums.TaskStatus;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;

@@ -11,7 +11,7 @@ import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.utils.Strings;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -37,14 +37,14 @@ public class ApiDocSchemeService extends AbstractEntity {
     /**
      * 方案编码
      */
-    @NotEmpty
+    @NotBlank
     @Size(max = 64)
     private String schemeNo;
 
     /**
      * 服务编码
      */
-    @NotEmpty
+    @NotBlank
     @Size(max = 64)
     private String serviceNo;
 

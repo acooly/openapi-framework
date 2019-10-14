@@ -13,7 +13,7 @@ import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.google.common.base.MoreObjects;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -35,7 +35,7 @@ public class ApiMetaService extends AbstractEntity {
     /**
      * 服务名称
      */
-    @NotEmpty
+    @NotBlank
     @Size(max = 64)
     private String serviceName;
 

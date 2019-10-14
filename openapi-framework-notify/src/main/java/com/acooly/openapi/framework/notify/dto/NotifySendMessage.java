@@ -11,12 +11,11 @@ import com.acooly.core.common.facade.LinkedHashMapParameterize;
 import com.acooly.core.utils.validate.jsr303.HttpUrl;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
-import com.acooly.openapi.framework.common.message.ApiNotify;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Id;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**

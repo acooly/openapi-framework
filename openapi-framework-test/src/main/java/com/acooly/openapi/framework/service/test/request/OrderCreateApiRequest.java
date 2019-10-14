@@ -11,7 +11,7 @@ import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -25,12 +25,12 @@ import java.util.List;
 @Setter
 public class OrderCreateApiRequest extends ApiRequest {
 
-    @NotEmpty
+    @NotBlank
     @Size(max = 64)
     @OpenApiField(desc = "订单号", constraint = "商户订单号，唯一标志一笔交易", demo = "20912213123sdf", ordinal = 1)
     private String merchOrderNo;
 
-    @NotEmpty
+    @NotBlank
     @Size(max = 64)
     @OpenApiField(desc = "标题", constraint = "标题", demo = "特色牛肉干", ordinal = 2)
     @ToString.Maskable
@@ -59,13 +59,13 @@ public class OrderCreateApiRequest extends ApiRequest {
     @OpenApiField(desc = "买家身份证号码", demo = "510232987409587463", ordinal = 8)
     private String buyerCertNo;
 
-    @NotEmpty
+    @NotBlank
     @ToString.Invisible
     @Size(min = 20, max = 20)
     @OpenApiField(desc = "卖家用户ID", demo = "201603080912340002", ordinal = 9)
     private String payeeUserId;
 
-    @NotEmpty
+    @NotBlank
     @Length(min = 6)
     @OpenApiField(desc = "交易密码", demo = "!QAZ@WSX", security = true, ordinal = 10)
     private String password;

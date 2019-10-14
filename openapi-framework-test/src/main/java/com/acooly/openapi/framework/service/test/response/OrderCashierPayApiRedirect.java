@@ -5,7 +5,7 @@ import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -20,7 +20,7 @@ import javax.validation.constraints.Size;
 @Setter
 public class OrderCashierPayApiRedirect extends ApiResponse {
 
-    @NotEmpty
+    @NotBlank
     @Size(max = 64)
     @OpenApiField(desc = "订单号", constraint = "商户订单号，唯一标志一笔交易", demo = "20912213123sdf", ordinal = 1)
     private String merchOrderNo;
@@ -29,7 +29,7 @@ public class OrderCashierPayApiRedirect extends ApiResponse {
     @OpenApiField(desc = "支付金额", ordinal = 2)
     private Money amount;
 
-    @NotEmpty
+    @NotBlank
     @OpenApiField(desc = "买家用户ID", demo = "12312312312", ordinal = 3)
     private String payerUserId;
 
