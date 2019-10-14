@@ -291,7 +291,7 @@ public class OpenApiClient {
      * @param request
      */
     protected void guessServiceName(ApiRequest request) {
-        if (!Strings.isNoneBlank(request.getService())) {
+        if (Strings.isNoneBlank(request.getService())) {
             return;
         }
 
