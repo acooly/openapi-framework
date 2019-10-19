@@ -27,6 +27,13 @@ public interface ApiNotifyHandler {
     void asyncNotify(ApiNotifyOrder apiNotifyOrder);
 
     /**
+     * 异步发送处置
+     *
+     * @param apiNotifyOrder
+     */
+    void sendNotify(ApiNotifyOrder apiNotifyOrder);
+
+    /**
      * 同步通知处理
      *
      * @param apiNotifyOrder

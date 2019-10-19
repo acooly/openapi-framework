@@ -9,7 +9,7 @@ package com.acooly.openapi.framework.facade.order;
 
 import com.acooly.core.common.facade.OrderBase;
 import com.acooly.core.common.facade.Parameterize;
-import com.acooly.openapi.framework.common.message.ApiMessage;
+import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.google.common.collect.Maps;
 
 import java.util.Collection;
@@ -25,10 +25,21 @@ public class ApiNotifyOrder extends OrderBase implements Parameterize<String, St
      * serialVersionUID
      */
     private static final long serialVersionUID = 7850941772007013885L;
+    /**
+     * 通知报文
+     */
+    private ApiNotify notifyMessage;
 
+    /**
+     * 覆盖原始请求订单的notifyUrl
+     */
+    private String url;
+
+
+    /**
+     * 扩展参数（无订单通知时无效：GID）
+     */
     private Map<String, String> parameters = Maps.newLinkedHashMap();
-
-    private ApiMessage notifyMessage;
 
 
     @Override
@@ -71,11 +82,19 @@ public class ApiNotifyOrder extends OrderBase implements Parameterize<String, St
         this.parameters.clear();
     }
 
-    public ApiMessage getNotifyMessage() {
+    public ApiNotify getNotifyMessage() {
         return notifyMessage;
     }
 
-    public void setNotifyMessage(ApiMessage notifyMessage) {
+    public void setNotifyMessage(ApiNotify notifyMessage) {
         this.notifyMessage = notifyMessage;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -55,7 +55,6 @@
             <artifactId>openapi-framework-client</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-common</artifactId>
@@ -73,6 +72,21 @@
             <artifactId>acooly-component-test</artifactId>
             <version>${acooly.version}</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-configuration-processor</artifactId>
+            <version>${acooly.version}</version>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
 
         <dependency>
             <groupId>org.assertj</groupId>

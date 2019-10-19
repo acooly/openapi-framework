@@ -188,6 +188,9 @@ public class OpenApiClient {
         ApiMessageContext context = new ApiMessageContext();
         if (httpRequest.code() == 302) {
             String location = httpRequest.header("Location");
+            if (showLog) {
+                log.info("跳转-> Location: {}", location);
+            }
             context.setUrl(location);
             Map<String, String> queryStringMap = Splitter.on("&").withKeyValueSeparator("=").split(Strings.substringAfter(location, "?"));
             context.setParameters(queryStringMap);

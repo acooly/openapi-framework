@@ -9,16 +9,16 @@ package com.acooly.openapi.framework.notify.facade;
 
 import com.acooly.core.common.facade.ResultBase;
 import com.acooly.core.utils.enums.ResultStatus;
+import com.acooly.module.appservice.AppService;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
-import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
 import com.acooly.openapi.framework.facade.api.OpenApiRemoteService;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
+import com.acooly.openapi.framework.facade.order.ApiSignOrder;
 import com.acooly.openapi.framework.facade.order.ApiVerifyOrder;
 import com.acooly.openapi.framework.facade.result.ApiNotifyResult;
+import com.acooly.openapi.framework.facade.result.ApiSignResult;
 import com.acooly.openapi.framework.notify.service.ApiNotifyHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,7 +31,6 @@ import javax.annotation.Resource;
 @Service("openApiRemoteService")
 public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
 
-    private static Logger logger = LoggerFactory.getLogger(OpenApiRemoteServiceImpl.class);
 
     @Resource
     private ApiNotifyHandler apiNotifyHandler;
@@ -42,62 +41,49 @@ public class OpenApiRemoteServiceImpl implements OpenApiRemoteService {
      * 异步通知处理
      */
     @Override
+    @AppService
     public ResultBase asyncNotify(ApiNotifyOrder apiNotifyOrder) {
-        ResultBase result = new ResultBase();
-        try {
-            apiNotifyOrder.check();
-            apiNotifyHandler.asyncNotify(apiNotifyOrder);
-        } catch (ApiServiceException e) {
-            result.setStatus(ResultStatus.failure);
-            result.setDetail(e.getDetail());
-        } catch (Exception e) {
-            result.setStatus(ResultStatus.failure);
-            result.setDetail(e.getMessage());
-        }
-        return result;
+        apiNotifyHandler.asyncNotify(apiNotifyOrder);
+        return new ResultBase();
     }
 
     @Override
+    @AppService
+    public ResultBase sendNotify(ApiNotifyOrder apiNotifyOrder) {
+        apiNotifyHandler.sendNotify(apiNotifyOrder);
+        return new ResultBase();
+    }
+
+    @Override
+    @AppService
     public ApiNotifyResult syncReturn(ApiNotifyOrder apiNotifyOrder) {
-        logger.info("服务跳回 入参:{}", apiNotifyOrder);
+        ApiMessageContext context = apiNotifyHandler.syncNotify(apiNotifyOrder);
         ApiNotifyResult result = new ApiNotifyResult();
-        try {
-            apiNotifyOrder.check();
-            ApiMessageContext context = apiNotifyHandler.syncNotify(apiNotifyOrder);
-            result.setProtocol(context.getProtocol());
-            result.setSign(context.getSign());
-            result.setSignType(context.getSignType());
-            result.setAccessKey(context.getAccessKey());
-            result.setBody(context.getBody());
-            result.setReturnUrl(context.getUrl());
-            result.setStatus(ResultStatus.success);
-        } catch (ApiServiceException e) {
-            result.setStatus(ResultStatus.failure);
-            result.setDetail(e.getDetail());
-        } catch (Exception e) {
-            result.setStatus(ResultStatus.failure);
-            result.setDetail(e.getMessage());
-        }
-        logger.info("服务跳回 出参:{}", result);
+        result.setProtocol(context.getProtocol());
+        result.setSign(context.getSign());
+        result.setSignType(context.getSignType());
+        result.setAccessKey(context.getAccessKey());
+        result.setBody(context.getBody());
+        result.setReturnUrl(context.getUrl());
+        result.setStatus(ResultStatus.success);
         return result;
     }
 
 
     @Override
+    @AppService
     public ResultBase verify(ApiVerifyOrder apiVerifyOrder) {
-        ResultBase result = new ResultBase();
-        try {
-            apiVerifyOrder.check();
-            apiAuthentication.verify(apiVerifyOrder.getBody(), apiVerifyOrder.getAccessKey(), apiVerifyOrder.getSignType(), apiVerifyOrder.getSign());
-        } catch (ApiServiceException e) {
-            result.setStatus(e);
-            result.setDetail(e.getDetail());
-        } catch (Exception e) {
-            result.setStatus(ResultStatus.failure);
-            result.setDetail(e.getMessage());
-        }
-        return result;
+        apiAuthentication.verify(apiVerifyOrder.getBody(), apiVerifyOrder.getAccessKey(),
+                apiVerifyOrder.getSignType(), apiVerifyOrder.getSign());
+        return new ResultBase();
     }
 
-
+    @Override
+    @AppService
+    public ApiSignResult sign(ApiSignOrder apiSignOrder) {
+        String sign = apiAuthentication.signature(apiSignOrder.getBody(), apiSignOrder.getAccessKey(), apiSignOrder.getSignType().code());
+        ApiSignResult result = new ApiSignResult();
+        result.setSign(sign);
+        return result;
+    }
 }

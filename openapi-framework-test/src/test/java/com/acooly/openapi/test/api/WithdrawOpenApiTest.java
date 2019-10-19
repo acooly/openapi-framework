@@ -5,7 +5,6 @@ import com.acooly.core.utils.Money;
 import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
-import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.service.test.request.WithdrawApiRequest;
 import com.acooly.openapi.framework.service.test.response.WithdrawApiResponse;
@@ -15,8 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * 以提现为案例，测试异步接口服务
@@ -32,7 +29,9 @@ public class WithdrawOpenApiTest extends AbstractApiServieTests {
     /**
      * 下层业务系统发起通知的MOCK实现CONTROLLER
      */
-    String TEST_NOTIFY_CALL = "http://127.0.0.1:8089/openapi/test/withdraw/server/notifyCall.html";
+    String CALL_ASYNC_NOTIFY_URL = "http://127.0.0.1:8089/openapi/test/withdraw/server/notifyCall.html";
+
+    String CALL_SEND_NOTIFY_URL = "http://127.0.0.1:8089/openapi/test/withdraw/server/sendNotify.html";
 
     /**
      * 客户端通知地址
@@ -70,9 +69,18 @@ public class WithdrawOpenApiTest extends AbstractApiServieTests {
      * @throws Exception
      */
     @Test
-    public void testNotify() throws Exception {
+    public void testAsyncNotify() throws Exception {
+        doCallNotify(CALL_ASYNC_NOTIFY_URL);
+    }
+
+    @Test
+    public void testSendNotify() throws Exception {
+        doCallNotify(CALL_SEND_NOTIFY_URL);
+    }
+
+    protected void doCallNotify(String callUrl) {
         // 你需要在testWithdraw()后，在日志中获取gid
-        String gid = "g5d9ed02544a7d0a3a3c1b48a";
+        String gid = "12123123123123123";
         Map<String, String> parameters = Maps.newHashMap();
         parameters.put(ApiConstants.GID, gid);
         parameters.put(ApiConstants.PARTNER_ID, partnerId);
@@ -81,13 +89,12 @@ public class WithdrawOpenApiTest extends AbstractApiServieTests {
         parameters.put("fee", "0.40");
         parameters.put("delay", "T1");
         parameters.put("status", ResultStatus.success.code());
-        HttpRequest httpRequest = HttpRequest.post(TEST_NOTIFY_CALL)
+        HttpRequest httpRequest = HttpRequest.post(callUrl)
                 .contentType(HttpRequest.CONTENT_TYPE_FORM)
                 .form(parameters);
         int status = httpRequest.code();
         String body = httpRequest.body();
         log.info("通知调用结果：{}", body);
     }
-
 
 }

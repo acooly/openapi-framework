@@ -9,8 +9,10 @@ package com.acooly.openapi.framework.facade.api;
 
 import com.acooly.core.common.facade.ResultBase;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
+import com.acooly.openapi.framework.facade.order.ApiSignOrder;
 import com.acooly.openapi.framework.facade.order.ApiVerifyOrder;
 import com.acooly.openapi.framework.facade.result.ApiNotifyResult;
+import com.acooly.openapi.framework.facade.result.ApiSignResult;
 
 /**
  * OpenApi 远程服务接口
@@ -28,6 +30,17 @@ public interface OpenApiRemoteService {
      * @return ResultBase 中的status为sucess表示通知已投递
      */
     ResultBase asyncNotify(ApiNotifyOrder apiNotifyOrder);
+
+    /**
+     * 异步发送
+     * 不根据OpenApi的请求订单发送（GID），
+     * 注意：无订单通知的ApiNotifyOrder中parameters参数无效，必须采用ApiNotify对象报文方式组装通知报文数据，
+     * 也就是说必须由OpenApi层先定义通知报文对象，保障OpenApi层对通知可识别，可文档化
+     *
+     * @param apiNotifyOrder
+     * @return
+     */
+    ResultBase sendNotify(ApiNotifyOrder apiNotifyOrder);
 
     /**
      * 同步通知
@@ -50,4 +63,12 @@ public interface OpenApiRemoteService {
      */
     ResultBase verify(ApiVerifyOrder apiVerifyOrder);
 
+    /**
+     * 签名报文
+     * 用于：下层服务根据需要对直接出口报文签名
+     *
+     * @param apiSignOrder
+     * @return
+     */
+    ApiSignResult sign(ApiSignOrder apiSignOrder);
 }
