@@ -68,6 +68,10 @@ public class ApiMessageContext extends InfoBase {
         return getValue(ApiConstants.ACCESS_KEY);
     }
 
+    public String getRequestIp() {
+        return getValue(ApiConstants.REQUEST_IP);
+    }
+
     public String getSign() {
         return getValue(ApiConstants.SIGN);
     }

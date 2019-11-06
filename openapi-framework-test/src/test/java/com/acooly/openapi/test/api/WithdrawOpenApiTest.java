@@ -49,7 +49,7 @@ public class WithdrawOpenApiTest extends AbstractApiServieTests {
     @Test
     public void testWithdraw() throws Exception {
         WithdrawApiRequest request = new WithdrawApiRequest();
-        request.setProtocol(ApiProtocol.HTTP_FORM_JSON);
+//        request.setProtocol(ApiProtocol.HTTP_FORM_JSON);
         request.setRequestNo(Ids.RandomNumberGenerator.getNewString(20));
         request.setMerchOrderNo(Ids.RandomNumberGenerator.getNewString(20));
         request.setService("withdraw");

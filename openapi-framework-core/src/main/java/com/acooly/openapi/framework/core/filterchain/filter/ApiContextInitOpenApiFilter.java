@@ -10,6 +10,7 @@ package com.acooly.openapi.framework.core.filterchain.filter;
 
 import com.acooly.core.utils.Strings;
 import com.acooly.module.filterchain.FilterChain;
+import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.common.message.ApiRequest;
@@ -37,7 +38,9 @@ public class ApiContextInitOpenApiFilter extends AbstractOpenApiFilter {
     public void doInternalFilter(ApiContext context, FilterChain<ApiContext> filterChain) {
         try {
             context.init();
+            context.doPrevHandleRequest();
             doInitApiService(context);
+            context.doRrevHandleResponse();
         } finally {
             logRequestData(context);
         }
@@ -50,13 +53,15 @@ public class ApiContextInitOpenApiFilter extends AbstractOpenApiFilter {
         ApiResponse apiResponse = apiService.getResponseBean();
         context.setRequest(apiRequest);
         context.setResponse(apiResponse);
-        context.prevHandleResponse();
     }
 
     private void logRequestData(ApiContext apiContext) {
         String serviceName = apiContext.getServiceName();
         String labelPostfix = (Strings.isNotBlank(serviceName) ? "[" + serviceName + "]:" : ":");
-        openApiLoggerHandler.log("服务请求" + labelPostfix, apiContext.getRequest(), apiContext.getRequestBody());
+        openApiLoggerHandler.log("服务请求" + labelPostfix, apiContext.getRequest(),
+                apiContext.getRequestBody(),
+                apiContext.getApiRequestContext().getHeaders(),
+                ApiConstants.REQUEST_IP + ": " + apiContext.getApiRequestContext().getRequestIp());
     }
 
 

@@ -44,6 +44,9 @@ public enum ApiServiceResultCode implements Messageable {
     REDIRECT_URL_NOT_EXIST("REDIRECT_URL_NOT_EXIST", "跳转服务需设置redirectUrl"),
     UNSUPPORTED_PROTOCOL("UNSUPPORTED_PROTOCOL", "不支持的报文协议类型"),
     OBJECT_NOT_EXIST("OBJECT_NOT_EXIST", "对象不存在"),
+
+    JSON_BODY_PARSING_FAILED("JSON_BODY_PARSING_FAILED", "JSON报文体解析失败"),
+
     /**
      * 合作伙伴id没有在openapi中注册
      */

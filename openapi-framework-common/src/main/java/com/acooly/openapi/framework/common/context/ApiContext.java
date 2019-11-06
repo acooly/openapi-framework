@@ -13,7 +13,6 @@ package com.acooly.openapi.framework.common.context;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.system.IPUtil;
 import com.acooly.module.filterchain.Context;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
@@ -27,8 +26,6 @@ import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.common.utils.ApiUtils;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
@@ -159,26 +156,21 @@ public class ApiContext extends Context {
         this.gid = Ids.gid();
         MDC.put(ApiConstants.GID, gid);
         // 预解析报文
-        doPrevHandleRequest();
-        // 设置LOG的MDC
-        MDC.put(ApiConstants.REQUEST_NO, this.requestNo);
-        this.stopWatch = new Slf4JStopWatch(serviceName, perlogger);
+        this.apiRequestContext = ApiUtils.getApiRequestContext(this.httpRequest);
     }
 
     /**
      * 预解析报文
      */
-    protected void doPrevHandleRequest() {
-        // load和解析请求
-        this.apiRequestContext = ApiUtils.getApiRequestContext(this.httpRequest);
+    public void doPrevHandleRequest() {
         this.putAll(apiRequestContext.headersToParameters());
         this.putAll(apiRequestContext.getParameters());
 
         this.apiProtocol = ApiProtocol.find(apiRequestContext.getProtocol());
-        if (Strings.isNoneBlank(apiRequestContext.getBody()) && ApiUtils.isJson(apiRequestContext.getBody())) {
+        // && ApiUtils.isJson(apiRequestContext.getBody())
+        if (Strings.isNoneBlank(apiRequestContext.getBody())) {
             this.requestBody = apiRequestContext.getBody();
-            JSONObject jsonObject = (JSONObject) JSON.parse(requestBody);
-            this.putAll(jsonObject);
+            this.putAll(ApiUtils.parseJsonBody(this.requestBody));
         } else {
             // 老协议，则组装参数为requestBody，用于后续签名认证
             this.requestBody = ApiUtils.getWaitForSignString(apiRequestContext.getParameters());
@@ -199,14 +191,17 @@ public class ApiContext extends Context {
         this.context = getParameter(ApiConstants.CONTEXT);
         // 扩展
         this.userAgent = getParameter(HttpHeaders.USER_AGENT);
-        this.requestIp = IPUtil.getIpAddr(this.httpRequest);
+        this.requestIp = getParameter(ApiConstants.REQUEST_IP);
+        MDC.put(ApiConstants.REQUEST_NO, this.requestNo);
+        this.stopWatch = new Slf4JStopWatch(serviceName, perlogger);
+        stopWatch.start();
     }
 
 
     /**
      * 初始化响应信息
      */
-    public void prevHandleResponse() {
+    public void doRrevHandleResponse() {
         // 预处理响应
         this.apiResponseContext = ApiUtils.getApiResponseContext(this.apiRequestContext);
         if (this.response == null) {

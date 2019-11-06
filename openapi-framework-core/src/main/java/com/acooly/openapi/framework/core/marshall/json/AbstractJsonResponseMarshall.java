@@ -97,7 +97,8 @@ public abstract class AbstractJsonResponseMarshall<T, S extends ApiResponse> imp
         } else if (result.getClass().isAssignableFrom(Map.class)) {
             openApiLoggerHandler.log(getLogLabel(apiResponse), (Map) result);
         } else if (result.getClass().isAssignableFrom(ApiMessageContext.class)) {
-            openApiLoggerHandler.log(getLogLabel(apiResponse), ((ApiMessageContext) result).getBody());
+            ApiMessageContext amc = (ApiMessageContext) result;
+            openApiLoggerHandler.log(getLogLabel(apiResponse), apiResponse, amc.getBody(), amc.getHeaders(), null);
         } else {
             openApiLoggerHandler.log(getLogLabel(apiResponse), result.toString());
         }

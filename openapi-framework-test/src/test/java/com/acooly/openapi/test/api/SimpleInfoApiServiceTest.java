@@ -8,6 +8,7 @@
  */
 package com.acooly.openapi.test.api;
 
+import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
@@ -28,6 +29,7 @@ public class SimpleInfoApiServiceTest extends AbstractApiServieTests {
     @Test
     public void testSpecialStr() {
         ApiRequest request = new ApiRequest();
+        request.setProtocol(ApiProtocol.HTTP_FORM_JSON);
         request.setService("simpleInfo");
         request.setContext(specialStr);
         request(request, ApiResponse.class);

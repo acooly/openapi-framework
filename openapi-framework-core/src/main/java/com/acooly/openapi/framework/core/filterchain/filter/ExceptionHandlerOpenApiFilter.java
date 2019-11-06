@@ -36,7 +36,7 @@ public class ExceptionHandlerOpenApiFilter extends AbstractOpenApiFilter {
             return;
         }
         if (context.getResponse() == null) {
-            context.prevHandleResponse();
+            context.doRrevHandleResponse();
         }
 
         apiServiceExceptionHander.handleApiServiceException(context.getRequest(),

@@ -67,9 +67,8 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
         log(label, null, msg);
     }
 
-
     @Override
-    public void log(String label, ApiMessage apiMessage, String msg) {
+    public void log(String label, ApiMessage apiMessage, String msg, Map<String, String> headers, String ext) {
         long start = System.currentTimeMillis();
         if (openAPIProperties.getLogSafety()) {
             if (ApiUtils.isJson(msg)) {
@@ -83,11 +82,15 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
         }
 
         if (isSep()) {
-            apiQuerylogger.info(StringUtils.trimToEmpty(label) + msg);
+            apiQuerylogger.info("{} {}, headers: {}, {}", StringUtils.trimToEmpty(label), msg, headers, StringUtils.trimToEmpty(ext));
         } else {
-            logger.info(StringUtils.trimToEmpty(label) + msg);
+            logger.info("{} {}, headers: {}, {}", StringUtils.trimToEmpty(label), msg, headers, StringUtils.trimToEmpty(ext));
         }
+    }
 
+    @Override
+    public void log(String label, ApiMessage apiMessage, String msg) {
+        log(label, apiMessage, msg, null, null);
     }
 
 

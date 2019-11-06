@@ -9,13 +9,17 @@
  */
 package com.acooly.openapi.framework.common.utils;
 
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.system.IPUtil;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.http.HttpHeaders;
 
@@ -30,6 +34,7 @@ import static com.acooly.openapi.framework.common.ApiConstants.BODY;
  *
  * @author acooly
  */
+@Slf4j
 public final class ApiUtils {
 
     private static UrlValidator httpUrlValidator = null;
@@ -40,6 +45,14 @@ public final class ApiUtils {
     }
 
     private ApiUtils() {
+    }
+
+    public static Map parseJsonBody(String jsonBody) {
+        try {
+            return (JSONObject) JSON.parse(jsonBody);
+        } catch (Exception e) {
+            throw new ApiServiceException(ApiServiceResultCode.JSON_BODY_PARSING_FAILED);
+        }
     }
 
     /**
@@ -107,8 +120,14 @@ public final class ApiUtils {
         context.header(ApiConstants.X_API_SIGN_TYPE, request.getHeader(ApiConstants.X_API_SIGN_TYPE));
         context.header(ApiConstants.X_API_SIGN, request.getHeader(ApiConstants.X_API_SIGN));
         context.header(HttpHeaders.USER_AGENT, request.getHeader(HttpHeaders.USER_AGENT));
+        context.header(ApiConstants.REQUEST_IP, IPUtil.getIpAddr(request));
         context.setParameters(Servlets.getParameters(request));
-        String body = Servlets.getBody(request);
+        String body = null;
+        try {
+            body = Servlets.getBody(request);
+        } catch (Exception e) {
+            log.error("读取请求报文体失败: {}", e.getMessage());
+        }
         if (Strings.isBlank(body)) {
             body = context.getValue(BODY);
         }
@@ -118,7 +137,6 @@ public final class ApiUtils {
 
 
     public static boolean isHttpUrl(String str) {
-
         return httpUrlValidator.isValid(str);
     }
 
@@ -154,4 +172,8 @@ public final class ApiUtils {
     }
 
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

@@ -90,7 +90,7 @@ public class OpenApiClient {
             Map<String, Object> jsonObject = JsonMarshallor.INSTANCE.parse(responseContext.getBody(), Map.class);
             Map<String, String> map = Maps.transformValues(jsonObject, v -> (v != null ? v.toString() : null));
             String waitForSign = ApiUtils.getWaitForSignString(map);
-            log.info("响应[FORM_JSON] waitForSign: {}", waitForSign);
+            log.debug("响应[FORM_JSON] waitForSign: {}", waitForSign);
             if (!sign(ApiUtils.getWaitForSignString(map)).equals(map.get(ApiConstants.SIGN))) {
                 throw new RuntimeException("验证失败");
             }
