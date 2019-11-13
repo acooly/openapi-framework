@@ -52,7 +52,7 @@ public class ServiceExecuteOpenApiFilter extends AbstractOpenApiFilter {
             publishBeforeServiceExecuteEvent(context);
             apiService.service(context);
             // 如果是跳转接口，必须设置redirect的检查
-            if (context.isRedirect() && Strings.isNullOrEmpty(apiService.getRedirectUrl())) {
+            if (context.isRedirect() && Strings.isNullOrEmpty(context.getRedirectUrl())) {
                 throw new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, "跳转接口必须设置下层RedirectUrl");
             }
         } catch (Throwable ex) {

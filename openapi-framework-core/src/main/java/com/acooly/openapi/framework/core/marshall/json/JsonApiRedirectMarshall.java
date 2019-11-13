@@ -7,6 +7,7 @@
  */
 package com.acooly.openapi.framework.core.marshall.json;
 
+import com.acooly.core.utils.Asserts;
 import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;

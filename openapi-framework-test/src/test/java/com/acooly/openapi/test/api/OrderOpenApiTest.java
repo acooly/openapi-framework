@@ -51,7 +51,6 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
     public void testOrderCreateSync() throws Exception {
         OrderCreateApiRequest request = new OrderCreateApiRequest();
         // 可修改协议，目前支持：HTTP_FORM_JSON，JSON
-        request.setProtocol(ApiProtocol.HTTP_FORM_JSON);
         request.setRequestNo(Ids.RandomNumberGenerator.getNewString(20));
         request.setMerchOrderNo(Ids.RandomNumberGenerator.getNewString(20));
         request.setService("orderCreate");
@@ -76,7 +75,6 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
         request.setGoodsInfos(goodInfos);
         request.ext("xx", "oo");
         OrderCreateApiResponse response = request(request, OrderCreateApiResponse.class);
-        log.info("{}", response);
         log.info("订单号: {}", request.getMerchOrderNo());
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isTrue();

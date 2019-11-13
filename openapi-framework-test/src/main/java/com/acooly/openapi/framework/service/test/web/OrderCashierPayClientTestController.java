@@ -5,6 +5,7 @@ import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Servlets;
 import com.acooly.openapi.framework.client.OpenApiClient;
+import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.service.test.request.OrderCashierPayApiRequest;
 import com.acooly.openapi.framework.service.test.request.OrderCreateApiRequest;
@@ -104,6 +105,9 @@ public class OrderCashierPayClientTestController extends AbstractStandardEntityC
         ApiMessageContext messageContext = openApiClient.parse(apiRequest);
         // 可以传参到页面通过页面POST提交（URL:messageResult.getUrl(), Post参数：messageResult.getAllParameters()）
         // 或则这里直接redirect
+
+        // mock 签名错误
+//        messageContext.parameter(ApiConstants.SIGN,"12121");
         String redirectUrl = messageContext.buildRedirectUrl();
         Servlets.redirect(response, redirectUrl);
     }

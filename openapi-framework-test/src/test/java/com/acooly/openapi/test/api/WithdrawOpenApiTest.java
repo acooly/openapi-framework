@@ -4,7 +4,6 @@ import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.service.test.request.WithdrawApiRequest;
 import com.acooly.openapi.framework.service.test.response.WithdrawApiResponse;
@@ -52,6 +51,7 @@ public class WithdrawOpenApiTest extends AbstractApiServieTests {
 //        request.setProtocol(ApiProtocol.HTTP_FORM_JSON);
         request.setRequestNo(Ids.RandomNumberGenerator.getNewString(20));
         request.setMerchOrderNo(Ids.RandomNumberGenerator.getNewString(20));
+        request.setUserId(request.getMerchOrderNo());
         request.setService("withdraw");
         request.setAmount(amount);
         request.setDelay(WithdrawApiRequest.DelayEnum.T1);

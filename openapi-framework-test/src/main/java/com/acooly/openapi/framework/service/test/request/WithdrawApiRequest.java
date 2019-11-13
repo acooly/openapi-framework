@@ -43,9 +43,8 @@ public class WithdrawApiRequest extends ApiAsyncRequest {
     private Money amount;
 
     @OpenApiField(desc = "到账方式", constraint = "到账方式,默认:T1", demo = "T1", ordinal = 7)
-    @Length(max = 1, min = 1, message = "长度为1字符")
+    @NotNull
     private DelayEnum delay = DelayEnum.T1;
-
 
     @Getter
     public enum DelayEnum implements Messageable {

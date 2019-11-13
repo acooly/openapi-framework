@@ -42,10 +42,14 @@ public class RequestMarshallOpenApiFilter extends AbstractOpenApiFilter {
     public void doInternalFilter(ApiContext context, FilterChain<ApiContext> filterChain) {
         ApiRequestMarshall apiRequestMarshall = apiMarshallFactory.getRequestMarshall(context.getApiProtocol());
         ApiRequest apiRequest = (ApiRequest) apiRequestMarshall.marshall(context);
-        doValidateParameter(apiRequest);
-        doVerifyIdempotence(apiRequest);
         context.setRequest(apiRequest);
+        doValidateAfterMarshall(context);
+    }
+
+    protected void doValidateAfterMarshall(ApiContext context) {
         doValidateServiceParam(context);
+        doValidateParameter(context.getRequest());
+        doValidateIdempotence(context.getRequest());
     }
 
     /**
@@ -69,7 +73,7 @@ public class RequestMarshallOpenApiFilter extends AbstractOpenApiFilter {
      *
      * @param apiRequest
      */
-    protected void doVerifyIdempotence(ApiRequest apiRequest) {
+    protected void doValidateIdempotence(ApiRequest apiRequest) {
         orderInfoService.checkUnique(apiRequest.getPartnerId(), apiRequest.getRequestNo());
     }
 
