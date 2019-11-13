@@ -13,6 +13,7 @@ import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.message.ApiMessage;
+import com.acooly.openapi.framework.common.utils.ApiUtils;
 import com.acooly.openapi.framework.core.OpenAPIProperties;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
@@ -66,12 +67,11 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
         log(label, null, msg);
     }
 
-
     @Override
-    public void log(String label, ApiMessage apiMessage, String msg) {
+    public void log(String label, ApiMessage apiMessage, String msg, Map<String, String> headers, String ext) {
         long start = System.currentTimeMillis();
         if (openAPIProperties.getLogSafety()) {
-            if (isJson(msg)) {
+            if (ApiUtils.isJson(msg)) {
                 if (apiMessage == null) {
                     msg = safetyJson(msg, null);
                 } else {
@@ -82,11 +82,15 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
         }
 
         if (isSep()) {
-            apiQuerylogger.info(StringUtils.trimToEmpty(label) + msg);
+            apiQuerylogger.info("{} {}, headers: {}, {}", StringUtils.trimToEmpty(label), msg, headers, StringUtils.trimToEmpty(ext));
         } else {
-            logger.info(StringUtils.trimToEmpty(label) + msg);
+            logger.info("{} {}, headers: {}, {}", StringUtils.trimToEmpty(label), msg, headers, StringUtils.trimToEmpty(ext));
         }
+    }
 
+    @Override
+    public void log(String label, ApiMessage apiMessage, String msg) {
+        log(label, apiMessage, msg, null, null);
     }
 
 
@@ -224,20 +228,6 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
         return ignores;
     }
 
-
-    private boolean isJson(String json) {
-        try {
-            JSON.parse(json);
-            if ((Strings.startsWith(json, "[")
-                    && Strings.endsWith(json, "]")) || (Strings.startsWith(json, "{")
-                    && Strings.endsWith(json, "}"))) {
-                return true;
-            }
-        } catch (Exception e) {
-            //ig
-        }
-        return false;
-    }
 
     private String safetyJson(String json, Map<String, Annotation> safetyProperties) {
         if (Strings.isBlank(json)) {

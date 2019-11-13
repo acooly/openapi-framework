@@ -1,6 +1,5 @@
 package com.acooly.openapi.framework.common.enums;
 
-import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.Messageable;
 import com.google.common.collect.Maps;
 
@@ -8,28 +7,46 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * OpenApi错误信息定义
+ *
+ * @author zhangpu
+ */
 public enum ApiServiceResultCode implements Messageable {
+
+    /**
+     * 成功
+     */
     SUCCESS("SUCCESS", "成功"),
+    /**
+     * 处理中
+     */
     PROCESSING("PROCESSING", "处理中"),
+    /**
+     * 失败
+     */
+    FAILURE("FAILURE", "执行失败"),
+
+
     INTERNAL_ERROR("INTERNAL_ERROR", "内部错误"),
     PARAMETER_ERROR("PARAMETER_ERROR", "参数错误"),
-    FAILURE("FAILURE", "执行失败"),
-    UNAUTHENTICATED_ERROR("UNAUTHENTICATED_ERROR", "认证(签名)错误"),
     PARAM_FORMAT_ERROR("PARAM_FORMAT_ERROR", "参数格式错误"),
+
+    ACCESS_KEY_NOT_EXIST("ACCESS_KEY_NOT_EXIST", "访问码非法"),
+    UNAUTHENTICATED_ERROR("UNAUTHENTICATED_ERROR", "认证(签名)错误"),
     REQUEST_NO_NOT_UNIQUE("REQUEST_NO_NOT_UNIQUE", "请求号重复"),
     FIELD_NOT_UNIQUE("FIELD_NOT_UNIQUE", "对象字段重复"),
-
     TOO_MANY_REQUEST("TOO_MANY_REQUEST", "请求数太多"),
-
     MOCK_NOT_FOUND("MOCK_NOT_FOUND", "MOCK请求不匹配"),
-
     REQUEST_GID_NOT_EXSIT("REQUEST_GID_NOT_EXSIT", "gid不存在"),
-
     SERVICE_NOT_FOUND_ERROR("SERVICE_NOT_FOUND_ERROR", "服务不存在"),
-
     UNAUTHORIZED_ERROR("UNAUTHORIZED_ERROR", "未授权的服务"),
-
     REDIRECT_URL_NOT_EXIST("REDIRECT_URL_NOT_EXIST", "跳转服务需设置redirectUrl"),
+    UNSUPPORTED_PROTOCOL("UNSUPPORTED_PROTOCOL", "不支持的报文协议类型"),
+    OBJECT_NOT_EXIST("OBJECT_NOT_EXIST", "对象不存在"),
+
+    JSON_BODY_PARSING_FAILED("JSON_BODY_PARSING_FAILED", "JSON报文体解析失败"),
+
     /**
      * 合作伙伴id没有在openapi中注册
      */
@@ -39,9 +56,8 @@ public enum ApiServiceResultCode implements Messageable {
      */
     PARTNER_NOT_PRODUCT("PARTNER_NOT_PRODUCT", "商户没有配置产品"),
 
-    NOTIFY_ERROR("NOTIFY_ERROR", "异步通知失败"),
+    NOTIFY_ERROR("NOTIFY_ERROR", "异步通知失败");
 
-    OBJECT_NOT_EXIST("OBJECT_NOT_EXIST", "对象不存在");
     private final String code;
     private final String message;
 
@@ -71,7 +87,7 @@ public enum ApiServiceResultCode implements Messageable {
                 return status;
             }
         }
-        throw new IllegalArgumentException("ApiServiceResultCode not legal:" + code);
+        return null;
     }
 
     /**

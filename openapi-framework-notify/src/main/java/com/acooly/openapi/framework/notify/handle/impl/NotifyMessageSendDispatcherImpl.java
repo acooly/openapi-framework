@@ -7,54 +7,61 @@
  */
 package com.acooly.openapi.framework.notify.handle.impl;
 
-import com.acooly.openapi.framework.common.enums.MessageType;
+import com.acooly.core.common.exception.BusinessException;
+import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.notify.handle.NotifyMessageSendDispatcher;
 import com.acooly.openapi.framework.notify.handle.NotifyMessageSendHandler;
 import com.acooly.openapi.framework.service.domain.NotifyMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.EnumMap;
 import java.util.Map;
 
-/** @author zhangpu */
+/**
+ * @author zhangpu
+ */
+@Slf4j
 @Component
-public class NotifyMessageSendDispatcherImpl
-    implements NotifyMessageSendDispatcher, InitializingBean {
+public class NotifyMessageSendDispatcherImpl implements NotifyMessageSendDispatcher, InitializingBean {
+    private static Map<String, NotifyMessageSendHandler> handlerMap = Maps.newHashMap();
 
-  private static final Logger logger =
-      LoggerFactory.getLogger(NotifyMessageSendDispatcherImpl.class);
+    @Autowired
+    private ApplicationContext applicationContext;
 
-  private static Map<MessageType, NotifyMessageSendHandler> handlerMap =
-      new EnumMap<>(MessageType.class);
-
-  @Autowired private ApplicationContext applicationContext;
-
-  @Override
-  public void dispatch(NotifyMessage notifyMessage) {
-    NotifyMessageSendHandler handler = handlerMap.get(notifyMessage.getMessageType());
-    if (handler == null) {
-      throw new RuntimeException(notifyMessage.getMessageType() + "类型的通知发送组件不存在");
+    @Override
+    public void dispatch(NotifyMessage notifyMessage) {
+        NotifyMessageSendHandler handler = handlerMap.get(getHandlerKey(notifyMessage.getMessageType().code(),
+                notifyMessage.getProtocol().code()));
+        if (handler == null) {
+            log.warn("通知 没有对应的发送处理器。protocol:{},messageType:{}", notifyMessage.getProtocol(),
+                    notifyMessage.getMessageType());
+            throw new BusinessException(ApiServiceResultCode.OBJECT_NOT_EXIST, notifyMessage.getMessageType() + "类型的通知发送组件不存在");
+        }
+        handler.send(notifyMessage);
     }
-    handler.send(notifyMessage);
-  }
 
-  @Override
-  public void afterPropertiesSet() throws Exception {
-    Map<String, NotifyMessageSendHandler> map =
-        applicationContext.getBeansOfType(NotifyMessageSendHandler.class);
-    if (map.isEmpty()) {
-      return;
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Map<String, NotifyMessageSendHandler> map = applicationContext.getBeansOfType(NotifyMessageSendHandler.class);
+        if (map.isEmpty()) {
+            return;
+        }
+        for (NotifyMessageSendHandler handler : map.values()) {
+            handlerMap.put(getHandlerKey(handler), handler);
+            log.info("OpenApi 加载异步通知实现：{}/{} :{}", handler.getNotifyMessageType().getCode(),
+                    handler.getApiProtocol().getCode(), handler);
+        }
     }
-    for (NotifyMessageSendHandler handler : map.values()) {
-      if (handler.getNotifyMessageType() != null) {
-        handlerMap.put(handler.getNotifyMessageType(), handler);
-        logger.info("加载{}通知发送组件:{}", handler.getNotifyMessageType().getCode(), handler);
-      }
+
+    protected String getHandlerKey(NotifyMessageSendHandler handler) {
+        return getHandlerKey(handler.getNotifyMessageType().code(), handler.getApiProtocol().code());
     }
-  }
+
+    protected String getHandlerKey(String messageType, String protocol) {
+        return messageType + "_" + protocol;
+    }
 }

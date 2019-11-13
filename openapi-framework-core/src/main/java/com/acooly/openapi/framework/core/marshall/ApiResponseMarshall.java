@@ -7,6 +7,7 @@
  */
 package com.acooly.openapi.framework.core.marshall;
 
+import com.acooly.openapi.framework.common.enums.ApiMessageType;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 
 /**
@@ -16,4 +17,9 @@ import com.acooly.openapi.framework.common.message.ApiResponse;
  * @param <S>
  * @author zhangpu
  */
-public interface ApiResponseMarshall<T, S extends ApiResponse> extends ApiMarshall<T, S> {}
+public interface ApiResponseMarshall<T, S extends ApiResponse> extends ApiMarshall<T, S> {
+    @Override
+    default ApiMessageType getApiMessageType() {
+        return ApiMessageType.Response;
+    }
+}

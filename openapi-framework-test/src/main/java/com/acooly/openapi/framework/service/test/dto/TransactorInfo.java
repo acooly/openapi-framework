@@ -14,7 +14,7 @@ import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.service.test.enums.TransactorType;
 import com.acooly.openapi.framework.service.test.enums.UserAuthEnum;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 
@@ -26,13 +26,13 @@ import javax.validation.constraints.NotNull;
 public class TransactorInfo {
 
   /** 所属企业用户ID */
-  @NotEmpty
+  @NotBlank
   @OpenApiField(desc = "所属企业用户ID", constraint = "所属企业用户ID")
   @Length(max = 32)
   private String userId;
 
   /** 经营人ID * */
-  @NotEmpty
+  @NotBlank
   @Length(max = 32)
   @OpenApiField(desc = "经营人ID", constraint = "经营人ID")
   private String transactorId;
@@ -43,13 +43,13 @@ public class TransactorInfo {
   private TransactorType transactorType;
 
   /** 真实姓名 */
-  @NotEmpty
+  @NotBlank
   @Length(max = 64)
   @OpenApiField(desc = "真实姓名", constraint = "真实姓名, 如：张三")
   private String realName;
 
   /** 身份证号码 */
-  @NotEmpty
+  @NotBlank
   @Length(max = 18)
   @OpenApiField(desc = "身份证号码", constraint = "身份证号码")
   private String certNo;

@@ -21,5 +21,5 @@ import java.util.List;
  * @author qiubo@qq.com
  */
 public interface ApiAuthorizer {
-  void authorize(ApiContext apiContext, List<Permission> permissionList);
+    void authorize(ApiContext context, List<Permission> permissionList);
 }

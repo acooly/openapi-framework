@@ -11,10 +11,11 @@ package com.acooly.openapi.framework.client;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.NotBlank;
 
 import static com.acooly.openapi.framework.client.OpenApiClientProperties.PREFIX;
 

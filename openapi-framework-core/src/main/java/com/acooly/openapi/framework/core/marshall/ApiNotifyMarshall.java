@@ -7,7 +7,7 @@
  */
 package com.acooly.openapi.framework.core.marshall;
 
-import com.acooly.openapi.framework.common.message.ApiNotify;
+import com.acooly.openapi.framework.common.enums.ApiMessageType;
 
 /**
  * 异步通知组装
@@ -16,4 +16,9 @@ import com.acooly.openapi.framework.common.message.ApiNotify;
  * @param <S>
  * @author zhangpu
  */
-public interface ApiNotifyMarshall<T, S extends ApiNotify> extends ApiMarshall<T, S> {}
+public interface ApiNotifyMarshall<T, S> extends ApiMarshall<T, S> {
+    @Override
+    default ApiMessageType getApiMessageType() {
+        return ApiMessageType.Notify;
+    }
+}

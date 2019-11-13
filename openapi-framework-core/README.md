@@ -9,7 +9,7 @@ openapi-framework-core
 # 简介
 `openapi-framework-core`是开放平台网关的核心，实现了网关的核心架构和能力。结构上网关核心包括服务执行层和服务实现层，能力上包括：认证，授权，加解密，日志，事件，协议等。
 
-# 集成
+# 集成及配置
 OpenApi服务框架核心提供API服务的统一处理和执行能力，只需在目标工程整合该模块即可实现网关服务。
 
 ## 依赖
@@ -23,7 +23,16 @@ OpenApi服务框架核心提供API服务的统一处理和执行能力，只需�
 </dependency>
 ```
 
->注意：openapi-framework.version，请根据具体情况选择，一般推荐选择最新发布版本,目前最新版本为：4.2.0-SNAPSHOT。
+>注意：openapi-framework.version，请根据具体情况选择，一般推荐选择最新发布版本。
+
+### 版本说明
+
+* 1.4.x : acoolyV3版本	 -> YIJI/HTD
+* 4.0.x : acoolyV4.0版本 -> cnevx
+* 4.2.1 : acoolyV4.2.x 版本 (支持JSON协议）
+* 4.2.2 : acoolyv4.2.x 版本（v4最新版本：支持JSON和HTTP_FORM_JOSN老协议）
+* 5.0.x : acoolyV5.x.x (测试中...)
+
 
 ## 配置
 
@@ -113,6 +122,8 @@ acooly.openapi.rates[2].interval=1000
 acooly.openapi.rates[2].max-requests=10
 ```
 
+# 开发模式
+
 ## 工程规划
 
 如果目标项目需要提供网关服务，目前情况下，加载依赖配置即可正常开发openApi服务提供服务。这里推荐一个工程结构规划，编译项目管理和报文复用。
@@ -138,11 +149,18 @@ xxxx-project
 3. openapi-service 网关服务实现模块（OpenApi服务开发） --（依赖）--> core和openapi-message
 4. openapi-message --（依赖）--> common
 
-# 开发
+## 服务模式
+
+### 单服务模式
+
+### SOA微服务
+
+
+# 开发说明
 
 openapi框架提供的Api服务开发模式比较简单，基于接口报文定义，由框架完成报文（请求，响应，通知等）的解析，组装，认证，授权等，开发人员定义具体服务后，框架会提供组装好的客户端请求对象，开发人员按需注入服务进行逻辑处理后，回填数据到定义的响应对象就完成接口开发工作，由框架完成后续的签名，组装报文并响应/发送给客户端请求方。
 
-## 服务开发
+## 同步服务开发
 
 ### 报文定义
 
@@ -281,5 +299,11 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
         assertThat(response.getContext()).isEqualTo(content);
     }
 ```
+
+## 异步和跳转
+
+
+# 相关工具
+
 
 

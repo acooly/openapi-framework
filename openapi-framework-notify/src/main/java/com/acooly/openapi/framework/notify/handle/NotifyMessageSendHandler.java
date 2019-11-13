@@ -7,18 +7,38 @@
  */
 package com.acooly.openapi.framework.notify.handle;
 
+import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.MessageType;
 import com.acooly.openapi.framework.service.domain.NotifyMessage;
 
-/** @author zhangpu */
+/**
+ * @author zhangpu
+ */
 public interface NotifyMessageSendHandler {
 
-  /**
-   * 发送
-   *
-   * @param notifyMessage
-   */
-  void send(NotifyMessage notifyMessage);
+    /**
+     * 发送
+     *
+     * @param notifyMessage
+     */
+    void send(NotifyMessage notifyMessage);
 
-  MessageType getNotifyMessageType();
+    /**
+     * 通知类型
+     *
+     * @return
+     */
+    default MessageType getNotifyMessageType() {
+        return MessageType.HTTP;
+    }
+
+
+    /**
+     * 协议
+     *
+     * @return
+     */
+    default ApiProtocol getApiProtocol() {
+        return ApiProtocol.JSON;
+    }
 }

@@ -7,15 +7,16 @@ package com.acooly.openapi.framework.service.test.api;
 import com.acooly.openapi.framework.common.annotation.ApiDocNote;
 import com.acooly.openapi.framework.common.annotation.ApiDocType;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
+import com.acooly.openapi.framework.common.dto.OrderDto;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.common.message.ApiNotify;
-import com.acooly.openapi.framework.common.utils.Ids;
-import com.acooly.openapi.framework.core.service.base.BaseApiService;
-import com.acooly.openapi.framework.service.test.request.WithdrawRequest;
-import com.acooly.openapi.framework.service.test.notify.WithdrawNotify;
-import com.acooly.openapi.framework.service.test.response.WithdrawResponse;
+import com.acooly.openapi.framework.core.service.base.AbstractAsyncApiService;
+import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
+import com.acooly.openapi.framework.service.test.notify.WithdrawApiNotify;
+import com.acooly.openapi.framework.service.test.request.WithdrawApiRequest;
+import com.acooly.openapi.framework.service.test.response.WithdrawApiResponse;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -25,8 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApiDocType(code = "test", name = "测试")
 @ApiDocNote("测试异步接口。<li>1、client -> 同步请求 -> gateway</li><li>2、gateway -> 异步通知（notifyUrl） -> client</li>")
-@OpenApiService(name = "withdraw", desc = "测试：提现", responseType = ResponseType.ASNY, busiType = ApiBusiType.Trade, owner = "zhangpu")
-public class WithdrawApiService extends BaseApiService<WithdrawRequest, WithdrawResponse> {
+@OpenApiService(name = "withdraw", desc = "测试：提现异步接口", responseType = ResponseType.ASNY, busiType = ApiBusiType.Trade, owner = "zhangpu")
+public class WithdrawApiService extends AbstractAsyncApiService<WithdrawApiRequest, WithdrawApiResponse, WithdrawApiNotify> {
 
     /**
      * 同步处理
@@ -35,22 +36,25 @@ public class WithdrawApiService extends BaseApiService<WithdrawRequest, Withdraw
      * @param response 完成业务处理后，回填到response中，框架负责响应给请求客户端
      */
     @Override
-    protected void doService(WithdrawRequest request, WithdrawResponse response) {
+    protected void doService(WithdrawApiRequest request, WithdrawApiResponse response) {
         // do any business and back filling to response
-        response.setTradeNo(Ids.oid());
+        response.setMerchOrderNo(request.getMerchOrderNo());
         response.setResult(ApiServiceResultCode.PROCESSING);
     }
 
+
     /**
-     * 返回异步通知的报文bean
+     * 异步处理定制
      * <p>
-     * 下层业务处理完成后，通过GID通知OpenApi异步处理框架结果数据，
-     * 框架根据这里指定的报文类型对数据进行组装和验证后，签名发送通知给客户端
+     * 针对下层系统的异步通知，在发送给给客户前，做服务层的自定义处理
+     * 这里不建议进行逻辑处理，主要用于格式，类型转换处理。
      *
-     * @return 异步通知的报文Bean
+     * @param orderInfo      原始订单信息
+     * @param apiNotifyOrder 外部调用过来准备推送的数据
+     * @param apiNotify      准备发送的推送内容对象
      */
     @Override
-    public ApiNotify getApiNotifyBean() {
-        return new WithdrawNotify();
+    protected void customizeApiNotify(OrderDto orderInfo, ApiNotifyOrder apiNotifyOrder, ApiNotify apiNotify) {
+        super.customizeApiNotify(orderInfo, apiNotifyOrder, apiNotify);
     }
 }

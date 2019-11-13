@@ -1,8 +1,8 @@
 package com.acooly.openapi.framework.service.test;
 
 import com.acooly.openapi.framework.client.AbstractApiClientService;
-import com.acooly.openapi.framework.service.test.request.WithdrawRequest;
-import com.acooly.openapi.framework.service.test.response.WithdrawResponse;
+import com.acooly.openapi.framework.service.test.request.WithdrawApiRequest;
+import com.acooly.openapi.framework.service.test.response.WithdrawApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class WithdrawApiClientService extends AbstractApiClientService {
 
-    public WithdrawResponse withdraw(WithdrawRequest request) {
-        return request(request, WithdrawResponse.class);
+    public WithdrawApiResponse withdraw(WithdrawApiRequest request) {
+        return request(request, WithdrawApiResponse.class);
     }
 }

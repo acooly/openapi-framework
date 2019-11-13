@@ -9,6 +9,6 @@ import org.springframework.boot.SpringApplication;
 public class Main {
   public static void main(String[] args) {
     Apps.setProfileIfNotExists("sdev");
-    new SpringApplication(Main.class).run(args);
+    new SpringApplication(TestMain.class).run(args);
   }
 }

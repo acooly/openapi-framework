@@ -76,7 +76,7 @@ public class OpenApiNotifySpringScheduler implements InitializingBean {
         try {
             startRetryScheduler();
         } catch (Exception e) {
-            log.error("The retry notify  scheduling init failed", e);
+            log.error("The retry asyncNotify  scheduling init failed", e);
         }
     }
 }

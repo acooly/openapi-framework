@@ -12,7 +12,7 @@ import com.acooly.openapi.framework.common.enums.SecretType;
 import com.acooly.openapi.framework.common.enums.SignType;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -36,14 +36,14 @@ public class ApiTenant extends AbstractEntity {
     /**
      * 合作方编码
      */
-    @NotEmpty
+    @NotBlank
     @Size(max = 32)
     private String partnerId;
 
     /**
      * 合作方名称
      */
-    @NotEmpty
+    @NotBlank
     @Size(max = 32)
     private String partnerName;
 

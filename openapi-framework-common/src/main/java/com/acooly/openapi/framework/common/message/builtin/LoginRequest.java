@@ -8,7 +8,7 @@ import com.acooly.openapi.framework.common.enums.DeviceType;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import javax.validation.constraints.Size;
 
@@ -21,12 +21,12 @@ import javax.validation.constraints.Size;
 @Setter
 public class LoginRequest extends ApiRequest {
 
-    @NotEmpty
+    @NotBlank
     @Size(max = 50)
     @OpenApiField(desc = "用户名", constraint = "登录的ID", demo = "zhangpu", ordinal = 1)
     private String username;
 
-    @NotEmpty
+    @NotBlank
     @Size(max = 128)
     @OpenApiField(desc = "密码", security = true, demo = "xxdawER2e$#rwe", ordinal = 2)
     private String password;

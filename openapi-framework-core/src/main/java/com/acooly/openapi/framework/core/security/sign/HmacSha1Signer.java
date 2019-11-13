@@ -1,7 +1,7 @@
 package com.acooly.openapi.framework.core.security.sign;
 
+import com.acooly.core.utils.security.Cryptos;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
-import com.acooly.openapi.framework.common.utils.Cryptos;
 import org.springframework.stereotype.Component;
 
 /**

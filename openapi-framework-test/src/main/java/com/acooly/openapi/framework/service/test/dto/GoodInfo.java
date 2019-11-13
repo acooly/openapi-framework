@@ -16,7 +16,7 @@ import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,7 +28,7 @@ import javax.validation.constraints.Size;
 @Setter
 public class GoodInfo extends InfoBase {
 
-    @NotEmpty
+    @NotBlank
     @Size(max = 63)
     @OpenApiField(desc = "商品名称", demo = "牛肉干", ordinal = 1)
     private String name;

@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.acooly</groupId>
         <artifactId>openapi-framework</artifactId>
-        <version>4.2.1-SNAPSHOT</version>
+        <version>5.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>openapi-framework-test</artifactId>
@@ -43,7 +43,7 @@
             <artifactId>openapi-framework-extensions</artifactId>
         </dependency>
 
-        <!-- OpenApi notify -->
+        <!-- OpenApi asyncNotify -->
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-notify</artifactId>
@@ -54,7 +54,6 @@
             <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-client</artifactId>
         </dependency>
-
 
         <dependency>
             <groupId>com.acooly</groupId>
@@ -74,6 +73,21 @@
             <version>${acooly.version}</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-configuration-processor</artifactId>
+            <version>${acooly.version}</version>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
@@ -87,7 +101,7 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-coder</artifactId>
-            <version>${acooly.version}</version>
+            <version>5.0.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

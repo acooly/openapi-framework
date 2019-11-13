@@ -12,7 +12,7 @@ import com.acooly.core.utils.Strings;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -35,14 +35,14 @@ public class ApiAuth extends AbstractEntity {
     /**
      * 访问帐号
      */
-    @NotEmpty
+    @NotBlank
     @Size(max = 45)
     private String accessKey;
 
     /**
      * 访问秘钥
      */
-    @NotEmpty
+    @NotBlank
     @Size(max = 45)
     private String secretKey;
 

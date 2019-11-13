@@ -5,7 +5,7 @@
     <parent>
         <artifactId>openapi-framework</artifactId>
         <groupId>com.acooly</groupId>
-        <version>4.2.1-SNAPSHOT</version>
+        <version>5.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -19,12 +19,10 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-mybatis</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-event</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
     </dependencies>
 

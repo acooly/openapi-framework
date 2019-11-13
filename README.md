@@ -45,6 +45,12 @@ OpenApi开放平台框架提供完善的网关服务解决方案。
 4. 自定义文档生成扩展点
 
     监听spring事件`ApiMetaParseFinish`
+    
+    
+### v4.2.2-SNAPSHOT   
+
+* 在4.1基础上重构openapi的核心实现，采用filterChian方式。
+* 支付双协议：JSON（4.1及以上）和HTTP_FORM_JSON（4.0及以下）
 
 ### v4.0.0-SNAPSHOT
 

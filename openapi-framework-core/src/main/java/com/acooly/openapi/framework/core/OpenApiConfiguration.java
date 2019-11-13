@@ -4,14 +4,14 @@ import com.acooly.openapi.framework.core.auth.ApiAuthorization;
 import com.acooly.openapi.framework.core.auth.impl.DefaultApiAuthorization;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.core.auth.realm.impl.DefaultAuthInfoRealm;
-import com.acooly.openapi.framework.core.common.cache.CacheManager;
-import com.acooly.openapi.framework.core.common.cache.impl.ConfigCacheManager;
-import com.acooly.openapi.framework.core.common.cache.impl.NOOPCacheManager;
-import com.acooly.openapi.framework.service.service.impl.NothingToDoOrderInfoService;
+import com.acooly.openapi.framework.core.common.cache.OpenApiCacheManager;
+import com.acooly.openapi.framework.core.common.cache.impl.ConfigOpenApiCacheManager;
+import com.acooly.openapi.framework.core.common.cache.impl.NOOPOpenApiCacheManager;
 import com.acooly.openapi.framework.core.service.buildin.login.DefaultAppApiLoginService;
 import com.acooly.openapi.framework.core.servlet.OpenAPIDispatchServlet;
 import com.acooly.openapi.framework.service.service.AppApiLoginService;
 import com.acooly.openapi.framework.service.service.OrderInfoService;
+import com.acooly.openapi.framework.service.service.impl.NothingToDoOrderInfoService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -49,11 +49,11 @@ public class OpenApiConfiguration {
     }
 
     @Bean
-    public CacheManager cacheManager() {
+    public OpenApiCacheManager openApicacheManager() {
         if (properties.getAuthInfoCache().isEnable()) {
-            return new ConfigCacheManager(properties.getAuthInfoCache().getDefaultTimeout());
+            return new ConfigOpenApiCacheManager(properties.getAuthInfoCache().getDefaultTimeout());
         } else {
-            return new NOOPCacheManager();
+            return new NOOPOpenApiCacheManager();
         }
     }
 

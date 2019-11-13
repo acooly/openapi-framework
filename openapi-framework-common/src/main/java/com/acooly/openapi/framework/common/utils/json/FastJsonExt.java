@@ -8,9 +8,9 @@
  */
 package com.acooly.openapi.framework.common.utils.json;
 
+import com.acooly.core.utils.Reflections;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.utils.DataTypeUtils;
-import com.acooly.openapi.framework.common.utils.Reflections;
 import com.alibaba.fastjson.PropertyNamingStrategy;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.alibaba.fastjson.parser.ParserConfig;

@@ -12,6 +12,7 @@ package com.acooly.openapi.framework.core.service.factory;
 
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.utils.Assert;
+import com.acooly.core.utils.Reflections;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.ApiDocNote;
 import com.acooly.openapi.framework.common.annotation.ApiDocType;
@@ -21,10 +22,9 @@ import com.acooly.openapi.framework.common.message.ApiAsyncRequest;
 import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
 import com.acooly.openapi.framework.core.OpenAPIProperties;
-import com.acooly.openapi.framework.core.marshall.ObjectAccessor;
 import com.acooly.openapi.framework.core.service.route.ServiceRouter;
-import com.acooly.openapi.framework.core.util.GenericsUtils;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.slf4j.Logger;
@@ -121,8 +121,8 @@ public class ApiServiceFactoryImpl
     }
 
     private boolean checkApiService(ApiService curApiService) {
-        Class requestClazz = GenericsUtils.getSuperClassGenricType(curApiService.getClass(), 0);
-        Class responseClazz = GenericsUtils.getSuperClassGenricType(curApiService.getClass(), 1);
+        Class requestClazz = Reflections.getSuperClassGenricType(curApiService.getClass(), 0);
+        Class responseClazz = Reflections.getSuperClassGenricType(curApiService.getClass(), 1);
         Assert.isAssignable(ApiRequest.class, requestClazz);
         Assert.isAssignable(ApiResponse.class, responseClazz);
         OpenApiService apiServiceAnnotation = getOpenApiServiceAnnotation(curApiService);

@@ -2,9 +2,9 @@ package com.acooly.openapi.framework.core.marshall.crypt;
 
 import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Exceptions;
+import com.acooly.core.utils.security.Cryptos;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
-import com.acooly.openapi.framework.common.utils.Cryptos;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

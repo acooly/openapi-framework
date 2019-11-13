@@ -9,11 +9,9 @@ package com.acooly.openapi.framework.facade.result;
 
 import com.acooly.core.common.facade.ResultBase;
 import com.acooly.core.utils.Encodes;
+import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.Map;
 
 /**
  * @author zhangpu
@@ -24,13 +22,8 @@ public class ApiNotifyResult extends ResultBase {
      * serialVersionUID
      */
     private static final long serialVersionUID = -348730141776307996L;
-    /**
-     * 签名 x-api-sign
-     */
+    private String protocol;
     private String sign;
-    /**
-     * x-api-signType
-     */
     private String signType;
     private String accessKey;
     private String body;
@@ -46,17 +39,15 @@ public class ApiNotifyResult extends ResultBase {
     private String notifyUrl;
 
     public String getQueryString() {
-        Map<String, String> data = Maps.newHashMap();
-        data.put(ApiConstants.SIGN, this.sign);
-        data.put(ApiConstants.SIGN_TYPE, this.signType);
-        data.put(ApiConstants.ACCESS_KEY, this.accessKey);
-        data.put(ApiConstants.BODY, this.body);
         StringBuilder sb = new StringBuilder();
-
         sb.append(ApiConstants.BODY).append("=").append(Encodes.urlEncode(this.body)).append("&")
                 .append(ApiConstants.ACCESS_KEY).append("=").append(this.accessKey).append("&")
-                .append(ApiConstants.SIGN_TYPE).append("=").append(this.accessKey).append("&")
+                .append(ApiConstants.SIGN_TYPE).append("=").append(this.signType).append("&")
                 .append(ApiConstants.SIGN).append("=").append(this.sign);
+
+        if (Strings.isNotBlank(this.protocol)) {
+            sb.append("&").append(ApiConstants.PROTOCOL).append("=").append(this.protocol);
+        }
         return sb.toString();
     }
 
@@ -131,5 +122,13 @@ public class ApiNotifyResult extends ResultBase {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getProtocol() {
+        return protocol;
+    }
+
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
     }
 }

@@ -305,7 +305,7 @@ var detailview = $.extend({}, $.fn.datagrid.defaults.view, {
 
 		// function resizeDetails(){
 		// 	var ht = dc.header2.find('table');
-		// 	var fr = ht.find('tr.datagrid-filter-row');
+		// 	var fr = ht.find('tr.datagrid-filterchain-row');
 		// 	fr.hide();
 		// 	var ww = ht.width()-1;
 		// 	var details = dc.body2.find('>table.datagrid-btable>tbody>tr>td>div.datagrid-row-detail:visible')._outerWidth(ww);

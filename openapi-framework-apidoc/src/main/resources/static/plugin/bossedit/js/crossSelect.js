@@ -119,13 +119,13 @@ if (typeof jQuery === 'undefined') {
                     });
                 }
 
-                // Append left filter
+                // Append left filterchain
                 if (self.options.search && self.options.search.left) {
                     self.options.search.$left = $(self.options.search.left);
                     self.$left.before(self.options.search.$left);
                 }
 
-                // Append right filter
+                // Append right filterchain
                 if (self.options.search && self.options.search.right) {
                     self.options.search.$right = $(self.options.search.right);
                     self.$right.before($(self.options.search.$right));
@@ -138,7 +138,7 @@ if (typeof jQuery === 'undefined') {
             events: function() {
                 var self = this;
 
-                // Attach event to left filter
+                // Attach event to left filterchain
                 if (self.options.search && self.options.search.$left) {
                     self.options.search.$left.on('keyup', function(e) {
                         if (this.value) {
@@ -150,7 +150,7 @@ if (typeof jQuery === 'undefined') {
                     });
                 }
 
-                // Attach event to right filter
+                // Attach event to right filterchain
                 if (self.options.search && self.options.search.$right) {
                     self.options.search.$right.on('keyup', function(e) {
                         if (this.value) {

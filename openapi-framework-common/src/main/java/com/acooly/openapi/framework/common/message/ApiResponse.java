@@ -5,17 +5,18 @@ import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
+
 
 @Getter
 @Setter
 public class ApiResponse extends ApiMessage {
 
-    @NotEmpty
+    @NotBlank
     @OpenApiField(desc = "服务响应编码", constraint = "必填", demo = "PARAM_FORMAT_ERROR", ordinal = ApiConstants.ORDINAL_MAX + 1)
     private String code = ApiServiceResultCode.SUCCESS.getCode();
 
-    @NotEmpty
+    @NotBlank
     @OpenApiField(desc = "服务响应信息", demo = "参数格式错误", ordinal = ApiConstants.ORDINAL_MAX + 2)
     private String message = ApiServiceResultCode.SUCCESS.getMessage();
 

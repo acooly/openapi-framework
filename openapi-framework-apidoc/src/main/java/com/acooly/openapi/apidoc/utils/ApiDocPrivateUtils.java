@@ -5,7 +5,7 @@
 
 package com.acooly.openapi.apidoc.utils;
 
-import com.acooly.core.utils.GenericsUtils;
+import com.acooly.core.utils.Reflections;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
@@ -46,7 +46,7 @@ public class ApiDocPrivateUtils {
             Class<?> cc = clazz;
             Class<?> tt = null;
             do {
-                tt = GenericsUtils.getSuperClassGenricType(cc);
+                tt = Reflections.getSuperClassGenricType(cc);
                 if (tt != Object.class) {
                     break;
                 }

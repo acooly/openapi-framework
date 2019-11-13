@@ -10,7 +10,7 @@ package com.acooly.openapi.mock.entity;
 import com.acooly.core.common.domain.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -29,7 +29,7 @@ import javax.validation.constraints.Size;
 public class ApiMock extends AbstractEntity {
 
 	/** 服务名称 */
-	@NotEmpty
+	@NotBlank
 	@Size(max=128)
     private String serviceName;
 

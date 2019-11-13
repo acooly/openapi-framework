@@ -7,7 +7,7 @@ import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import javax.validation.constraints.Size;
 import java.util.Map;
@@ -21,22 +21,22 @@ import java.util.Map;
 @Setter
 public abstract class ApiMessage extends InfoBase {
 
-    @NotEmpty
+    @NotBlank
     @Size(min = 8, max = 64)
     @OpenApiField(desc = "请求流水号", constraint = "商户请求号，全局唯一。建议规则为：商户前缀+唯一标识",
             demo = "201601011212120001", ordinal = ApiConstants.ORDINAL_MIN)
     private String requestNo;
 
-    @NotEmpty
+    @NotBlank
     @OpenApiField(desc = "Api服务名", constraint = "必填", demo = "Auth", ordinal = ApiConstants.ORDINAL_MIN + 1)
     private String service;
 
-    @NotEmpty
+    @NotBlank
     @OpenApiField(desc = "服务版本", constraint = "必填", demo = "1.0", ordinal = ApiConstants.ORDINAL_MIN + 2)
     private String version = ApiConstants.VERSION_DEFAULT;
 
 
-    @NotEmpty
+    @NotBlank
     @OpenApiField(desc = "商户ID", constraint = "必填", demo = "test", ordinal = ApiConstants.ORDINAL_MAX - 3)
     private String partnerId;
 
