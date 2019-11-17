@@ -1,7 +1,10 @@
 package com.acooly.openapi.test.api;
 
 import com.acooly.core.utils.Ids;
+import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
+import com.acooly.openapi.framework.common.message.ApiRequest;
+import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.common.message.builtin.LoginRequest;
 import com.acooly.openapi.framework.common.message.builtin.LoginResponse;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
@@ -119,5 +122,16 @@ public class OpenApiBenchmarkTest extends AbstractApiServieTests {
         log.info("测试：跳转报文的returnUrl不为空 - [通过]");
     }
 
+
+    @Test
+    public void testServiceInnerBusinessException() {
+        ApiRequest request = new ApiRequest();
+        request.setService("simpleInfo");
+        request.setContext("1212");
+        ApiResponse response = request(request, ApiResponse.class);
+        assertThat(response).isNotNull();
+        assertThat(response.isSuccess()).isFalse();
+        assertThat(response.getCode()).isEqualTo("TEST_ERROR_CODE");
+    }
 
 }
