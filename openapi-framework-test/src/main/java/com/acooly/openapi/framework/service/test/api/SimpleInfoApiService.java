@@ -8,10 +8,12 @@
  */
 package com.acooly.openapi.framework.service.test.api;
 
+import com.acooly.core.common.facade.ResultBase;
 import com.acooly.openapi.framework.common.annotation.ApiDocNote;
 import com.acooly.openapi.framework.common.annotation.ApiDocType;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
+import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
@@ -30,5 +32,10 @@ public class SimpleInfoApiService extends BaseApiService<ApiRequest, ApiResponse
     @Override
     protected void doService(ApiRequest request, ApiResponse response) {
 
+        ResultBase resultBase = new ResultBase();
+        resultBase.setStatus(ApiServiceResultCode.OBJECT_NOT_EXIST);
+        resultBase.setCode("TEST_ERROR_CODE");
+        resultBase.setDetail("测试错误消息");
+        resultBase.throwIfNotSuccess();
     }
 }

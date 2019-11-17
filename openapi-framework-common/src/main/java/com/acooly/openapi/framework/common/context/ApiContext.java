@@ -239,11 +239,9 @@ public class ApiContext extends Context {
         this.apiService = apiService;
     }
 
-
-    private void throwIfBlank(String value, String detail) {
-        if (Strings.isBlank(value)) {
-            throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, detail);
-        }
+    public void exception(Exception exception) {
+        this.error = true;
+        this.exception = exception;
     }
 
     private String throwIfEmpty(String key, String value) {
