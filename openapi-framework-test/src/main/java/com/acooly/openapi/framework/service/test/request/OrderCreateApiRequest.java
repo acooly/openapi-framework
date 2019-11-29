@@ -8,11 +8,12 @@ import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.annotation.OpenApiFieldCondition;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
+import com.acooly.openapi.framework.service.test.enums.TestBigEnum;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
-import javax.validation.constraints.NotBlank;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -75,5 +76,8 @@ public class OrderCreateApiRequest extends ApiRequest {
 
     @OpenApiField(desc = "商品信息", ordinal = 12)
     private List<GoodInfo> goodsInfos;
+
+    @OpenApiField(desc = "测试用大枚举", ordinal = 13)
+    private TestBigEnum testBigEnum;
 
 }
