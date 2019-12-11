@@ -8,14 +8,12 @@ package com.acooly.openapi.apidoc.web;
 
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.web.AbstractJQueryEntityController;
-import com.acooly.core.common.web.MappingMethod;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
-import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
+import com.acooly.openapi.apidoc.enums.DocStatusEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
-import com.acooly.openapi.apidoc.persist.entity.ApiDocSchemeDesc;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeDescService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeService;
@@ -33,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,6 +62,14 @@ public class ApiDocSchemeManagerController extends AbstractJQueryEntityControlle
 
     @Autowired
     private ApiDocSchemeDescService apiDocSchemeDescService;
+
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        super.referenceData(request, model);
+        String category = Servlets.getParameter(request, "category");
+        request.setAttribute("category", category);
+        model.put("allStatuss", DocStatusEnum.mapping());
+    }
 
     @RequestMapping("/settingService")
     public String settingService(long id, Model model) {
@@ -216,79 +223,75 @@ public class ApiDocSchemeManagerController extends AbstractJQueryEntityControlle
         return reJsonObject;
     }
 
-    @Override
-    protected ApiDocScheme doSave(HttpServletRequest request, HttpServletResponse response, Model model, boolean isCreate) throws Exception {
-        ApiDocScheme entity = loadEntity(request);
-        if (entity == null) {
-            // create
-            allow(request, response, MappingMethod.create);
-            entity = getEntityClass().newInstance();
-            entity.setSchemeNo("build-" + System.currentTimeMillis());
-            entity.setSortTime(System.currentTimeMillis());
-        } else {
-            // update
-            allow(request, response, MappingMethod.update);
-        }
-        doDataBinding(request, entity);
-        onSave(request, response, model, entity, isCreate);
-        // 这里服务层默认是根据entity的Id是否为空自动判断是SAVE还是UPDATE.
-        if (isCreate) {
-            getEntityService().save(entity);
-        } else {
-            getEntityService().update(entity);
-        }
-        //保存或更新方案描述
-        createOrUpdateDesc(request,entity.getSchemeNo());
-        return entity;
-    }
+//    @Override
+//    protected ApiDocScheme doSave(HttpServletRequest request, HttpServletResponse response, Model model, boolean isCreate) throws Exception {
+//        ApiDocScheme entity = loadEntity(request);
+//        if (entity == null) {
+//            // create
+//            allow(request, response, MappingMethod.create);
+//            entity = getEntityClass().newInstance();
+//            entity.setSchemeNo("build-" + System.currentTimeMillis());
+//            entity.setSortTime(System.currentTimeMillis());
+//        } else {
+//            // update
+//            allow(request, response, MappingMethod.update);
+//        }
+//        doDataBinding(request, entity);
+//        onSave(request, response, model, entity, isCreate);
+//        // 这里服务层默认是根据entity的Id是否为空自动判断是SAVE还是UPDATE.
+//        if (isCreate) {
+//            getEntityService().save(entity);
+//        } else {
+//            getEntityService().update(entity);
+//        }
+//        //保存或更新方案描述
+//        createOrUpdateDesc(request, entity.getSchemeNo());
+//        return entity;
+//    }
+//
+//    /**
+//     * 更新或保存方案描述
+//     *
+//     * @param request
+//     */
+//    private void createOrUpdateDesc(HttpServletRequest request, String schemeNo) {
+//        String schemeDesc = Servlets.getParameter(request, "schemeDesc");
+//        ApiDocSchemeDesc apiDocSchemeDesc = apiDocSchemeDescService.findBySchemeNo(schemeNo);
+//        boolean isCreate = false;
+//        if (apiDocSchemeDesc == null) {
+//            apiDocSchemeDesc = new ApiDocSchemeDesc();
+//            isCreate = true;
+//        }
+//        apiDocSchemeDesc.setSchemeDesc(schemeDesc);
+//        apiDocSchemeDesc.setSchemeNo(schemeNo);
+//        if (isCreate) {
+//            apiDocSchemeDescService.save(apiDocSchemeDesc);
+//        } else {
+//            apiDocSchemeDescService.update(apiDocSchemeDesc);
+//        }
+//    }
 
-    @Override
-    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
-        model.put("allSchemeTypes", SchemeTypeEnum.mapping());
-    }
-
-    /**
-     * 更新或保存方案描述
-     *
-     * @param request
-     */
-    private void createOrUpdateDesc(HttpServletRequest request, String schemeNo) {
-        String schemeDesc = Servlets.getParameter(request, "schemeDesc");
-        ApiDocSchemeDesc apiDocSchemeDesc = apiDocSchemeDescService.findBySchemeNo(schemeNo);
-        boolean isCreate = false;
-        if (apiDocSchemeDesc == null) {
-            apiDocSchemeDesc = new ApiDocSchemeDesc();
-            isCreate = true;
-        }
-        apiDocSchemeDesc.setSchemeDesc(schemeDesc);
-        apiDocSchemeDesc.setSchemeNo(schemeNo);
-        if (isCreate) {
-            apiDocSchemeDescService.save(apiDocSchemeDesc);
-        } else {
-            apiDocSchemeDescService.update(apiDocSchemeDesc);
-        }
-    }
-
-    @Override
-    public String edit(HttpServletRequest request, HttpServletResponse response, Model model) {
-        allow(request, response, MappingMethod.update);
-        try {
-            model.addAllAttributes(referenceData(request));
-            ApiDocScheme entity = loadEntity(request);
-            ApiDocSchemeDesc apiDocSchemeDesc = apiDocSchemeDescService.findBySchemeNo(entity.getSchemeNo());
-            entity.setApiDocschemeDesc(apiDocSchemeDesc);
-            model.addAttribute("action", ACTION_EDIT);
-            model.addAttribute(getEntityName(), entity);
-            onEdit(request, response, model, entity);
-        } catch (Exception e) {
-            log.warn(getExceptionMessage("edit", e), e);
-            handleException("编辑", e, request);
-        }
-        return getEditView();
-    }
+//    @Override
+//    public String edit(HttpServletRequest request, HttpServletResponse response, Model model) {
+//        allow(request, response, MappingMethod.update);
+//        try {
+//            model.addAllAttributes(referenceData(request));
+//            ApiDocScheme entity = loadEntity(request);
+//            ApiDocSchemeDesc apiDocSchemeDesc = apiDocSchemeDescService.findBySchemeNo(entity.getSchemeNo());
+//            entity.setApiDocschemeDesc(apiDocSchemeDesc);
+//            model.addAttribute("action", ACTION_EDIT);
+//            model.addAttribute(getEntityName(), entity);
+//            onEdit(request, response, model, entity);
+//        } catch (Exception e) {
+//            log.warn(getExceptionMessage("edit", e), e);
+//            handleException("编辑", e, request);
+//        }
+//        return getEditView();
+//    }
 
     /**
      * 解决方案置顶
+     *
      * @param request
      * @param response
      * @return
@@ -310,6 +313,7 @@ public class ApiDocSchemeManagerController extends AbstractJQueryEntityControlle
 
     /**
      * 上移解决方案
+     *
      * @param request
      * @param response
      * @return
@@ -335,5 +339,98 @@ public class ApiDocSchemeManagerController extends AbstractJQueryEntityControlle
         sortMap.put("sortTime", false);
         return getEntityService()
                 .query(getPageInfo(request), getSearchParams(request), sortMap);
+    }
+
+
+    @RequestMapping("/move")
+    @ResponseBody
+    public JsonResult move(HttpServletRequest request, HttpServletResponse response, Model model) {
+        JsonResult result = new JsonResult();
+        String point = request.getParameter("point");
+        String sourceId = request.getParameter("sourceId");
+        String targetId = request.getParameter("targetId");
+        try {
+            apiDocSchemeService.move(sourceId, targetId, point);
+        } catch (Exception e) {
+            handleException(result, "移动异常", e);
+        }
+        return result;
+    }
+
+    @RequestMapping("/changeStatus")
+    @ResponseBody
+    public JsonResult changeStatus(HttpServletRequest request, HttpServletResponse response, Model model, Long id, String status) {
+        JsonResult result = new JsonResult();
+        try {
+            ApiDocScheme apiDocScheme = apiDocSchemeService.get(id);
+            apiDocScheme.setStatus(DocStatusEnum.find(status));
+            apiDocSchemeService.update(apiDocScheme);
+        } catch (Exception e) {
+            handleException(result, "移动异常", e);
+        }
+        return result;
+    }
+
+
+    @RequestMapping(value = "queryTree")
+    @ResponseBody
+    public JsonListResult<ApiDocScheme> queryTree(HttpServletRequest request, HttpServletResponse response) {
+        JsonListResult<ApiDocScheme> result = new JsonListResult<>();
+        try {
+            result.appendData(referenceData(request));
+            Long parentId = Servlets.getLongParameter(request, "id");
+            String category = Servlets.getParameter(request, "category");
+            List<ApiDocScheme> entities = apiDocSchemeService.level(parentId, category);
+            result.setTotal((long) entities.size());
+            result.setRows(entities);
+        } catch (Exception e) {
+            handleException(result, "列表查询", e);
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "loadTree")
+    @ResponseBody
+    public JsonListResult<ApiDocScheme> loadTree(HttpServletRequest request, HttpServletResponse response) {
+        JsonListResult<ApiDocScheme> result = new JsonListResult<>();
+        try {
+            String category = Servlets.getParameter(request, "category");
+            Long parentId = Servlets.getLongParameter(request, "parentId");
+            result.appendData(referenceData(request));
+            List<ApiDocScheme> entities = Strings.isBlank(category) ? apiDocSchemeService.tree(parentId) :
+                    apiDocSchemeService.tree(category, parentId);
+            result.setTotal((long) entities.size());
+            result.setRows(entities);
+        } catch (Exception e) {
+            handleException(result, "加载数据树", e);
+        }
+        return result;
+    }
+
+    @Override
+    protected void onCreate(HttpServletRequest request, HttpServletResponse response, Model model) {
+        Long parentId = Servlets.getLongParameter(request, "parentId");
+        String category = Servlets.getParameter(request, "category");
+        model.addAttribute("category", category);
+        model.addAttribute("parent", getParent(parentId));
+        super.onCreate(request, response, model);
+    }
+
+    @Override
+    protected void onEdit(HttpServletRequest request, HttpServletResponse response, Model model, ApiDocScheme entity) {
+        if (!ApiDocScheme.TOP_PARENT_ID.equals(entity.getParentId())) {
+            model.addAttribute("parent", getParent(entity.getParentId()));
+        }
+        String category = Servlets.getParameter(request, "category");
+        model.addAttribute("category", category);
+        super.onEdit(request, response, model, entity);
+    }
+
+    private ApiDocScheme getParent(Long parentId) {
+        if (parentId != null) {
+            return apiDocSchemeService.get(parentId);
+        } else {
+            return null;
+        }
     }
 }

@@ -9,12 +9,16 @@
  */
 package com.acooly.openapi.apidoc.portal;
 
+import com.acooly.core.common.web.support.JsonEntityResult;
+import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.module.cms.domain.Content;
 import com.acooly.module.cms.service.ContentService;
 import com.acooly.openapi.apidoc.ApiDocProperties;
 import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
+import com.acooly.openapi.apidoc.persist.dto.ApiDocSchemeDto;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocSchemeDesc;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
@@ -22,11 +26,15 @@ import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeDescService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
 import com.acooly.openapi.apidoc.portal.dto.SchemeDto;
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -134,12 +142,12 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
         List<SchemeDto> schemes = loadSchemeList(request, null);
         List<SchemeDto> showSchemes = Lists.newArrayList();
         if (!apiDocProperties.isDefaultSchemeShow()) {
-            for(SchemeDto s:schemes){
-                if(s.getSchemeTypeEnum() != SchemeTypeEnum.common){
+            for (SchemeDto s : schemes) {
+                if (s.getSchemeTypeEnum() != SchemeTypeEnum.common) {
                     showSchemes.add(s);
                 }
             }
-        }else{
+        } else {
             showSchemes.addAll(schemes);
         }
         model.addAttribute("showSchemes", showSchemes);
@@ -179,10 +187,49 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
 
 
         ApiDocSchemeDesc apiDocSchemeDesc = apiDocSchemeDescService.findBySchemeNo(apiScheme.getSchemeNo());
-        if(apiDocSchemeDesc != null && Strings.isNotBlank(apiDocSchemeDesc.getSchemeDesc())) {
+        if (apiDocSchemeDesc != null && Strings.isNotBlank(apiDocSchemeDesc.getSchemeDesc())) {
             apiDocSchemeDesc.setSchemeDesc(HtmlUtils.htmlUnescape(apiDocSchemeDesc.getSchemeDesc()));
             model.addAttribute("apiSchemeDesc", apiDocSchemeDesc);
         }
     }
 
+    /**
+     * 目录列表
+     */
+    @ResponseBody
+    @GetMapping(value = {"/{category}/{id}", "/{category}"})
+    public JsonListResult<ApiDocSchemeDto> catalogList(@PathVariable(value = "category", required = true) String category,
+                                                       @PathVariable(value = "id", required = false) Long id,
+                                                       HttpServletRequest request, HttpServletResponse response, Model model) {
+        JsonListResult<ApiDocSchemeDto> result = new JsonListResult<ApiDocSchemeDto>();
+        List<ApiDocScheme> list = apiDocSchemeService.tree(category, id);
+        // 使用json转换entity为dto，解决深copy的问题
+        if (Collections3.isNotEmpty(list)) {
+            List<ApiDocSchemeDto> resultList = JSON.parseArray(JSON.toJSONString(list), ApiDocSchemeDto.class);
+            result.setRows(resultList);
+            result.setTotal(Long.valueOf(resultList.size()));
+        }
+        return result;
+    }
+
+    /**
+     * 内容详情
+     */
+    @ResponseBody
+    @GetMapping(value = {"/content/{id}"})
+    public JsonEntityResult contentDetail(@PathVariable(value = "id", required = true) Long id,
+                                          HttpServletRequest request, HttpServletResponse response, Model model) {
+        JsonEntityResult<ApiDocSchemeDto> result = new JsonEntityResult<ApiDocSchemeDto>();
+        ApiDocScheme apiDocScheme = apiDocSchemeService.get(id);
+        ApiDocSchemeDesc apiDocSchemeDesc = apiDocSchemeDescService.get(id);
+        if (apiDocScheme == null || apiDocSchemeDesc == null) {
+            result.setSuccess(false);
+            result.setMessage("内容不存在");
+        }
+        ApiDocSchemeDto dto = new ApiDocSchemeDto();
+        BeanCopier.copy(apiDocScheme, dto);
+        dto.setContent(apiDocSchemeDesc.getSchemeDesc());
+        result.setEntity(dto);
+        return result;
+    }
 }

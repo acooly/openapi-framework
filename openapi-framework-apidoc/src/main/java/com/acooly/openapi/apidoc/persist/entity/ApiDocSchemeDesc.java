@@ -31,7 +31,7 @@ public class ApiDocSchemeDesc extends AbstractEntity {
 	/** 方案编码 */
 	@NotBlank
 	@Size(max=64)
-    private String schemeNo = "";
+    private String schemeNo;
 
 	/** 方案描述 */
     private String schemeDesc;

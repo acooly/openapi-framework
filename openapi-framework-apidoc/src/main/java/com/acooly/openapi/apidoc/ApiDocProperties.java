@@ -33,6 +33,7 @@ import static com.acooly.openapi.apidoc.ApiDocProperties.PREFIX;
 public class ApiDocProperties {
     public static final String PREFIX = "acooly.openapi.apidoc";
 
+    public static final String DEFAULT_CATEGORY = "api";
     public static final String DEF_SCHEME_NO = "SYSTEM";
     public static final String DEF_SCHEME_TITLE = "所有服务";
     public static final String DEF_SCHEME_AUTHOR = "acooly";
