@@ -1,5 +1,15 @@
-package com.acooly.openapi.apidoc.persist.dto;
+/*
+ * www.acooly.cn Inc.
+ * Copyright (c) 2017 All Rights Reserved
+ */
 
+/*
+ * 修订记录:
+ * zhangpu@acooly.cn 2017-08-02 07:38 创建
+ */
+package com.acooly.openapi.apidoc.portal.dto;
+
+import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -7,8 +17,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author liangsong
- * @date 2019-12-10 17:04
+ * scheme 实体 DTO
+ *
+ * @author zhangpu 2017-08-02 07:38
  */
 @Data
 public class ApiDocSchemeDto implements Serializable {
@@ -24,6 +35,11 @@ public class ApiDocSchemeDto implements Serializable {
      * 主题
      */
     private String category;
+
+    /**
+     * 方案类型
+     */
+    private SchemeTypeEnum schemeTypeEnum;
 
     /**
      * 唯一编码
@@ -64,4 +80,13 @@ public class ApiDocSchemeDto implements Serializable {
      * 详细内容
      */
     private String content;
+
+    public ApiDocSchemeDto() {
+    }
+
+    public ApiDocSchemeDto(Long id, String title, String schemeNo) {
+        this.id = id;
+        this.title = title;
+        this.schemeNo = schemeNo;
+    }
 }

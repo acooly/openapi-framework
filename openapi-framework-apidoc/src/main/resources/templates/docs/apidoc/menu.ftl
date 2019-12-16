@@ -5,7 +5,7 @@
     <ul class="doc-menu-content">
     <#if showSchemes??>
     <#list showSchemes as e>
-        <li <#if e.id = schemeId >class="item-this"</#if>><a href="/docs/scheme/scheme.html?schemeId=${e.id}">${e.name}</a></li>
+        <li <#if e.id = schemeId >class="item-this"</#if>><a href="/docs/scheme/scheme.html?schemeId=${e.id}">${e.title}</a></li>
     </#list>
     </#if>
     </ul>
