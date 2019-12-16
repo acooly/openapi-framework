@@ -48,6 +48,7 @@
                 <th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
                 <th field="id" sortable="true" sum="true">id</th>
                 <#--                <th field="parentId" sortable="true" sum="true">父级id</th>-->
+                <th field="schemeNo">编码</th>
                 <th field="title" formatter="contentFormatter">文档名称</th>
                 <#--                <th field="sortTime" sortable="true" sum="true">排序值</th>-->
                 <#--                <th field="path" formatter="contentFormatter">层级路径</th>-->

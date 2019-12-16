@@ -22,15 +22,20 @@ CREATE TABLE `api_doc_scheme` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `scheme_no` varchar(64) NOT NULL DEFAULT '' COMMENT '方案编码',
   `title` varchar(64) NOT NULL DEFAULT '' COMMENT '标题',
+  `status` varchar(20) DEFAULT NULL COMMENT '状态{draft:草稿,onShelf:已上架,offShelf:已下架}',
+  `parent_id` bigint(20) DEFAULT NULL COMMENT '父级id',
+  `path` varchar(255) DEFAULT NULL COMMENT '层级路径',
+  `sub_count` int(20) DEFAULT NULL COMMENT '子节点数量',
   `author` varchar(64) DEFAULT NULL COMMENT '作者',
+  `category` varchar(20) DEFAULT NULL COMMENT '分类',
   `note` varchar(128) DEFAULT NULL COMMENT '说明',
   `scheme_type` varchar(16) DEFAULT '' COMMENT '方案类型{auto:通用,custom:自定义}',
   `sort_time` bigint(20) DEFAULT NULL COMMENT '排序值',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='服务方案';
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=utf8mb4 COMMENT='服务方案';
 
 CREATE TABLE `api_doc_scheme_desc` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -65,7 +70,7 @@ CREATE TABLE `api_doc_message` (
   `comments` varchar(255) DEFAULT NULL COMMENT '备注',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  `signatrue` varchar(128) DEFAULT NULL COMMENT '签名(message_no+message_type+note)',
+  `signature` varchar(128) DEFAULT NULL COMMENT '签名(message_no+message_type+note)',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_API_DOC_MESSAGE_NO` (`message_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='服务报文';

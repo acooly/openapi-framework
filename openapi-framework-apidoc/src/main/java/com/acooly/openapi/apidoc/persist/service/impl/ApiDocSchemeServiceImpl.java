@@ -315,7 +315,7 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
         ApiDocScheme target = this.get(Long.valueOf(targetId));
         // 更新源节点父节点计数
         if (!ApiDocScheme.TOP_PARENT_ID.equals(source.getParentId())) {
-            ApiDocScheme sourceParent = this.get(target.getParentId());
+            ApiDocScheme sourceParent = this.get(source.getParentId());
             sourceParent.setSubCount(sourceParent.getSubCount() - 1);
             this.update(sourceParent);
         }
@@ -324,6 +324,7 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
             target.setSubCount(target.getSubCount() + 1);
             source.setParentId(target.getId());
             source.setSortTime(System.currentTimeMillis());
+            this.update(target);
         } else if ("top".equals(point)) {
             source.setSortTime(target.getSortTime() + 1);
             // 不同级

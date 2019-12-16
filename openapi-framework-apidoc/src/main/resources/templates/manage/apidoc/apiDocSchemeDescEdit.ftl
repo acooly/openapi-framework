@@ -1,19 +1,19 @@
 <#assign jodd=JspTaglibs["http://www.springside.org.cn/jodd_form"] />
 <link rel="stylesheet" href="/plugin/editormd/css/editormd.css" />
 <div class="easyui-layout" data-options="fit : true,border : false">
-    <div data-options="region:'north',border:false" style="padding:5px; overflow: hidden;" align="left">
-        <form id="manage_apiDocSchemeDesc_searchform" onsubmit="return false">
-            <table class="tableForm" width="100%">
-                <tr>
-                    <td align="left">
-                        <div>
-                            <a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="insertApi()"><i class="fa fa-flag fa-lg fa-fw fa-col"></i>插入Api</a>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div>
+<#--    <div data-options="region:'north',border:false" style="padding:5px; overflow: hidden;" align="left">-->
+<#--        <form id="manage_apiDocSchemeDesc_searchform" onsubmit="return false">-->
+<#--            <table class="tableForm" width="100%">-->
+<#--                <tr>-->
+<#--                    <td align="left">-->
+<#--                        <div>-->
+<#--                            <a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="insertApi()"><i class="fa fa-flag fa-lg fa-fw fa-col"></i>插入Api</a>-->
+<#--                        </div>-->
+<#--                    </td>-->
+<#--                </tr>-->
+<#--            </table>-->
+<#--        </form>-->
+<#--    </div>-->
     <!-- 列表和工具栏 -->
     <div data-options="region:'center',border:true,split:true">
 

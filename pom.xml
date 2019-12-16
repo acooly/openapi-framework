@@ -25,61 +25,61 @@
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-common</artifactId>
-                <version>${acooly.version}</version>
+                <version>${parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-core</artifactId>
-                <version>${acooly.version}</version>
+                <version>${parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-service</artifactId>
-                <version>${acooly.version}</version>
+                <version>${parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-mock</artifactId>
-                <version>${acooly.version}</version>
+                <version>${parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-test</artifactId>
-                <version>${acooly.version}</version>
+                <version>${parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-notify</artifactId>
-                <version>${acooly.version}</version>
+                <version>${parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-extensions</artifactId>
-                <version>${acooly.version}</version>
+                <version>${parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-facade</artifactId>
-                <version>${acooly.version}</version>
+                <version>${parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-client</artifactId>
-                <version>${acooly.version}</version>
+                <version>${parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-apidoc</artifactId>
-                <version>${acooly.version}</version>
+                <version>${parent.version}</version>
             </dependency>
         </dependencies>
 

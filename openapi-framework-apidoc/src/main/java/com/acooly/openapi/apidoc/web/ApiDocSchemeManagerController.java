@@ -15,7 +15,6 @@ import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.enums.DocStatusEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
-import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeDescService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
@@ -59,9 +58,6 @@ public class ApiDocSchemeManagerController extends AbstractJQueryEntityControlle
 
     @Autowired
     private ApiDocSchemeServiceService apiDocSchemeServiceService;
-
-    @Autowired
-    private ApiDocSchemeDescService apiDocSchemeDescService;
 
     @Override
     protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
