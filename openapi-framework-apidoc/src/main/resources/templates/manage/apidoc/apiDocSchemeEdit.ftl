@@ -18,15 +18,15 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>名称：</th>
+                    <th>标题：</th>
                     <td><input type="text" name="title" size="40" class="easyui-validatebox text" data-options="required:true" validType="byteLength[1,32]"/></td>
                 </tr>
-                <tr>
-                    <th>链接地址：</th>
-                    <td>
-                        <textarea name="link" style="width: 300px; height: 60px;"></textarea>
-                    </td>
-                </tr>
+<#--                <tr>-->
+<#--                    <th>链接地址：</th>-->
+<#--                    <td>-->
+<#--                        <textarea name="link" style="width: 300px; height: 60px;"></textarea>-->
+<#--                    </td>-->
+<#--                </tr>-->
             </table>
         </@jodd.form>
     </form>

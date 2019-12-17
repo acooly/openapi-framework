@@ -38,9 +38,9 @@
 			});
 		},
 		enableDnd: function(jq, id){
-			if (!$('#treegrid-dnd-style').length){
+			if (!$('#treegrid-dnd-style'+id).length){
 				$('head').append(
-					'<style id="treegrid-dnd-style">' +
+					'<style id="treegrid-dnd-style"+id>' +
 					'.treegrid-row-top td{border-top:1px solid red}' +
 					'.treegrid-row-bottom td{border-bottom:1px solid red}' +
 					'.treegrid-row-append .tree-title{border:1px solid red}' +

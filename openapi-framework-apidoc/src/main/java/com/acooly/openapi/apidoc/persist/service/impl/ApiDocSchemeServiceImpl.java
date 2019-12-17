@@ -311,36 +311,42 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void move(String sourceId, String targetId, String point) {
-        ApiDocScheme source = this.get(Long.valueOf(sourceId));
-        ApiDocScheme target = this.get(Long.valueOf(targetId));
-        // 更新源节点父节点计数
-        if (!ApiDocScheme.TOP_PARENT_ID.equals(source.getParentId())) {
-            ApiDocScheme sourceParent = this.get(source.getParentId());
+        Map<Long, ApiDocScheme> nodeMap = Maps.newHashMap();
+        //源节点
+        ApiDocScheme source = loadNodeById(Long.valueOf(sourceId), nodeMap);
+        //目标节点
+        ApiDocScheme target = loadNodeById(Long.valueOf(targetId), nodeMap);
+
+        //源节点父节点id
+        Long sourceParentId = source.getParentId();
+        Long targetParentId = target.getParentId();
+        if ("append".equals(point)) {
+            source.setParentId(target.getId());
+            source.setSortTime(System.currentTimeMillis());
+            //变更目标父节点
+            targetParentId = source.getParentId();
+        } else if ("top".equals(point)) {
+            source.setSortTime(target.getSortTime() + 1);
+            source.setParentId(targetParentId);
+        } else if ("bottom".equals(point)) {
+            source.setSortTime(target.getSortTime() - 1);
+            source.setParentId(targetParentId);
+        }
+        //仅处理source节点更新
+        this.update(source);
+
+        //更新源父节点计数
+        if (!ApiDocScheme.TOP_PARENT_ID.equals(sourceParentId) && !sourceParentId.equals(targetParentId)) {
+            ApiDocScheme sourceParent = loadNodeById(Long.valueOf(sourceParentId), nodeMap);
             sourceParent.setSubCount(sourceParent.getSubCount() - 1);
             this.update(sourceParent);
         }
-        if ("append".equals(point)) {
-            // 更新目标节点父节点计数
-            target.setSubCount(target.getSubCount() + 1);
-            source.setParentId(target.getId());
-            source.setSortTime(System.currentTimeMillis());
-            this.update(target);
-        } else if ("top".equals(point)) {
-            source.setSortTime(target.getSortTime() + 1);
-            // 不同级
-            if (source.getParentId() != null && target.getParentId() != null
-                    && !source.getParentId().equals(target.getParentId())) {
-                source.setParentId(target.getParentId());
-            }
-        } else if ("bottom".equals(point)) {
-            source.setSortTime(target.getSortTime() - 1);
-            // 不同级
-            if (source.getParentId() != null && target.getParentId() != null
-                    && !source.getParentId().equals(target.getParentId())) {
-                source.setParentId(target.getParentId());
-            }
+        //更新目标父节点计数
+        if (!ApiDocScheme.TOP_PARENT_ID.equals(targetParentId) && !sourceParentId.equals(targetParentId)) {
+            ApiDocScheme targetParent = loadNodeById(Long.valueOf(targetParentId), nodeMap);
+            targetParent.setSubCount(targetParent.getSubCount() + 1);
+            this.update(targetParent);
         }
-        this.update(source);
     }
 
     /**
@@ -355,4 +361,16 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
                         .thenComparing(t -> -t.getId())));
     }
 
+
+    protected ApiDocScheme loadNodeById(Long id, Map<Long, ApiDocScheme> nodeMap) {
+        if (nodeMap.get(id) != null) {
+            return nodeMap.get(id);
+        }
+        ApiDocScheme apiDocScheme = this.get(id);
+        if (apiDocScheme == null) {
+            throw new BusinessException("数据异常");
+        }
+        nodeMap.put(id, apiDocScheme);
+        return apiDocScheme;
+    }
 }

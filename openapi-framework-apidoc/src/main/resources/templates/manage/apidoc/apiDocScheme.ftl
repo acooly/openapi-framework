@@ -8,8 +8,8 @@
                 $(this).treegrid('enableDnd', row?row.id:null);
             },
             onBeforeDrop :function(targetRow, sourceRow, point){
-                console.info("targetRow:" + targetRow.name);
-                console.info("sourceRow:" + sourceRow.name);
+                console.info("targetRow:" + targetRow.title);
+                console.info("sourceRow:" + sourceRow.title);
                 console.info("point:" + JSON.stringify(point));
                 if (!point || point == null){
                     return false;
@@ -49,10 +49,12 @@
                 <th field="id" sortable="true" sum="true">id</th>
                 <#--                <th field="parentId" sortable="true" sum="true">父级id</th>-->
                 <th field="schemeNo">编码</th>
-                <th field="title" formatter="contentFormatter">文档名称</th>
+                <th field="title" formatter="contentFormatter">标题</th>
+                <th field="category">分类</th>
+                <th field="subCount">子节点数量</th>
                 <#--                <th field="sortTime" sortable="true" sum="true">排序值</th>-->
                 <#--                <th field="path" formatter="contentFormatter">层级路径</th>-->
-                <th field="link">链接地址</th>
+<#--                <th field="link">链接地址</th>-->
                 <th field="statusText">状态</th>
                 <#--                <th field="operUsernameCreate">创建人员</th>-->
                 <#--                <th field="operUsernameModify">修改人员</th>-->
