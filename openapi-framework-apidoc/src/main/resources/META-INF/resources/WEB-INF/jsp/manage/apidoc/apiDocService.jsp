@@ -68,7 +68,7 @@ function showServiceInfo(id){
 			<th field="manualNote" formatter="contentFormatter">手工说明</th>
 			<th field="serviceType" formatter="mappingFormatter">服务类型</th>
 			<th field="busiType" formatter="mappingFormatter">业务类型</th>
-			<th field="sortTime" sum="true">排序值</th>
+<%--			<th field="sortTime" sum="true">排序值</th>--%>
 			<th field="comments">备注</th>
 		    <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
 		    <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>

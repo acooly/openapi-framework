@@ -18,6 +18,16 @@
                     </td>
                 </tr>
                 <tr>
+                    <th>编码：</th>
+                    <td>
+                        <#if action == 'create'>
+                            <input type="text" name="schemeNo" size="40" class="easyui-validatebox text" validType="byteLength[1,32]"/>
+                        <#else>
+                            ${apiDocScheme.schemeNo}
+                        </#if>
+                    </td>
+                </tr>
+                <tr>
                     <th>标题：</th>
                     <td><input type="text" name="title" size="40" class="easyui-validatebox text" data-options="required:true" validType="byteLength[1,32]"/></td>
                 </tr>

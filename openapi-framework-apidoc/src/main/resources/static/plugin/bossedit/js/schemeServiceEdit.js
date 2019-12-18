@@ -5,6 +5,7 @@ function schemeInfo(id) {
     $.ajax({
         type: "POST",
         data: {id: id},
+        dataType: "json",
         url: "/manage/apidoc/apiDocScheme/getSignSchemeInfo.html",
         error: function (data) {
             alert("Connection error");
@@ -12,10 +13,9 @@ function schemeInfo(id) {
         },
         success: function (data) {
             schemeInfoContext = data;
-            var schemeInfoHtml = schemeInfoTemplate(schemeInfoContext);
+            var schemeInfoHtml = schemeInfoTemplate(schemeInfoContext)
             $('#schemeBaseInfo').html(schemeInfoHtml);
-        },
-        dataType: "json"
+        }
     });
 };
 

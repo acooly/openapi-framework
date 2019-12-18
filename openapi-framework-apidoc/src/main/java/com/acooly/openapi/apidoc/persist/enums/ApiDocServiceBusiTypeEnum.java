@@ -7,12 +7,12 @@
  */
 package com.acooly.openapi.apidoc.persist.enums;
 
+import com.acooly.core.utils.enums.Messageable;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.acooly.core.utils.enums.Messageable;
 
 /**
  * 服务 ApiDocServiceBusiTypeEnum 枚举定义
@@ -21,6 +21,10 @@ import com.acooly.core.utils.enums.Messageable;
  * Date: 2017-12-05 12:34:39
  */
 public enum ApiDocServiceBusiTypeEnum implements Messageable {
+
+	Trade("Trade", "交易"),
+
+	Manage("Manage", "管理"),
 
 	Query("Query", "查询"),
 

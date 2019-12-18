@@ -15,6 +15,8 @@ import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.enums.DocStatusEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
+import com.acooly.openapi.apidoc.persist.enums.ApiDocServiceBusiTypeEnum;
+import com.acooly.openapi.apidoc.persist.enums.ApiDocServiceServiceTypeEnum;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
@@ -65,6 +67,8 @@ public class ApiDocSchemeManagerController extends AbstractJQueryEntityControlle
         String category = Servlets.getParameter(request, "category");
         request.setAttribute("category", category);
         model.put("allStatuss", DocStatusEnum.mapping());
+        model.put("allServiceTypes", ApiDocServiceServiceTypeEnum.mapping());
+        model.put("allBusiTypes", ApiDocServiceBusiTypeEnum.mapping());
     }
 
     @RequestMapping("/settingService")
@@ -95,6 +99,7 @@ public class ApiDocSchemeManagerController extends AbstractJQueryEntityControlle
         try {
             ApiDocScheme apiScheme = apiDocSchemeService.get(id);
             JSONObject data = new JSONObject();
+            data.put("schemeNo", apiScheme.getSchemeNo());
             data.put("name", apiScheme.getTitle());
             data.put("note", apiScheme.getNote());
             data.put("schemeType", apiScheme.getSchemeType());
@@ -428,5 +433,20 @@ public class ApiDocSchemeManagerController extends AbstractJQueryEntityControlle
         } else {
             return null;
         }
+    }
+
+    @ResponseBody
+    @RequestMapping("/schemeServiceList")
+    private JsonListResult<ApiDocService> schemeServiceList(String schemeNo, HttpServletRequest request, HttpServletResponse response) {
+        JsonListResult<ApiDocService> result = new JsonListResult<>();
+        try {
+            result.appendData(referenceData(request));
+            List<ApiDocService> apiDocServices = apiDocSchemeServiceService.findSchemeApiDocServices(schemeNo);
+            result.setRows(apiDocServices);
+            result.setMessage("查询服务信息成功");
+        } catch (Exception var5) {
+            this.handleException(result, "查询", var5);
+        }
+        return result;
     }
 }

@@ -4,21 +4,6 @@
     $(function () {
         $.acooly.framework.registerKeydown('manage_apiScheme_searchform', 'manage_apiScheme_datagrid');
     });
-
-    /**
-     * 打开权限设置界面
-     */
-    function manage_apiPartner_showSetting(id) {
-        $('#layout_center_tabs').tabs('close', "配置解决方案服务列表");
-        $('#edit_scheme_id').dialog({
-            title: '<i class="fa fa-cog fa-lg fa-fw fa-col"></i> 配置解决方案服务列表',
-            href: '/manage/apidoc/apiDocScheme/settingService.html?id='+id,
-            closable: true,
-            modal: true,
-            width: 1000,
-            height: 450
-        });
-    }
 </script>
 <link rel="stylesheet" type="text/css" href="/plugin/bossedit/css/wangEditor.min.css">
 <link rel="stylesheet" type="text/css" href="/plugin/bossedit/css/common.css">
@@ -28,7 +13,6 @@
 <div class="easyui-layout" data-options="fit : true,border : false">
     <div class="module fn-clear">
         <div class="module-main" id="schemeBaseInfo">
-
         </div>
     </div>
 </div>
@@ -39,13 +23,17 @@
         <div class="plan-title fn-clear">
             <div class="fn-left title-left">
                 <div class="fn-clear">
-                    <label>解决方案名称：</label>
-                    <div class="plan-text">{{data.name}}</div>
+                    <label>编码：</label>
+                    <div class="plan-text">{{data.schemeNo}}</div>
                 </div>
                 <div class="fn-clear">
-                    <label>说明：</label>
-                    <div class="plan-text">{{data.note}}</div>
+                    <label>标题：</label>
+                    <div class="plan-text">{{data.name}}</div>
                 </div>
+<%--                <div class="fn-clear">--%>
+<%--                    <label>说明：</label>--%>
+<%--                    <div class="plan-text">{{data.note}}</div>--%>
+<%--                </div>--%>
             </div>
             <div class="fn-right title-right">
                 <div class="fn-clear">
@@ -122,6 +110,20 @@
 <script src="/plugin/bossedit/js/schemeServiceEdit.js"></script>
 <%--<script src="../plugs/bossedit/js/common.js"></script>--%>
 <%--<script src="../plugs/bossedit/js/solution_detail.js"></script>--%>
-<script>
+<script type="text/javascript">
     schemeInfo(${id});
+    /**
+     * 打开权限设置界面
+     */
+    function manage_apiPartner_showSetting(id) {
+        $('#layout_center_tabs').tabs('close', "配置解决方案服务列表");
+        $('#edit_scheme_id').dialog({
+            title: '<i class="fa fa-cog fa-lg fa-fw fa-col"></i> 配置解决方案服务列表',
+            href: '/manage/apidoc/apiDocScheme/settingService.html?id='+id,
+            closable: true,
+            modal: true,
+            width: 1000,
+            height: 450
+        });
+    }
 </script>
