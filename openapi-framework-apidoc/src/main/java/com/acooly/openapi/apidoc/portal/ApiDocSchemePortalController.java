@@ -10,6 +10,7 @@
 package com.acooly.openapi.apidoc.portal;
 
 import com.acooly.core.utils.Collections3;
+import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.cms.domain.Content;
 import com.acooly.module.cms.service.ContentService;
@@ -131,7 +132,9 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
 
 
     protected void doLoadSchemeMenus(HttpServletRequest request, HttpServletResponse response, Model model) {
-        List<ApiDocSchemeDto> schemes = loadSchemeList(request, null);
+        String schemeType = Servlets.getParameter("schemeType");
+        String category = Servlets.getParameter("category");
+        List<ApiDocSchemeDto> schemes = loadSchemeList(request, schemeType, category);
         List<ApiDocSchemeDto> showSchemes = Lists.newArrayList();
         if (!apiDocProperties.isDefaultSchemeShow()) {
             for (ApiDocSchemeDto s : schemes) {
@@ -146,8 +149,8 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
     }
 
 
-    protected List<ApiDocSchemeDto> loadSchemeList(HttpServletRequest request, SchemeTypeEnum schemeGroupEnum) {
-        List<ApiDocScheme> schemes = apiDocSchemeService.findBySchemeType(schemeGroupEnum);
+    protected List<ApiDocSchemeDto> loadSchemeList(HttpServletRequest request, String schemeType, String category) {
+        List<ApiDocScheme> schemes = apiDocSchemeService.findBySchemeTypeAndCategory(schemeType, category);
         List<ApiDocSchemeDto> apiDocSchemeDtos = Lists.newArrayList();
         if (Collections3.isNotEmpty(schemes)) {
             ApiDocSchemeDto apiDocSchemeDto = null;

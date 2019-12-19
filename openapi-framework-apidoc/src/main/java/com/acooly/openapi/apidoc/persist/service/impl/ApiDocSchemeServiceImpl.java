@@ -77,7 +77,20 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
         } else {
             return getEntityDao().findBySchemeType(schemeType);
         }
+    }
 
+    @Override
+    public List<ApiDocScheme> findBySchemeTypeAndCategory(String schemeType, String category) {
+        Map<String, Object> map = Maps.newHashMap();
+        if (Strings.isNotBlank(schemeType)) {
+            map.put("EQ_schemeType", schemeType);
+        }
+        if (Strings.isNotBlank(category)) {
+            map.put("EQ_category", category);
+        }
+        Map<String, Boolean> sortMap = Maps.newHashMap();
+        sortMap.put("sortTime", false);
+        return this.getEntityDao().list(map, sortMap);
     }
 
     /**

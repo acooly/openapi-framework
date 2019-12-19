@@ -25,7 +25,7 @@
 <div class="container">
     <!--左边-->
     <div class="container-left">
-                <@includePage path="/docs/scheme/menu.html?page=index"/>
+                <@includePage path="/docs/scheme/menu.html?page=index&category=api"/>
     </div>
     <!--右边-->
     <div id="dataCont" class="container-main">

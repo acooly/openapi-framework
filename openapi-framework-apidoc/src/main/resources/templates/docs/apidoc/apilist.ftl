@@ -24,7 +24,7 @@
 		<div class="container">
             <!--左边-->
             <div class="container-left">
-                <@includePage path="/docs/apischeme/menu.html?page=apilist"/>
+                <@includePage path="/docs/apischeme/menu.html?page=apilist&category=api"/>
             </div>
             <!--右边-->
             <div class="container-main">

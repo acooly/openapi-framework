@@ -39,6 +39,13 @@ public interface ApiDocSchemeService extends EntityService<ApiDocScheme> {
      */
     List<ApiDocScheme> findBySchemeType(SchemeTypeEnum schemeType);
 
+    /**
+     * 按方案类型查询
+     *
+     * @param schemeType
+     * @return
+     */
+    List<ApiDocScheme> findBySchemeTypeAndCategory(String schemeType,String category);
 
     /**
      * 合并

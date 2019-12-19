@@ -32,6 +32,4 @@ public interface ApiDocSchemeDao extends EntityMybatisDao<ApiDocScheme> {
 
     @Select("select * from api_doc_scheme where sort_time >= #{sortTime} and id != #{id} limit 1")
     ApiDocScheme findBeforeOne(@Param("sortTime") Long sortTime, @Param("id") Long id);
-
-
 }
