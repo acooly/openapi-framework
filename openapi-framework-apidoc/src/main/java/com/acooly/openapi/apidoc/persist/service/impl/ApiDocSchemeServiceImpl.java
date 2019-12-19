@@ -14,6 +14,7 @@ import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.arithmetic.tree.QuickTree;
 import com.acooly.openapi.apidoc.ApiDocProperties;
 import com.acooly.openapi.apidoc.enums.ApiDocErrorCodeEnum;
+import com.acooly.openapi.apidoc.enums.DocStatusEnum;
 import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
 import com.acooly.openapi.apidoc.persist.dao.ApiDocSchemeDao;
 import com.acooly.openapi.apidoc.persist.dao.ApiDocServiceDao;
@@ -294,6 +295,7 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
         category = Strings.isBlankDefault(category, ApiDocProperties.DEFAULT_CATEGORY);
         rootPath = Strings.isBlankDefault(rootPath, ApiDocScheme.TOP_PARENT_PATH);
         params.put("EQ_category", category);
+        params.put("EQ_status", DocStatusEnum.onShelf);
         params.put("RLIKE_path", rootPath);
         List<ApiDocScheme> treeTypes = query(params, null);
         return doTree(treeTypes);

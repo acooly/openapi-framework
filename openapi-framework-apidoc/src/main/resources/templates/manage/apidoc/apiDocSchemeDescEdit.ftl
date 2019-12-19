@@ -1,5 +1,8 @@
 <#assign jodd=JspTaglibs["http://www.springside.org.cn/jodd_form"] />
 <link rel="stylesheet" href="/plugin/editormd/css/editormd.css" />
+<style>
+    li{ list-style: disc;}
+</style>
 <div class="easyui-layout" data-options="fit : true,border : false">
 <#--    <div data-options="region:'north',border:false" style="padding:5px; overflow: hidden;" align="left">-->
 <#--        <form id="manage_apiDocSchemeDesc_searchform" onsubmit="return false">-->
@@ -16,7 +19,6 @@
 <#--    </div>-->
     <!-- 列表和工具栏 -->
     <div data-options="region:'center',border:true,split:true">
-
         <div class="easyui-layout" data-options="fit : true,border : false">
             <div data-options="region:'center',border:false">
                 <form id="manage_apiDocSchemeDesc_editform" action="/manage/apidoc/apiDocSchemeDesc/<#if action=='create'>saveJson<#else>updateJson</#if>.html" method="post">
@@ -120,9 +122,5 @@
 
     function manage_apiDocSchemeDesc_editform_beforeSubmit() {
         $("#schemeDesc").val(editor.getMarkdown());
-    }
-
-    function insertApi() {
-
     }
 </script>
