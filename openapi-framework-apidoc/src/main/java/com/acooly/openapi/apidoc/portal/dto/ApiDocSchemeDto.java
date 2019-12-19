@@ -10,6 +10,7 @@
 package com.acooly.openapi.apidoc.portal.dto;
 
 import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
+import com.google.common.collect.Lists;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -80,6 +81,11 @@ public class ApiDocSchemeDto implements Serializable {
      * 详细内容
      */
     private String content;
+
+    /**
+     * 关联的服务列表
+     */
+    private List<ApiDocServiceDto> serviceList = Lists.newArrayList();
 
     public ApiDocSchemeDto() {
     }

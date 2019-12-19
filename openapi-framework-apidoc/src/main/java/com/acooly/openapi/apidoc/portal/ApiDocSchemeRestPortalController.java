@@ -66,14 +66,21 @@ public class ApiDocSchemeRestPortalController {
         JsonEntityResult<ApiDocSchemeDto> result = new JsonEntityResult<>();
         ApiDocScheme apiDocScheme = apiDocSchemeService.get(id);
         ApiDocSchemeDesc apiDocSchemeDesc = apiDocSchemeDescService.get(id);
-        if (apiDocScheme == null || apiDocSchemeDesc == null) {
+        if (apiDocScheme == null) {
             result.setSuccess(false);
-            result.setMessage("内容不存在");
+            result.setMessage("方案不存在");
             return result;
         }
         ApiDocSchemeDto dto = new ApiDocSchemeDto();
         BeanCopier.copy(apiDocScheme, dto);
-        dto.setContent(apiDocSchemeDesc.getSchemeDesc());
+        if (apiDocSchemeDesc != null) {
+            dto.setContent(apiDocSchemeDesc.getSchemeDesc());
+        }
+        List<ApiDocService> schemeServices = apiDocSchemeServiceService.findSchemeApiDocServices(apiDocScheme.getSchemeNo());
+        if (Collections3.isNotEmpty(schemeServices)) {
+            List<ApiDocServiceDto> serviceList = JSON.parseArray(JSON.toJSONString(schemeServices), ApiDocServiceDto.class);
+            dto.setServiceList(serviceList);
+        }
         result.setEntity(dto);
         return result;
     }
