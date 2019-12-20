@@ -43,12 +43,11 @@ public class ApiDocDemoPortalController extends AbstractPortalController {
     /**
      * 获取Demo报文
      */
-    @RequestMapping("message")
+    @RequestMapping("/message")
     @ResponseBody
-    public JsonListResult<ApiDocMessageContext> message(HttpServletRequest request, HttpServletResponse response) {
+    public JsonListResult<ApiDocMessageContext> message(String id, HttpServletRequest request, HttpServletResponse response) {
         JsonListResult<ApiDocMessageContext> result = new JsonListResult<ApiDocMessageContext>();
         try {
-            String id = request.getParameter("id");
             ApiDocService apiServiceDoc = apiDocServiceService.loadApiDocService(Long.valueOf(id));
             String signType = Strings.isBlankDefault(request.getParameter("signType"), SignTypeEnum.MD5Hex.name());
             List<ApiDocMessageContext> messages = apiDocMessageBuilder.build(apiServiceDoc, signType);

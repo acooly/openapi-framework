@@ -39,6 +39,7 @@ public class ApiDocApiRestPortalController {
             result.setSuccess(false);
             result.setCode(ResultStatus.failure.getCode());
             result.setMessage("api信息不存在");
+            return result;
         }
         ApiDocServiceDto apiDocServiceDto = JSON.parseObject(JSON.toJSONString(apiDocService), ApiDocServiceDto.class);
         result.setEntity(apiDocServiceDto);
