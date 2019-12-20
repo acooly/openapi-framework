@@ -4,6 +4,7 @@ import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.mapper.BeanCopier;
+import com.acooly.openapi.apidoc.enums.DocStatusEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocSchemeDesc;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
@@ -47,7 +48,7 @@ public class ApiDocSchemeRestPortalController {
     @GetMapping(value = {"/catalogList"})
     public JsonListResult<ApiDocSchemeDto> catalogList(String category, Long id, HttpServletRequest request, HttpServletResponse response, Model model) {
         JsonListResult<ApiDocSchemeDto> result = new JsonListResult<ApiDocSchemeDto>();
-        List<ApiDocScheme> list = apiDocSchemeService.tree(category, id);
+        List<ApiDocScheme> list = apiDocSchemeService.tree(category, id, DocStatusEnum.onShelf);
         // 使用json转换entity为dto，解决深copy的问题
         if (Collections3.isNotEmpty(list)) {
             List<ApiDocSchemeDto> resultList = JSON.parseArray(JSON.toJSONString(list), ApiDocSchemeDto.class);

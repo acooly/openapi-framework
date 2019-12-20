@@ -8,11 +8,11 @@
 package com.acooly.openapi.apidoc.persist.service;
 
 import com.acooly.core.common.service.EntityService;
+import com.acooly.openapi.apidoc.enums.DocStatusEnum;
 import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
 import com.alibaba.fastjson.JSONObject;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -70,57 +70,63 @@ public interface ApiDocSchemeService extends EntityService<ApiDocScheme> {
 
     /**
      * 树形结构
-     * 默认主题为：theme
+     * 默认分类为：api
      *
      * @param rootPath 根节点Path（为空，则默认：/）
+     * @param status
      * @return
      */
-    List<ApiDocScheme> tree(String rootPath);
+    List<ApiDocScheme> tree(String rootPath, DocStatusEnum status);
 
     /**
      * 树形结构
-     * 默认主题为：theme
+     * 默认分类为：api
      *
      * @param rootId 根节点Id（为空，则默认：0）
+     * @param status
      * @return
      */
-    List<ApiDocScheme> tree(Long rootId);
+    List<ApiDocScheme> tree(Long rootId, DocStatusEnum status);
 
     /**
      * 树形结构
      *
-     * @param theme    主题（为空，则默认：default）
+     * @param category    分类
      * @param rootPath 根节点Path（为空，则默认：/）
+     * @param status
      * @return
      */
-    List<ApiDocScheme> tree(@NotEmpty String theme, String rootPath);
+    List<ApiDocScheme> tree(String category, String rootPath, DocStatusEnum status);
 
     /**
      * 树形结构
      *
-     * @param theme  主题（为空，则默认：default）
+     * @param category  主题（为空，则默认：api）
      * @param rootId 根节点Id（为空，则默认：0）
+     * @param status
      * @return
      */
-    List<ApiDocScheme> tree(@NotEmpty String theme, Long rootId);
+    List<ApiDocScheme> tree(String category, Long rootId, DocStatusEnum status);
 
     /**
      * 单层查询
-     * （默认主题：default）
+     * （默认分类：api）
      *
      * @param parentId
+     * @param status
      * @return
      */
-    List<ApiDocScheme> level(Long parentId);
+    List<ApiDocScheme> level(Long parentId, DocStatusEnum status);
 
     /**
      * 单层查询
      *
      * @param parentId 为空：顶层（parentId=TOP_PARENT_ID）
-     * @param theme    为空则：默认主题（theme=DEFAULT_THEME）
+     * @param category    为空则：默认分类（category=DEFAULT_THEME）
+     * @param status
      * @return
      */
-    List<ApiDocScheme> level(Long parentId, String theme);
+    List<ApiDocScheme> level(Long parentId, String category, DocStatusEnum status);
 
     /**
      * 移动节点

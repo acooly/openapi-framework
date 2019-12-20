@@ -381,7 +381,7 @@ public class ApiDocSchemeManagerController extends AbstractJQueryEntityControlle
             result.appendData(referenceData(request));
             Long parentId = Servlets.getLongParameter(request, "id");
             String category = Servlets.getParameter(request, "category");
-            List<ApiDocScheme> entities = apiDocSchemeService.level(parentId, category);
+            List<ApiDocScheme> entities = apiDocSchemeService.level(parentId, category, null);
             result.setTotal((long) entities.size());
             result.setRows(entities);
         } catch (Exception e) {
@@ -398,8 +398,8 @@ public class ApiDocSchemeManagerController extends AbstractJQueryEntityControlle
             String category = Servlets.getParameter(request, "category");
             Long parentId = Servlets.getLongParameter(request, "parentId");
             result.appendData(referenceData(request));
-            List<ApiDocScheme> entities = Strings.isBlank(category) ? apiDocSchemeService.tree(parentId) :
-                    apiDocSchemeService.tree(category, parentId);
+            List<ApiDocScheme> entities = Strings.isBlank(category) ? apiDocSchemeService.tree(parentId, null) :
+                    apiDocSchemeService.tree(category, parentId, null);
             result.setTotal((long) entities.size());
             result.setRows(entities);
         } catch (Exception e) {

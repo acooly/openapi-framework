@@ -32,7 +32,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
@@ -272,17 +271,20 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
     }
 
     @Override
-    public List<ApiDocScheme> level(Long parentId) {
-        return level(parentId, null);
+    public List<ApiDocScheme> level(Long parentId, DocStatusEnum status) {
+        return level(parentId, status);
     }
 
     @Override
-    public List<ApiDocScheme> level(Long parentId, String category) {
+    public List<ApiDocScheme> level(Long parentId, String category, DocStatusEnum status) {
         Long queryParentId = Strings.isBlankDefault(parentId, ApiDocScheme.TOP_PARENT_ID);
         String queryCategory = Strings.isBlankDefault(category, ApiDocProperties.DEFAULT_CATEGORY);
         Map<String, Object> map = Maps.newHashMap();
         map.put("EQ_category", queryCategory);
         map.put("EQ_parentId", queryParentId);
+        if (status != null) {
+            map.put("EQ_status", status);
+        }
         Map<String, Boolean> sortMap = Maps.newLinkedHashMap();
         sortMap.put("sortTime", false);
         sortMap.put("id", false);
@@ -290,19 +292,21 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
     }
 
     @Override
-    public List<ApiDocScheme> tree(@NotNull String category, String rootPath) {
+    public List<ApiDocScheme> tree(String category, String rootPath, DocStatusEnum status) {
         Map<String, Object> params = Maps.newHashMap();
         category = Strings.isBlankDefault(category, ApiDocProperties.DEFAULT_CATEGORY);
         rootPath = Strings.isBlankDefault(rootPath, ApiDocScheme.TOP_PARENT_PATH);
         params.put("EQ_category", category);
-        params.put("EQ_status", DocStatusEnum.onShelf);
         params.put("RLIKE_path", rootPath);
+        if (status != null) {
+            params.put("EQ_status", status);
+        }
         List<ApiDocScheme> treeTypes = query(params, null);
         return doTree(treeTypes);
     }
 
     @Override
-    public List<ApiDocScheme> tree(@NotNull String category, Long rootId) {
+    public List<ApiDocScheme> tree(String category, Long rootId, DocStatusEnum status) {
         String path = null;
         if (rootId != null && !rootId.equals(ApiDocScheme.TOP_PARENT_ID)) {
             ApiDocScheme rootApiDocScheme = get(rootId);
@@ -310,17 +314,17 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
                 path = rootApiDocScheme.getPath();
             }
         }
-        return tree(category, path);
+        return tree(category, path, status);
     }
 
     @Override
-    public List<ApiDocScheme> tree(String rootPath) {
-        return tree(ApiDocProperties.DEFAULT_CATEGORY, rootPath);
+    public List<ApiDocScheme> tree(String rootPath, DocStatusEnum status) {
+        return tree(ApiDocProperties.DEFAULT_CATEGORY, rootPath, status);
     }
 
     @Override
-    public List<ApiDocScheme> tree(Long rootId) {
-        return tree(ApiDocProperties.DEFAULT_CATEGORY, rootId);
+    public List<ApiDocScheme> tree(Long rootId, DocStatusEnum status) {
+        return tree(ApiDocProperties.DEFAULT_CATEGORY, rootId, status);
     }
 
     @Override
