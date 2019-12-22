@@ -86,7 +86,6 @@ public class OpenApiClient {
             }
         } else {
             log.info("响应-> {}", responseContext.getBody());
-            // fixme
             Map<String, Object> jsonObject = JsonMarshallor.INSTANCE.parse(responseContext.getBody(), Map.class);
             Map<String, String> map = Maps.transformValues(jsonObject, v -> (v != null ? v.toString() : null));
             String waitForSign = ApiUtils.getWaitForSignString(map);

@@ -3,11 +3,11 @@ package com.acooly.openapi.framework.common.message;
 import com.acooly.core.common.facade.BizOrderBase;
 import com.acooly.core.common.facade.OrderBase;
 import com.acooly.core.utils.Ids;
+import com.acooly.core.utils.Reflections;
 import com.acooly.core.utils.mapper.BeanCopier;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.MDC;
-import org.springframework.beans.BeanUtils;
 
 @Getter
 @Setter
@@ -23,7 +23,7 @@ public class ApiRequest extends ApiMessage {
 
 
     public <T extends OrderBase> T toOrder(Class<T> clazz) {
-        T t = BeanUtils.instantiateClass(clazz);
+        T t = Reflections.createObject(clazz);
         t.setGid(MDC.get("gid"));
         BeanCopier.copy(this, t);
         if (t instanceof BizOrderBase) {
