@@ -6,7 +6,7 @@
  */
 package com.acooly.openapi.mock.web;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.openapi.mock.entity.ApiMock;
 import com.acooly.openapi.mock.service.ApiMockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping(value = "/manage/module/openapi/mock/apiMock")
-public class ApiMockManagerController extends AbstractJQueryEntityController<ApiMock, ApiMockService> {
+public class ApiMockManagerController extends AbstractJsonEntityController<ApiMock, ApiMockService> {
 
 
     {

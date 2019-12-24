@@ -10,11 +10,22 @@
 
     <dependencies>
 
+        <!-- 模块依赖 -->
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-common-util</artifactId>
+        </dependency>
 
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-core</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -23,8 +34,12 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-filterchain</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.perf4j</groupId>
+            <artifactId>perf4j</artifactId>
+            <version>0.9.16</version>
+        </dependency>
     </dependencies>
 </project>

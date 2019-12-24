@@ -67,7 +67,7 @@ public class OpenApiClient {
 }
 ```
 
->注意：`OpenApiClient `设计为基于框架的ApiMessage对象，包括：ApiRequest，ApiResponse等。你可以再本地项目跟进文档构建ApiMessage，也可以引用服务器端的xxx-messages.jar直接使用服务器端的报文定义。
+>注意：`OpenApiClient `设计为基于框架的ApiMessage对象，包括：ApiRequest，ApiResponse等。你可以在本地项目根据文档构建ApiMessage，也可以引用服务器端的xxx-messages.jar直接使用服务器端的报文定义。
 
 ## AbstractApiClientService
 

@@ -37,20 +37,12 @@
 
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-jpa</artifactId>
-            <version>${acooly.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
             <artifactId>acooly-component-config</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-configuration-processor</artifactId>
-            <version>${acooly.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -61,7 +53,6 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
-            <version>1.8.0.RELEASE</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
