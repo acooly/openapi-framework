@@ -14,10 +14,16 @@ import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
 import com.acooly.openapi.apidoc.portal.dto.ApiDocSchemeDto;
 import com.acooly.openapi.apidoc.portal.dto.ApiDocServiceDto;
 import com.alibaba.fastjson.JSON;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,6 +52,9 @@ public class ApiDocSchemeRestPortalController {
      */
     @ResponseBody
     @GetMapping(value = {"/catalogList"})
+    @ApiOperation("文档-查询分类目录列表")
+    @ApiImplicitParams({@ApiImplicitParam(name = "category", value = "文档分类", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "id", value = "父级目录id", required = false, paramType = "query")})
     public JsonListResult<ApiDocSchemeDto> catalogList(String category, Long id, HttpServletRequest request, HttpServletResponse response, Model model) {
         JsonListResult<ApiDocSchemeDto> result = new JsonListResult<ApiDocSchemeDto>();
         List<ApiDocScheme> list = apiDocSchemeService.tree(category, id, DocStatusEnum.onShelf);
@@ -63,6 +72,8 @@ public class ApiDocSchemeRestPortalController {
      */
     @ResponseBody
     @GetMapping(value = {"/contentDetail"})
+    @ApiOperation("文档-文档内容详情")
+    @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "文档id（即目录id）", required = true, paramType = "query")})
     public JsonEntityResult contentDetail(Long id, HttpServletRequest request, HttpServletResponse response, Model model) {
         JsonEntityResult<ApiDocSchemeDto> result = new JsonEntityResult<>();
         ApiDocScheme apiDocScheme = apiDocSchemeService.get(id);
@@ -92,6 +103,8 @@ public class ApiDocSchemeRestPortalController {
      */
     @ResponseBody
     @GetMapping(value = {"/serviceList"})
+    @ApiOperation("文档-api列表")
+    @ApiImplicitParams({@ApiImplicitParam(name = "schemeNo", value = "文档编码", required = true, paramType = "query")})
     public JsonListResult<ApiDocServiceDto> serviceList(String schemeNo,
                                                         HttpServletRequest request, HttpServletResponse response, Model model) {
         List<ApiDocService> list = apiDocSchemeServiceService.findSchemeApiDocServices(schemeNo);

@@ -6,10 +6,16 @@ import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
 import com.acooly.openapi.apidoc.portal.dto.ApiDocServiceDto;
 import com.alibaba.fastjson.JSON;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,12 +33,13 @@ public class ApiDocApiRestPortalController {
     private ApiDocServiceService apiDocServiceService;
 
     /**
-     * 查询方案下的指定Api接口内容
+     * 查询指定Api接口内容
      */
     @ResponseBody
     @GetMapping(value = {"/serviceDetail"})
-    public JsonEntityResult serviceDetail(String schemeNo, String serviceNo,
-                                          HttpServletRequest request, HttpServletResponse response, Model model) {
+    @ApiOperation("api-查询指定Api接口内容")
+    @ApiImplicitParams({@ApiImplicitParam(name = "serviceNo", value = "api服务编码", required = true, paramType = "query")})
+    public JsonEntityResult serviceDetail(String serviceNo, HttpServletRequest request, HttpServletResponse response, Model model) {
         JsonEntityResult<ApiDocServiceDto> result = new JsonEntityResult<>();
         ApiDocService apiDocService = apiDocServiceService.loadApiDocServiceByNo(serviceNo);
         if (apiDocService == null) {

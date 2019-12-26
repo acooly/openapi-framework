@@ -10,24 +10,29 @@
 package com.acooly.openapi.apidoc.builder;
 
 import com.acooly.openapi.apidoc.enums.MessageTypeEnum;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Map;
 
 /**
  * @author zhangpu 2018-01-22 17:06
  */
 @Getter
 @Setter
+@ApiModel(value = "ApiDocMessageContext", description = "api服务报文消息结构体")
 public class ApiDocMessageContext {
 
+    @ApiModelProperty(value = "服务编号")
     private String serviceNo;
 
+    @ApiModelProperty(value = "消息类型")
     private MessageTypeEnum messageType;
 
+    @ApiModelProperty(value = "浏览器header内容")
     private Object header;
 
+    @ApiModelProperty(value = "浏览器body体内容")
     private Object body;
 
 

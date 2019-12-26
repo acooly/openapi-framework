@@ -16,6 +16,9 @@ import com.acooly.openapi.apidoc.builder.ApiDocMessageBuilder;
 import com.acooly.openapi.apidoc.builder.ApiDocMessageContext;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocServiceService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +48,8 @@ public class ApiDocDemoPortalController extends AbstractPortalController {
      */
     @RequestMapping("/message")
     @ResponseBody
+    @ApiOperation("api-apiDemo报文消息")
+    @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "文档id", required = true, paramType = "query")})
     public JsonListResult<ApiDocMessageContext> message(String id, HttpServletRequest request, HttpServletResponse response) {
         JsonListResult<ApiDocMessageContext> result = new JsonListResult<ApiDocMessageContext>();
         try {
