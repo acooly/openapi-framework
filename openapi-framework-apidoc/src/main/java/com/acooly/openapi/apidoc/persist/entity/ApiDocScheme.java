@@ -9,6 +9,7 @@ package com.acooly.openapi.apidoc.persist.entity;
 
 import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.common.domain.Sortable;
+import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.arithmetic.tree.TreeNode;
 import com.acooly.openapi.apidoc.ApiDocProperties;
 import com.acooly.openapi.apidoc.enums.DocStatusEnum;
@@ -49,6 +50,11 @@ public class ApiDocScheme extends AbstractEntity implements TreeNode<ApiDocSchem
      */
     @Size(max = 64)
     private String schemeNo;
+
+    /**
+     * 父级编码
+     */
+    private String parentSchemeNo;
 
     /**
      * 标题
@@ -143,9 +149,12 @@ public class ApiDocScheme extends AbstractEntity implements TreeNode<ApiDocSchem
         this.apiDocSchemeServices.add(apiDocSchemeService);
     }
 
-    public ApiDocScheme(String schemeNo, String title) {
+    public ApiDocScheme(String schemeNo, String title, String parentSchemeNo) {
         this.schemeNo = schemeNo;
         this.title = title;
+        if (Strings.isNotBlank(parentSchemeNo)) {
+            this.parentSchemeNo = parentSchemeNo;
+        }
         this.setSchemeType(SchemeTypeEnum.auto);
     }
 

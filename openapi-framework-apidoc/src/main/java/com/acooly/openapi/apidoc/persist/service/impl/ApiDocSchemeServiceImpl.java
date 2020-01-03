@@ -37,6 +37,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 服务方案 Service实现
@@ -101,49 +102,98 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
      */
     @Override
     public void merge(List<ApiDocScheme> apiDocSchemes) {
-
         try {
-            // 删除自动生成已持久化的未匹配的scheme
-            List<ApiDocScheme> persists = findBySchemeType(SchemeTypeEnum.auto);
-            List<ApiDocScheme> needRemoves = Lists.newArrayList();
-            for (ApiDocScheme persist : persists) {
-                if (!apiDocSchemes.contains(persist)) {
-                    needRemoves.add(persist);
+            if (Collections3.isEmpty(apiDocSchemes)) {
+                return;
+            }
+            Map<String, ApiDocScheme> atMap = apiDocSchemes.stream().collect(Collectors.toMap(ApiDocScheme::getSchemeNo, apiDocScheme -> apiDocScheme));
+            List<ApiDocScheme> persists = findBySchemeTypeAndCategory(null, ApiDocProperties.DEFAULT_CATEGORY);
+            if (persists == null) {
+                persists = Lists.newArrayList();
+            }
+            List<Serializable> needRemoves = Lists.newArrayList();
+            // 删除注解中无，而数据库中存在的方案
+            for (ApiDocScheme scheme : persists) {
+                // 删除自动生成已持久化的未匹配的scheme
+                if (atMap.get(scheme.getSchemeNo()) == null) {
+                    needRemoves.add(scheme.getId());
                 }
             }
             //删除系统默认生成的所有服务解决方案
             List<ApiDocScheme> commonSchemes = findBySchemeType(SchemeTypeEnum.common);
             if (apiDocProperties.isDefaultSchemeEnable()) {
                 for (ApiDocScheme scheme : commonSchemes) {
-                    if (!apiDocSchemes.contains(scheme)) {
-                        needRemoves.add(scheme);
+                    // 删除自动生成已持久化的未匹配的scheme
+                    if (atMap.get(scheme.getSchemeNo()) == null) {
+                        needRemoves.add(scheme.getId());
                     }
                 }
             }
-
-            List<Serializable> ids = Lists.newArrayList();
-            needRemoves.forEach(e -> {
-                ids.add(e.getId());
-            });
-            if (Collections3.isNotEmpty(ids)) {
-                removes(ids.toArray(new Serializable[]{}));
+            if (Collections3.isNotEmpty(needRemoves)) {
+                removes(needRemoves.toArray(new Serializable[]{}));
+                persists.removeIf(persist -> needRemoves.contains(persist.getId()));
             }
 
-            // 保存：传入有，数据库无的schemes
-            persists = getAll();
+            // 将剩余存在的方案转换为schemeNo为key的map
+            Map<String, ApiDocScheme> dbMap = persists.stream().collect(Collectors.toMap(ApiDocScheme::getSchemeNo, apiDocScheme -> apiDocScheme));
+
             List<ApiDocScheme> needSaves = Lists.newArrayList();
-            for (ApiDocScheme input : apiDocSchemes) {
-                if (!persists.contains(input)) {
-                    needSaves.add(input);
+            for (ApiDocScheme apiDocScheme : apiDocSchemes) {
+                // 注解标注的scheme在数据库中不存在，则需要插入数据库
+                if (dbMap.get(apiDocScheme.getSchemeNo()) == null) {
+                    needSaves.add(apiDocScheme);
                 }
             }
-            saves(needSaves);
-            log.info("合并服务方案 成功。 新增: {}， 删除冗余:{}", needSaves.size(), needRemoves.size());
+
+            if (Collections3.isNotEmpty(needSaves)) {
+                saves(needSaves);
+                // 将保存之后的列表全部加入到list中，此list现包含所有数据
+            }
+
+            persists = findBySchemeTypeAndCategory(null, ApiDocProperties.DEFAULT_CATEGORY);
+            dbMap = persists.stream().collect(Collectors.toMap(ApiDocScheme::getSchemeNo, apiDocScheme -> apiDocScheme));
+
+            List<ApiDocScheme> needUpdates = Lists.newArrayList();
+            for (ApiDocScheme persist : persists) {
+                boolean needUpdate = false;
+                // 基于数据库存储的schemeNo获取注解中定义的scheme
+                ApiDocScheme atScheme = atMap.get(persist.getSchemeNo());
+                // 获取数据库中父级scheme
+                ApiDocScheme parentDbScheme = dbMap.get(persist.getParentSchemeNo());
+
+                // 判断父节点是否发生变化 (数据库存储的父节点与扫描的父节点不一致或parentId与parentSchemeNo不匹配)
+                if (!Strings.equals(persist.getParentSchemeNo(), atScheme.getParentSchemeNo())) {
+                    needUpdate = true;
+                }
+                if (parentDbScheme != null && !parentDbScheme.getId().equals(atScheme.getParentId())) {
+                    needUpdate = true;
+                }
+                // 判断子节点数量是否发生变化
+                if (!persist.getSubCount().equals(atScheme.getSubCount())) {
+                    needUpdate = true;
+                    persist.setSubCount(atScheme.getSubCount());
+                }
+                if (needUpdate) {
+                    if (parentDbScheme != null) {
+                        persist.setParentSchemeNo(atScheme.getParentSchemeNo());
+                        persist.setParentId(parentDbScheme.getId());
+                        persist.setPath(ApiDocScheme.TOP_PARENT_PATH + persist.getParentId() + ApiDocScheme.TOP_PARENT_PATH);
+                    } else {
+                        persist.setParentSchemeNo(null);
+                        persist.setParentId(ApiDocScheme.TOP_PARENT_ID);
+                        persist.setPath(ApiDocScheme.TOP_PARENT_PATH);
+                    }
+                    needUpdates.add(persist);
+                }
+            }
+            if (Collections3.isNotEmpty(needUpdates)) {
+                saves(needUpdates);
+            }
+            log.info("合并服务方案 成功。 新增: {}， 删除冗余:{}，更新: {} ", needSaves.size(), needRemoves.size(), needUpdates.size());
         } catch (Exception e) {
+            e.printStackTrace();
             throw Exceptions.runtimeException("合并方案数据库失败：" + e.getMessage());
         }
-
-
     }
 
     @Override

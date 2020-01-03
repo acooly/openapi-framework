@@ -21,6 +21,7 @@ CREATE TABLE `api_doc_service` (
 CREATE TABLE `api_doc_scheme` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `scheme_no` varchar(64) NOT NULL DEFAULT '' COMMENT '方案编码',
+  `parent_scheme_no` varchar(64) DEFAULT NULL COMMENT '父级方案编码',
   `title` varchar(64) NOT NULL DEFAULT '' COMMENT '标题',
   `status` varchar(20) DEFAULT NULL COMMENT '状态{draft:草稿,onShelf:已上架,offShelf:已下架}',
   `parent_id` bigint(20) DEFAULT NULL COMMENT '父级id',

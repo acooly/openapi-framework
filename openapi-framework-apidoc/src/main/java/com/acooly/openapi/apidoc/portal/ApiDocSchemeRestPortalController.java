@@ -53,7 +53,7 @@ public class ApiDocSchemeRestPortalController {
     @ResponseBody
     @GetMapping(value = {"/catalogList"})
     @ApiOperation("文档-查询分类目录列表")
-    @ApiImplicitParams({@ApiImplicitParam(name = "category", value = "文档分类", required = true, paramType = "query"),
+    @ApiImplicitParams({@ApiImplicitParam(name = "category", value = "文档分类{api:api文档,product:产品文档}", required = true, paramType = "query"),
             @ApiImplicitParam(name = "id", value = "父级目录id", required = false, paramType = "query")})
     public JsonListResult<ApiDocSchemeDto> catalogList(String category, Long id, HttpServletRequest request, HttpServletResponse response, Model model) {
         JsonListResult<ApiDocSchemeDto> result = new JsonListResult<ApiDocSchemeDto>();
