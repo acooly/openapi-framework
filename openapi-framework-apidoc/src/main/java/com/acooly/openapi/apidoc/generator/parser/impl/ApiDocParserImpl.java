@@ -275,8 +275,10 @@ public class ApiDocParserImpl extends OpenApiDocParserSupport implements ApiDocP
      */
     private FieldStatus doParseApiDocItemStatus(Field field) {
         FieldStatus status = FieldStatus.O;
-        if (!(field.getAnnotation(NotNull.class) == null && field.getAnnotation(NotEmpty.class) == null && field
-                .getAnnotation(NotBlank.class) == null)) {
+        if (!(field.getAnnotation(NotNull.class) == null
+                && field.getAnnotation(NotEmpty.class) == null
+                && field.getAnnotation(javax.validation.constraints.NotEmpty.class) == null
+                && field.getAnnotation(NotBlank.class) == null)) {
             status = FieldStatus.M;
         }
         //条件可选
