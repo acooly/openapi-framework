@@ -73,7 +73,7 @@
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-client</artifactId>
-                <version>${parent.version}</version>
+                <version>5.0.0-xiyangdev-SNAPSHOT</version>
             </dependency>
 
             <dependency>
