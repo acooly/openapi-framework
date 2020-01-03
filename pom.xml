@@ -25,49 +25,49 @@
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-common</artifactId>
-                <version>${parent.version}</version>
+                <version>5.0.0-xiyangdev-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-core</artifactId>
-                <version>${parent.version}</version>
+                <version>5.0.0-xiyangdev-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-service</artifactId>
-                <version>${parent.version}</version>
+                <version>5.0.0-xiyangdev-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-mock</artifactId>
-                <version>${parent.version}</version>
+                <version>5.0.0-xiyangdev-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-test</artifactId>
-                <version>${parent.version}</version>
+                <version>5.0.0-xiyangdev-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-notify</artifactId>
-                <version>${parent.version}</version>
+                <version>5.0.0-xiyangdev-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-extensions</artifactId>
-                <version>${parent.version}</version>
+                <version>5.0.0-xiyangdev-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-facade</artifactId>
-                <version>${parent.version}</version>
+                <version>5.0.0-xiyangdev-SNAPSHOT</version>
             </dependency>
 
             <dependency>
@@ -79,7 +79,7 @@
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-apidoc</artifactId>
-                <version>${parent.version}</version>
+                <version>5.0.0-xiyangdev-SNAPSHOT</version>
             </dependency>
         </dependencies>
 
