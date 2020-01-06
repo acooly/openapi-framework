@@ -106,9 +106,9 @@ public class SchemeApiDocParserImpl extends OpenApiDocParserSupport implements A
                 parentScheme.setSubCount(parentScheme.getSubCount() + 1);
                 apiDocSchemeMaps.put(parentCode, parentScheme);
             }
-            ApiDocSchemeService apiDocSchemeService = new ApiDocSchemeService(apiDocType.code(), serviceNo);
-            apiDocSchemeMaps.get(apiDocType.code()).append(apiDocSchemeService);
         }
+        ApiDocSchemeService apiDocSchemeService = new ApiDocSchemeService(apiDocType.code(), serviceNo);
+        apiDocSchemeMaps.get(apiDocType.code()).append(apiDocSchemeService);
     }
 
     private void doGroupServices(ApiMetaService apiMetaService, ApiDocType apiDocType, Map<String, List<ApiMetaService>> schemeServices) {
