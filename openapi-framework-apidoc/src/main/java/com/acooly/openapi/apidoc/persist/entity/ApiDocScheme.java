@@ -155,6 +155,7 @@ public class ApiDocScheme extends AbstractEntity implements TreeNode<ApiDocSchem
         if (Strings.isNotBlank(parentSchemeNo)) {
             this.parentSchemeNo = parentSchemeNo;
         }
+        this.setStatus(DocStatusEnum.onShelf);
         this.setSchemeType(SchemeTypeEnum.auto);
     }
 
