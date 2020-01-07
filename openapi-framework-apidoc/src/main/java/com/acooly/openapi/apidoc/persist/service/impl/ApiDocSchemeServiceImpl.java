@@ -279,18 +279,16 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
         }
 
         // 设置当前节点的path(以目录服务)
-        if (Strings.isBlank(o.getPath())) {
-            // 有parent
-            if (parent != null) {
-                String parentPath = parent.getPath();
-                if (Strings.isBlank(parentPath)) {
-                    parentPath = ApiDocScheme.TOP_PARENT_PATH;
-                }
-                o.setPath(parentPath + parent.getId() + ApiDocScheme.TOP_PARENT_PATH);
-
-            } else {
-                o.setPath(ApiDocScheme.TOP_PARENT_PATH);
+        // 有parent
+        if (parent != null) {
+            String parentPath = parent.getPath();
+            if (Strings.isBlank(parentPath)) {
+                parentPath = ApiDocScheme.TOP_PARENT_PATH;
             }
+            o.setPath(parentPath + parent.getId() + ApiDocScheme.TOP_PARENT_PATH);
+
+        } else {
+            o.setPath(ApiDocScheme.TOP_PARENT_PATH);
         }
         // 设置当前时间为新节点的排序值
         if (o.getSortTime() == null) {
