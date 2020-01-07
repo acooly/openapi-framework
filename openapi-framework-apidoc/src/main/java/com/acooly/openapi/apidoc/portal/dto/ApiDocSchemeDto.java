@@ -101,7 +101,7 @@ public class ApiDocSchemeDto implements Serializable {
      * 关联的服务列表
      */
     @ApiModelProperty(value = "关联的服务列表")
-    private List<ApiDocServiceDto> serviceList = Lists.newArrayList();
+    private List<ApiDocServiceDto> services = Lists.newArrayList();
 
     public ApiDocSchemeDto() {
     }

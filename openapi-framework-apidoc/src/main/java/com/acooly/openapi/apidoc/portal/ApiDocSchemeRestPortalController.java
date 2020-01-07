@@ -54,10 +54,23 @@ public class ApiDocSchemeRestPortalController {
     @GetMapping(value = {"/catalogList"})
     @ApiOperation("文档-查询分类目录列表")
     @ApiImplicitParams({@ApiImplicitParam(name = "category", value = "文档分类{api:api文档,product:产品文档}", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "id", value = "父级目录id", required = false, paramType = "query")})
-    public JsonListResult<ApiDocSchemeDto> catalogList(String category, Long id, HttpServletRequest request, HttpServletResponse response, Model model) {
+            @ApiImplicitParam(name = "id", value = "父级目录id", required = false, paramType = "query"),
+            @ApiImplicitParam(name = "loadApis", value = "加载目录下的api列表", required = false, paramType = "query")})
+    public JsonListResult<ApiDocSchemeDto> catalogList(String category, Long id, boolean loadApis, HttpServletRequest request, HttpServletResponse response, Model model) {
         JsonListResult<ApiDocSchemeDto> result = new JsonListResult<ApiDocSchemeDto>();
         List<ApiDocScheme> list = apiDocSchemeService.tree(category, id, DocStatusEnum.onShelf);
+
+        if (loadApis) {
+            List<ApiDocService> docServices = apiDocSchemeServiceService.findSchemeApiDocServices(null);
+            for (ApiDocScheme apiDocScheme : list) {
+                for (ApiDocService docService : docServices) {
+                    if (apiDocScheme.getSchemeNo().equals(docService.getSchemeNo())) {
+                        apiDocScheme.append(docService);
+                        break;
+                    }
+                }
+            }
+        }
         // 使用json转换entity为dto，解决深copy的问题
         if (Collections3.isNotEmpty(list)) {
             List<ApiDocSchemeDto> resultList = JSON.parseArray(JSON.toJSONString(list), ApiDocSchemeDto.class);
@@ -91,7 +104,7 @@ public class ApiDocSchemeRestPortalController {
         List<ApiDocService> schemeServices = apiDocSchemeServiceService.findSchemeApiDocServices(apiDocScheme.getSchemeNo());
         if (Collections3.isNotEmpty(schemeServices)) {
             List<ApiDocServiceDto> serviceList = JSON.parseArray(JSON.toJSONString(schemeServices), ApiDocServiceDto.class);
-            dto.setServiceList(serviceList);
+            dto.setServices(serviceList);
         }
         result.setEntity(dto);
         return result;

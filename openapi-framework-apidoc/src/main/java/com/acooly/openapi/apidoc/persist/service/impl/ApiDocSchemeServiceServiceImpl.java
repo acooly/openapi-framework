@@ -7,6 +7,7 @@
 package com.acooly.openapi.apidoc.persist.service.impl;
 
 import com.acooly.core.common.service.EntityServiceImpl;
+import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.persist.dao.ApiDocSchemeServiceDao;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
@@ -36,7 +37,10 @@ public class ApiDocSchemeServiceServiceImpl extends EntityServiceImpl<ApiDocSche
 
     @Override
     public List<ApiDocService> findSchemeApiDocServices(String schemeNo) {
-        return getEntityDao().findSchemeService(schemeNo);
+        if (Strings.isNotBlank(schemeNo)) {
+            return getEntityDao().findSchemeService(schemeNo);
+        }
+        return getEntityDao().findAllSchemeService();
     }
 
     @Override

@@ -9,6 +9,7 @@
  */
 package com.acooly.openapi.apidoc.portal;
 
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.safety.signature.SignTypeEnum;
@@ -49,11 +50,20 @@ public class ApiDocDemoPortalController extends AbstractPortalController {
     @RequestMapping("/message")
     @ResponseBody
     @ApiOperation("api-apiDemo报文消息")
-    @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "文档id", required = true, paramType = "query")})
-    public JsonListResult<ApiDocMessageContext> message(String id, HttpServletRequest request, HttpServletResponse response) {
+    @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "api服务id", required = false, paramType = "query"),
+            @ApiImplicitParam(name = "serviceNo", value = "api服务编码", required = false, paramType = "query")})
+    public JsonListResult<ApiDocMessageContext> message(String id, String serviceNo, HttpServletRequest request, HttpServletResponse response) {
         JsonListResult<ApiDocMessageContext> result = new JsonListResult<ApiDocMessageContext>();
         try {
-            ApiDocService apiServiceDoc = apiDocServiceService.loadApiDocService(Long.valueOf(id));
+            ApiDocService apiServiceDoc = null;
+            if (Strings.isNotBlank(id)) {
+                apiDocServiceService.loadApiDocService(Long.valueOf(id));
+            } else {
+                apiDocServiceService.loadApiDocServiceByNo(serviceNo);
+            }
+            if (apiServiceDoc == null) {
+                throw new BusinessException("系统异常，数据不存在!");
+            }
             String signType = Strings.isBlankDefault(request.getParameter("signType"), SignTypeEnum.MD5Hex.name());
             List<ApiDocMessageContext> messages = apiDocMessageBuilder.build(apiServiceDoc, signType);
             result.setRows(messages);

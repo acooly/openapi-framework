@@ -124,6 +124,8 @@ public class ApiDocService extends AbstractEntity {
     @Transient
     private List<ApiDocMessage> apiDocMessages = Lists.newArrayList();
 
+    @Transient
+    private String schemeNo;
 
     public ApiDocService() {
     }

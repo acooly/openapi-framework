@@ -135,7 +135,7 @@ public class ApiDocScheme extends AbstractEntity implements TreeNode<ApiDocSchem
     private List<ApiDocSchemeService> apiDocSchemeServices = Lists.newArrayList();
 
     @Transient
-    private List<ApiDocService> services;
+    private List<ApiDocService> services = Lists.newArrayList();
 
     @Transient
     private ApiDocSchemeDesc apiDocschemeDesc;
@@ -143,6 +143,10 @@ public class ApiDocScheme extends AbstractEntity implements TreeNode<ApiDocSchem
 
     public ApiDocScheme() {
 
+    }
+
+    public void append(ApiDocService apiDocService) {
+        this.services.add(apiDocService);
     }
 
     public void append(ApiDocSchemeService apiDocSchemeService) {
