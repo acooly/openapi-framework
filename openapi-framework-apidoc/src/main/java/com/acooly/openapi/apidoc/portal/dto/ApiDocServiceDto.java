@@ -23,6 +23,9 @@ public class ApiDocServiceDto implements Serializable {
     @ApiModelProperty(value = "id")
     private String id;
 
+    @ApiModelProperty(value = "所属方案编码")
+    private String schemeNo;
+
     /**
      * 服务编号
      */

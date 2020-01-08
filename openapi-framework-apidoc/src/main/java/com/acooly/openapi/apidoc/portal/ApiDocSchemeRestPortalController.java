@@ -3,6 +3,7 @@ package com.acooly.openapi.apidoc.portal;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.utils.Collections3;
+import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.openapi.apidoc.enums.DocStatusEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
@@ -54,12 +55,27 @@ public class ApiDocSchemeRestPortalController {
     @GetMapping(value = {"/catalogList"})
     @ApiOperation("文档-查询分类目录列表")
     @ApiImplicitParams({@ApiImplicitParam(name = "category", value = "文档分类{api:api文档,product:产品文档}", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "id", value = "父级目录id", required = false, paramType = "query"),
-            @ApiImplicitParam(name = "loadApis", value = "加载目录下的api列表", required = false, paramType = "query")})
-    public JsonListResult<ApiDocSchemeDto> catalogList(String category, Long id, boolean loadApis, HttpServletRequest request, HttpServletResponse response, Model model) {
+            @ApiImplicitParam(name = "schemeNo", value = "当前文档方案编码", required = false, paramType = "query"),
+            @ApiImplicitParam(name = "loadApis", value = "加载api列表", required = false, paramType = "query")})
+    public JsonListResult<ApiDocSchemeDto> catalogList(String category, String schemeNo, boolean loadApis, HttpServletRequest request, HttpServletResponse response, Model model) {
         JsonListResult<ApiDocSchemeDto> result = new JsonListResult<ApiDocSchemeDto>();
-        List<ApiDocScheme> list = apiDocSchemeService.tree(category, id, DocStatusEnum.onShelf);
-
+        Long treeId = null;
+        if (Strings.isNotBlank(schemeNo)) {
+            ApiDocScheme scheme = apiDocSchemeService.findBySchemeNo(schemeNo);
+            // 如果schemeNo不为空但未查询到值，直接返回
+            if (scheme == null || Strings.isBlank(scheme.getPath())) {
+                return result;
+            }
+            // treeId首先赋值为当前schemeNo对应节点id
+            treeId = scheme.getId();
+            // 如果当前节点为子节点，则找到最顶级节点id
+            if (!ApiDocScheme.TOP_PARENT_ID.equals(scheme.getParentId())) {
+                String[] pathIds = scheme.getPath().split("/");
+                treeId = Long.parseLong(pathIds[1]);
+            }
+        }
+        List<ApiDocScheme> list = apiDocSchemeService.tree(category, treeId, DocStatusEnum.onShelf);
+        // 是否需要加载api列表
         if (loadApis) {
             List<ApiDocService> docServices = apiDocSchemeServiceService.findSchemeApiDocServices(null);
             for (ApiDocScheme apiDocScheme : list) {
@@ -86,11 +102,11 @@ public class ApiDocSchemeRestPortalController {
     @ResponseBody
     @GetMapping(value = {"/contentDetail"})
     @ApiOperation("文档-文档内容详情")
-    @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "文档id（即目录id）", required = true, paramType = "query")})
-    public JsonEntityResult contentDetail(Long id, HttpServletRequest request, HttpServletResponse response, Model model) {
+    @ApiImplicitParams({@ApiImplicitParam(name = "schemeNo", value = "当前文档方案编码", required = true, paramType = "query")})
+    public JsonEntityResult contentDetail(String schemeNo, HttpServletRequest request, HttpServletResponse response, Model model) {
         JsonEntityResult<ApiDocSchemeDto> result = new JsonEntityResult<>();
-        ApiDocScheme apiDocScheme = apiDocSchemeService.get(id);
-        ApiDocSchemeDesc apiDocSchemeDesc = apiDocSchemeDescService.get(id);
+        ApiDocScheme apiDocScheme = apiDocSchemeService.findBySchemeNo(schemeNo);
+        ApiDocSchemeDesc apiDocSchemeDesc = apiDocSchemeDescService.get(apiDocScheme.getId());
         if (apiDocScheme == null) {
             result.setSuccess(false);
             result.setMessage("方案不存在");

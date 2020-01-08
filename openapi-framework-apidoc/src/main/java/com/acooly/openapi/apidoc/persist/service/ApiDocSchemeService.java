@@ -139,4 +139,11 @@ public interface ApiDocSchemeService extends EntityService<ApiDocScheme> {
      * @param point
      */
     void move(String sourceId, String targetId, String point);
+
+    /**
+     * 根据schemeNo查询方案
+     * @param schemeNo
+     * @return
+     */
+    ApiDocScheme findBySchemeNo(String schemeNo);
 }

@@ -416,6 +416,14 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
         }
     }
 
+    @Override
+    public ApiDocScheme findBySchemeNo(String schemeNo) {
+        if (Strings.isBlank(schemeNo)) {
+            return null;
+        }
+        return this.getEntityDao().findUniqu("EQ_schemeNo", schemeNo);
+    }
+
     /**
      * 排序处理
      * 每层内排序规则：sortTime desc, id desc
