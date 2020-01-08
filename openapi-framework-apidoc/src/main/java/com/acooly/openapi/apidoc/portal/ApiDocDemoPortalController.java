@@ -57,9 +57,9 @@ public class ApiDocDemoPortalController extends AbstractPortalController {
         try {
             ApiDocService apiServiceDoc = null;
             if (Strings.isNotBlank(id)) {
-                apiDocServiceService.loadApiDocService(Long.valueOf(id));
+                apiServiceDoc = apiDocServiceService.loadApiDocService(Long.valueOf(id));
             } else {
-                apiDocServiceService.loadApiDocServiceByNo(serviceNo);
+                apiServiceDoc = apiDocServiceService.loadApiDocServiceByNo(serviceNo);
             }
             if (apiServiceDoc == null) {
                 throw new BusinessException("系统异常，数据不存在!");
