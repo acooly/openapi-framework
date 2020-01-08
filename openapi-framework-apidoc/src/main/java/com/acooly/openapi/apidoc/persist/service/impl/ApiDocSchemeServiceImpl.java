@@ -340,7 +340,16 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
     }
 
     @Override
-    public List<ApiDocScheme> tree(String category, String rootPath, DocStatusEnum status) {
+    public List<ApiDocScheme> tree(String category, Long rootId, DocStatusEnum status) {
+        String rootPath = ApiDocScheme.TOP_PARENT_PATH;
+        ApiDocScheme rootApiDocScheme = null;
+        if (rootId != null && !rootId.equals(ApiDocScheme.TOP_PARENT_ID)) {
+            rootApiDocScheme = get(rootId);
+            if (rootApiDocScheme == null) {
+                throw new BusinessException("参数错误，节点不存在");
+            }
+            rootPath = ApiDocScheme.TOP_PARENT_PATH + rootId + ApiDocScheme.TOP_PARENT_PATH;
+        }
         Map<String, Object> params = Maps.newHashMap();
         category = Strings.isBlankDefault(category, ApiDocProperties.DEFAULT_CATEGORY);
         rootPath = Strings.isBlankDefault(rootPath, ApiDocScheme.TOP_PARENT_PATH);
@@ -349,25 +358,8 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
         if (status != null) {
             params.put("EQ_status", status);
         }
-        List<ApiDocScheme> treeTypes = query(params, null);
+        List<ApiDocScheme> treeTypes = this.getEntityDao().treeQuery(category, rootId, rootPath, status);
         return doTree(treeTypes);
-    }
-
-    @Override
-    public List<ApiDocScheme> tree(String category, Long rootId, DocStatusEnum status) {
-        String path = null;
-        if (rootId != null && !rootId.equals(ApiDocScheme.TOP_PARENT_ID)) {
-            ApiDocScheme rootApiDocScheme = get(rootId);
-            if (rootApiDocScheme == null) {
-                path = rootApiDocScheme.getPath();
-            }
-        }
-        return tree(category, path, status);
-    }
-
-    @Override
-    public List<ApiDocScheme> tree(String rootPath, DocStatusEnum status) {
-        return tree(ApiDocProperties.DEFAULT_CATEGORY, rootPath, status);
     }
 
     @Override

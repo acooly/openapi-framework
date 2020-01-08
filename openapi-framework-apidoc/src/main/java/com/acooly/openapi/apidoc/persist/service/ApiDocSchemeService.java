@@ -72,31 +72,11 @@ public interface ApiDocSchemeService extends EntityService<ApiDocScheme> {
      * 树形结构
      * 默认分类为：api
      *
-     * @param rootPath 根节点Path（为空，则默认：/）
-     * @param status
-     * @return
-     */
-    List<ApiDocScheme> tree(String rootPath, DocStatusEnum status);
-
-    /**
-     * 树形结构
-     * 默认分类为：api
-     *
      * @param rootId 根节点Id（为空，则默认：0）
      * @param status
      * @return
      */
     List<ApiDocScheme> tree(Long rootId, DocStatusEnum status);
-
-    /**
-     * 树形结构
-     *
-     * @param category    分类
-     * @param rootPath 根节点Path（为空，则默认：/）
-     * @param status
-     * @return
-     */
-    List<ApiDocScheme> tree(String category, String rootPath, DocStatusEnum status);
 
     /**
      * 树形结构

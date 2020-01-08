@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.acooly.openapi.apidoc.persist.dao.ApiDocSchemeDao">
+
+    <select id="treeQuery" resultType="com.acooly.openapi.apidoc.persist.entity.ApiDocScheme">
+        select * from api_doc_scheme where category = #{category}
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        and (id = #{rootId} or path like CONCAT(#{rootPath},'%'))
+        order by sort_time desc
+    </select>
+
+</mapper>

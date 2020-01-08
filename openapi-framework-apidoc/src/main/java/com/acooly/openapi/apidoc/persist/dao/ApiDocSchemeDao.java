@@ -7,6 +7,7 @@
 package com.acooly.openapi.apidoc.persist.dao;
 
 import com.acooly.module.mybatis.EntityMybatisDao;
+import com.acooly.openapi.apidoc.enums.DocStatusEnum;
 import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
 import org.apache.ibatis.annotations.Param;
@@ -32,4 +33,6 @@ public interface ApiDocSchemeDao extends EntityMybatisDao<ApiDocScheme> {
 
     @Select("select * from api_doc_scheme where sort_time >= #{sortTime} and id != #{id} limit 1")
     ApiDocScheme findBeforeOne(@Param("sortTime") Long sortTime, @Param("id") Long id);
+
+    List<ApiDocScheme> treeQuery(@Param("category")String category,@Param("rootId") Long rootId, @Param("rootPath")String rootPath,@Param("status") DocStatusEnum status);
 }
