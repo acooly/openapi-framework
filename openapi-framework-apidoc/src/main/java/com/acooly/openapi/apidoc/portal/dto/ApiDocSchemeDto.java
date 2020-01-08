@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -96,6 +97,16 @@ public class ApiDocSchemeDto implements Serializable {
      */
     @ApiModelProperty(value = "内容文本-markdown格式")
     private String content;
+
+    /**
+     * 创建时间
+     */
+    @ApiModelProperty(value = "创建时间")
+    private Date createTime = new Date();
+
+    /** 修改时间 */
+    @ApiModelProperty(value = "修改时间")
+    private Date updateTime = new Date();
 
     /**
      * 关联的服务列表
