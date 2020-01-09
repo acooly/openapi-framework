@@ -169,7 +169,7 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
                 if (!Strings.equals(persist.getParentSchemeNo(), atScheme.getParentSchemeNo())) {
                     needUpdate = true;
                 }
-                if (parentDbScheme != null && !parentDbScheme.getId().equals(atScheme.getParentId())) {
+                if (parentDbScheme != null && !parentDbScheme.getId().equals(persist.getParentId())) {
                     needUpdate = true;
                 }
                 // 判断子节点数量是否发生变化
