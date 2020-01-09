@@ -159,7 +159,7 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
                 // 基于数据库存储的schemeNo获取注解中定义的scheme
                 ApiDocScheme atScheme = atMap.get(persist.getSchemeNo());
                 // 获取数据库中父级scheme
-                ApiDocScheme parentDbScheme = dbMap.get(persist.getParentSchemeNo());
+                ApiDocScheme parentDbScheme = dbMap.get(atScheme.getParentSchemeNo());
 
                 // 判断父节点是否发生变化 (数据库存储的父节点与扫描的父节点不一致或parentId与parentSchemeNo不匹配)
                 if (!Strings.equals(persist.getParentSchemeNo(), atScheme.getParentSchemeNo())) {
