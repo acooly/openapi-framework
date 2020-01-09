@@ -17,6 +17,7 @@ import com.acooly.openapi.apidoc.enums.ApiDocErrorCodeEnum;
 import com.acooly.openapi.apidoc.enums.DocStatusEnum;
 import com.acooly.openapi.apidoc.enums.SchemeTypeEnum;
 import com.acooly.openapi.apidoc.persist.dao.ApiDocSchemeDao;
+import com.acooly.openapi.apidoc.persist.dao.ApiDocSchemeServiceDao;
 import com.acooly.openapi.apidoc.persist.dao.ApiDocServiceDao;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
@@ -55,6 +56,9 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
 
     @Autowired
     private ApiDocProperties apiDocProperties;
+
+    @Resource
+    private ApiDocSchemeServiceDao apiDocSchemeServiceDao;
 
     @Override
     public ApiDocScheme createDefault() {
@@ -340,7 +344,7 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
     }
 
     @Override
-    public List<ApiDocScheme> tree(String category, Long rootId, DocStatusEnum status) {
+    public List<ApiDocScheme> tree(String category, Long rootId, DocStatusEnum status, boolean loadApis) {
         String rootPath = ApiDocScheme.TOP_PARENT_PATH;
         ApiDocScheme rootApiDocScheme = null;
         if (rootId != null && !rootId.equals(ApiDocScheme.TOP_PARENT_ID)) {
@@ -359,12 +363,21 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
             params.put("EQ_status", status);
         }
         List<ApiDocScheme> treeTypes = this.getEntityDao().treeQuery(category, rootId, rootPath, status);
+        List<ApiDocService> docServices = apiDocSchemeServiceDao.findAllSchemeService();
+        for (ApiDocScheme apiDocScheme : treeTypes) {
+            for (ApiDocService docService : docServices) {
+                if (apiDocScheme.getSchemeNo().equals(docService.getSchemeNo())) {
+                    apiDocScheme.append(docService);
+                    break;
+                }
+            }
+        }
         return doTree(treeTypes);
     }
 
     @Override
     public List<ApiDocScheme> tree(Long rootId, DocStatusEnum status) {
-        return tree(ApiDocProperties.DEFAULT_CATEGORY, rootId, status);
+        return tree(ApiDocProperties.DEFAULT_CATEGORY, rootId, status, false);
     }
 
     @Override

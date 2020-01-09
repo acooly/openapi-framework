@@ -45,7 +45,7 @@ public interface ApiDocSchemeService extends EntityService<ApiDocScheme> {
      * @param schemeType
      * @return
      */
-    List<ApiDocScheme> findBySchemeTypeAndCategory(String schemeType,String category);
+    List<ApiDocScheme> findBySchemeTypeAndCategory(String schemeType, String category);
 
     /**
      * 合并
@@ -58,12 +58,14 @@ public interface ApiDocSchemeService extends EntityService<ApiDocScheme> {
 
     /**
      * 置顶
+     *
      * @param id
      */
     void moveTop(Long id);
 
     /**
      * 上移
+     *
      * @param id
      */
     void moveUp(Long id);
@@ -81,12 +83,12 @@ public interface ApiDocSchemeService extends EntityService<ApiDocScheme> {
     /**
      * 树形结构
      *
-     * @param category  主题（为空，则默认：api）
-     * @param rootId 根节点Id（为空，则默认：0）
+     * @param category 主题（为空，则默认：api）
+     * @param rootId   根节点Id（为空，则默认：0）
      * @param status
      * @return
      */
-    List<ApiDocScheme> tree(String category, Long rootId, DocStatusEnum status);
+    List<ApiDocScheme> tree(String category, Long rootId, DocStatusEnum status, boolean loadApis);
 
     /**
      * 单层查询
@@ -102,7 +104,7 @@ public interface ApiDocSchemeService extends EntityService<ApiDocScheme> {
      * 单层查询
      *
      * @param parentId 为空：顶层（parentId=TOP_PARENT_ID）
-     * @param category    为空则：默认分类（category=DEFAULT_THEME）
+     * @param category 为空则：默认分类（category=DEFAULT_THEME）
      * @param status
      * @return
      */
@@ -122,6 +124,7 @@ public interface ApiDocSchemeService extends EntityService<ApiDocScheme> {
 
     /**
      * 根据schemeNo查询方案
+     *
      * @param schemeNo
      * @return
      */

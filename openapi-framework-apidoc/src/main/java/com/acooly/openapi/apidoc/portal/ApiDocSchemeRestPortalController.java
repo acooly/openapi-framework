@@ -75,19 +75,7 @@ public class ApiDocSchemeRestPortalController {
                 treeId = Long.parseLong(pathIds[1]);
             }
         }
-        List<ApiDocScheme> list = apiDocSchemeService.tree(category, treeId, DocStatusEnum.onShelf);
-        // 是否需要加载api列表
-        if (loadApis) {
-            List<ApiDocService> docServices = apiDocSchemeServiceService.findSchemeApiDocServices(null);
-            for (ApiDocScheme apiDocScheme : list) {
-                for (ApiDocService docService : docServices) {
-                    if (apiDocScheme.getSchemeNo().equals(docService.getSchemeNo())) {
-                        apiDocScheme.append(docService);
-                        break;
-                    }
-                }
-            }
-        }
+        List<ApiDocScheme> list = apiDocSchemeService.tree(category, treeId, DocStatusEnum.onShelf, loadApis);
         // 使用json转换entity为dto，解决深copy的问题
         if (Collections3.isNotEmpty(list)) {
             List<ApiDocSchemeDto> resultList = JSON.parseArray(JSON.toJSONString(list), ApiDocSchemeDto.class);
