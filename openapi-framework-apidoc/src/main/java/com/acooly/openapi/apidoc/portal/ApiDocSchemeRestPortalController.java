@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -115,7 +116,7 @@ public class ApiDocSchemeRestPortalController {
         ApiDocSchemeDto dto = new ApiDocSchemeDto();
         BeanCopier.copy(apiDocScheme, dto);
         if (apiDocSchemeDesc != null) {
-            dto.setContent(apiDocSchemeDesc.getSchemeDesc());
+            dto.setContent(HtmlUtils.htmlUnescape(apiDocSchemeDesc.getSchemeDesc()));
         }
         List<ApiDocService> schemeServices = apiDocSchemeServiceService.findSchemeApiDocServices(apiDocScheme.getSchemeNo());
         if (Collections3.isNotEmpty(schemeServices)) {
