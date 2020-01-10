@@ -1,6 +1,8 @@
 package com.acooly.openapi.apidoc.portal.dto;
 
 import com.acooly.openapi.apidoc.enums.MessageTypeEnum;
+import com.acooly.openapi.apidoc.persist.entity.ApiDocItem;
+import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author liangsong
@@ -76,4 +79,7 @@ public class ApiDocMessageDto implements Serializable {
     @Size(max = 128)
     @ApiModelProperty(value = "签名")
     private String signature;
+
+    @ApiModelProperty(value = "apiDoc字段项")
+    private List<ApiDocItem> apiDocItems = Lists.newArrayList();
 }
