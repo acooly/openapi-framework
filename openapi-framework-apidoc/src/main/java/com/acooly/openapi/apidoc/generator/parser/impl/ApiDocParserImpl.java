@@ -278,6 +278,7 @@ public class ApiDocParserImpl extends OpenApiDocParserSupport implements ApiDocP
         if (!(field.getAnnotation(NotNull.class) == null
                 && field.getAnnotation(NotEmpty.class) == null
                 && field.getAnnotation(javax.validation.constraints.NotEmpty.class) == null
+                && field.getAnnotation(org.hibernate.validator.constraints.NotBlank.class) == null
                 && field.getAnnotation(NotBlank.class) == null)) {
             status = FieldStatus.M;
         }
