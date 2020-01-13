@@ -53,7 +53,6 @@
                     <artifactId>jsp-api</artifactId>
                 </exclusion>
             </exclusions>
-            <version>${acooly.version}</version>
         </dependency>
 
         <dependency>
@@ -64,33 +63,27 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-jpa</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-dubbo</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-security</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-threadpool</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-web</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-configuration-processor</artifactId>
-            <version>${acooly.version}</version>
             <optional>true</optional>
         </dependency>
         

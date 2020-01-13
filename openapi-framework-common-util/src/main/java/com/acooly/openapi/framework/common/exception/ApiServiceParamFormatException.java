@@ -11,7 +11,6 @@
 package com.acooly.openapi.framework.common.exception;
 
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
-import com.acooly.openapi.framework.common.exception.ApiServiceException;
 
 /**
  * 参数格式错误异常

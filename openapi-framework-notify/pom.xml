@@ -25,27 +25,23 @@
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-dubbo</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-distributedlock</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-appservice</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-configuration-processor</artifactId>
-            <version>${acooly.version}</version>
             <optional>true</optional>
         </dependency>
 
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-component-appservice</artifactId>
-            <version>${acooly.version}</version>
-        </dependency>
+
     </dependencies>
 </project>

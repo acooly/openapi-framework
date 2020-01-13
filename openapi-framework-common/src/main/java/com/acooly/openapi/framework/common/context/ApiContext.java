@@ -27,6 +27,7 @@ import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.common.utils.ApiUtils;
 import com.google.common.collect.Maps;
+import com.google.common.net.HttpHeaders;
 import lombok.Getter;
 import lombok.Setter;
 import org.perf4j.StopWatch;
@@ -34,7 +35,7 @@ import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-import org.springframework.http.HttpHeaders;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -239,11 +240,9 @@ public class ApiContext extends Context {
         this.apiService = apiService;
     }
 
-
-    private void throwIfBlank(String value, String detail) {
-        if (Strings.isBlank(value)) {
-            throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, detail);
-        }
+    public void exception(Exception exception) {
+        this.error = true;
+        this.exception = exception;
     }
 
     private String throwIfEmpty(String key, String value) {

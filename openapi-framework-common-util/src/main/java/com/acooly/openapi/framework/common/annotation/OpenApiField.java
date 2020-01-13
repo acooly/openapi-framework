@@ -10,8 +10,6 @@
  */
 package com.acooly.openapi.framework.common.annotation;
 
-import com.alibaba.fastjson.annotation.JSONField;
-
 import java.lang.annotation.*;
 
 /**
@@ -54,6 +52,7 @@ public @interface OpenApiField {
 
     /**
      * 排序，按数字升序
+     *
      * @return
      */
     int ordinal() default 0;

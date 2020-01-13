@@ -6,6 +6,20 @@ OpenApi开放平台框架提供完善的网关服务解决方案。
 
 ## 版本说明
 
+### v5.0.0-SNAPSHOT
+
+* 与v4.2.2-SNAPSHOT同步维护，支持acoolyV5框架
+* 从acoolys/openapi-framework迁移到/acoolys/openapi/openapi-framework
+
+### v4.2.2-SNAPSHOT
+
+过度版本，19年内全部升级为v5
+
+升级重构：
+
+1. filter方式重构处理核心
+2. 同时支持JSON和FORM_JSON两种协议
+
 ### v4.2.0-SNAPSHOT
 
 #### 1. 请求

@@ -5,7 +5,7 @@
     <!-- 继承基础配置,核心依赖包，编译选项和插件配 -->
     <parent>
         <groupId>com.acooly</groupId>
-        <artifactId>acooly-app-parent</artifactId>
+        <artifactId>acooly-app-independent-parent</artifactId>
         <version>5.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>openapi-framework</artifactId>
@@ -18,9 +18,14 @@
         <acooly.version>5.0.0-SNAPSHOT</acooly.version>
     </properties>
 
-
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>openapi-framework-common-util</artifactId>
+                <version>${parent.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
@@ -85,53 +90,20 @@
 
     </dependencyManagement>
 
-
-    <dependencies>
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-common-facade</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-validator</groupId>
-            <artifactId>commons-validator</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.perf4j</groupId>
-            <artifactId>perf4j</artifactId>
-            <version>0.9.16</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
-
     <modules>
         <module>openapi-framework-assemble</module>
         <module>openapi-framework-core</module>
         <module>openapi-framework-test</module>
         <module>openapi-framework-facade</module>
         <module>openapi-framework-common</module>
+        <module>openapi-framework-common-util</module>
         <module>openapi-framework-service</module>
         <module>openapi-framework-apidoc</module>
         <module>openapi-framework-extensions</module>
         <module>openapi-framework-mock</module>
         <module>openapi-framework-client</module>
         <module>openapi-framework-notify</module>
+
     </modules>
 
 

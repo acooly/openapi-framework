@@ -6,7 +6,7 @@
 */
 package com.acooly.openapi.apidoc.web;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.core.common.web.MappingMethod;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "/manage/apidoc/apiDocService")
-public class ApiDocServiceManagerController extends AbstractJQueryEntityController<ApiDocService, ApiDocServiceService> {
+public class ApiDocServiceManagerController extends AbstractJsonEntityController<ApiDocService, ApiDocServiceService> {
 	
 
 	{

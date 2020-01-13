@@ -12,8 +12,6 @@ import com.acooly.module.filterchain.Filter;
 import com.acooly.module.filterchain.FilterChain;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
-import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
-import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.core.log.OpenApiLoggerHandler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,15 +43,8 @@ public abstract class AbstractOpenApiFilter implements Filter<ApiContext> {
             doInternalFilter(context, filterChain);
             log.debug("filter execute success: {}", this.getClass().getSimpleName());
         } catch (Exception e) {
-            log.warn("filter execute failure: {}, error: {}", this.getClass().getSimpleName(), e.getMessage());
-            context.setError(true);
-            ApiServiceException apiServiceException;
-            if (ApiServiceException.class.isAssignableFrom(e.getClass())) {
-                apiServiceException = (ApiServiceException) e;
-            } else {
-                apiServiceException = new ApiServiceException(ApiServiceResultCode.INTERNAL_ERROR, e.getMessage());
-            }
-            context.setException(apiServiceException);
+            log.warn("filter execute failure: {} : {}", this.getClass().getSimpleName(), e.getMessage());
+            context.exception(e);
         }
     }
 

@@ -55,31 +55,12 @@
             <artifactId>openapi-framework-client</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-common</artifactId>
-            <version>${acooly.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-common-facade</artifactId>
-            <version>${acooly.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-test</artifactId>
-            <version>${acooly.version}</version>
         </dependency>
 
-
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-configuration-processor</artifactId>
-            <version>${acooly.version}</version>
-            <optional>true</optional>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -87,21 +68,9 @@
             <optional>true</optional>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-coder</artifactId>
-            <version>${acooly.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

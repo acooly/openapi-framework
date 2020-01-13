@@ -6,7 +6,7 @@
 */
 package com.acooly.openapi.apidoc.web;
 
-import com.acooly.core.common.web.AbstractJQueryEntityController;
+import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.openapi.apidoc.persist.entity.ApiQaClassify;
 import com.acooly.openapi.apidoc.persist.entity.ApiQaQuestion;
@@ -32,7 +32,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "/manage/apidoc/apiQaQuestion")
-public class ApiQaQuestionManagerController extends AbstractJQueryEntityController<ApiQaQuestion, ApiQaQuestionService> {
+public class ApiQaQuestionManagerController extends AbstractJsonEntityController<ApiQaQuestion, ApiQaQuestionService> {
 	
 
 	{

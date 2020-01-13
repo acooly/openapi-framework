@@ -9,7 +9,6 @@
  */
 package com.acooly.openapi.framework.common.utils;
 
-import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.system.IPUtil;
@@ -19,9 +18,9 @@ import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.net.HttpHeaders;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.UrlValidator;
-import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
