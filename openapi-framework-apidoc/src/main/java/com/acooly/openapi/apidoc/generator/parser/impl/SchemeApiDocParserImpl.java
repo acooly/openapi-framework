@@ -102,10 +102,12 @@ public class SchemeApiDocParserImpl extends OpenApiDocParserSupport implements A
                 parentScheme = new ApiDocScheme(parentCode, apiDocType.parentName(), null);
                 parentScheme.setSubCount(1);
                 apiDocSchemeMaps.put(parentCode, parentScheme);
-            } else {
+            } else if (apiDocScheme == null) {
+                // 当前方案在schemeMap中不存在时，才增加父节点的子节点数量
                 parentScheme.setSubCount(parentScheme.getSubCount() + 1);
                 apiDocSchemeMaps.put(parentCode, parentScheme);
             }
+
         }
         ApiDocSchemeService apiDocSchemeService = new ApiDocSchemeService(apiDocType.code(), serviceNo);
         apiDocSchemeMaps.get(apiDocType.code()).append(apiDocSchemeService);
