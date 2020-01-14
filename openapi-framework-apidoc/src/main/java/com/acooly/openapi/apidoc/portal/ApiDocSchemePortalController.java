@@ -23,6 +23,7 @@ import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeDescService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
 import com.acooly.openapi.apidoc.portal.dto.ApiDocSchemeDto;
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,7 @@ import org.springframework.web.util.HtmlUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author zhangpu 2017-10-11 00:00
@@ -153,12 +155,10 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
         List<ApiDocScheme> schemes = apiDocSchemeService.findBySchemeTypeAndCategory(schemeType, category);
         List<ApiDocSchemeDto> apiDocSchemeDtos = Lists.newArrayList();
         if (Collections3.isNotEmpty(schemes)) {
-            ApiDocSchemeDto apiDocSchemeDto = null;
-            for (ApiDocScheme scheme : schemes) {
-                apiDocSchemeDto = new ApiDocSchemeDto(scheme.getId(), scheme.getTitle(), scheme.getSchemeNo());
-                apiDocSchemeDto.setSchemeTypeEnum(scheme.getSchemeType());
-                apiDocSchemeDtos.add(apiDocSchemeDto);
-            }
+            apiDocSchemeDtos = JSON.parseArray(JSON.toJSONString(schemes), ApiDocSchemeDto.class);
+            // 过滤所有父节点
+            apiDocSchemeDtos = apiDocSchemeDtos.stream().filter(item ->
+                    item.getSubCount() == null || item.getSubCount().intValue() == 0).collect(Collectors.toList());
         }
         return apiDocSchemeDtos;
     }
