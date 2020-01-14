@@ -141,7 +141,7 @@ public class ApiDocItem extends AbstractEntity {
      * 签名
      */
     @Size(max = 128)
-    private String signatrue;
+    private String signature;
 
     @Transient
     private List<ApiDocItem> children = Lists.newArrayList();
