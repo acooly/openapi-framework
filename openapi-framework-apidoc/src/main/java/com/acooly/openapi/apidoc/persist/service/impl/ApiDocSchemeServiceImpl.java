@@ -363,12 +363,14 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
             params.put("EQ_status", status);
         }
         List<ApiDocScheme> treeTypes = this.getEntityDao().treeQuery(category, rootId, rootPath, status);
-        List<ApiDocService> docServices = apiDocSchemeServiceDao.findAllSchemeService();
-        for (ApiDocScheme apiDocScheme : treeTypes) {
-            for (ApiDocService docService : docServices) {
-                if (apiDocScheme.getSchemeNo().equals(docService.getSchemeNo())) {
-                    apiDocScheme.append(docService);
-                    break;
+        if (loadApis) {
+            List<ApiDocService> docServices = apiDocSchemeServiceDao.findAllSchemeService();
+            for (ApiDocScheme apiDocScheme : treeTypes) {
+                for (ApiDocService docService : docServices) {
+                    if (apiDocScheme.getSchemeNo().equals(docService.getSchemeNo())) {
+                        apiDocScheme.append(docService);
+                        break;
+                    }
                 }
             }
         }
