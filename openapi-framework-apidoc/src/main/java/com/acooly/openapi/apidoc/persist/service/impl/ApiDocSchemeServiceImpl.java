@@ -289,8 +289,8 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
             if (Strings.isBlank(parentPath)) {
                 parentPath = ApiDocScheme.TOP_PARENT_PATH;
             }
+            o.setParentSchemeNo(parent.getSchemeNo());
             o.setPath(parentPath + parent.getId() + ApiDocScheme.TOP_PARENT_PATH);
-
         } else {
             o.setPath(ApiDocScheme.TOP_PARENT_PATH);
         }
@@ -388,34 +388,42 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
         ApiDocScheme source = loadNodeById(Long.valueOf(sourceId), nodeMap);
         //目标节点
         ApiDocScheme target = loadNodeById(Long.valueOf(targetId), nodeMap);
-
-        //源节点父节点id
-        Long sourceParentId = source.getParentId();
+        //目标节点父节点id
         Long targetParentId = target.getParentId();
+        //源节点父节点id
+        Long beforeMoveParentId = source.getParentId();
+        Long afterMoveParentId = null;
         if ("append".equals(point)) {
+            afterMoveParentId = target.getId();
             source.setParentId(target.getId());
+            source.setParentSchemeNo(target.getSchemeNo());
+            source.setPath(target.getPath() + targetId + ApiDocScheme.TOP_PARENT_PATH);
             source.setSortTime(System.currentTimeMillis());
-            //变更目标父节点
-            targetParentId = source.getParentId();
         } else if ("top".equals(point)) {
+            afterMoveParentId = target.getParentId();
             source.setSortTime(target.getSortTime() + 1);
             source.setParentId(targetParentId);
+            source.setParentSchemeNo(target.getParentSchemeNo());
+            source.setPath(target.getPath());
         } else if ("bottom".equals(point)) {
+            afterMoveParentId = target.getParentId();
             source.setSortTime(target.getSortTime() - 1);
             source.setParentId(targetParentId);
+            source.setParentSchemeNo(target.getParentSchemeNo());
+            source.setPath(target.getPath());
         }
         //仅处理source节点更新
         this.update(source);
 
-        //更新源父节点计数
-        if (!ApiDocScheme.TOP_PARENT_ID.equals(sourceParentId) && !sourceParentId.equals(targetParentId)) {
-            ApiDocScheme sourceParent = loadNodeById(Long.valueOf(sourceParentId), nodeMap);
+        //更新源父节点计数,当前移动的节点源父节点不为根目录并且不在同一个父级节点之间移动时，才更新
+        if (!ApiDocScheme.TOP_PARENT_ID.equals(beforeMoveParentId) && !beforeMoveParentId.equals(targetParentId)) {
+            ApiDocScheme sourceParent = loadNodeById(Long.valueOf(beforeMoveParentId), nodeMap);
             sourceParent.setSubCount(sourceParent.getSubCount() - 1);
             this.update(sourceParent);
         }
-        //更新目标父节点计数
-        if (!ApiDocScheme.TOP_PARENT_ID.equals(targetParentId) && !sourceParentId.equals(targetParentId)) {
-            ApiDocScheme targetParent = loadNodeById(Long.valueOf(targetParentId), nodeMap);
+        //更新目标父节点计数，当前移动的移动至非根节点并且不在同一个父级节点之间移动时，才更新
+        if (!ApiDocScheme.TOP_PARENT_ID.equals(afterMoveParentId) && !beforeMoveParentId.equals(targetParentId)) {
+            ApiDocScheme targetParent = loadNodeById(Long.valueOf(afterMoveParentId), nodeMap);
             targetParent.setSubCount(targetParent.getSubCount() + 1);
             this.update(targetParent);
         }
