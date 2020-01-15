@@ -369,7 +369,7 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
                 for (ApiDocService docService : docServices) {
                     if (apiDocScheme.getSchemeNo().equals(docService.getSchemeNo())) {
                         apiDocScheme.append(docService);
-                        break;
+                        continue;
                     }
                 }
             }
