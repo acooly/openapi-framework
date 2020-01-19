@@ -88,7 +88,7 @@ public interface ApiDocSchemeService extends EntityService<ApiDocScheme> {
      * @param status
      * @return
      */
-    List<ApiDocScheme> tree(String category, Long rootId, DocStatusEnum status, boolean loadApis);
+    List<ApiDocScheme> tree(String category, Long rootId, DocStatusEnum status);
 
     /**
      * 单层查询

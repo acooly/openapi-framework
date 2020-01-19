@@ -50,4 +50,9 @@ public class ApiDocSchemeServiceServiceImpl extends EntityServiceImpl<ApiDocSche
             apiDocSchemeServiceDao.removeById(apiSchemeServiceDoc.getId());
         }
     }
+
+    @Override
+    public List<ApiDocService> findContentServices(String schemeNo) {
+        return this.getEntityDao().findContentServices(schemeNo);
+    }
 }

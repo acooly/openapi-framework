@@ -29,5 +29,10 @@ public interface ApiDocSchemeServiceService extends EntityService<ApiDocSchemeSe
 
     void deleteSchemeService(String schemeNo, String serviceNo);
 
-
+    /**
+     * 传入产品的schemeNo，查询得到产品相关的service，返回的服务列表的schemeNo为在api列表分类中的schemeNo
+     * @param schemeNo
+     * @return
+     */
+    List<ApiDocService> findContentServices(String schemeNo);
 }

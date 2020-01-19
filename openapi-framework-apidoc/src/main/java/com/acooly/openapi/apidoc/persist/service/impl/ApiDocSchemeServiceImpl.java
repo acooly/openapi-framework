@@ -344,7 +344,7 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
     }
 
     @Override
-    public List<ApiDocScheme> tree(String category, Long rootId, DocStatusEnum status, boolean loadApis) {
+    public List<ApiDocScheme> tree(String category, Long rootId, DocStatusEnum status) {
         String rootPath = ApiDocScheme.TOP_PARENT_PATH;
         ApiDocScheme rootApiDocScheme = null;
         if (rootId != null && !rootId.equals(ApiDocScheme.TOP_PARENT_ID)) {
@@ -363,23 +363,12 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
             params.put("EQ_status", status);
         }
         List<ApiDocScheme> treeTypes = this.getEntityDao().treeQuery(category, rootId, rootPath, status);
-        if (loadApis) {
-            List<ApiDocService> docServices = apiDocSchemeServiceDao.findAllSchemeService();
-            for (ApiDocScheme apiDocScheme : treeTypes) {
-                for (ApiDocService docService : docServices) {
-                    if (apiDocScheme.getSchemeNo().equals(docService.getSchemeNo())) {
-                        apiDocScheme.append(docService);
-                        continue;
-                    }
-                }
-            }
-        }
         return doTree(treeTypes);
     }
 
     @Override
     public List<ApiDocScheme> tree(Long rootId, DocStatusEnum status) {
-        return tree(ApiDocProperties.DEFAULT_CATEGORY, rootId, status, false);
+        return tree(ApiDocProperties.DEFAULT_CATEGORY, rootId, status);
     }
 
     @Override
