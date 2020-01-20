@@ -399,7 +399,7 @@ public class ApiDocSchemeManagerController extends AbstractJQueryEntityControlle
             Long parentId = Servlets.getLongParameter(request, "parentId");
             result.appendData(referenceData(request));
             List<ApiDocScheme> entities = Strings.isBlank(category) ? apiDocSchemeService.tree(parentId, null) :
-                    apiDocSchemeService.tree(category, parentId, null);
+                    apiDocSchemeService.tree(category, parentId, null, null);
             result.setTotal((long) entities.size());
             result.setRows(entities);
         } catch (Exception e) {

@@ -30,7 +30,6 @@ import org.springframework.web.util.HtmlUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author liangsong
@@ -62,7 +61,6 @@ public class ApiDocSchemeRestPortalController {
     public JsonListResult<ApiDocSchemeDto> catalogList(String category, String schemeNo, boolean loadApis, HttpServletRequest request, HttpServletResponse response, Model model) {
         JsonListResult<ApiDocSchemeDto> result = new JsonListResult<ApiDocSchemeDto>();
         Long treeId = null;
-        List<ApiDocService> schemeServices = null;
         if (Strings.isNotBlank(schemeNo)) {
             ApiDocScheme scheme = apiDocSchemeService.findBySchemeNo(schemeNo);
             // 如果schemeNo不为空但未查询到值，直接返回
@@ -77,25 +75,13 @@ public class ApiDocSchemeRestPortalController {
                 treeId = Long.parseLong(pathIds[1]);
             }
         }
-        List<ApiDocScheme> list = apiDocSchemeService.tree(category, treeId, DocStatusEnum.onShelf);
+        List<ApiDocScheme> list = apiDocSchemeService.tree(category, treeId, DocStatusEnum.onShelf, schemeNo);
         if (Collections3.isEmpty(list)) {
             return result;
-        }
-        if (loadApis) {
-            schemeServices = apiDocSchemeServiceService.findContentServices(schemeNo);
-        }
-
-        // 使用json转换entity为dto，解决深copy的问题
-        if (Collections3.isNotEmpty(schemeServices)) {
-            Optional<ApiDocScheme> apiDocScheme = list.stream().filter(p -> p.getSchemeNo().equals(schemeNo)).findFirst();
-            if (apiDocScheme.isPresent()) {
-                apiDocScheme.get().setServices(schemeServices);
-            }
         }
         List<ApiDocSchemeDto> resultList = JSON.parseArray(JSON.toJSONString(list), ApiDocSchemeDto.class);
         result.setRows(resultList);
         result.setTotal(Long.valueOf(resultList.size()));
-
         return result;
     }
 

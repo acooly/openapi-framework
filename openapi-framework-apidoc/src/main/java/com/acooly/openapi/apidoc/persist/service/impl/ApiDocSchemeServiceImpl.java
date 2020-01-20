@@ -34,10 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -344,9 +341,10 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
     }
 
     @Override
-    public List<ApiDocScheme> tree(String category, Long rootId, DocStatusEnum status) {
+    public List<ApiDocScheme> tree(String category, Long rootId, DocStatusEnum status, String schemeNo) {
         String rootPath = ApiDocScheme.TOP_PARENT_PATH;
         ApiDocScheme rootApiDocScheme = null;
+        List<ApiDocService> schemeServices = null;
         if (rootId != null && !rootId.equals(ApiDocScheme.TOP_PARENT_ID)) {
             rootApiDocScheme = get(rootId);
             if (rootApiDocScheme == null) {
@@ -363,12 +361,26 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
             params.put("EQ_status", status);
         }
         List<ApiDocScheme> treeTypes = this.getEntityDao().treeQuery(category, rootId, rootPath, status);
+
+        if (Collections3.isEmpty(treeTypes)) {
+            return null;
+        }
+        if (Strings.isNotBlank(schemeNo)) {
+            schemeServices = apiDocSchemeServiceDao.findContentServices(schemeNo);
+        }
+        // 使用json转换entity为dto，解决深copy的问题
+        if (Collections3.isNotEmpty(schemeServices)) {
+            Optional<ApiDocScheme> apiDocScheme = treeTypes.stream().filter(p -> schemeNo.equals(p.getSchemeNo())).findFirst();
+            if (apiDocScheme.isPresent()) {
+                apiDocScheme.get().setServices(schemeServices);
+            }
+        }
         return doTree(treeTypes);
     }
 
     @Override
     public List<ApiDocScheme> tree(Long rootId, DocStatusEnum status) {
-        return tree(ApiDocProperties.DEFAULT_CATEGORY, rootId, status);
+        return tree(ApiDocProperties.DEFAULT_CATEGORY, rootId, status, null);
     }
 
     @Override
