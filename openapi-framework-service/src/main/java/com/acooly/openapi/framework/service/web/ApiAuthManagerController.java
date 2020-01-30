@@ -8,14 +8,11 @@ package com.acooly.openapi.framework.service.web;
 
 import com.acooly.core.common.view.ViewResult;
 import com.acooly.core.common.web.AbstractJsonEntityController;
-import com.acooly.core.utils.Dates;
-import com.acooly.core.utils.Ids;
 import com.acooly.openapi.framework.common.enums.SignType;
+import com.acooly.openapi.framework.common.utils.AccessKeys;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
 import com.acooly.openapi.framework.service.service.ApiAuthService;
 import com.acooly.openapi.framework.service.service.ApiMetaServiceService;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 
 /**
  * 认证授权信息管理 管理控制器
@@ -50,7 +46,7 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
     @RequestMapping(value = "generateAccessKey")
     @ResponseBody
     public ViewResult generatePartnerId(HttpServletRequest request, HttpServletResponse response) {
-        return ViewResult.success(Ids.getDid());
+        return ViewResult.success(AccessKeys.newAccessKey());
     }
 
     @RequestMapping(value = "generateSecretKey")
@@ -60,7 +56,7 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
             signType = SignType.MD5;
         }
         if (signType == SignType.MD5) {
-            return ViewResult.success(DigestUtils.md5Hex(Dates.format(new Date()) + RandomStringUtils.randomAscii(5)));
+            return ViewResult.success(AccessKeys.newSecretKey());
         } else {
             throw new UnsupportedOperationException("不支持的signType:" + signType);
         }

@@ -9,6 +9,7 @@
  */
 package com.acooly.openapi.framework.common.utils;
 
+import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.system.IPUtil;
@@ -20,9 +21,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.net.HttpHeaders;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -168,11 +172,5 @@ public final class ApiUtils {
             //ig
         }
         return false;
-    }
-
-
-    @Override
-    public String toString() {
-        return super.toString();
     }
 }

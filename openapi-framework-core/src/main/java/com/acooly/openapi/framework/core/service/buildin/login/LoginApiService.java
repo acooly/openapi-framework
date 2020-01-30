@@ -1,6 +1,7 @@
 package com.acooly.openapi.framework.core.service.buildin.login;
 
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.ApiDocNote;
 import com.acooly.openapi.framework.common.annotation.ApiDocType;
@@ -11,15 +12,14 @@ import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.builtin.LoginRequest;
 import com.acooly.openapi.framework.common.message.builtin.LoginResponse;
+import com.acooly.openapi.framework.common.utils.AccessKeys;
 import com.acooly.openapi.framework.core.OpenAPIProperties;
 import com.acooly.openapi.framework.core.auth.realm.impl.CacheableAuthInfoRealm;
 import com.acooly.openapi.framework.core.service.base.BaseApiService;
 import com.acooly.openapi.framework.service.domain.LoginDto;
 import com.acooly.openapi.framework.service.service.AppApiLoginService;
 import com.acooly.openapi.framework.service.service.AuthInfoRealmManageService;
-import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -56,13 +56,13 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
             response.setCustomerId(dto.getCustomerId());
             String accessKey = requestAccessKey + "#" + request.getUsername();
             String secretKey = authInfoRealmManageService.getSercretKey(accessKey);
-            if (Strings.isNullOrEmpty(secretKey)) {
-                secretKey = RandomStringUtils.randomAlphanumeric(32);
+            if (Strings.isBlank(secretKey)) {
+                secretKey = AccessKeys.newSecretKey();
                 authInfoRealmManageService.createAuthenticationInfo(accessKey, secretKey);
                 // 这里不用设置动态accessKey的权限，权限与其父accessKey一致。
             } else {
                 if (openAPIProperties.getLogin().isSecretKeyDynamic()) {
-                    secretKey = RandomStringUtils.randomAlphanumeric(32);
+                    secretKey = AccessKeys.newSecretKey();
                     authInfoRealmManageService.updateAuthenticationInfo(accessKey, secretKey);
                     cacheableAuthInfoRealm.removeCache(accessKey);
                 }

@@ -58,7 +58,7 @@ public class OpenApiDynamicTest extends AbstractApiServieTests {
         assertThat(response.isSuccess()).isTrue();
         log.info("测试：匿名登录接口 - [通过]：LoginResponse: {}", response);
         log.info("customerId: {}", response.getCustomerId());
-        log.info("AccessKey: {}", response.getAccessKey());
+        log.info("AccessKeys: {}", response.getAccessKey());
         log.info("SecretKey: {}", response.getSecretKey());
         return response;
     }

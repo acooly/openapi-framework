@@ -37,7 +37,7 @@ public class OrderCashierPayClientTestController extends AbstractStandardEntityC
 
     /**
      * 注意：
-     * 1、openApiClient可以通过参数配置：AccessKey,SecretKey和网关地址
+     * 1、openApiClient可以通过参数配置：AccessKeys,SecretKey和网关地址
      * 2、可以手动通过构造函数设置和初始化
      */
     @Autowired
