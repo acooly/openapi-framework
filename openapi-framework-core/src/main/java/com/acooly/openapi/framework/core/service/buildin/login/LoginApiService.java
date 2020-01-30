@@ -52,6 +52,7 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
     protected void doService(LoginRequest request, LoginResponse response) {
         try {
             String requestAccessKey = ApiContextHolder.getApiContext().getAccessKey();
+            // OpenApi的login不提供App客户端请求参数的存储和处理，交给集成工程的login接口实现
             LoginDto dto = appApiLoginService.login(request, ApiContextHolder.getApiContext());
             response.setCustomerId(dto.getCustomerId());
             String accessKey = requestAccessKey + "#" + request.getUsername();
