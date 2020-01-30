@@ -12,11 +12,11 @@ import com.acooly.core.utils.Strings;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
-import javax.validation.constraints.NotBlank;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -31,6 +31,13 @@ import java.util.List;
 @Getter
 @Setter
 public class ApiAuth extends AbstractEntity {
+
+    /**
+     * 合作方编码
+     */
+    @NotBlank
+    @Size(max = 32)
+    private String partnerId;
 
     /**
      * 访问帐号

@@ -25,7 +25,7 @@ public class DefaultApiAuthorizer implements ApiAuthorizer {
 
     @Override
     public void authorize(ApiContext apiContext, List<Permission> permissionList) {
-        String resource = apiContext.getPartnerId() + ":" + apiContext.getServiceName();
+        String resource = apiContext.getCanonicalAccessKey() + ":" + apiContext.getServiceName();
         if (!hasPermission(permissionList, resource)) {
             throw new ApiServiceAuthorizationException("服务[" + apiContext.getServiceName() + "]未授权");
         }

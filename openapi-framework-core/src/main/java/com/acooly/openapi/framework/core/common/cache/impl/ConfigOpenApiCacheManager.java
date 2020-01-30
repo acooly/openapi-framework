@@ -1,6 +1,7 @@
 package com.acooly.openapi.framework.core.common.cache.impl;
 
 import com.acooly.module.config.entity.AppConfig;
+import com.acooly.module.config.service.AppConfigService;
 import com.acooly.module.config.service.impl.AppConfigManager;
 import com.acooly.openapi.framework.core.common.cache.OpenApiCacheManager;
 import com.alibaba.fastjson.JSON;
@@ -18,7 +19,6 @@ public class ConfigOpenApiCacheManager implements OpenApiCacheManager, Initializ
 
     @Autowired
     private AppConfigManager configManager;
-
 
     private Integer defaultTimeout;
 
@@ -62,7 +62,7 @@ public class ConfigOpenApiCacheManager implements OpenApiCacheManager, Initializ
 
     @Override
     public void cleanup(String key) {
-        configManager.invalidate(NAME_SPACE + key);
+        configManager.delete(NAME_SPACE + key);
     }
 
 

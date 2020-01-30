@@ -36,7 +36,7 @@ public class DefaultApiAuthorization implements ApiAuthorization {
     public void authorize(ApiContext apiContext) {
         try {
             List<Permission> permissionList =
-                    (List<Permission>) authInfoRealm.getAuthorizationInfo(apiContext.getAccessKey());
+                    (List<Permission>) authInfoRealm.getAuthorizationInfo(apiContext.getCanonicalAccessKey());
             apiAuthorizer.authorize(apiContext, permissionList);
         } catch (ApiServiceException asae) {
             throw asae;
@@ -45,4 +45,5 @@ public class DefaultApiAuthorization implements ApiAuthorization {
             throw new ApiServiceAuthorizationException("内部错误");
         }
     }
+
 }
