@@ -95,7 +95,7 @@ CREATE TABLE `api_doc_item` (
   `sort_time` bigint(20) DEFAULT NULL COMMENT '排序辅助值',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  `signatrue` varchar(128) DEFAULT NULL COMMENT '签名(item_no+name+title+data_length+data_type+descn+demo+status+encryptStatus)',
+  `signature` varchar(128) DEFAULT NULL COMMENT '签名(item_no+name+title+data_length+data_type+descn+demo+status+encryptStatus)',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_api_doc_item` (`item_no`),
   KEY `FK_apidoc_item_self` (`parent_id`),
