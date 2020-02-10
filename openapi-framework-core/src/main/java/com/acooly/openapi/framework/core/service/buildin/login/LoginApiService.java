@@ -59,7 +59,7 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
             String secretKey = authInfoRealmManageService.getSercretKey(accessKey);
             if (Strings.isBlank(secretKey)) {
                 secretKey = AccessKeys.newSecretKey();
-                authInfoRealmManageService.createAuthenticationInfo(accessKey, secretKey);
+                authInfoRealmManageService.createAuthenticationInfo(requestAccessKey, accessKey, secretKey);
                 // 这里不用设置动态accessKey的权限，权限与其父accessKey一致。
             } else {
                 if (openAPIProperties.getLogin().isSecretKeyDynamic()) {

@@ -8,7 +8,7 @@
 package com.acooly.openapi.framework.service.service;
 
 import com.acooly.core.common.service.EntityService;
-import com.acooly.openapi.framework.service.domain.ApiTenant;
+import com.acooly.openapi.framework.service.domain.ApiPartner;
 
 /**
  * 租户管理 Service接口
@@ -17,6 +17,6 @@ import com.acooly.openapi.framework.service.domain.ApiTenant;
  * @author qiubo
  *
  */
-public interface ApiTenantService extends EntityService<ApiTenant> {
+public interface ApiPartnerService extends EntityService<ApiPartner> {
 
 }

@@ -8,6 +8,8 @@ package com.acooly.openapi.framework.service.service.impl;
 
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityServiceImpl;
+import com.acooly.core.utils.Ids;
+import com.acooly.core.utils.Strings;
 import com.acooly.module.event.EventBus;
 import com.acooly.openapi.framework.service.dao.ApiAuthDao;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
@@ -36,8 +38,19 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
     }
 
     @Override
+    public void save(ApiAuth o) throws BusinessException {
+        if (Strings.isBlank(o.getAuthNo())) {
+            o.setAuthNo(Ids.did());
+        }
+        super.save(o);
+    }
+
+    @Override
     public void update(ApiAuth o) throws BusinessException {
         ApiAuth oldApiAuth = this.get(o.getId());
+        if (Strings.isBlank(o.getAuthNo())) {
+            o.setAuthNo(Ids.did());
+        }
         super.update(o);
         eventBus.publish(new ApiAuthUpdateEvent(oldApiAuth));
     }

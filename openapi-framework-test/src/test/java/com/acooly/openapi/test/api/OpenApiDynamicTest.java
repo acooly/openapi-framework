@@ -28,9 +28,9 @@ public class OpenApiDynamicTest extends AbstractApiServieTests {
      * 1、特殊字符, 2、多级报文, 3、加密解密, 4.context回传
      */
     @Test
-    public void testAnonymousLoginAndAuthz() {
+    public void testLoginAndAuthz() {
         LoginResponse response = login("test", "06f7aab08aa2431e6dae6a156fc9e0b4",
-                "zhangpu", "123123123");
+                "zhangpu2", "123123123");
         OpenApiClient openApiClient = getOpenApiClient(response.getAccessKey(), response.getSecretKey());
 
         ApiRequest request = new ApiRequest();

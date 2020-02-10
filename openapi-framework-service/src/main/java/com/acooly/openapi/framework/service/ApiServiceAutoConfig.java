@@ -19,8 +19,7 @@ import java.util.List;
  */
 @Configuration
 @ComponentScan(basePackages = {"com.acooly.openapi.framework.service"})
-@MapperScan(basePackages = "com.acooly.openapi.framework.service.dao"
-        , markerInterface = EntityMybatisDao.class)
+@MapperScan(basePackages = "com.acooly.openapi.framework.service.dao", markerInterface = EntityMybatisDao.class)
 public class ApiServiceAutoConfig {
     @Bean
     public StandardDatabaseScriptIniter openapiManageScriptIniter() {
@@ -28,7 +27,7 @@ public class ApiServiceAutoConfig {
 
             @Override
             public String getEvaluateTable() {
-                return "api_tenant";
+                return "api_partner";
             }
 
             @Override

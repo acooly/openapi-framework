@@ -8,30 +8,27 @@ package com.acooly.openapi.framework.service.domain;
 
 
 import com.acooly.core.common.domain.AbstractEntity;
-import com.acooly.openapi.framework.common.enums.SecretType;
-import com.acooly.openapi.framework.common.enums.SignType;
 import lombok.Getter;
 import lombok.Setter;
-import javax.validation.constraints.NotBlank;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
  * 租户管理 Entity
+ * <p>
+ * 关系：Tenant -(n)-> Merchant -(n)-> Partner
  *
- * @author qiubo
+ * @author zhangpu
  * Date: 2018-08-21 14:31:05
  */
 @Entity
-@Table(name = "api_tenant")
+@Table(name = "api_partner")
 @Getter
 @Setter
-public class ApiTenant extends AbstractEntity {
+public class ApiPartner extends AbstractEntity {
 
     /**
      * 合作方编码
@@ -41,6 +38,13 @@ public class ApiTenant extends AbstractEntity {
     private String partnerId;
 
     /**
+     * 商户会员号
+     */
+    @NotBlank
+    @Size(max = 64)
+    private String merchantNo;
+
+    /**
      * 合作方名称
      */
     @NotBlank
@@ -48,18 +52,11 @@ public class ApiTenant extends AbstractEntity {
     private String partnerName;
 
     /**
-     * 安全方案
+     * 租户编码
+     * 预留用于支持多租户
      */
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private SecretType secretType;
-
-    /**
-     * 签名类型
-     */
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private SignType signType;
+    @Size(max = 64)
+    private String tenantNo;
 
     /**
      * 备注

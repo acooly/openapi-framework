@@ -154,8 +154,8 @@ $(function() {
 
                 var htmlContent = '<div><b>通知地址:</b> '+row.url+'</div><div><div style="float:left;width:500px;">' +
                             '<h3 style="border-bottom: 1px solid #dddddd;">Notify Request:</h3>' +
-                            '<div><pre>'+formatJson(row.content)+'</pre></div></div>' +
-                            '<div style="float:left;">'+
+                            '<div><pre style="background-color: #fff; border: 0;">'+formatJson(row.content)+'</pre></div></div>' +
+                            '<div style="float:left;padding-left: 20px;">'+
                             '<h3 style="border-bottom: 1px solid #dddddd;">Notify Response:</h3><div>'+row.respInfo+'</div>' +
                             '</div><div style="clear: both;"></div> </div>';
 

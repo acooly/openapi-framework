@@ -8,11 +8,20 @@ package com.acooly.openapi.framework.service.web;
 
 import com.acooly.core.common.view.ViewResult;
 import com.acooly.core.common.web.AbstractJsonEntityController;
+import com.acooly.core.common.web.support.JsonListResult;
+import com.acooly.core.common.web.support.JsonResult;
+import com.acooly.core.utils.Collections3;
+import com.acooly.core.utils.Servlets;
+import com.acooly.core.utils.Strings;
+import com.acooly.openapi.framework.common.enums.SecretType;
 import com.acooly.openapi.framework.common.enums.SignType;
 import com.acooly.openapi.framework.common.utils.AccessKeys;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
+import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
+import com.acooly.openapi.framework.service.service.ApiAuthAclService;
 import com.acooly.openapi.framework.service.service.ApiAuthService;
 import com.acooly.openapi.framework.service.service.ApiMetaServiceService;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,27 +30,40 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 认证授权信息管理 管理控制器
  *
- * @author qiubo
- * Date: 2018-08-21 14:31:06
+ * @author zhangpu
+ * @date 2020-2-8
  */
 @Controller
-@RequestMapping(value = "/manage/module/openapi/apiAuth")
+@RequestMapping(value = "/manage/openapi/apiAuth")
 public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAuth, ApiAuthService> {
 
-
-    {
-        allowMapping = "*";
-    }
-
-    @SuppressWarnings("unused")
     @Autowired
     private ApiAuthService apiAuthService;
     @Autowired
     private ApiMetaServiceService apiMetaServiceService;
+    @Autowired
+    private ApiAuthAclService apiAuthAclService;
+
+    @RequestMapping(value = "loadAcls")
+    @ResponseBody
+    public JsonListResult<ApiAuthAcl> loadAcls(HttpServletRequest request, HttpServletResponse response) {
+        JsonListResult<ApiAuthAcl> result = new JsonListResult<>();
+        try {
+            String authNo = Servlets.getParameter(request, "authNo");
+            List<ApiAuthAcl> acls = apiAuthAclService.loadAcls(authNo);
+            result.setRows(acls);
+        } catch (Exception e) {
+            handleException(result, "加载ACL", e);
+        }
+        return result;
+    }
 
     @RequestMapping(value = "generateAccessKey")
     @ResponseBody
@@ -71,8 +93,34 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
         } catch (Exception e) {
             handleException("设置权限", e, request);
         }
-        return "/manage/module/openapi/apiAuthSetting";
+        return "/manage/openapi/apiAuthSetting";
     }
+
+    @RequestMapping(value = "settingSave")
+    @ResponseBody
+    public JsonResult settingSave(HttpServletRequest request, @Valid String authNo) {
+        JsonResult result = new JsonResult();
+        try {
+            String[] serviceNos = Strings.split(Servlets.getParameter("serviceNo"), ",");
+            List<ApiAuthAcl> acls = Lists.newArrayList();
+            ApiAuthAcl apiAuthAcl = null;
+            String[] services = null;
+            for (String serviceNo : serviceNos) {
+                apiAuthAcl = new ApiAuthAcl();
+                services = Strings.split(serviceNo, "_");
+                apiAuthAcl.setAuthNo(authNo);
+                apiAuthAcl.setServiceNo(serviceNo);
+                apiAuthAcl.setName(services[0]);
+                apiAuthAcl.setVersion(services[1]);
+                acls.add(apiAuthAcl);
+            }
+            apiAuthAclService.merge(acls);
+        } catch (Exception e) {
+            handleException(result, "保持ACL权限", e);
+        }
+        return result;
+    }
+
 
     @RequestMapping(value = "getAllService")
     @ResponseBody
@@ -90,5 +138,22 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
         return ViewResult.success(null);
     }
 
+    @RequestMapping(value = "getSignTypes")
+    @ResponseBody
+    public JsonResult getSignTypes(HttpServletRequest request) {
+        JsonResult result = new JsonResult();
+        String secretType = Servlets.getParameter(request, "secretType");
+        if (Strings.isBlank(secretType)) {
+            secretType = SecretType.digest.code();
+        }
+        List<SignType> signTypes = SecretType.find(secretType).getSignTypes();
+        result.appendData(Collections3.extractToMap(signTypes, "code", "message"));
+        return result;
+    }
 
+    @Override
+    protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
+        model.put("allSecretTypes", SecretType.mapping());
+        model.put("allSignTypes", SignType.mapping());
+    }
 }

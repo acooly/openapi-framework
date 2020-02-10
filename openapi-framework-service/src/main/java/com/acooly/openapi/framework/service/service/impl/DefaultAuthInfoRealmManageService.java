@@ -1,8 +1,10 @@
 package com.acooly.openapi.framework.service.service.impl;
 
-import com.acooly.openapi.framework.service.service.AuthInfoRealmManageService;
+import com.acooly.core.utils.Ids;
+import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
 import com.acooly.openapi.framework.service.service.ApiAuthService;
+import com.acooly.openapi.framework.service.service.AuthInfoRealmManageService;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,18 +22,25 @@ public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageSer
     ApiAuthService apiAuthService;
 
     @Override
+    public void createAuthenticationInfo(String parentAccessKey, String accessKey, String secretKey) {
+        ApiAuth parentAuth = apiAuthService.findByAccesskey(parentAccessKey);
+        ApiAuth apiAuth = new ApiAuth();
+        BeanCopier.copy(parentAuth, apiAuth);
+        apiAuth.setId(null);
+        apiAuth.setParentId(parentAuth.getId());
+        apiAuth.setAuthNo(Ids.oid());
+        apiAuth.setAccessKey(accessKey);
+        apiAuth.setSecretKey(secretKey);
+        apiAuth.setPermissions(null);
+        apiAuthService.save(apiAuth);
+    }
+
+    @Override
     public void createAuthenticationInfo(String accessKey, String secretKey) {
         ApiAuth apiAuth = new ApiAuth();
         apiAuth.setSecretKey(secretKey);
         apiAuth.setAccessKey(accessKey);
         apiAuthService.save(apiAuth);
-    }
-
-    @Override
-    public void createAuthorizationInfo(String accessKey, String authorizationInfo) {
-        ApiAuth apiAuth = apiAuthService.findByAccesskey(accessKey);
-        apiAuth.setPermissions(authorizationInfo);
-        apiAuthService.update(apiAuth);
     }
 
     @Override
@@ -44,7 +53,7 @@ public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageSer
     @Override
     public String getSercretKey(String accessKey) {
         ApiAuth apiAuth = apiAuthService.findByAccesskey(accessKey);
-        if(apiAuth==null){
+        if (apiAuth == null) {
             return null;
         }
         return apiAuth.getSecretKey();

@@ -9,14 +9,16 @@ package com.acooly.openapi.framework.service.domain;
 
 import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.arithmetic.tree.TreeNode;
+import com.acooly.openapi.framework.common.enums.SecretType;
+import com.acooly.openapi.framework.common.enums.SignType;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -30,7 +32,19 @@ import java.util.List;
 @Table(name = "api_auth")
 @Getter
 @Setter
-public class ApiAuth extends AbstractEntity {
+public class ApiAuth extends AbstractEntity implements TreeNode<ApiAuth> {
+
+    /**
+     * 父节点
+     */
+    private Long parentId;
+
+    /**
+     * 认证编码
+     */
+    @NotBlank
+    @Size(max = 32)
+    private String authNo;
 
     /**
      * 合作方编码
@@ -38,6 +52,20 @@ public class ApiAuth extends AbstractEntity {
     @NotBlank
     @Size(max = 32)
     private String partnerId;
+
+    /**
+     * 安全方案
+     */
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private SecretType secretType;
+
+    /**
+     * 签名类型
+     */
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private SignType signType;
 
     /**
      * 访问帐号
@@ -81,5 +109,15 @@ public class ApiAuth extends AbstractEntity {
             }
         }
         return services;
+    }
+
+    @Override
+    public List<ApiAuth> getChildren() {
+        return null;
+    }
+
+    @Override
+    public void setChildren(List<ApiAuth> children) {
+
     }
 }

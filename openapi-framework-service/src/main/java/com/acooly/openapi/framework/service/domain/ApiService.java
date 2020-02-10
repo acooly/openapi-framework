@@ -23,21 +23,31 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class ApiService extends AbstractEntity {
-  /** 服务编码 */
-  private String code;
-  /** 服务名 */
-  private String name;
-  /** 服务版本 */
-  private String version;
-  /** 中文描述 */
-  private String title;
-  /** 备注 */
-  private String comments;
+    /**
+     * 服务编码
+     */
+    private String serviceCode;
+    /**
+     * 服务名
+     */
+    private String name;
+    /**
+     * 服务版本
+     */
+    private String version;
+    /**
+     * 中文描述
+     */
+    private String title;
+    /**
+     * 备注
+     */
+    private String comments;
 
-  @ManyToOne(
-    fetch = FetchType.LAZY,
-    cascade = {CascadeType.REFRESH}
-  )
-  @JoinColumn(name = "type_id")
-  private ApiServiceType apiServiceType;
+    @ManyToOne(
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH}
+    )
+    @JoinColumn(name = "type_id")
+    private ApiServiceType apiServiceType;
 }

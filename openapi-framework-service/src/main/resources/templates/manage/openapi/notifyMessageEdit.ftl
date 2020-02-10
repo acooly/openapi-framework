@@ -45,7 +45,6 @@
 				<td>
                     <select name="status" editable="false" style="height:27px;" panelHeight="auto" class="easyui-combobox" data-options="required:true">
 						<#list allStatus as k,v><option <#if notifyMessage.status.code()==k>selected</#if> value="${k}">${v}</option></#list>
-
 					</select>
                 </td>
 			</tr>
