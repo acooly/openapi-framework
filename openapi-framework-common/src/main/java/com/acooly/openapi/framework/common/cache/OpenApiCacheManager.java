@@ -2,7 +2,7 @@
  * acooly.com Inc.
  * Copyright (c) 2014 All Rights Reserved
  */
-package com.acooly.openapi.framework.core.common.cache;
+package com.acooly.openapi.framework.common.cache;
 
 /**
  * 缓存接口

@@ -127,9 +127,9 @@ public class OpenAPIProperties {
          */
         private boolean enable = true;
         /**
-         * 缓存信息过期时间,单位：ms
+         * 缓存信息过期时间,单位：ms,默认10分钟
          */
-        private int defaultTimeout = 2 * 60 * 60 * 1000;
+        private int defaultTimeout = 10 * 60 * 1000;
     }
 
     @Data

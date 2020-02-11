@@ -32,6 +32,9 @@ import org.springframework.stereotype.Service;
 @Service("apiAuthService")
 public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> implements ApiAuthService {
 
+    /**
+     * 发布时间，用于更新缓存
+     */
     @Autowired(required = false)
     private EventBus eventBus;
 

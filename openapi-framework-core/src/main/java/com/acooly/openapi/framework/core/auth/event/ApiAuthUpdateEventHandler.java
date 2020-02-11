@@ -8,6 +8,7 @@
  */
 package com.acooly.openapi.framework.core.auth.event;
 
+import com.acooly.core.utils.Strings;
 import com.acooly.module.event.EventHandler;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.core.auth.realm.impl.CacheableAuthInfoRealm;
@@ -30,7 +31,16 @@ public class ApiAuthUpdateEventHandler {
     @Handler
     public void handleApiAuthUpdateEvent(ApiAuthUpdateEvent apiAuthUpdateEvent) {
         if (authInfoRealm instanceof CacheableAuthInfoRealm) {
-            ((CacheableAuthInfoRealm) authInfoRealm).removeCache(apiAuthUpdateEvent.getApiAuth().getAccessKey());
+            String accessKey = null;
+            if (apiAuthUpdateEvent.getApiAuth() != null) {
+                accessKey = apiAuthUpdateEvent.getApiAuth().getAccessKey();
+            } else if (apiAuthUpdateEvent.getApiAuthAcl() != null) {
+                accessKey = apiAuthUpdateEvent.getApiAuthAcl().getAccessKey();
+            }
+            if (Strings.isBlank(accessKey)) {
+                return;
+            }
+            ((CacheableAuthInfoRealm) authInfoRealm).removeCache(accessKey);
         }
     }
 

@@ -10,7 +10,7 @@
  */
 package com.acooly.openapi.framework.core.common.cache.impl;
 
-import com.acooly.openapi.framework.core.common.cache.OpenApiCacheManager;
+import com.acooly.openapi.framework.common.cache.OpenApiCacheManager;
 
 /** @author qiubo@qq.com */
 public class NOOPOpenApiCacheManager implements OpenApiCacheManager {
