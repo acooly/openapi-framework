@@ -65,25 +65,6 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
         return result;
     }
 
-    @RequestMapping(value = "generateAccessKey")
-    @ResponseBody
-    public ViewResult generatePartnerId(HttpServletRequest request, HttpServletResponse response) {
-        return ViewResult.success(AccessKeys.newAccessKey());
-    }
-
-    @RequestMapping(value = "generateSecretKey")
-    @ResponseBody
-    public ViewResult generateSecretKey(HttpServletRequest request, HttpServletResponse response, SignType signType) {
-        if (signType == null) {
-            signType = SignType.MD5;
-        }
-        if (signType == SignType.MD5) {
-            return ViewResult.success(AccessKeys.newSecretKey());
-        } else {
-            throw new UnsupportedOperationException("不支持的signType:" + signType);
-        }
-    }
-
     @RequestMapping("setting")
     public String setting(HttpServletRequest request, HttpServletResponse response, Model model, Long id) {
         try {
@@ -101,6 +82,7 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
     public JsonResult settingSave(HttpServletRequest request, @Valid String authNo) {
         JsonResult result = new JsonResult();
         try {
+            ApiAuth apiAuth = apiAuthService.findByAuthNo(authNo);
             String[] serviceNos = Strings.split(Servlets.getParameter("serviceNo"), ",");
             List<ApiAuthAcl> acls = Lists.newArrayList();
             ApiAuthAcl apiAuthAcl = null;
@@ -108,6 +90,7 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
             for (String serviceNo : serviceNos) {
                 apiAuthAcl = new ApiAuthAcl();
                 services = Strings.split(serviceNo, "_");
+                apiAuthAcl.setAccessKey(apiAuth.getAccessKey());
                 apiAuthAcl.setAuthNo(authNo);
                 apiAuthAcl.setServiceNo(serviceNo);
                 apiAuthAcl.setName(services[0]);
@@ -149,6 +132,26 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
         List<SignType> signTypes = SecretType.find(secretType).getSignTypes();
         result.appendData(Collections3.extractToMap(signTypes, "code", "message"));
         return result;
+    }
+
+
+    @RequestMapping(value = "generateAccessKey")
+    @ResponseBody
+    public ViewResult generatePartnerId(HttpServletRequest request, HttpServletResponse response) {
+        return ViewResult.success(AccessKeys.newAccessKey());
+    }
+
+    @RequestMapping(value = "generateSecretKey")
+    @ResponseBody
+    public ViewResult generateSecretKey(HttpServletRequest request, HttpServletResponse response, SignType signType) {
+        if (signType == null) {
+            signType = SignType.MD5;
+        }
+        if (signType == SignType.MD5) {
+            return ViewResult.success(AccessKeys.newSecretKey());
+        } else {
+            throw new UnsupportedOperationException("不支持的signType:" + signType);
+        }
     }
 
     @Override

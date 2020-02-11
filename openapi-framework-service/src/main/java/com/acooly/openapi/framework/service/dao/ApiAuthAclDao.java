@@ -28,14 +28,25 @@ public interface ApiAuthAclDao extends EntityMybatisDao<ApiAuthAcl> {
      * @param authNo
      * @return
      */
-    @Select("select * from api_auth_service  where auth_no =#{authNo}")
+    @Select("select * from api_auth_acl  where auth_no =#{authNo}")
     List<ApiAuthAcl> findByAuthNo(@Param("authNo") String authNo);
 
     /**
+     * 根据accessKey查询
+     *
+     * @param accessKey
+     * @return
+     */
+    @Select("select * from api_auth_acl  where access_key =#{accessKey}")
+    List<ApiAuthAcl> findByAccessKey(@Param("accessKey") String accessKey);
+
+
+    /**
      * 删除authNo对应的ACL
+     *
      * @param authNo
      */
-    @Select("delete * from api_auth_service  where auth_no =#{authNo}")
+    @Select("delete * from api_auth_acl  where auth_no =#{authNo}")
     void removeByAuthNo(@Param("authNo") String authNo);
 
 }

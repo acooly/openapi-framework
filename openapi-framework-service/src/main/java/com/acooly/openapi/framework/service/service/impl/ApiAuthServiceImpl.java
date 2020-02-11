@@ -7,6 +7,7 @@
 package com.acooly.openapi.framework.service.service.impl;
 
 import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.common.exception.CommonErrorCodes;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
@@ -15,6 +16,7 @@ import com.acooly.openapi.framework.service.dao.ApiAuthDao;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
 import com.acooly.openapi.framework.service.event.ApiAuthUpdateEvent;
 import com.acooly.openapi.framework.service.service.ApiAuthService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
  * @author qiubo
  * @author zhangpu : 调整缓存更新为事件模式
  */
+@Slf4j
 @Service("apiAuthService")
 public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> implements ApiAuthService {
 
@@ -38,7 +41,17 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
     }
 
     @Override
+    public ApiAuth findByAuthNo(String authNo) {
+        return getEntityDao().findByAuthNo(authNo);
+    }
+
+    @Override
     public void save(ApiAuth o) throws BusinessException {
+        ApiAuth apiAuth = findByAccesskey(o.getAccessKey());
+        if (apiAuth != null) {
+            log.warn("认证对象的AccessKey已存在: {}", o.getAccessKey());
+            throw new BusinessException(CommonErrorCodes.OBJECT_NOT_UNIQUE, "认证对象的AccessKey已存在");
+        }
         if (Strings.isBlank(o.getAuthNo())) {
             o.setAuthNo(Ids.did());
         }

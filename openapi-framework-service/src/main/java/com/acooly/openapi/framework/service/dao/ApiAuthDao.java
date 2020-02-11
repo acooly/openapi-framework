@@ -19,6 +19,20 @@ import org.apache.ibatis.annotations.Select;
  * @author qiubo
  */
 public interface ApiAuthDao extends EntityMybatisDao<ApiAuth> {
+
+    /**
+     * 根据accesskey查询
+     * @param accesskey
+     * @return
+     */
     @Select("select * from api_auth  where access_key =#{accesskey}")
     ApiAuth findByAccesskey(@Param("accesskey") String accesskey);
+
+    /**
+     * 根据编码查询
+     * @param authNo
+     * @return
+     */
+    @Select("select * from api_auth  where auth_no =#{authNo}")
+    ApiAuth findByAuthNo(@Param("authNo") String authNo);
 }

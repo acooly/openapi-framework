@@ -43,7 +43,7 @@ public class ApiAuthAclServiceImpl extends EntityServiceImpl<ApiAuthAcl, ApiAuth
             }
             if (Collections3.isNotEmpty(deleteAcls)) {
                 List<Long> ids = Lists.newArrayList();
-                for(ApiAuthAcl apiAuthAcl:deleteAcls){
+                for (ApiAuthAcl apiAuthAcl : deleteAcls) {
                     ids.add(apiAuthAcl.getId());
                 }
                 Serializable[] idArray = ids.toArray(new Long[]{});
@@ -61,5 +61,8 @@ public class ApiAuthAclServiceImpl extends EntityServiceImpl<ApiAuthAcl, ApiAuth
         return getEntityDao().findByAuthNo(authNo);
     }
 
-
+    @Override
+    public List<ApiAuthAcl> queryAcls(String accessKey) {
+        return getEntityDao().findByAccessKey(accessKey);
+    }
 }

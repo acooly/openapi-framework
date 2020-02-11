@@ -24,7 +24,7 @@ import javax.validation.constraints.Size;
  * @date 2020-02-01 01:41
  */
 @Entity
-@Table(name = "api_auth_service")
+@Table(name = "api_auth_acl")
 @Getter
 @Setter
 public class ApiAuthAcl extends AbstractEntity {
@@ -35,6 +35,11 @@ public class ApiAuthAcl extends AbstractEntity {
     @NotBlank
     @Size(max = 32)
     private String authNo;
+
+    /**
+     * 访问码
+     */
+    private String accessKey;
 
     /**
      * 服务编码
@@ -61,7 +66,7 @@ public class ApiAuthAcl extends AbstractEntity {
         if (this == o) {
             return true;
         } else {
-            ApiAuthAcl that = (ApiAuthAcl)o;
+            ApiAuthAcl that = (ApiAuthAcl) o;
             return this.serviceNo != null ? this.serviceNo.equals(that.serviceNo) : that.serviceNo == null;
         }
     }
@@ -70,4 +75,5 @@ public class ApiAuthAcl extends AbstractEntity {
     public int hashCode() {
         return this.serviceNo != null ? this.serviceNo.hashCode() : 0;
     }
+
 }

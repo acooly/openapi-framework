@@ -25,4 +25,11 @@ public interface ApiAuthService extends EntityService<ApiAuth> {
      * @return
      */
     ApiAuth findByAccesskey(String accesskey);
+
+    /**
+     * 根据编码查询
+     * @param authNo
+     * @return
+     */
+    ApiAuth findByAuthNo(String authNo);
 }

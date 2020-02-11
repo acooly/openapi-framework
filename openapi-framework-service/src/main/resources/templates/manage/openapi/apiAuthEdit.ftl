@@ -4,6 +4,12 @@
     <@jodd.form bean="apiAuth" scope="request">
         <input name="id" type="hidden"/>
         <table class="tableForm" width="100%">
+            <#if action=='edit'>
+            <tr>
+                <th>认证编码：</th>
+                <td>${apiAuth.authNo}</td>
+            </tr>
+            </#if>
             <tr>
                 <th>接入方ID：</th>
                 <td>
@@ -14,12 +20,6 @@
                  </#if>
                 </td>
             </tr>
-            <#if action=='edit'>
-            <tr>
-                <th>认证编码：</th>
-                <td>${apiAuth.authNo}</td>
-            </tr>
-            </#if>
             <tr>
                 <th>安全类型：</th>
                 <td>
@@ -55,7 +55,11 @@
             </tr>
             <tr>
                 <th>访问权限：</th>
-                <td><textarea rows="3" cols="40" placeholder="请输入访问权限..." style="width:300px;" name="permissions" class="easyui-validatebox" data-options="validType:['length[1,512]']"></textarea></td>
+                <td>
+                    <textarea rows="3" cols="40" placeholder="请输入访问权限..." style="width:300px;" name="permissions" class="easyui-validatebox" data-options="validType:['length[1,512]']"></textarea>
+                    <div>格式：accessKey:service,多个逗号分隔，支持通配符:'*'</div>
+                    <div>例如：test:order*,test:queryInfo,app*:login</div>
+                </td>
             </tr>
             <tr>
                 <th>备注：</th>

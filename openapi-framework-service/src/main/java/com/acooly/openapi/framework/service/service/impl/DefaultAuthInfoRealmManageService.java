@@ -1,14 +1,19 @@
 package com.acooly.openapi.framework.service.service.impl;
 
+import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Ids;
+import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
+import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
+import com.acooly.openapi.framework.service.service.ApiAuthAclService;
 import com.acooly.openapi.framework.service.service.ApiAuthService;
 import com.acooly.openapi.framework.service.service.AuthInfoRealmManageService;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -20,6 +25,8 @@ public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageSer
 
     @Autowired
     ApiAuthService apiAuthService;
+    @Autowired
+    ApiAuthAclService apiAuthAclService;
 
     @Override
     public void createAuthenticationInfo(String parentAccessKey, String accessKey, String secretKey) {
@@ -61,6 +68,23 @@ public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageSer
 
     @Override
     public Set<String> getAuthorizationInfo(String accessKey) {
-        return Sets.newHashSet(apiAuthService.findByAccesskey(accessKey).getPermissions());
+        Set<String> permissions = Sets.newHashSet();
+        // 解析添加特殊权限
+        String perms = apiAuthService.findByAccesskey(accessKey).getPermissions();
+        if (Strings.isNotBlank(perms)) {
+            for (String perm : Strings.split(perms, ",")) {
+                permissions.add(perm);
+            }
+        }
+
+        // 获取ACL
+        List<ApiAuthAcl> acls = apiAuthAclService.queryAcls(accessKey);
+        if (Collections3.isNotEmpty(acls)) {
+            for (ApiAuthAcl acl : acls) {
+                permissions.add(accessKey + ":" + acl.getName());
+            }
+        }
+
+        return permissions;
     }
 }

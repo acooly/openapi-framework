@@ -34,4 +34,11 @@ public interface ApiAuthAclService extends EntityService<ApiAuthAcl> {
      * @return
      */
     List<ApiAuthAcl> loadAcls(String authNo);
+
+    /**
+     * 获取Acl
+     * @param accessKey
+     * @return
+     */
+    List<ApiAuthAcl> queryAcls(String accessKey);
 }
