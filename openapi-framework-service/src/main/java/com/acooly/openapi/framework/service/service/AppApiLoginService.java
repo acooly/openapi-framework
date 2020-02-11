@@ -12,8 +12,15 @@ import com.acooly.openapi.framework.service.domain.LoginDto;
  * @date 2016年1月10日
  */
 public interface AppApiLoginService {
+
     /**
+     * 登录认证
+     * <p>
      * 通过请求对象中的partnerId username password 判断用户登录信息是否正确，如果不正确，请抛出异常
+     *
+     * @param loginRequest
+     * @param apiContext
+     * @return
      */
     LoginDto login(LoginRequest loginRequest, ApiContext apiContext);
 }

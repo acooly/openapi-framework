@@ -7,7 +7,7 @@
 package com.acooly.openapi.framework.service.dao;
 
 import com.acooly.module.mybatis.EntityMybatisDao;
-import com.acooly.openapi.framework.service.domain.ApiTenant;
+import com.acooly.openapi.framework.service.domain.ApiPartner;
 
 /**
  * 租户管理 Mybatis Dao
@@ -16,6 +16,6 @@ import com.acooly.openapi.framework.service.domain.ApiTenant;
  *
  * @author qiubo
  */
-public interface ApiTenantDao extends EntityMybatisDao<ApiTenant> {
+public interface ApiPartnerDao extends EntityMybatisDao<ApiPartner> {
 
 }

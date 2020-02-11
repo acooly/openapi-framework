@@ -36,7 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -50,6 +49,8 @@ import java.util.Map;
 @Setter
 public class ApiContext extends Context {
     private static final Logger perlogger = LoggerFactory.getLogger(ApiConstants.PERFORMANCE_LOGGER);
+    public static final String ACCESSKEY_SUB_SPLIT_CHAR = "#";
+
     private HttpServletRequest httpRequest;
     private HttpServletResponse httpResponse;
     /**
@@ -234,6 +235,19 @@ public class ApiContext extends Context {
         }
         return openApiService.responseType() == ResponseType.REDIRECT;
     }
+
+    /**
+     * 获取规范的AccessKey
+     * 兼容动态AccessKey和subAccessKey模式，形如：accessKey#username模式
+     * @return
+     */
+    public String getCanonicalAccessKey() {
+        if (Strings.contains(getAccessKey(), ACCESSKEY_SUB_SPLIT_CHAR)) {
+            return Strings.substringBefore(getAccessKey(), ACCESSKEY_SUB_SPLIT_CHAR);
+        }
+        return getAccessKey();
+    }
+
 
     public void setApiService(ApiService apiService) {
         this.setOpenApiService(apiService.getClass().getAnnotation(OpenApiService.class));

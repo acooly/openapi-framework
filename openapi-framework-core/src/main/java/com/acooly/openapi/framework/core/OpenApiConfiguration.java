@@ -1,11 +1,11 @@
 package com.acooly.openapi.framework.core;
 
+import com.acooly.openapi.framework.common.cache.OpenApiCacheManager;
 import com.acooly.openapi.framework.core.auth.ApiAuthorization;
 import com.acooly.openapi.framework.core.auth.impl.DefaultApiAuthorization;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.core.auth.realm.impl.DefaultAuthInfoRealm;
-import com.acooly.openapi.framework.core.common.cache.OpenApiCacheManager;
-import com.acooly.openapi.framework.core.common.cache.impl.ConfigOpenApiCacheManager;
+import com.acooly.openapi.framework.core.common.cache.impl.MultiLevelOpenApiCacheManager;
 import com.acooly.openapi.framework.core.common.cache.impl.NOOPOpenApiCacheManager;
 import com.acooly.openapi.framework.core.service.buildin.login.DefaultAppApiLoginService;
 import com.acooly.openapi.framework.core.servlet.OpenAPIDispatchServlet;
@@ -51,7 +51,7 @@ public class OpenApiConfiguration {
     @Bean
     public OpenApiCacheManager openApicacheManager() {
         if (properties.getAuthInfoCache().isEnable()) {
-            return new ConfigOpenApiCacheManager(properties.getAuthInfoCache().getDefaultTimeout());
+            return new MultiLevelOpenApiCacheManager();
         } else {
             return new NOOPOpenApiCacheManager();
         }

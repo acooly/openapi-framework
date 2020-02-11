@@ -9,9 +9,9 @@ package com.acooly.openapi.framework.service.service.impl;
 import org.springframework.stereotype.Service;
 
 import com.acooly.core.common.service.EntityServiceImpl;
-import com.acooly.openapi.framework.service.service.ApiTenantService;
-import com.acooly.openapi.framework.service.dao.ApiTenantDao;
-import com.acooly.openapi.framework.service.domain.ApiTenant;
+import com.acooly.openapi.framework.service.service.ApiPartnerService;
+import com.acooly.openapi.framework.service.dao.ApiPartnerDao;
+import com.acooly.openapi.framework.service.domain.ApiPartner;
 
 /**
  * 租户管理 Service实现
@@ -22,6 +22,6 @@ import com.acooly.openapi.framework.service.domain.ApiTenant;
  *
  */
 @Service("apiTenantService")
-public class ApiTenantServiceImpl extends EntityServiceImpl<ApiTenant, ApiTenantDao> implements ApiTenantService {
+public class ApiPartnerServiceImpl extends EntityServiceImpl<ApiPartner, ApiPartnerDao> implements ApiPartnerService {
 
 }

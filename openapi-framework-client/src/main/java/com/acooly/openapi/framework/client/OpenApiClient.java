@@ -156,6 +156,7 @@ public class OpenApiClient {
 
 
     public String sign(String body) {
+        log.debug("Request Sign Body: {}", body);
         return DigestUtils.md5Hex(body + secretKey);
     }
 

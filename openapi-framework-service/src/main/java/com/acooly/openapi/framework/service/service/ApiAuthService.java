@@ -12,11 +12,24 @@ import com.acooly.openapi.framework.service.domain.ApiAuth;
 
 /**
  * 认证授权信息管理 Service接口
- *
+ * <p>
  * Date: 2018-08-21 14:31:06
- * @author qiubo
  *
+ * @author qiubo
  */
 public interface ApiAuthService extends EntityService<ApiAuth> {
-    ApiAuth findByAccesskey( String accesskey);
+    /**
+     * 根据AccessKey查询认证对象
+     *
+     * @param accesskey
+     * @return
+     */
+    ApiAuth findByAccesskey(String accesskey);
+
+    /**
+     * 根据编码查询
+     * @param authNo
+     * @return
+     */
+    ApiAuth findByAuthNo(String authNo);
 }

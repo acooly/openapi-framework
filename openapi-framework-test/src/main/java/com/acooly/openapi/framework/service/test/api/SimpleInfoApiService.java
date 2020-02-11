@@ -32,10 +32,10 @@ public class SimpleInfoApiService extends BaseApiService<ApiRequest, ApiResponse
     @Override
     protected void doService(ApiRequest request, ApiResponse response) {
 
-        ResultBase resultBase = new ResultBase();
-        resultBase.setStatus(ApiServiceResultCode.OBJECT_NOT_EXIST);
-        resultBase.setCode("TEST_ERROR_CODE");
-        resultBase.setDetail("测试错误消息");
-        resultBase.throwIfNotSuccess();
+//        ResultBase resultBase = new ResultBase();
+//        resultBase.setStatus(ApiServiceResultCode.OBJECT_NOT_EXIST);
+//        resultBase.setCode("TEST_ERROR_CODE");
+//        resultBase.setDetail("测试错误消息");
+//        resultBase.throwIfNotSuccess();
     }
 }

@@ -6,12 +6,13 @@
  */
 package com.acooly.openapi.framework.core.auth.realm.impl;
 
+import com.acooly.core.common.boot.Apps;
+import com.acooly.openapi.framework.common.cache.OpenApiCacheManager;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.core.auth.permission.Permission;
 import com.acooly.openapi.framework.core.auth.permission.PermissionResolver;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
-import com.acooly.openapi.framework.core.common.cache.OpenApiCacheManager;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
@@ -25,8 +26,8 @@ import java.util.Set;
 /**
  * 缓存实现
  *
- * @author zhangpu
  * @author Bohr.Qiu <qiubo@qq.com>
+ * @author zhangpu on 2020-02-11 for 缓存key支持多个OpenApi公用一个分布式缓存(redis)不冲突
  */
 public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -76,11 +77,11 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
     }
 
     private String authorizationKey(String accessKey) {
-        return AUTHZ_CACHE_KEY_PREFIX + accessKey;
+        return Apps.getAppName() + ":" + AUTHZ_CACHE_KEY_PREFIX + accessKey;
     }
 
     private String authenticationKey(String accessKey) {
-        return AUTHC_CACHE_KEY_PREFIX + accessKey;
+        return Apps.getAppName() + ":" + AUTHC_CACHE_KEY_PREFIX + accessKey;
     }
 
     public void removeCache(String accessKey) {

@@ -1,45 +1,67 @@
 /*
  * acooly.cn Inc.
- * Copyright (c) 2016 All Rights Reserved.
- * create by acooly
- * date:2016-07-16
- *
+ * Copyright (c) 2018 All Rights Reserved.
+ * create by qiubo
+ * date:2018-08-21
  */
 package com.acooly.openapi.framework.service.domain;
 
+
 import com.acooly.core.common.domain.AbstractEntity;
-import com.acooly.openapi.framework.common.enums.SecretType;
-import com.acooly.openapi.framework.common.enums.SignType;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
- * 合作方管理 Entity
+ * 租户管理 Entity
+ * <p>
+ * 关系：Tenant -(n)-> Merchant -(n)-> Partner
  *
- * @author acooly Date: 2016-07-16 02:05:01
+ * @author zhangpu
+ * Date: 2018-08-21 14:31:05
  */
 @Entity
 @Table(name = "api_partner")
 @Getter
 @Setter
 public class ApiPartner extends AbstractEntity {
-  /** 合作方编码 */
-  private String partnerId;
-  /** 合作方名称 */
-  private String partnerName;
-  /** 安全方案 */
-  @Enumerated(EnumType.STRING)
-  private SecretType secretType;
-  /** 签名类型 */
-  @Enumerated(EnumType.STRING)
-  private SignType signType;
-  /** 秘钥 */
-  private String secretKey;
-  /** 备注 */
-  private String comments;
+
+    /**
+     * 合作方编码
+     */
+    @NotBlank
+    @Size(max = 32)
+    private String partnerId;
+
+    /**
+     * 商户会员号
+     */
+    @NotBlank
+    @Size(max = 64)
+    private String merchantNo;
+
+    /**
+     * 合作方名称
+     */
+    @NotBlank
+    @Size(max = 32)
+    private String partnerName;
+
+    /**
+     * 租户编码
+     * 预留用于支持多租户
+     */
+    @Size(max = 64)
+    private String tenantNo;
+
+    /**
+     * 备注
+     */
+    @Size(max = 128)
+    private String comments;
+
 }

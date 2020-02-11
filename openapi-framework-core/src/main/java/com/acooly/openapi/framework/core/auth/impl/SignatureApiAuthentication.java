@@ -47,7 +47,6 @@ public class SignatureApiAuthentication implements ApiAuthentication {
                     throw new ApiServiceException(notSupport);
                 }
             }
-
             verify(apiContext.getRequestBody(), accessKey, apiContext.getSignType(), requestSign);
         } catch (ApiServiceException asae) {
             throw asae;
