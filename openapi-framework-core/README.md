@@ -31,7 +31,7 @@ OpenApi服务框架核心提供API服务的统一处理和执行能力，只需�
 * 4.0.x : acoolyV4.0版本 -> cnevx
 * 4.2.1 : acoolyV4.2.x 版本 (支持JSON协议）
 * 4.2.2 : acoolyv4.2.x 版本（v4最新版本：支持JSON和HTTP_FORM_JOSN老协议）
-* 5.0.x : acoolyV5.x.x (测试中...)
+* 5.0.x : acoolyV5.x.x 
 
 
 ## 配置
