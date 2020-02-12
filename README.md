@@ -6,6 +6,11 @@ OpenApi开放平台框架提供完善的网关服务解决方案。
 
 ## 版本说明
 
+### v5.0.0-SNAPSHOT-20200213
+
+
+
+
 ### v5.0.0-SNAPSHOT
 
 * 与v4.2.2-SNAPSHOT同步维护，支持acoolyV5框架

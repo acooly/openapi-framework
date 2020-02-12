@@ -102,25 +102,6 @@ CREATE TABLE `api_doc_item` (
   CONSTRAINT `FK_apidoc_item_self` FOREIGN KEY (`parent_id`) REFERENCES `api_doc_item` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='报文字段';
 
-CREATE TABLE `api_meta_service` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `service_name` varchar(128) NOT NULL COMMENT '服务名称',
-  `version` varchar(32) DEFAULT NULL COMMENT '版本号',
-  `service_desc` varchar(256) DEFAULT NULL COMMENT '服务描述',
-  `response_type` varchar(128) DEFAULT NULL COMMENT '服务响应类型',
-  `owner` varchar(64) DEFAULT NULL COMMENT '所属系统',
-  `busi_type` varchar(64) DEFAULT NULL COMMENT '服务名称',
-  `note` varchar(4000) DEFAULT NULL COMMENT '服务介绍',
-  `service_class` varchar(128) DEFAULT NULL COMMENT '服务类',
-  `request_class` varchar(128) DEFAULT NULL COMMENT '请求类',
-  `response_class` varchar(128) DEFAULT NULL COMMENT '同步响应类',
-  `notify_class` varchar(128) DEFAULT NULL COMMENT '异步响应类',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_name_version` (`service_name`,`version`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='服务类';
-
 CREATE TABLE `api_qa_classify` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL COMMENT '分类名称',
