@@ -1,11 +1,7 @@
-<!-- title: OpenApiSDK组件 -->
+<!-- title: OpenApiClient工具 -->
 <!-- type: openapi -->
 <!-- author: qiubo,zhangpu -->
-<!-- date: 2019-02-06 -->
-OpenApiSDK组件
-====
-openapi-framework-client
-----
+<!-- date: 2019-01-06 -->
 
 # 简介
 openapi-framework-client模块是框架提供的通用开放平台客户端，这里可理解为Acooly框架内的SDK，同时也可以应用给外部，只是必须依赖Acooly框架的几个核心库。客户端Java项目可以轻松的通过几个简单配置和引入网关的messages包模块（如：XXX-PROJECT-OPENAPI-MESSAGES.jar），即可直接使用通过该工具实现本地服务器方式开发和注入网关调用。

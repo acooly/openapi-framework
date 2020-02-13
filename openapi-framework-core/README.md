@@ -1,10 +1,7 @@
 <!-- title: OpenApi服务开发指南 -->
 <!-- type: openapi -->
 <!-- author: qiubo,zhangpu -->
-<!-- date: 2019-02-01 -->
-OpenApi服务开发指南
-====
-openapi-framework-core
+<!-- date: 2020-02-10 -->
 
 # 简介
 `openapi-framework-core`是开放平台网关的核心，实现了网关的核心架构和能力。结构上网关核心包括服务执行层和服务实现层，能力上包括：认证，授权，加解密，日志，事件，协议等。
