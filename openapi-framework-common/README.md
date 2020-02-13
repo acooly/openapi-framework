@@ -1,26 +1,26 @@
-<!-- title: OpenApi开发平台框架 -->
+<!-- title: OpenApi框架简介 -->
 <!-- type: openapi -->
 <!-- author: zhangpu -->
 <!-- date: 2020-02-13 -->
-## 简介
+## 1. 简介
 OpenApi开放平台框架提供完善的网关服务开放平台的完整解决方案。
 
-## 文档
+## 2. 文档
 
-### 服务开发
+### 2.1 服务开发
 
 * [OpenApi服务开发指南](https://acooly.cn/docs/component/openapi-framework-core.html)
 * [OpenApi服务异步通知](https://acooly.cn/docs/component/openapi-framework-notify.html)
 * [OpenApi文档自动化](https://acooly.cn/docs/component/openapi-framework-apidoc.html)
 
-### 接入开发
+### 2.2 接入开发
 
 * [OpenApi接入开发指南](https://acooly.cn/docs/component/openapi-framework-common.html)
 * [OpenApiClient工具](https://acooly.cn/docs/component/openapi-framework-client.html)
 
-## 版本
+## 3. 版本
 
-### v5.0.0-SNAPSHOT-20200213
+### v5.0.0-SNAPSHOT(2020-02-13)
 
 本版本主要重构了OpenApi核心认证和授权结构，缓存实现等功能，涉及数据结构变更。主要内容如下：
 
