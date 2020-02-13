@@ -5,6 +5,8 @@ DROP COLUMN `secret_type`,
 ADD COLUMN `merchant_no` VARCHAR(64) NULL DEFAULT NULL COMMENT '商户会员号' AFTER `partner_name`,
 ADD COLUMN `tenant_no` VARCHAR(64) NULL DEFAULT NULL COMMENT '租户编码' AFTER `merchant_no`;
 
+-- replace api_partner with api_tenant
+DROP TABLE api_partner
 ALTER TABLE `api_tenant` RENAME TO  `api_partner`;
 -- update merchant_no and tenant_no with partner_id
 update `api_partner` set `merchant_no` = `partner_id`, `tenant_no` = `partner_id` where partner_id = 'test';
