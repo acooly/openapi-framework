@@ -28,7 +28,6 @@ Acooly开放平台openApi设计支持跳转和异步接口，作为可选模块�
 	<version>${openapi.version}</version>
 </dependency>
 ```
-> 当前稳定版本：4.2.0-SNAPSHOT
 
 
 ## 配置

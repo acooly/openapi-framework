@@ -21,7 +21,6 @@ openapi-framework-client模块是框架提供的通用开放平台客户端，�
 	<version>${openapi.version}</version>
 </dependency>
 ```
-> 当前稳定版本：4.2.0-SNAPSHOT
 
 ## 配置
 
