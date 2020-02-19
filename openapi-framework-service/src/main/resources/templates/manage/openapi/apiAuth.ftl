@@ -75,14 +75,13 @@
             <tr>
                 <th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
                 <th field="id" sum="true">ID</th>
-                <th field="authNo">认证编码</th>
+                <th field="partnerId">PartnerId</th>
                 <th field="secretType" formatter="mappingFormatter">安全类型</th>
                 <th field="signType" formatter="mappingFormatter">签名类型</th>
-                <th field="accessKey">访问码</th>
+                <th field="accessKey">AccessKey</th>
                 <th field="secretKey">安全码</th>
-                <th field="permissions" formatter="contentFormatter">访问权限</th>
-                <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
-                <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>
+                <th field="permissions" formatter="contentFormatter">通用权限</th>
+                <th field="comments">备注</th>
                 <th field="rowActions" data-options="formatter:function(value, row, index){return manage_apiAuth_action_show(row)}">动作</th>
             </tr>
             </thead>
@@ -97,7 +96,7 @@
 
         <!-- 表格的工具栏 -->
         <div id="manage_apiAuth_toolbar">
-            <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/openapi/apiAuth/create.html',entity:'apiAuth',width:500,height:400})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
+            <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/openapi/apiAuth/create.html',entity:'apiAuth',width:600,height:500})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
             <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/openapi/apiAuth/deleteJson.html','manage_apiAuth_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>
             <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_apiAuth_showSetting();"><i class="fa fa-cog fa-lg fa-fw fa-col"></i>设置权限</a>
         </div>

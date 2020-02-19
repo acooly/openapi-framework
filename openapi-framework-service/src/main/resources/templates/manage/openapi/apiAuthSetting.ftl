@@ -40,7 +40,11 @@
         height: 0px;
     }
 
-    .openapi-apilist .openapi-api .selected { background-color: #01AAED; color:#fff; border-color: #1E9FFF; }
+    .openapi-apilist .openapi-api .selected {
+        background-color: #01AAED;
+        color: #fff;
+        border-color: #1E9FFF;
+    }
 </style>
 <div id="manage_apiAuth_setting_layout" class="easyui-layout" data-options="fit:true,border:true">
     <div id="manage_openapi_apilist_container" class="servicelist" style="border-bottom: cornflowerblue"></div>
@@ -54,7 +58,7 @@
         %>
         <div class="openapi-api">
             <div class="openapi-api-item">
-                <div class="left"><input type="checkbox" name="serviceNo" value="<%=e.serviceNo%>" onclick="alert('111')"></div>
+                <div class="left"><input type="checkbox" name="serviceNo" value="<%=e.serviceNo%>" onclick="bindCheckBox($(this).parent().parent(),$(this))"></div>
                 <div class="right"><%=e.serviceNo%> <br> <%=e.serviceDesc%></div>
             </div>
         </div>
@@ -83,13 +87,7 @@
                 // 注册事件：点击行联动checkbox
                 $('.openapi-api-item').click(function () {
                     var checkbox = $(this).children().first().children();
-                    if ($(checkbox).attr("checked")) {
-                        $(checkbox).prop("checked", false);
-                        $(this).removeClass("selected")
-                    } else {
-                        $(checkbox).prop("checked", true);
-                        $(this).addClass("selected")
-                    }
+                    bindCheckBox($(this),checkbox);
                 });
                 loadACLs();
 
@@ -98,6 +96,16 @@
                 $.messager.show({title: '失败', msg: e});
             }
         });
+    }
+
+    function bindCheckBox(container,checkbox) {
+        if ($(checkbox).attr("checked")) {
+            $(checkbox).prop("checked", false);
+            $(container).removeClass("selected")
+        } else {
+            $(checkbox).prop("checked", true);
+            $(container).addClass("selected")
+        }
     }
 
     /**
