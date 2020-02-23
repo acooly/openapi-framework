@@ -1,9 +1,9 @@
 package com.acooly.openapi.framework.common.enums;
 
 import com.acooly.core.utils.enums.Messageable;
-import com.google.common.collect.Maps;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +33,7 @@ public enum ApiServiceResultCode implements Messageable {
     PARAM_FORMAT_ERROR("PARAM_FORMAT_ERROR", "参数格式错误"),
 
     ACCESS_KEY_NOT_EXIST("ACCESS_KEY_NOT_EXIST", "访问码非法"),
-    UNAUTHENTICATED_ERROR("UNAUTHENTICATED_ERROR", "认证(签名)错误"),
+    UNAUTHENTICATED_ERROR("UNAUTHENTICATED_ERROR", "签名认证错误"),
     UNAUTH_PASSWORD_ERROR("UNAUTH_PASSWORD_ERROR", "密码或账户错误"),
     REQUEST_NO_NOT_UNIQUE("REQUEST_NO_NOT_UNIQUE", "请求号重复"),
     FIELD_NOT_UNIQUE("FIELD_NOT_UNIQUE", "对象字段重复"),
@@ -45,6 +45,8 @@ public enum ApiServiceResultCode implements Messageable {
     REDIRECT_URL_NOT_EXIST("REDIRECT_URL_NOT_EXIST", "跳转服务需设置redirectUrl"),
     UNSUPPORTED_PROTOCOL("UNSUPPORTED_PROTOCOL", "不支持的报文协议类型"),
     OBJECT_NOT_EXIST("OBJECT_NOT_EXIST", "对象不存在"),
+
+    CRYPTO_ERROR("CRYPTO_ERROR", "加解密错误"),
 
     JSON_BODY_PARSING_FAILED("JSON_BODY_PARSING_FAILED", "JSON报文体解析失败"),
 
@@ -68,7 +70,7 @@ public enum ApiServiceResultCode implements Messageable {
     }
 
     public static Map<String, String> mapping() {
-        Map<String, String> map = Maps.newLinkedHashMap();
+        Map<String, String> map = new LinkedHashMap();
         for (ApiServiceResultCode type : values()) {
             map.put(type.getCode(), type.getMessage());
         }

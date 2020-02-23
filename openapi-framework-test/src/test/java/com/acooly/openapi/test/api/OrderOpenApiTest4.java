@@ -6,7 +6,6 @@ package com.acooly.openapi.test.api;
 
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Ids;
-import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests4;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.GoodType;

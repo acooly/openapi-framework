@@ -25,6 +25,7 @@ import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.common.utils.ApiServerUtils;
 import com.acooly.openapi.framework.common.utils.ApiUtils;
 import com.google.common.collect.Maps;
 import com.google.common.net.HttpHeaders;
@@ -172,7 +173,7 @@ public class ApiContext extends Context {
         // && ApiUtils.isJson(apiRequestContext.getBody())
         if (Strings.isNoneBlank(apiRequestContext.getBody())) {
             this.requestBody = apiRequestContext.getBody();
-            this.putAll(ApiUtils.parseJsonBody(this.requestBody));
+            this.putAll(ApiServerUtils.parseJsonBody(this.requestBody));
         } else {
             // 老协议，则组装参数为requestBody，用于后续签名认证
             this.requestBody = ApiUtils.getWaitForSignString(apiRequestContext.getParameters());
@@ -239,6 +240,7 @@ public class ApiContext extends Context {
     /**
      * 获取规范的AccessKey
      * 兼容动态AccessKey和subAccessKey模式，形如：accessKey#username模式
+     *
      * @return
      */
     public String getCanonicalAccessKey() {

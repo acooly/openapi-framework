@@ -1,7 +1,6 @@
 package com.acooly.openapi.framework.service.test.request;
 
 import com.acooly.core.utils.Money;
-import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.validate.jsr303.CertNo;
 import com.acooly.core.utils.validate.jsr303.MobileNo;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
@@ -11,7 +10,6 @@ import com.acooly.openapi.framework.service.test.dto.GoodInfo;
 import com.acooly.openapi.framework.service.test.enums.TestBigEnum;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -34,7 +32,7 @@ public class OrderCreateApiRequest extends ApiRequest {
     @NotBlank
     @Size(max = 64)
     @OpenApiField(desc = "标题", constraint = "标题", demo = "特色牛肉干", ordinal = 2)
-    @ToString.Maskable
+//    @ToString.Maskable
     private String title;
 
     @OpenApiField(desc = "金额", constraint = "单笔金额最小1元，最大10000元", demo = "120.00", ordinal = 3)
@@ -61,13 +59,13 @@ public class OrderCreateApiRequest extends ApiRequest {
     private String buyerCertNo;
 
     @NotBlank
-    @ToString.Invisible
+//    @ToString.Invisible
     @Size(min = 20, max = 20)
     @OpenApiField(desc = "卖家用户ID", demo = "201603080912340002", ordinal = 9)
     private String payeeUserId;
 
     @NotBlank
-    @Length(min = 6)
+//    @Length(min = 6)
     @OpenApiField(desc = "交易密码", demo = "!QAZ@WSX", security = true, ordinal = 10)
     private String password;
 

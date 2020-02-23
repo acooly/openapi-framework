@@ -2,7 +2,6 @@ package com.acooly.openapi.test.api;
 
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
-import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.core.log.SafetyLog;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
 import com.acooly.openapi.framework.service.test.dto.GoodInfo;

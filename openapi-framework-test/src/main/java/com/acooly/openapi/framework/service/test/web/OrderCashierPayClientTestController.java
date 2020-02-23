@@ -5,7 +5,6 @@ import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Servlets;
 import com.acooly.openapi.framework.client.OpenApiClient;
-import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.service.test.request.OrderCashierPayApiRequest;
 import com.acooly.openapi.framework.service.test.request.OrderCreateApiRequest;

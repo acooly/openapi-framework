@@ -46,7 +46,7 @@ public class OpenApiBenchmarkTestUtils {
         request.setBuyerUserId("09876543211234567890");
         request.setBuyeryEmail("qiuboboy@qq.com");
         request.setBuyeryMobileNo("13898765453");
-        request.setBuyerCertNo("330702194706165014");
+        request.setBuyerCertNo("51022119820915641X");
         request.setPassword("12312312");
         request.setContext(CONTEXT);
         List<GoodInfo> goodInfos = Lists.newArrayList();

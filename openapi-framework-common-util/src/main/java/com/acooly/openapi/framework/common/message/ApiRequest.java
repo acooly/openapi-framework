@@ -1,16 +1,19 @@
+/**
+ * openapi-framework
+ * <p>
+ * Copyright 2014 Acooly.cn, Inc. All rights reserved.
+ *
+ * @author zhangpu
+ * @date 2019-09-16 09:31
+ */
 package com.acooly.openapi.framework.common.message;
 
-import com.acooly.core.common.facade.BizOrderBase;
-import com.acooly.core.common.facade.OrderBase;
-import com.acooly.core.utils.Ids;
-import com.acooly.core.utils.Reflections;
-import com.acooly.core.utils.mapper.BeanCopier;
-import lombok.Getter;
-import lombok.Setter;
-import org.slf4j.MDC;
-
-@Getter
-@Setter
+/**
+ * 请求报文基类
+ *
+ * @author zhangpu@acooly.cn
+ * @date 2019-09-16
+ */
 public class ApiRequest extends ApiMessage {
 
 
@@ -21,14 +24,4 @@ public class ApiRequest extends ApiMessage {
     public void check() throws RuntimeException {
     }
 
-
-    public <T extends OrderBase> T toOrder(Class<T> clazz) {
-        T t = Reflections.createObject(clazz);
-        t.setGid(MDC.get("gid"));
-        BeanCopier.copy(this, t);
-        if (t instanceof BizOrderBase) {
-            ((BizOrderBase) t).setBizOrderNo(Ids.oid());
-        }
-        return t;
-    }
 }

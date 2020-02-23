@@ -7,17 +7,14 @@
  */
 package com.acooly.openapi.framework.service.test.dto;
 
-import com.acooly.core.common.facade.InfoBase;
 import com.acooly.core.utils.Money;
-import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.validate.jsr303.HttpUrl;
-import com.acooly.core.utils.validate.jsr303.MoneyConstraint;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.service.test.enums.GoodType;
 import lombok.Getter;
 import lombok.Setter;
-import javax.validation.constraints.NotBlank;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -26,7 +23,7 @@ import javax.validation.constraints.Size;
  */
 @Getter
 @Setter
-public class GoodInfo extends InfoBase {
+public class GoodInfo {
 
     @NotBlank
     @Size(max = 63)
@@ -41,11 +38,10 @@ public class GoodInfo extends InfoBase {
     @OpenApiField(desc = "商品数量", demo = "1", ordinal = 3)
     private int quantity;
 
-    @MoneyConstraint(min = 1)
     @OpenApiField(desc = "价格", demo = "120.00", ordinal = 4)
     private Money price;
 
-    @ToString.Invisible
+    //    @ToString.Invisible
     @HttpUrl(blankable = true)
     @OpenApiField(desc = "介绍网址", demo = "http://www.merchant.com/goods.html", ordinal = 5)
     private String referUrl;

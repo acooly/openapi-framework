@@ -5,17 +5,16 @@ package com.acooly.openapi.framework.common.message;
 
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import lombok.Getter;
-import lombok.Setter;
-import javax.validation.constraints.NotBlank;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * @author zhangpu
+ * App客户端请求基类
+ *
+ * @author zhangpu@acooly.cn
+ * @date 2015年5月12日
  */
-@Getter
-@Setter
 public class AppRequest extends ApiRequest {
 
     /**
@@ -32,4 +31,20 @@ public class AppRequest extends ApiRequest {
     @OpenApiField(desc = "APP版本号", constraint = "APP程序版本号",
             demo = "111", ordinal = ApiConstants.ORDINAL_MAX + 2)
     private String appVersion;
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getAppVersion() {
+        return appVersion;
+    }
+
+    public void setAppVersion(String appVersion) {
+        this.appVersion = appVersion;
+    }
 }

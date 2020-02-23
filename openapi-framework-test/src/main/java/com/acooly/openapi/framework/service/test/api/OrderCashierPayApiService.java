@@ -7,9 +7,9 @@ import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.core.service.base.AbstractAsyncApiService;
+import com.acooly.openapi.framework.service.test.notify.OrderCashierPayNotify;
 import com.acooly.openapi.framework.service.test.request.OrderCashierPayApiRequest;
 import com.acooly.openapi.framework.service.test.response.OrderCashierPayApiRedirect;
-import com.acooly.openapi.framework.service.test.response.OrderCashierPayNotify;
 import lombok.extern.slf4j.Slf4j;
 
 /**

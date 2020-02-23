@@ -44,9 +44,9 @@ public class OpenApis {
      * 跳转解析
      * <p>
      * 用于下层服务接受跳转请求时解析请求。主要包括：
-     * 1、解析请求，也可调用：OpenApis.redirectParseRequest
+     * 1、解析请求，也可调用：OpenApiTools.redirectParseRequest
      * 2、验证签名，调用openApiRemoteService远程服务，如果不通过抛出异常。
-     * 3、解析报文，解析为可用的跳转报文对象。也可以调用：OpenApis.redirectParseMessage
+     * 3、解析报文，解析为可用的跳转报文对象。也可以调用：OpenApiTools.redirectParseMessage
      *
      * @param request              Http请求对象
      * @param clazz                OpenApi的ApiRedirect报文对象

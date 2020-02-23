@@ -1,4 +1,4 @@
-package com.acooly.openapi.framework.service.test.response;
+package com.acooly.openapi.framework.service.test.notify;
 
 import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
@@ -6,18 +6,14 @@ import com.acooly.openapi.framework.common.message.ApiNotify;
 import com.acooly.openapi.framework.service.test.enums.OrderPayStatus;
 import lombok.Getter;
 import lombok.Setter;
-import javax.validation.constraints.NotBlank;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * 收银台支付 通知报文
- * <p>
- * 同步和异步通知共用
- *
  * @author zhangpu
- * @date 2019-01-28 15:03
+ * @date 2016/2/12
  */
 @Getter
 @Setter
@@ -39,5 +35,6 @@ public class OrderCashierPayNotify extends ApiNotify {
     @NotNull
     @OpenApiField(desc = "状态", ordinal = 4)
     private OrderPayStatus payStatus;
+
 
 }

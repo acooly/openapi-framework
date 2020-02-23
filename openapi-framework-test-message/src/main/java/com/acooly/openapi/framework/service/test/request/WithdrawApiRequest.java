@@ -10,7 +10,6 @@ import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.message.ApiAsyncRequest;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -30,11 +29,11 @@ public class WithdrawApiRequest extends ApiAsyncRequest {
     private String merchOrderNo;
 
     @NotBlank
-    @Length(max = 20, min = 20, message = "会员编码，固定长度为20字节")
+    @Size(max = 20, min = 20, message = "会员编码，固定长度为20字节")
     @OpenApiField(desc = "会员编码", constraint = "提现用户ID", demo = "20198982938272827232", ordinal = 2)
     private String userId;
 
-    @Length(max = 20, message = "账号最大长度为20字节")
+    @Size(max = 20, message = "账号最大长度为20字节")
     @OpenApiField(desc = "会员账号", constraint = "会员账号，如果为空则为主账号，与会员编码相同", demo = "20198982938272827232", ordinal = 3)
     private String accountNo;
 

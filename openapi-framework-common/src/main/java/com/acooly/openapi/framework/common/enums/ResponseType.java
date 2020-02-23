@@ -13,6 +13,7 @@ package com.acooly.openapi.framework.common.enums;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.message.ApiAsyncRequest;
+import com.acooly.openapi.framework.common.utils.ApiServerUtils;
 import com.acooly.openapi.framework.common.utils.ApiUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -40,7 +41,7 @@ public enum ResponseType implements Consumer<ApiContext> {
         @Override
         public void accept(ApiContext apiContext) {
             ApiAsyncRequest request = (ApiAsyncRequest) apiContext.getRequest();
-            ApiUtils.checkOpenAPIUrl(request.getNotifyUrl(), ApiConstants.NOTIFY_URL);
+            ApiServerUtils.checkOpenAPIUrl(request.getNotifyUrl(), ApiConstants.NOTIFY_URL);
         }
     },
     /**
@@ -51,9 +52,9 @@ public enum ResponseType implements Consumer<ApiContext> {
         public void accept(ApiContext apiContext) {
             ApiAsyncRequest request = (ApiAsyncRequest) apiContext.getRequest();
             if (StringUtils.isNotEmpty(request.getNotifyUrl())) {
-                ApiUtils.checkOpenAPIUrl(request.getNotifyUrl(), ApiConstants.NOTIFY_URL);
+                ApiServerUtils.checkOpenAPIUrl(request.getNotifyUrl(), ApiConstants.NOTIFY_URL);
             }
-            ApiUtils.checkOpenAPIUrl(request.getReturnUrl(), ApiConstants.RETURN_URL);
+            ApiServerUtils.checkOpenAPIUrl(request.getReturnUrl(), ApiConstants.RETURN_URL);
         }
     };
 

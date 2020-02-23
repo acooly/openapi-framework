@@ -1,7 +1,6 @@
 package com.acooly.openapi.test.api;
 
 import com.acooly.core.utils.Ids;
-import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
