@@ -10,7 +10,6 @@ package com.acooly.openapi.framework.core.executer;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.core.filterchain.OpenApiFilterChain;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 /**
  * 服务执行HTTP实现
@@ -38,6 +36,13 @@ public class HttpApiServiceExecuter
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Headers", "content-type,x-api-accesskey,x-api-sign,x-api-signtype");
+        response.addHeader("Access-Control-Allow-Credentials", "true");
+        response.addHeader("Access-Control-Allow-Methods", "POST,GET,post,get");
+        if ("OPTIONS".equals(request.getMethod()) || "options".equals(request.getMethod())) {
+            return;
+        }
         ApiContext context = ApiContextHolder.getApiContext();
         context.setHttpRequest(request);
         context.setHttpResponse(response);
