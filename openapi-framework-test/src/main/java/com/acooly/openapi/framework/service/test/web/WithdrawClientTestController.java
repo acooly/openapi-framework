@@ -1,8 +1,9 @@
 package com.acooly.openapi.framework.service.test.web;
 
 import com.acooly.core.utils.Servlets;
-import com.acooly.openapi.framework.client.OpenApiClient;
-import com.acooly.openapi.framework.common.dto.ApiMessageContext;
+import com.acooly.openapi.framework.common.OpenApiTools;
+import com.acooly.openapi.framework.demo.message.notify.WithdrawApiNotify;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,20 +19,29 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Slf4j
 @Controller
-@RequestMapping("/openapi/test/withdraw/client")
+@RequestMapping("/openapi/demo/withdraw/client")
 public class WithdrawClientTestController {
 
 
     @RequestMapping("notifyUrl")
     public void mockNotifyUrl(HttpServletRequest request, HttpServletResponse response) {
-        OpenApiClient openApiClient = new OpenApiClient("http://localhost:8089/gateway.do",
+        OpenApiTools openApiTools = new OpenApiTools("http://localhost:8089/gateway.do",
                 "test", "06f7aab08aa2431e6dae6a156fc9e0b4", true);
-        ApiMessageContext apiMessageContext = openApiClient.verify(request);
-        log.info("MOCK客户端 接收异步通知 验证签名: 通过");
-        log.info("MOCK客户端 接收异步通知 headers: {}", apiMessageContext.getHeaders());
-        log.info("MOCK客户端 接收异步通知 params : {}", apiMessageContext.getParameters());
-        log.info("MOCK客户端 接收异步通知 body   : {}", apiMessageContext.getBody());
-        Servlets.writeText(response, "success");
-        log.info("客户端 接收成功回写 success");
+
+        try {
+            // 1、接收通知报文；2、验签和解密；3、组织报文为报文对象
+            WithdrawApiNotify withdrawApiNotify = openApiTools.notice(request, WithdrawApiNotify.class);
+            if (!withdrawApiNotify.isSuccess()) {
+                // 通知的业务失败，但通知是正常接收的。你需要进行对应的业务处理。
+                log.warn("提现 [客户端] 异步通知业务不成功");
+            }
+            log.info("提现 [客户端] 接收异步通知：成功 {}", JSON.toJSONString(withdrawApiNotify));
+            Servlets.writeText(response, "success");
+            log.info("提现 [客户端] 接收异步通知 回写success");
+        } catch (Exception e) {
+            // 你的异常处理;
+            log.error("提现 [客户端] 接收异步通知 失败: {}", e.getMessage());
+            Servlets.writeText(response, "failure");
+        }
     }
 }

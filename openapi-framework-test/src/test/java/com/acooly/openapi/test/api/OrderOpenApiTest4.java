@@ -4,13 +4,13 @@
  */
 package com.acooly.openapi.test.api;
 
-import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Ids;
+import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests4;
-import com.acooly.openapi.framework.service.test.dto.GoodInfo;
-import com.acooly.openapi.framework.service.test.enums.GoodType;
-import com.acooly.openapi.framework.service.test.request.OrderCreateApiRequest;
-import com.acooly.openapi.framework.service.test.response.OrderCreateApiResponse;
+import com.acooly.openapi.framework.demo.message.dto.GoodsInfo;
+import com.acooly.openapi.framework.demo.message.enums.GoodType;
+import com.acooly.openapi.framework.demo.message.request.OrderCreateApiRequest;
+import com.acooly.openapi.framework.demo.message.response.OrderCreateApiResponse;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -47,15 +47,15 @@ public class OrderOpenApiTest4 extends AbstractApiServieTests4 {
         request.setBuyerCertNo("330702194706165014");
         request.setPassword(encrypt("12312312"));
         request.setContext(content);
-        List<GoodInfo> goodInfos = Lists.newArrayList();
-        GoodInfo goodInfo = new GoodInfo();
-        goodInfo.setGoodType(GoodType.actual);
-        goodInfo.setName("天子精品");
-        goodInfo.setPrice(Money.amout("400.00"));
-        goodInfo.setReferUrl("http://acooly.cn/tianzi");
-        goodInfos.add(goodInfo);
+        List<GoodsInfo> goodsInfos = Lists.newArrayList();
+        GoodsInfo goodsInfo = new GoodsInfo();
+        goodsInfo.setGoodType(GoodType.actual);
+        goodsInfo.setName("天子精品");
+        goodsInfo.setPrice(Money.amout("400.00"));
+        goodsInfo.setReferUrl("http://acooly.cn/tianzi");
+        goodsInfos.add(goodsInfo);
 
-        request.setGoodsInfos(goodInfos);
+        request.setGoodsInfos(goodsInfos);
 //        request.ext("xx", "oo");
         OrderCreateApiResponse response = request(request, OrderCreateApiResponse.class);
         log.info("{}", response);

@@ -18,11 +18,9 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.crypto.Cipher;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -119,14 +117,63 @@ public class OpenApiTools {
 
 
     /**
-     * 跳转接口跳回的验证签名
-     * gateway - redirect -> returnUrl
+     * 跳转接口请求
+     * <p>
+     * 用于：直接解析跳转接口请求报文，通过HttpServletResponse直接发送redirect
+     *
+     * @param request
+     * @param response
+     */
+    public void redirectSend(ApiRequest request, HttpServletResponse response) {
+        ApiMessageContext context = redirectParse(request);
+        String location = context.buildRedirectUrl();
+        try {
+            response.sendRedirect(location);
+        } catch (Exception e) {
+            throw new RuntimeException("跳转发送失败");
+        }
+    }
+
+    /**
+     * 跳转接口解析
+     * <p>
+     * 用于：解析需要跳转的报文，然后返回数据给客户端（前后端分离），由客户端发送调整情况
      *
      * @param request
      * @return
      */
-    public ApiMessageContext verify(HttpServletRequest request) {
+    public ApiMessageContext redirectParse(ApiRequest request) {
+        doDefaultVal(request);
+        doSecurity(request, CryptoType.encrypt);
+        ApiMessageContext context = new ApiMessageContext();
+        if (request.getProtocol() == ApiProtocol.JSON) {
+            String body = JsonMarshallor.INSTANCE.marshall(request);
+            context.parameter(ApiConstants.BODY, ApiUtils.urlEncode(body));
+            context.parameter(ApiConstants.PROTOCOL, ApiProtocol.JSON.code());
+            context.parameter(ApiConstants.ACCESS_KEY, accessKey);
+            context.parameter(ApiConstants.SIGN_TYPE, signType);
+            context.parameter(ApiConstants.SIGN, sign(body));
+            context.setBody(body);
+        } else {
+        }
+        context.setUrl(this.getGatewayUrl());
+        log.info("跳转请求-> body:{}", context.getBody());
+        return context;
+    }
+
+
+    /**
+     * 通知接收
+     * <p>
+     * <li>[同步通知] 跳转接口跳回：gateway - redirect -> returnUrl</li>
+     * <li>[异步通知] 异步接口通知：gateway -> notifyUrl</li>
+     *
+     * @param request 通知请求
+     * @return 解析结果
+     */
+    public ApiMessageContext noticeParse(HttpServletRequest request) {
         ApiMessageContext messageContext = ApiUtils.getApiRequestContext(request);
+        log.info("通知接收-> body:{}", messageContext.getBody());
         boolean verifyResult;
         String protocol = messageContext.getProtocol();
         if (ApiProtocol.JSON.code().equalsIgnoreCase(protocol)) {
@@ -142,6 +189,21 @@ public class OpenApiTools {
             throw new ApiServiceException(ApiServiceResultCode.UNAUTHENTICATED_ERROR);
         }
         return messageContext;
+    }
+
+    /**
+     * 通知接收并解析
+     *
+     * @param request 通知请求
+     * @param clazz   通知报文类型
+     * @param <T>     通知报文
+     * @return
+     */
+    public <T> T notice(HttpServletRequest request, Class<T> clazz) {
+        ApiMessageContext context = noticeParse(request);
+        ApiMessage response = JsonMarshallor.INSTANCE.parse(context.getBody(), clazz);
+        doSecurity(response, CryptoType.decrypt);
+        return (T) response;
     }
 
     /**
@@ -196,7 +258,7 @@ public class OpenApiTools {
             context.header(ApiConstants.X_API_SIGN, sign(body));
             context.header(ApiConstants.X_API_PROTOCOL, ApiProtocol.JSON.code());
         } else {
-            // 暂时不兼容V4
+            throw new UnsupportedOperationException("暂时不兼容V4");
         }
         context.setUrl(this.gatewayUrl);
         return context;
@@ -244,6 +306,9 @@ public class OpenApiTools {
 
 
     protected void doDefaultVal(ApiRequest request) {
+        if (ApiUtils.isBlank(request.getRequestNo())) {
+            request.setRequestNo(UUID.randomUUID().toString());
+        }
         if (ApiUtils.isBlank(request.getVersion())) {
             request.setVersion(DEFAULT_VERSION);
         }
@@ -280,7 +345,7 @@ public class OpenApiTools {
                 if (o == null) {
                     continue;
                 }
-                String value = cryptoType == CryptoType.encrypt ? encrypt(o.toString()) : decrypt(o.toString());
+                String value = (cryptoType == CryptoType.encrypt ? encrypt(o.toString()) : decrypt(o.toString()));
                 field.set(message, value);
             } catch (Exception e) {
                 throw new ApiClientException(ApiServiceResultCode.CRYPTO_ERROR, null, e);

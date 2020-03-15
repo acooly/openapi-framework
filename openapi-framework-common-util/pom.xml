@@ -12,8 +12,6 @@
     <artifactId>openapi-framework-common-util</artifactId>
 
     <dependencies>
-
-
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-common-type</artifactId>
@@ -50,4 +48,24 @@
             <artifactId>fastjson</artifactId>
         </dependency>
     </dependencies>
+
+
+    <repositories>
+        <repository>
+            <id>acooly-releases</id>
+            <name>acooly Internal Releases</name>
+            <url>
+                http://acooly.cn/nexus/content/repositories/releases/
+            </url>
+        </repository>
+
+        <repository>
+            <id>acooly-snapshots</id>
+            <name>acooly Internal snapshot</name>
+            <url>
+                http://acooly.cn/nexus/content/repositories/snapshots/
+            </url>
+        </repository>
+    </repositories>
+
 </project>

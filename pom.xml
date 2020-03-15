@@ -89,7 +89,13 @@
 
             <dependency>
                 <groupId>com.acooly</groupId>
-                <artifactId>openapi-framework-test-message</artifactId>
+                <artifactId>openapi-framework-demo-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>openapi-framework-demo-message</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -110,7 +116,7 @@
         <module>openapi-framework-mock</module>
         <module>openapi-framework-client</module>
         <module>openapi-framework-notify</module>
-        <module>openapi-framework-test-message</module>
+        <module>openapi-framework-demo</module>
 
     </modules>
 

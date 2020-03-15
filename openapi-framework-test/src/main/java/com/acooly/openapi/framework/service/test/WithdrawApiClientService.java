@@ -1,8 +1,8 @@
 package com.acooly.openapi.framework.service.test;
 
 import com.acooly.openapi.framework.client.AbstractApiClientService;
-import com.acooly.openapi.framework.service.test.request.WithdrawApiRequest;
-import com.acooly.openapi.framework.service.test.response.WithdrawApiResponse;
+import com.acooly.openapi.framework.demo.message.request.WithdrawApiRequest;
+import com.acooly.openapi.framework.demo.message.response.WithdrawApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

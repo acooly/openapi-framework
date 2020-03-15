@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>openapi-framework-demo</artifactId>
+        <groupId>com.acooly</groupId>
+        <version>5.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>openapi-framework-demo-message</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-common-util</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

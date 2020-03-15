@@ -63,7 +63,7 @@
 
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-test-message</artifactId>
+            <artifactId>openapi-framework-demo-service</artifactId>
         </dependency>
 
         <dependency>
