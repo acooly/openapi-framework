@@ -36,10 +36,10 @@ public class HttpApiServiceExecuter
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        response.addHeader("Access-Control-Allow-Origin", "*");
-        response.addHeader("Access-Control-Allow-Headers", "content-type,x-api-accesskey,x-api-sign,x-api-signtype");
-        response.addHeader("Access-Control-Allow-Credentials", "true");
-        response.addHeader("Access-Control-Allow-Methods", "POST,GET,post,get");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Headers", "content-type,x-api-accesskey,x-api-sign,x-api-signtype");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "POST,GET,post,get");
         if ("OPTIONS".equals(request.getMethod()) || "options".equals(request.getMethod())) {
             return;
         }
