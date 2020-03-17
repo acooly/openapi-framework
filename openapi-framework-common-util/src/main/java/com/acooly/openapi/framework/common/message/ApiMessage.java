@@ -129,7 +129,8 @@ public abstract class ApiMessage implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("ApiMessage{");
+        final StringBuffer sb = new StringBuffer();
+        sb.append(this.getClass().getSimpleName()).append(" {");
         sb.append("requestNo: '").append(requestNo).append('\'');
         sb.append(", service: '").append(service).append('\'');
         sb.append(", version: '").append(version).append('\'');
