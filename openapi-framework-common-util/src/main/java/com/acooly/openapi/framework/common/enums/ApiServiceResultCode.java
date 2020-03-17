@@ -48,6 +48,8 @@ public enum ApiServiceResultCode implements Messageable {
 
     CRYPTO_ERROR("CRYPTO_ERROR", "加解密错误"),
 
+    SEND_REDIRECT_ERROR("SEND_REDIRECT_ERROR","跳转请求失败"),
+
     JSON_BODY_PARSING_FAILED("JSON_BODY_PARSING_FAILED", "JSON报文体解析失败"),
 
     /**

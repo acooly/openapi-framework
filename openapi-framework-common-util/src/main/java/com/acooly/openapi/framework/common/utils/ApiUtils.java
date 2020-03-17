@@ -19,10 +19,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
+import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
@@ -363,11 +362,27 @@ public final class ApiUtils {
     }
 
     public static String urlDecode(String part) {
-
         try {
             return URLDecoder.decode(part, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 写入字符串到HttpServletResponse
+     *
+     * @param response
+     * @param data
+     */
+    public static void writeResponse(@NotNull HttpServletResponse response, @NotNull String data) {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/plain; charset=utf-8");
+        try (PrintWriter writer = response.getWriter()) {
+            writer.println(data);
+            writer.flush();
+        } catch (Exception e) {
+            throw new RuntimeException("响应请求(flushResponse)失败:" + e.getMessage());
         }
     }
 }

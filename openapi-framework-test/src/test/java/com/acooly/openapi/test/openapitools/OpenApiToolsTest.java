@@ -16,6 +16,7 @@ import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.test.openapitools.message.*;
 import com.alibaba.fastjson.JSON;
+import com.google.common.net.MediaType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -91,10 +92,11 @@ public class OpenApiToolsTest {
 
     /**
      * 测试：异步接口（提现）
-     *
+     * <p>
      * 1、这里发送同步请求，收到同步响应（处理中）
      * 2、服务器网关端完成业务处理后，会发送（POST）异步通知结果给请求时传入的notifyUrl
      * 3、notifyUrl指向的是一个客户端的controller，进行接收处理，处理逻辑详见：WithdrawClientTestController
+     *
      * @see com.acooly.openapi.framework.service.test.web.WithdrawClientTestController
      */
     @Test
@@ -114,6 +116,11 @@ public class OpenApiToolsTest {
         request.setNotifyUrl("http://127.0.0.1:8089/openapi/demo/withdraw/client/notifyUrl.html");
         WithdrawApiResponse response = openApiTools.send(request, WithdrawApiResponse.class);
         log.info("提现 申请成功，订单号: {}", request.getMerchOrderNo());
+    }
+
+    @Test
+    public void testewtse() {
+        System.out.printf(MediaType.PLAIN_TEXT_UTF_8.toString());
     }
 
 }

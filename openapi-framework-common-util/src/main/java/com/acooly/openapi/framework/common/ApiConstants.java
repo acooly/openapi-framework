@@ -66,6 +66,7 @@ public final class ApiConstants {
     public static final String BODY = "body";
 
     public static final String NOTIFY_SUCCESS_CONTENT = "success";
+    public static final String NOTIFY_FAILURE_CONTENT = "failure";
 
     public static final String LOGIN_SERVICE_NAME = "login";
     public static final String WILDCARD_TOKEN = "*";

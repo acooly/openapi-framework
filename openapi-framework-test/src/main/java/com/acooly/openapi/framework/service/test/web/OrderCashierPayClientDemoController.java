@@ -5,7 +5,10 @@ import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Servlets;
 import com.acooly.openapi.framework.client.OpenApiClient;
+import com.acooly.openapi.framework.common.ApiConstants;
+import com.acooly.openapi.framework.common.OpenApiTools;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
+import com.acooly.openapi.framework.demo.message.notify.OrderCashierPayNotify;
 import com.acooly.openapi.framework.demo.message.request.OrderCashierPayApiRequest;
 import com.acooly.openapi.framework.demo.message.request.OrderCreateApiRequest;
 import com.acooly.openapi.framework.demo.message.response.OrderCreateApiResponse;
@@ -29,8 +32,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Slf4j
 @Controller
-@RequestMapping("/openapi/test/orderCashierPay/client")
-public class OrderCashierPayClientTestController extends AbstractStandardEntityController {
+@RequestMapping("/openapi/demo/orderCashierPay/client")
+public class OrderCashierPayClientDemoController extends AbstractStandardEntityController {
 
     String payerUserId = "09876543211234567890";
 
@@ -41,6 +44,10 @@ public class OrderCashierPayClientTestController extends AbstractStandardEntityC
      */
     @Autowired
     private OpenApiClient openApiClient;
+
+    @Autowired(required = false)
+    OpenApiTools openApiTools = new OpenApiTools("http://localhost:8089/gateway.do",
+            ApiConstants.TEST_ACCESS_KEY, ApiConstants.TEST_SECRET_KEY, true);
 
     /**
      * 接入方：订单支付界面：MOCK
@@ -87,7 +94,7 @@ public class OrderCashierPayClientTestController extends AbstractStandardEntityC
     public void mockPay(HttpServletRequest request, HttpServletResponse response) {
         // 1.创建支付订单 mock
         OrderCreateApiRequest orderCreateApiRequest = getOrderCreateApiRequest(request);
-        openApiClient.send(orderCreateApiRequest, OrderCreateApiResponse.class);
+        openApiTools.send(orderCreateApiRequest, OrderCreateApiResponse.class);
 
         // 2.请求支付网关收银台跳转支付
         String merchOrderNo = orderCreateApiRequest.getMerchOrderNo();
@@ -100,14 +107,7 @@ public class OrderCashierPayClientTestController extends AbstractStandardEntityC
         apiRequest.setPayerUserId(payerUserId);
         apiRequest.setReturnUrl("http://127.0.0.1:8089/openapi/test/orderCashierPay/client/returnUrl.html");
         apiRequest.setNotifyUrl("http://127.0.0.1:8089/openapi/test/orderCashierPay/client/notifyUrl.html");
-        ApiMessageContext messageContext = openApiClient.parse(apiRequest);
-        // 可以传参到页面通过页面POST提交（URL:messageResult.getUrl(), Post参数：messageResult.getAllParameters()）
-        // 或则这里直接redirect
-
-        // mock 签名错误
-//        messageContext.parameter(ApiConstants.SIGN,"12121");
-        String redirectUrl = messageContext.buildRedirectUrl();
-        Servlets.redirect(response, redirectUrl);
+        openApiTools.redirectSend(apiRequest, response);
     }
 
     @RequestMapping("returnUrl")
@@ -115,13 +115,11 @@ public class OrderCashierPayClientTestController extends AbstractStandardEntityC
     public Object mockReturnUrl(HttpServletRequest request) {
         ApiMessageContext messageContext = null;
         try {
+            OrderCashierPayNotify orderCashierPayNotify = openApiTools.notice(request, OrderCashierPayNotify.class);
             messageContext = openApiClient.verify(request);
-            log.info("客户端 接收同步通知 验签成功。");
-            log.info("客户端 接收同步通知 header: {}", messageContext.getHeaders());
-            log.info("客户端 接收同步通知 params: {}", messageContext.getParameters());
-            log.info("客户端 接收同步通知 body: {}", messageContext.getBody());
+            log.info("客户端 接收同步通知 成功 {}", orderCashierPayNotify);
         } catch (Exception e) {
-            log.info("客户端 接收同步通知 验签失败！");
+            log.info("客户端 接收同步通知 处理失败：{}", e.getMessage());
         }
         return messageContext.getParameters();
     }

@@ -5,6 +5,7 @@ import com.acooly.openapi.framework.common.OpenApiTools;
 import com.acooly.openapi.framework.demo.message.notify.WithdrawApiNotify;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -22,11 +23,13 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/openapi/demo/withdraw/client")
 public class WithdrawClientTestController {
 
+    @Autowired(required = false)
+    OpenApiTools openApiTools = new OpenApiTools("http://localhost:8089/gateway.do",
+            "test", "06f7aab08aa2431e6dae6a156fc9e0b4", true);
 
     @RequestMapping("notifyUrl")
     public void mockNotifyUrl(HttpServletRequest request, HttpServletResponse response) {
-        OpenApiTools openApiTools = new OpenApiTools("http://localhost:8089/gateway.do",
-                "test", "06f7aab08aa2431e6dae6a156fc9e0b4", true);
+
 
         try {
             // 1、接收通知报文；2、验签和解密；3、组织报文为报文对象

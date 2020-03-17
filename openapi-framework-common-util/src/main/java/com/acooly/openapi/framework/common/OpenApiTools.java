@@ -1,6 +1,7 @@
 package com.acooly.openapi.framework.common;
 
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
+import com.acooly.openapi.framework.common.annotation.OpenApiSecure;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
@@ -80,7 +81,7 @@ public class OpenApiTools {
      * @param <T>     响应类
      * @return 响应对象
      */
-    public <T> T send(ApiRequest request, Class<T> clazz) {
+    public <T extends ApiMessage> T send(ApiRequest request, Class<T> clazz) {
         ApiMessageContext context = parseRequest(request);
         if (showLog) {
             log.info("请求-> body:{},header:{} ", context.getBody(), context.getHeaders());
@@ -109,7 +110,7 @@ public class OpenApiTools {
             }
         }
 
-        ApiMessage response = JsonMarshallor.INSTANCE.parse(responseContext.getBody(), clazz);
+        ApiMessage response = parseBody(responseContext.getBody(), clazz);
         // 解密
         doSecurity(response, CryptoType.decrypt);
         return (T) response;
@@ -130,7 +131,7 @@ public class OpenApiTools {
         try {
             response.sendRedirect(location);
         } catch (Exception e) {
-            throw new RuntimeException("跳转发送失败");
+            throw new ApiClientException(ApiServiceResultCode.SEND_REDIRECT_ERROR, "跳转发送失败", e);
         }
     }
 
@@ -173,7 +174,9 @@ public class OpenApiTools {
      */
     public ApiMessageContext noticeParse(HttpServletRequest request) {
         ApiMessageContext messageContext = ApiUtils.getApiRequestContext(request);
-        log.info("通知接收-> body:{}", messageContext.getBody());
+        if (isShowLog()) {
+            log.info("通知接收-> body:{}, headers: {}", messageContext.getBody(), messageContext.getHeaders());
+        }
         boolean verifyResult;
         String protocol = messageContext.getProtocol();
         if (ApiProtocol.JSON.code().equalsIgnoreCase(protocol)) {
@@ -192,19 +195,69 @@ public class OpenApiTools {
     }
 
     /**
-     * 通知接收并解析
+     * 通知接收并解析为ApiNotify对象
+     * 但不发送回写通知结果，客户端程序本地业务处理完成（怎么算完成，客户端程序决定）后，
+     * 手动才调用：openApiTools.sendNotifyResult发送给网关接受异步通知的结果（如果不发送success，网关会反复多次通知）。
      *
      * @param request 通知请求
      * @param clazz   通知报文类型
      * @param <T>     通知报文
      * @return
      */
-    public <T> T notice(HttpServletRequest request, Class<T> clazz) {
+    public <T extends ApiMessage> T notice(HttpServletRequest request, Class<T> clazz) {
         ApiMessageContext context = noticeParse(request);
-        ApiMessage response = JsonMarshallor.INSTANCE.parse(context.getBody(), clazz);
+        ApiMessage response = parseBody(context.getBody(), clazz);
         doSecurity(response, CryptoType.decrypt);
         return (T) response;
     }
+
+    /**
+     * 接受通知全自动处理
+     * <p>
+     * 注意：使用该方法则表示：只要接受并解析成功，无论客户本地是否处理成功（例如持久化等），都直接响应网关已经接受成功。
+     *
+     * <li>接受通知和解析报文；（接收通知报文，解析为ApiMessageContext对象）</li>
+     * <li>验签和解密报文；(验证服务器端签名和根据报文对加密的字段解密)</li>
+     * <li>组装通知对象；(转换为业务程序可用的ApiNotify对象)</li>
+     * <li>响应网关接收结果(根据接收情况，直接响应网关: success or other)</li>
+     *
+     * @param request  Servlet请求对象
+     * @param response Servlet响应对象
+     * @param clazz    通知的报文对象类型（ApiNotify子类)
+     * @param <T>      通知的报文对象泛型 (ApiNotify子类)
+     * @return 通知的报文对象实例
+     */
+    public <T extends ApiMessage> T notice(HttpServletRequest request, HttpServletResponse response, Class<T> clazz) {
+        ApiMessageContext context = noticeParse(request);
+        ApiMessage apiResponse = parseBody(context.getBody(), clazz);
+        doSecurity(apiResponse, CryptoType.decrypt);
+        noticeResult(response, true);
+        return (T) apiResponse;
+    }
+
+    /**
+     * 发送异步通知接受结果
+     *
+     * @param response
+     * @param success
+     */
+    public void noticeResult(HttpServletResponse response, boolean success) {
+        ApiUtils.writeResponse(response, success ? ApiConstants.NOTIFY_SUCCESS_CONTENT : ApiConstants.NOTIFY_FAILURE_CONTENT);
+    }
+
+
+    /**
+     * 解析组装报文为对象
+     *
+     * @param body  报文
+     * @param clazz 报文类型
+     * @param <T>   报文泛型
+     * @return 报文对象实例
+     */
+    public <T> T parseBody(String body, Class<T> clazz) {
+        return (T) JsonMarshallor.INSTANCE.parse(body, clazz);
+    }
+
 
     /**
      * 签名
@@ -229,6 +282,15 @@ public class OpenApiTools {
     }
 
     /**
+     * 按需加密对象
+     *
+     * @param apiMessage
+     */
+    public void encrypt(ApiMessage apiMessage) {
+        doSecurity(apiMessage, CryptoType.encrypt);
+    }
+
+    /**
      * 解密
      *
      * @param encrytText
@@ -240,11 +302,19 @@ public class OpenApiTools {
         return new String(decryptResult);
     }
 
+    /**
+     * 按需解密对象
+     *
+     * @param apiMessage
+     */
+    public void decrypt(ApiMessage apiMessage) {
+        doSecurity(apiMessage, CryptoType.decrypt);
+    }
+
 
     protected String getContextType(ApiProtocol apiProtocol) {
         return apiProtocol == ApiProtocol.JSON ? HttpRequest.CONTENT_TYPE_JSON : HttpRequest.CONTENT_TYPE_FORM;
     }
-
 
     protected ApiMessageContext parseRequest(ApiRequest request) {
         ApiMessageContext context = new ApiMessageContext();
@@ -325,8 +395,7 @@ public class OpenApiTools {
         if (fields == null) {
             List<Field> fieldList = new ArrayList();
             for (Field field : message.getClass().getDeclaredFields()) {
-                OpenApiField annotation = field.getAnnotation(OpenApiField.class);
-                if (annotation != null && annotation.security() && field.getType().isAssignableFrom(String.class)) {
+                if (needSecurity(field)) {
                     field.setAccessible(true);
                     fieldList.add(field);
                 }
@@ -351,6 +420,22 @@ public class OpenApiTools {
                 throw new ApiClientException(ApiServiceResultCode.CRYPTO_ERROR, null, e);
             }
         }
+    }
+
+    protected boolean needSecurity(Field field) {
+        // 只有字符串类型可加解密
+        if (!String.class.isAssignableFrom(field.getType())) {
+            return false;
+        }
+        OpenApiField annotation = field.getAnnotation(OpenApiField.class);
+        if (annotation != null && annotation.security()) {
+            return true;
+        }
+        OpenApiSecure openApiSecure = field.getAnnotation(OpenApiSecure.class);
+        if (openApiSecure != null) {
+            return true;
+        }
+        return false;
     }
 
     /**
