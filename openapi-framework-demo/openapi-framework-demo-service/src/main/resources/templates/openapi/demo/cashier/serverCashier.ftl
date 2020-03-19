@@ -5,24 +5,22 @@
     <@includePage path="/openapi/test/common/include.ftl"/>
 </head>
 <body>
-<!--顶部-->
-<@includePage path="/openapi/test/common/header.ftl"/>
 
 <div class="layui-container">
+    <@includePage path="/openapi/test/common/header.ftl"/>
+</div>
+
+<div class="layui-container">
+    <!--顶部-->
     <div class="layui-row openapi-header">
-        <div class="layui-col-xs4">
-            <div>第一步：客户端订单支付界面</div>
-        </div>
-        <div class="layui-col-xs4 openapi-header-active">
-            <div>第二步：服务端支付收银台</div>
-        </div>
-        <div class="layui-col-xs4">
-            <div>第三步：客户端接收跳回结果</div>
+        <div class="layui-col-xs4 openapi-header-title">
+            <div>网关支付收银台（演示）</div>
         </div>
     </div>
 </div>
 
 <div class="layui-main">
+    <div class="openapi-block">
     <form class="layui-form" action="/openapi/test/orderCashierPay/server/cashierPay.html" method="post" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="_csrf" value="${Request["org.springframework.security.web.csrf.CsrfToken"].token}">
         <input type="hidden" name="gid" value="${gid}">
@@ -70,7 +68,16 @@
             form.render();
         });
     </script>
+    </div>
 </div>
-
+<!--底部-->
+<div class="layui-footer footer footer-index">
+    <div class="layui-main">
+        <div>© 2020 open.cnvex.cn ,open.cartechfin.cn</div>
+        <div class="d1">重庆汽摩交易所&车云数科</div>
+        <div>技术支持：Acooly</div>
+    </div>
+</div>
+<!--end-->
 </body>
 </html>

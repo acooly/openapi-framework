@@ -11,6 +11,7 @@ import com.acooly.openapi.framework.facade.api.OpenApiRemoteService;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2019-01-27 19:28
  */
 @Slf4j
+@Profile({"default", "dev", "sdev", "test", "stest", "net", "snet"})
 @Controller
 @RequestMapping("/openapi/demo/withdraw/server")
 public class WithdrawServerTestController {

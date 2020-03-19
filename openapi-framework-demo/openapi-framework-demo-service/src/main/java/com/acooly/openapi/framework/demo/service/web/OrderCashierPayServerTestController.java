@@ -3,6 +3,7 @@ package com.acooly.openapi.framework.demo.service.web;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.facade.ResultBase;
 import com.acooly.core.common.web.AbstractStandardEntityController;
+import com.acooly.core.utils.Profiles;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
@@ -16,6 +17,7 @@ import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import com.acooly.openapi.framework.facade.order.ApiVerifyOrder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +34,9 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2019-01-27 19:28
  */
 @Slf4j
+@Profile({"default", "dev", "sdev", "test", "stest", "net", "snet"})
 @Controller
-@RequestMapping("/openapi/test/orderCashierPay/server")
+@RequestMapping("/openapi/demo/orderCashierPay/server")
 public class OrderCashierPayServerTestController extends AbstractStandardEntityController {
 
     // 也可以是注入dubbo客户端
@@ -57,7 +60,7 @@ public class OrderCashierPayServerTestController extends AbstractStandardEntityC
         try {
             // 一步搞定：解析请求，验证请求和解析报文
             context = OpenApis.redirectParse(request, OrderCashierPayApiRedirect.class, openApiRemoteService);
-            log.info("收银台 显示界面: {}", "/openapi/test/cashier/serverCashier");
+            log.info("收银台 显示界面: {}", "/openapi/demo/cashier/serverCashier");
             // 传值到界面
             model.addAttribute("entity", context.getApiRedirect());
             model.addAttribute("gid", context.getGid());
@@ -68,7 +71,7 @@ public class OrderCashierPayServerTestController extends AbstractStandardEntityC
             handleException(response, e, context);
             redirectBack(response, context, notify);
         }
-        return "/openapi/test/cashier/serverCashier";
+        return "/openapi/demo/cashier/serverCashier";
     }
 
     /**
@@ -96,7 +99,7 @@ public class OrderCashierPayServerTestController extends AbstractStandardEntityC
             // 请引用对应的openapi-message模块，已找到你需要的Redirect对象
             OrderCashierPayApiRedirect redirect = OpenApis.redirectParseMessage(messageContext.getBody(), OrderCashierPayApiRedirect.class);
             log.info("收银台 解析参数: {}", redirect);
-            log.info("收银台 显示界面: {}", "/openapi/test/cashier/serverCashier");
+            log.info("收银台 显示界面: {}", "/openapi/demo/cashier/serverCashier");
             // 传值到界面
             model.addAttribute("entity", redirect);
             model.addAttribute("gid", messageContext.getGid());
@@ -107,7 +110,7 @@ public class OrderCashierPayServerTestController extends AbstractStandardEntityC
             handleException(response, e, messageContext);
             redirectBack(response, messageContext, notify);
         }
-        return "/openapi/test/cashier/serverCashier";
+        return "/openapi/demo/cashier/serverCashier";
     }
 
 

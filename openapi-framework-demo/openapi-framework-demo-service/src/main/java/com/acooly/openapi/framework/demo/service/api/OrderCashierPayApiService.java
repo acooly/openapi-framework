@@ -1,5 +1,6 @@
 package com.acooly.openapi.framework.demo.service.api;
 
+import com.acooly.core.common.boot.Apps;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.openapi.framework.common.annotation.ApiDocNote;
 import com.acooly.openapi.framework.common.annotation.ApiDocType;
@@ -20,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author zhangpu
  * @date 2016/2/12
- * @see com.acooly.openapi.framework.service.test.web.OrderCashierPayServerTestController
+ * @see com.acooly.openapi.framework.demo.service.web.OrderCashierPayServerTestController
  */
 @Slf4j
 @ApiDocType(code = DemoApiUtils.API_DEMO_DOC_TYPE_CODE, name = DemoApiUtils.API_DEMO_DOC_TYPE_NAME)
@@ -37,6 +38,6 @@ public class OrderCashierPayApiService extends AbstractAsyncApiService<OrderCash
         BeanCopier.copy(request, redirect);
         // 3、设置跳转到下层服务的跳转地址,别忘记了。这里只有你（OpenApi）知道应该向那个服务跳转，不知道的去问这个服务的接收方。
         //    这里开发一个controller来mock下层服务：OrderCashierPayServerTestController
-        setRedirectUrl("http://localhost:8089/openapi/test/orderCashierPay/server/cashier.html");
+        setRedirectUrl("http://127.0.0.1:" + Apps.getHttpPort() + "/openapi/demo/orderCashierPay/server/cashier.html");
     }
 }
