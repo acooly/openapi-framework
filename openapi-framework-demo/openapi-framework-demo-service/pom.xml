@@ -12,6 +12,10 @@
     <artifactId>openapi-framework-demo-service</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-web</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>

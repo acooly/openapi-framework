@@ -3,8 +3,8 @@ package com.acooly.openapi.framework.core.test;
 import com.acooly.core.utils.Asserts;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Profiles;
-import com.acooly.openapi.framework.common.OpenApiTools;
-import com.acooly.openapi.framework.common.enums.SignTypeEnum;
+import com.acooly.openapi.framework.client.OpenApiClient;
+import com.acooly.openapi.framework.common.enums.SignType;
 import com.acooly.openapi.framework.common.message.ApiMessage;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
@@ -33,7 +33,7 @@ public abstract class AbstractApiServieTests {
     }
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected String signType = SignTypeEnum.MD5.toString();
+    protected String signType = SignType.MD5.code();
     protected String gatewayUrl = "http://127.0.0.1:8089/gateway.do";
     protected String accessKey = TEST_ACCESS_KEY;
     protected String secretKey = TEST_SECRET_KEY;
@@ -66,7 +66,7 @@ public abstract class AbstractApiServieTests {
         if (Strings.isNullOrEmpty(request.getRequestNo())) {
             request.setRequestNo(Ids.RandomNumberGenerator.getNewString(20));
         }
-        OpenApiTools openApiClient = new OpenApiTools(gatewayUrl, accessKey, secretKey);
+        OpenApiClient openApiClient = new OpenApiClient(gatewayUrl, accessKey, secretKey);
         return openApiClient.send(request, clazz);
     }
 
