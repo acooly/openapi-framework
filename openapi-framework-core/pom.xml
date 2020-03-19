@@ -31,6 +31,10 @@
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-demo-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.acooly</groupId>
             <artifactId>openapi-framework-facade</artifactId>
         </dependency>
 
