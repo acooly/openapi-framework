@@ -1,10 +1,11 @@
 package com.acooly.openapi.framework.demo.service.api;
 
-import com.acooly.core.common.boot.Apps;
+import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.openapi.framework.common.annotation.ApiDocNote;
 import com.acooly.openapi.framework.common.annotation.ApiDocType;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
+import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.core.service.base.AbstractAsyncApiService;
@@ -13,6 +14,8 @@ import com.acooly.openapi.framework.demo.message.request.OrderCashierPayApiReque
 import com.acooly.openapi.framework.demo.message.response.OrderCashierPayApiRedirect;
 import com.acooly.openapi.framework.demo.service.DemoApiUtils;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 跳转支付
@@ -38,6 +41,9 @@ public class OrderCashierPayApiService extends AbstractAsyncApiService<OrderCash
         BeanCopier.copy(request, redirect);
         // 3、设置跳转到下层服务的跳转地址,别忘记了。这里只有你（OpenApi）知道应该向那个服务跳转，不知道的去问这个服务的接收方。
         //    这里开发一个controller来mock下层服务：OrderCashierPayServerTestController
-        setRedirectUrl("http://127.0.0.1:" + Apps.getHttpPort() + "/openapi/demo/orderCashierPay/server/cashier.html");
+
+        HttpServletRequest httpRequest = ApiContextHolder.getApiContext().getHttpRequest();
+        String hostPrefix = Strings.substringBeforeLast(httpRequest.getRequestURL().toString(), "/");
+        setRedirectUrl(hostPrefix + "/openapi/demo/orderCashierPay/server/cashier.html");
     }
 }
