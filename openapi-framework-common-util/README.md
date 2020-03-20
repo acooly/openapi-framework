@@ -1,7 +1,7 @@
 <!-- title: OpenApi接入工具 -->
 <!-- type: openapi -->
 <!-- author: zhangpu -->
-<!-- date: 2020-02-28 -->
+<!-- date: 2020-02-01 -->
 ## 1. 简介
 提供最小依赖的OpenApi网关接入客户端工具包，以轻量化应用于商户系统中，帮助商户快速完成OpenApi服务的接入工作。
 工具包只有提供一个专用的工具类`OpenApiTools`,提供接入OpenApi网关时，客户端需要的所有基础功能和静态方法，配合OpenApi开放平台的ApiDoc快速对接。
