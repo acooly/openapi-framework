@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 /**
  * OpenApi 通用客户端工具

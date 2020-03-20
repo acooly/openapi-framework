@@ -49,7 +49,6 @@
         </dependency>
     </dependencies>
 
-
     <repositories>
         <repository>
             <id>acooly-releases</id>
