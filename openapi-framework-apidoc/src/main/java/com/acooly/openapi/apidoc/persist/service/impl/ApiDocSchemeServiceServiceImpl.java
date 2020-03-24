@@ -53,6 +53,11 @@ public class ApiDocSchemeServiceServiceImpl extends EntityServiceImpl<ApiDocSche
 
     @Override
     public List<ApiDocService> findContentServices(String schemeNo) {
-        return this.getEntityDao().findContentServices(schemeNo);
+        return this.findContentServices(schemeNo,null);
+    }
+
+    @Override
+    public List<ApiDocService> findContentServices(String schemeNo, String keywords) {
+        return this.getEntityDao().findContentServices(schemeNo, keywords);
     }
 }

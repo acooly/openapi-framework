@@ -39,15 +39,21 @@ public interface ApiDocSchemeServiceDao extends EntityMybatisDao<ApiDocSchemeSer
     List<ApiDocService> findAllSchemeService();
 
     @Select(value = "select * FROM api_doc_scheme_service WHERE scheme_no =#{schemeNo} AND service_no = #{serviceNo}")
-    List<ApiDocSchemeService> findSchemeServicesBySchemeIdAndServiceNo(@Param("schemeNo") String schemeNo, @Param("serviceNo")String serviceNo);
+    List<ApiDocSchemeService> findSchemeServicesBySchemeIdAndServiceNo(@Param("schemeNo") String schemeNo, @Param("serviceNo") String serviceNo);
 
     /**
      * 根据schemeNo获取这个scheme下的api列表
      * @param schemeNo
+     * @param keywords
      * @return
      */
-    @Select("select t1.*,t3.scheme_no from api_doc_service as t1 join api_doc_scheme_service as t2 on t1.service_no=t2.service_no " +
+    @Select("<script>select t1.*,t3.scheme_no from api_doc_service as t1 join api_doc_scheme_service as t2 on t1.service_no=t2.service_no " +
             "join api_doc_scheme as t3 on t2.scheme_no= t3.scheme_no and t3.category='api' and t3.scheme_no!='SYSTEM' and t1.service_no " +
-            "in (select service_no from api_doc_scheme_service where scheme_no = #{schemeNo})")
-    List<ApiDocService> findContentServices(String schemeNo);
+            "in (select service_no from api_doc_scheme_service where scheme_no = #{schemeNo}) " +
+            "<if test='keywords!=null'>" +
+            "and (upper(t1.name) like CONCAT(CONCAT('%', #{keywords}),'%') or UPPER(t1.title) like CONCAT(CONCAT('%', #{keywords}),'%')) " +
+            "</if>" +
+            "order by order by t1.update_time desc" +
+            "</script>")
+    List<ApiDocService> findContentServices(@Param("schemeNo") String schemeNo, @Param("keywords") String keywords);
 }

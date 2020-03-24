@@ -366,7 +366,7 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
             return null;
         }
         if (Strings.isNotBlank(schemeNo)) {
-            schemeServices = apiDocSchemeServiceDao.findContentServices(schemeNo);
+            schemeServices = apiDocSchemeServiceDao.findContentServices(schemeNo,null);
         }
         // 使用json转换entity为dto，解决深copy的问题
         if (Collections3.isNotEmpty(schemeServices)) {

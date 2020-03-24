@@ -118,14 +118,20 @@ public class ApiDocSchemeRestPortalController {
 
     /**
      * 查询方案下的服务列表
+     * 支持通过关键词查询服务名、服务标题来进行搜索
      */
     @ResponseBody
     @GetMapping(value = {"/serviceList"})
     @ApiOperation("文档-api列表")
-    @ApiImplicitParams({@ApiImplicitParam(name = "schemeNo", value = "文档编码", required = true, paramType = "query")})
-    public JsonListResult<ApiDocServiceDto> serviceList(String schemeNo,
+    @ApiImplicitParams({@ApiImplicitParam(name = "schemeNo", value = "文档编码", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "keywords", value = "搜索关键字", required = false, paramType = "query")})
+    public JsonListResult<ApiDocServiceDto> serviceList(String schemeNo, String keywords,
                                                         HttpServletRequest request, HttpServletResponse response, Model model) {
-        List<ApiDocService> list = apiDocSchemeServiceService.findContentServices(schemeNo);
+        String tmp = null;
+        if (Strings.isNotBlank(keywords)) {
+            tmp = Strings.trim(keywords).toUpperCase();
+        }
+        List<ApiDocService> list = apiDocSchemeServiceService.findContentServices(schemeNo,keywords);
         JsonListResult<ApiDocServiceDto> result = new JsonListResult<>();
         if (Collections3.isNotEmpty(list)) {
             List<ApiDocServiceDto> resultList = JSON.parseArray(JSON.toJSONString(list), ApiDocServiceDto.class);
