@@ -13,8 +13,9 @@
     function manage_apiAuth_showSetting() {
         $.acooly.framework.fireSelectRow('manage_apiAuth_datagrid', function (row) {
             $('<div/>').dialog({
+                class:'testclass',
                 href: '/manage/openapi/apiAuth/setting.json?id=' + row.id,
-                width: 1000, height: 600, modal: true,
+                width: 1000, height: 630, modal: true,
                 title: '<i class="fa fa-cog fa-lg fa-fw fa-col"></i> 设置访问权限: ' + row.accessKey,
                 buttons: [
                     {
@@ -40,7 +41,7 @@
         var html = "";
         if(!row.parentId){
             html = "<a onclick=\"$.acooly.framework.edit({url:'/manage/openapi/apiAuth/edit.html',id:'"+row.id+"',entity:'apiAuth',width:600,height:500});\" href=\"#\" title=\"编辑\"><i class=\"fa fa-pencil fa-lg fa-fw fa-col\"></i></a>";
-                    // " <a onclick=\"$.acooly.framework.show('/manage/openapi/apiAuth/show.html?id="+row.id+"',500,400);\" href=\"#\" title=\"查看\"><i class=\"fa fa-file-o fa-lg fa-fw fa-col\"></i></a>";
+            // " <a onclick=\"$.acooly.framework.show('/manage/openapi/apiAuth/show.html?id="+row.id+"',500,400);\" href=\"#\" title=\"查看\"><i class=\"fa fa-file-o fa-lg fa-fw fa-col\"></i></a>";
         }
         html += "<a onclick=\"$.acooly.framework.remove('/manage/openapi/apiAuth/deleteJson.html','"+row.id+"','manage_apiAuth_datagrid');\" href=\"#\" title=\"删除\"><i class=\"fa fa-trash-o fa-lg fa-fw fa-col\"></i></a>"
         return html;
@@ -55,7 +56,7 @@
                 <tr>
                     <td align="left">
                         <div>
-                            PartnerId: <input type="text" class="text" size="15" name="search_LIKE_partnerId"/>
+                            接入方编码: <input type="text" class="text" size="15" name="search_LIKE_partnerId"/>
                             AccessKey: <input type="text" class="text" size="15" name="search_LIKE_accessKey"/>
                             修改时间: <input size="15" type="text" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
                             至 <input size="15" type="text" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
@@ -75,12 +76,13 @@
             <tr>
                 <th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
                 <th field="id" sum="true">ID</th>
-                <th field="partnerId">PartnerId</th>
+                <th field="partnerId">接入方编码</th>
+                <th field="partnerName" data-options="formatter:function(value,row){return formatRefrence('manage_apiAuth_datagrid','allPartners',row.partnerId);} ">接入方名称</th>
                 <th field="secretType" formatter="mappingFormatter">安全类型</th>
                 <th field="signType" formatter="mappingFormatter">签名类型</th>
                 <th field="accessKey">AccessKey</th>
                 <th field="secretKey">安全码</th>
-                <th field="permissions" formatter="contentFormatter">通用权限</th>
+                <th field="permissions" data-options="formatter:function(value,row){return formatContent(value.replace(eval('/'+row.partnerId+':/g'),'\r\n'),50);} " width="150px">已配置权限</th>
                 <th field="comments">备注</th>
                 <th field="rowActions" data-options="formatter:function(value, row, index){return manage_apiAuth_action_show(row)}">动作</th>
             </tr>
@@ -88,11 +90,11 @@
         </table>
 
         <!-- 每行的Action动作模板 -->
-        <#--<div id="manage_apiAuth_action" style="display: none;">-->
-            <#--<a onclick="$.acooly.framework.edit({url:'/manage/openapi/apiAuth/edit.html',id:'{0}',entity:'apiAuth',width:500,height:400});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>-->
-            <#--<a onclick="$.acooly.framework.show('/manage/openapi/apiAuth/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>-->
-            <#--<a onclick="$.acooly.framework.remove('/manage/openapi/apiAuth/deleteJson.html','{0}','manage_apiAuth_datagrid');" href="#" title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>-->
-        <#--</div>-->
+    <#--<div id="manage_apiAuth_action" style="display: none;">-->
+    <#--<a onclick="$.acooly.framework.edit({url:'/manage/openapi/apiAuth/edit.html',id:'{0}',entity:'apiAuth',width:500,height:400});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>-->
+    <#--<a onclick="$.acooly.framework.show('/manage/openapi/apiAuth/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>-->
+    <#--<a onclick="$.acooly.framework.remove('/manage/openapi/apiAuth/deleteJson.html','{0}','manage_apiAuth_datagrid');" href="#" title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>-->
+    <#--</div>-->
 
         <!-- 表格的工具栏 -->
         <div id="manage_apiAuth_toolbar">

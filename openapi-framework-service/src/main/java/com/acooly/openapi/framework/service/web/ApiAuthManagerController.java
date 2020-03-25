@@ -18,9 +18,11 @@ import com.acooly.openapi.framework.common.enums.SignType;
 import com.acooly.openapi.framework.common.utils.AccessKeys;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
 import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
+import com.acooly.openapi.framework.service.domain.ApiPartner;
 import com.acooly.openapi.framework.service.service.ApiAuthAclService;
 import com.acooly.openapi.framework.service.service.ApiAuthService;
 import com.acooly.openapi.framework.service.service.ApiMetaServiceService;
+import com.acooly.openapi.framework.service.service.ApiPartnerService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +53,8 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
     private ApiMetaServiceService apiMetaServiceService;
     @Autowired
     private ApiAuthAclService apiAuthAclService;
+    @Autowired
+    private ApiPartnerService apiPartnerService;
 
     @RequestMapping(value = "loadAcls")
     @ResponseBody
@@ -158,5 +163,26 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
     protected void referenceData(HttpServletRequest request, Map<String, Object> model) {
         model.put("allSecretTypes", SecretType.mapping());
         model.put("allSignTypes", SignType.mapping());
+        model.put("allPartners", getAllPartner());
+    }
+
+    /**
+     * 获取所有的接入方，便于在前端展示接入方名称
+     *
+     * @return
+     */
+    private Map<String, String> getAllPartner() {
+        List<ApiPartner> partnerList = apiPartnerService.getAll();
+        if (partnerList == null || partnerList.size() == 0) {
+            return null;
+        }
+
+        Map<String, String> partnerMap = new HashMap<>(partnerList.size());
+
+        partnerList.forEach(apiPartner -> {
+            partnerMap.put(apiPartner.getPartnerId(), apiPartner.getPartnerName());
+        });
+
+        return partnerMap;
     }
 }
