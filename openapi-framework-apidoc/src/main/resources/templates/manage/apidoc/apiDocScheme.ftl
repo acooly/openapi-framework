@@ -8,9 +8,6 @@
                 $(this).treegrid('enableDnd', row?row.id:null);
             },
             onBeforeDrop :function(targetRow, sourceRow, point){
-                // console.info("targetRow:" + targetRow.title);
-                // console.info("sourceRow:" + sourceRow.title);
-                // console.info("point:" + JSON.stringify(point));
                 if (!point || point == null|| !targetRow || targetRow == null || !sourceRow || sourceRow == null){
                     return false;
                 }
@@ -46,7 +43,7 @@
                         标题: <input type="text" class="text" size="15" name="search_LIKE_title"/>
                         <a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false"
                            onclick="$.acooly.framework.search('manage_apiDocScheme_searchform${category}','manage_apiDocScheme_datagrid${category}');"><i
-                                    class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
+                                class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
                     </div>
                 </td>
             </tr>
@@ -112,7 +109,7 @@
         <div id="manage_apiDocScheme_toolbar${category}">
             <a href="#" class="easyui-linkbutton" plain="true"
                onclick="$.acooly.framework.create({url:'/manage/apidoc/apiDocScheme/create.html?category=${category}',form: 'manage_apiDocScheme_editform${category}', datagrid: 'manage_apiDocScheme_datagrid${category}',width:400,height:280})"><i
-                        class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
+                    class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
         </div>
     </div>
 
@@ -134,15 +131,21 @@
                         <th field="manualNote" formatter="contentFormatter">手工说明</th>
                         <th field="serviceType" formatter="mappingFormatter">服务类型</th>
                         <th field="busiType" formatter="mappingFormatter">业务类型</th>
-<#--                        <th field="sortTime" sum="true">排序值</th>-->
                         <th field="comments">备注</th>
                         <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
                         <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>
                         <th field="signature">签名</th>
-<#--                        <th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_apiDocService_action',value,row)}">动作</th>-->
+                        <th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_apiDocSchemeService_action',value,row)}">动作</th>
                     </tr>
                     </thead>
                 </table>
+
+                <!-- 每行的Action动作模板 -->
+                <div id="manage_apiDocSchemeService_action" style="display: none;">
+                    <a onclick="$.acooly.framework.confirmSubmit('/manage/apidoc/apiDocScheme/changeSchemaServiceOrder.html?direction=up','{0}','manage_apiDocSchemeService_datagrid${category}','确定','您是否要进行该操作?');" href="#" title="上移"><i class="fa fa-long-arrow-up fa-fw fa-col"></i></a>
+                    <a onclick="$.acooly.framework.confirmSubmit('/manage/apidoc/apiDocScheme/changeSchemaServiceOrder.html?direction=down','{0}','manage_apiDocSchemeService_datagrid${category}','确定','您是否要进行该操作?');" href="#" title="下移"><i class="fa fa-long-arrow-down fa-fw fa-col"></i></a>
+                </div>
+
             </div>
         </div>
     </div>
@@ -196,4 +199,3 @@
         });
     }
 </script>
-

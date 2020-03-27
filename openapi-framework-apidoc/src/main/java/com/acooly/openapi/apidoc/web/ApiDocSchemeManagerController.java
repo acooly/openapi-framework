@@ -334,6 +334,31 @@ public class ApiDocSchemeManagerController extends AbstractJQueryEntityControlle
         return result;
     }
 
+    /**
+     * 上移解决方案
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "changeSchemaServiceOrder")
+    @ResponseBody
+    public JsonResult moveDownService(HttpServletRequest request, HttpServletResponse response,Long id, String direction) {
+
+        JsonResult result = new JsonResult();
+        try {
+            if(Strings.equals(direction,"down")) {
+                apiDocSchemeServiceService.moveDown(id);
+            }else{
+                apiDocSchemeServiceService.moveUp(id);
+            }
+            result.setMessage("操作成功");
+        } catch (Exception e) {
+            handleException(result, "操作", e);
+        }
+        return result;
+    }
+
     @Override
     protected PageInfo<ApiDocScheme> doList(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Boolean> sortMap = Maps.newHashMap();

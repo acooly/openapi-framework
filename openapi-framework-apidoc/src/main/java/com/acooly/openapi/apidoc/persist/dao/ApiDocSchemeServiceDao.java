@@ -27,10 +27,10 @@ public interface ApiDocSchemeServiceDao extends EntityMybatisDao<ApiDocSchemeSer
     @Select("select * from api_doc_scheme_service where scheme_no = #{schemeNo}")
     List<ApiDocSchemeService> findBySchemeNo(@Param("schemeNo") String schemeNo);
 
-
-    @Select("select t1.*,t2.scheme_no from api_doc_service t1,api_doc_scheme_service t2 " +
-            "where t1.service_no = t2.service_no and  t2.scheme_no =  #{schemeNo}" +
-            " order by t1.name, t1.sort_time desc")
+    @Select("select t2.id,t1.service_no,t1.name,t1.version,t1.title,t1.owner,t1.note,t1.manual_note,t1.service_type,t1.busi_type,t2.scheme_no," +
+            "t1.comments,t1.create_time,t1.update_time,t2.sort_time from api_doc_service t1,api_doc_scheme_service t2 " +
+            "where t1.service_no = t2.service_no and t2.scheme_no =  #{schemeNo} " +
+            " order by t2.sort_time,t1.name desc")
     List<ApiDocService> findSchemeService(@Param("schemeNo") String schemeNo);
 
     @Select("select t1.*,t2.scheme_no from api_doc_service t1,api_doc_scheme_service t2 " +
@@ -56,4 +56,22 @@ public interface ApiDocSchemeServiceDao extends EntityMybatisDao<ApiDocSchemeSer
             "order by order by t1.update_time desc" +
             "</script>")
     List<ApiDocService> findContentServices(@Param("schemeNo") String schemeNo, @Param("keywords") String keywords);
+
+    /**
+     * 找到比当前记录sortTime更大的
+     * @param current
+     * @param id
+     * @return
+     */
+    @Select("select * from api_doc_scheme_service where scheme_no=#{schemeNo} and sort_time >= #{sortTime} and id != #{id} limit 1")
+    ApiDocSchemeService findBeforeOne(@Param("sortTime") long current, @Param("schemeNo") String schemeNo, @Param("id") Long id);
+
+    /**
+     * 找到比当前记录sortTime更小的
+     * @param current
+     * @param id
+     * @return
+     */
+    @Select("select * from api_doc_scheme_service where scheme_no=#{schemeNo} and sort_time <= #{sortTime} and id != #{id} limit 1")
+    ApiDocSchemeService findAlfterOne(@Param("sortTime") long current, @Param("schemeNo") String schemeNo, @Param("id") Long id);
 }

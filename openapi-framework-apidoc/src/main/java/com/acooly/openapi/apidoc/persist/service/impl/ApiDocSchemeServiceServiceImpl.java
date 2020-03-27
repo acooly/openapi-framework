@@ -6,6 +6,7 @@
  */
 package com.acooly.openapi.apidoc.persist.service.impl;
 
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.persist.dao.ApiDocSchemeServiceDao;
@@ -53,11 +54,45 @@ public class ApiDocSchemeServiceServiceImpl extends EntityServiceImpl<ApiDocSche
 
     @Override
     public List<ApiDocService> findContentServices(String schemeNo) {
-        return this.findContentServices(schemeNo,null);
+        return this.findContentServices(schemeNo, null);
     }
 
     @Override
     public List<ApiDocService> findContentServices(String schemeNo, String keywords) {
         return this.getEntityDao().findContentServices(schemeNo, keywords);
+    }
+
+    @Override
+    public void moveDown(Long id) {
+
+        try {
+            ApiDocSchemeService apiDocSchemeService = get(id);
+            long current = apiDocSchemeService.getSortTime();
+            ApiDocSchemeService beforeSchemeService = getEntityDao().findBeforeOne(current, apiDocSchemeService.getSchemeNo(), id);
+            exchangeSortTime(apiDocSchemeService, current, beforeSchemeService);
+        } catch (Exception e) {
+            throw new BusinessException("下移失败", e);
+        }
+    }
+    @Override
+    public void moveUp(Long id) {
+        try {
+            ApiDocSchemeService apiDocSchemeService = get(id);
+            long current = apiDocSchemeService.getSortTime();
+            ApiDocSchemeService beforeSchemeService = getEntityDao().findAlfterOne(current, apiDocSchemeService.getSchemeNo(), id);
+            if (beforeSchemeService == null) {
+                return;
+            }
+            exchangeSortTime(apiDocSchemeService, current, beforeSchemeService);
+        } catch (Exception e) {
+            throw new BusinessException("操作失败", e);
+        }
+    }
+
+    private void exchangeSortTime(ApiDocSchemeService apiDocSchemeService, long current, ApiDocSchemeService beforeSchemeService) {
+        apiDocSchemeService.setSortTime(beforeSchemeService.getSortTime());
+        beforeSchemeService.setSortTime(current);
+        this.update(apiDocSchemeService);
+        this.update(beforeSchemeService);
     }
 }

@@ -43,4 +43,18 @@ public interface ApiDocSchemeServiceService extends EntityService<ApiDocSchemeSe
      * @return
      */
     List<ApiDocService> findContentServices(String schemeNo, String keywords);
+
+    /**
+     * 下移
+     *
+     * @param id
+     */
+    void moveDown(Long id);
+
+    /**
+     * 下移
+     *
+     * @param id
+     */
+    void moveUp(Long id);
 }
