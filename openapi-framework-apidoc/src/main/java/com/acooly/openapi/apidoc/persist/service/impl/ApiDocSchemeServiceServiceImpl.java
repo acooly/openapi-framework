@@ -6,6 +6,7 @@
  */
 package com.acooly.openapi.apidoc.persist.service.impl;
 
+import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Strings;
@@ -54,12 +55,18 @@ public class ApiDocSchemeServiceServiceImpl extends EntityServiceImpl<ApiDocSche
 
     @Override
     public List<ApiDocService> findContentServices(String schemeNo) {
-        return this.findContentServices(schemeNo, null);
+        return this.getEntityDao().findContentServices(schemeNo);
     }
 
     @Override
-    public List<ApiDocService> findContentServices(String schemeNo, String keywords) {
-        return this.getEntityDao().findContentServices(schemeNo, keywords);
+    public PageInfo<ApiDocService> findContentServicesByKey(PageInfo<ApiDocService> pageInfo, String keywords) {
+        int totalCount = this.getEntityDao().countServicesByKey(keywords);
+        List<ApiDocService> contentServicesByKey = this.getEntityDao().findContentServicesByKey(keywords, (pageInfo.getCurrentPage() - 1)*pageInfo.getCountOfCurrentPage(), pageInfo.getCountOfCurrentPage());
+        pageInfo.setTotalCount(totalCount);
+        pageInfo.setPageResults(contentServicesByKey);
+        pageInfo.setTotalPage(pageInfo.getTotalPage());
+        return pageInfo;
+
     }
 
     @Override

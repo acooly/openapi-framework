@@ -6,6 +6,7 @@
  */
 package com.acooly.openapi.apidoc.persist.dao;
 
+import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.module.mybatis.EntityMybatisDao;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
@@ -13,6 +14,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 方案服务列表 Mybatis Dao
@@ -39,23 +41,35 @@ public interface ApiDocSchemeServiceDao extends EntityMybatisDao<ApiDocSchemeSer
     List<ApiDocService> findAllSchemeService();
 
     @Select(value = "select * FROM api_doc_scheme_service WHERE scheme_no =#{schemeNo} AND service_no = #{serviceNo}")
-    List<ApiDocSchemeService> findSchemeServicesBySchemeIdAndServiceNo(@Param("schemeNo") String schemeNo, @Param("serviceNo") String serviceNo);
+    List<ApiDocSchemeService> findSchemeServicesBySchemeIdAndServiceNo(@Param("schemeNo") String schemeNo, @Param("serviceNo")String serviceNo);
 
     /**
      * 根据schemeNo获取这个scheme下的api列表
      * @param schemeNo
-     * @param keywords
      * @return
      */
-    @Select("<script>select t1.*,t3.scheme_no from api_doc_service as t1 join api_doc_scheme_service as t2 on t1.service_no=t2.service_no " +
+    @Select("select t1.*,t3.scheme_no from api_doc_service as t1 join api_doc_scheme_service as t2 on t1.service_no=t2.service_no " +
             "join api_doc_scheme as t3 on t2.scheme_no= t3.scheme_no and t3.category='api' and t3.scheme_no!='SYSTEM' and t1.service_no " +
-            "in (select service_no from api_doc_scheme_service where scheme_no = #{schemeNo}) " +
-            "<if test='keywords!=null'>" +
+            "in (select service_no from api_doc_scheme_service where scheme_no = #{schemeNo})")
+    List<ApiDocService> findContentServices(String schemeNo);
+
+    /**
+     * 根据schemeNo获取这个scheme下的api列表
+     * @param
+     * @return
+     */
+    @Select("select t1.*,t3.scheme_no from api_doc_service as t1 join api_doc_scheme_service as t2 on t1.service_no=t2.service_no " +
+            "join api_doc_scheme as t3 on t2.scheme_no= t3.scheme_no and t3.category='api' and t3.scheme_no!='SYSTEM' " +
             "and (upper(t1.name) like CONCAT(CONCAT('%', #{keywords}),'%') or UPPER(t1.title) like CONCAT(CONCAT('%', #{keywords}),'%')) " +
-            "</if>" +
-            "order by order by t1.update_time desc" +
-            "</script>")
-    List<ApiDocService> findContentServices(@Param("schemeNo") String schemeNo, @Param("keywords") String keywords);
+            " order by t1.update_time desc limit #{start},#{limit}")
+    //List<ApiDocService> findContentServicesByKey(@Param("keywords") String keywords);
+    List<ApiDocService> findContentServicesByKey(@Param("keywords") String keywords,@Param("start") int start,@Param("limit") int limit);
+
+    @Select("select count(t1.id) from api_doc_service as t1 join api_doc_scheme_service as t2 on t1.service_no=t2.service_no " +
+            "join api_doc_scheme as t3 on t2.scheme_no= t3.scheme_no and t3.category='api' and t3.scheme_no!='SYSTEM' " +
+            "and (upper(t1.name) like CONCAT(CONCAT('%', #{keywords}),'%') or UPPER(t1.title) like CONCAT(CONCAT('%', #{keywords}),'%')) ")
+    int countServicesByKey(@Param("keywords") String keywords);
+
 
     /**
      * 找到比当前记录sortTime更大的

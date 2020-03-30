@@ -1,5 +1,6 @@
 package com.acooly.openapi.apidoc.portal;
 
+import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.web.support.JsonEntityResult;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.utils.Collections3;
@@ -21,10 +22,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -118,25 +116,43 @@ public class ApiDocSchemeRestPortalController {
 
     /**
      * 查询方案下的服务列表
-     * 支持通过关键词查询服务名、服务标题来进行搜索
      */
     @ResponseBody
     @GetMapping(value = {"/serviceList"})
     @ApiOperation("文档-api列表")
-    @ApiImplicitParams({@ApiImplicitParam(name = "schemeNo", value = "文档编码", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "keywords", value = "搜索关键字", required = false, paramType = "query")})
-    public JsonListResult<ApiDocServiceDto> serviceList(String schemeNo, String keywords,
+    @ApiImplicitParams({@ApiImplicitParam(name = "schemeNo", value = "文档编码", required = true, paramType = "query")})
+    public JsonListResult<ApiDocServiceDto> serviceList(String schemeNo,
                                                         HttpServletRequest request, HttpServletResponse response, Model model) {
-        String tmp = null;
-        if (Strings.isNotBlank(keywords)) {
-            tmp = Strings.trim(keywords).toUpperCase();
-        }
-        List<ApiDocService> list = apiDocSchemeServiceService.findContentServices(schemeNo,keywords);
+        List<ApiDocService> list = apiDocSchemeServiceService.findContentServices(schemeNo);
         JsonListResult<ApiDocServiceDto> result = new JsonListResult<>();
         if (Collections3.isNotEmpty(list)) {
             List<ApiDocServiceDto> resultList = JSON.parseArray(JSON.toJSONString(list), ApiDocServiceDto.class);
             result.setRows(resultList);
             result.setTotal(Long.valueOf(resultList.size()));
+        }
+        return result;
+    }
+
+    /**
+     * 查询方案下的服务列表
+     */
+    @ResponseBody
+    @GetMapping(value = {"/serviceSearchList"})
+    @ApiOperation("文档-api列表")
+    @ApiImplicitParams({@ApiImplicitParam(name = "keywords", value = "关键字", required = true, paramType = "query")})
+    public JsonListResult<ApiDocServiceDto> serviceSearchList(@RequestParam(value = "start", required = false, defaultValue = "1") Integer start,
+                                                              @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
+                                                              @RequestParam(value = "keywords", required = false) String keywords) {
+
+        PageInfo<ApiDocService> pageInfo = new PageInfo<>(limit, start);
+
+        PageInfo<ApiDocService> contentServicesByKey = apiDocSchemeServiceService.findContentServicesByKey(pageInfo, keywords);
+        JsonListResult<ApiDocServiceDto> result = new JsonListResult<>();
+        if (Collections3.isNotEmpty(contentServicesByKey.getPageResults())) {
+            List<ApiDocServiceDto> resultList = JSON.parseArray(JSON.toJSONString(contentServicesByKey.getPageResults()), ApiDocServiceDto.class);
+            result.setRows(resultList);
+            result.setTotal(pageInfo.getTotalCount());
+            result.setHasNext(pageInfo.hasNext());
         }
         return result;
     }

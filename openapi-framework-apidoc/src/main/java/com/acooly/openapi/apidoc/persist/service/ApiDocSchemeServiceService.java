@@ -7,6 +7,7 @@
  */
 package com.acooly.openapi.apidoc.persist.service;
 
+import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
@@ -31,18 +32,19 @@ public interface ApiDocSchemeServiceService extends EntityService<ApiDocSchemeSe
 
     /**
      * 传入产品的schemeNo，查询得到产品相关的service，返回的服务列表的schemeNo为在api列表分类中的schemeNo
+     *
      * @param schemeNo
      * @return
      */
     List<ApiDocService> findContentServices(String schemeNo);
 
     /**
-     * 传入产品的schemeNo，查询得到产品相关的service，返回的服务列表的schemeNo为在api列表分类中的schemeNo
+     * 关键词查询查询服务
      *
-     * @param schemeNo
+     * @param keywords
      * @return
      */
-    List<ApiDocService> findContentServices(String schemeNo, String keywords);
+    PageInfo<ApiDocService> findContentServicesByKey(PageInfo<ApiDocService> pageInfo,String keywords);
 
     /**
      * 下移
