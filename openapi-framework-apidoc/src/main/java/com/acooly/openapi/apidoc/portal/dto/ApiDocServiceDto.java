@@ -72,7 +72,7 @@ public class ApiDocServiceDto implements Serializable {
      * 服务类型
      */
     @ApiModelProperty(value = "服务类型")
-    private ResponseType serviceType = ResponseType.SYN;
+    private String serviceType = ResponseType.SYN.getMsg();
 
     /**
      * 业务类型

@@ -15,7 +15,11 @@ import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.persist.service.ApiDocSchemeServiceService;
 import com.acooly.openapi.apidoc.portal.dto.ApiDocSchemeDto;
 import com.acooly.openapi.apidoc.portal.dto.ApiDocServiceDto;
+import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.JSONSerializer;
+import com.alibaba.fastjson.serializer.ObjectSerializer;
+import com.alibaba.fastjson.serializer.SerializeConfig;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +31,8 @@ import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -105,8 +111,12 @@ public class ApiDocSchemeRestPortalController {
             dto.setContent(HtmlUtils.htmlUnescape(apiDocSchemeDesc.getSchemeDesc()));
         }
         List<ApiDocService> schemeServices = apiDocSchemeServiceService.findContentServices(apiDocScheme.getSchemeNo());
+
         if (Collections3.isNotEmpty(schemeServices)) {
             List<ApiDocServiceDto> serviceList = JSON.parseArray(JSON.toJSONString(schemeServices), ApiDocServiceDto.class);
+            serviceList.forEach(serviceDto -> {
+                serviceDto.setServiceType(ResponseType.valueOf(serviceDto.getServiceType()).getMsg());
+            });
             dto.setServices(serviceList);
         }
         result.setEntity(dto);
@@ -127,6 +137,9 @@ public class ApiDocSchemeRestPortalController {
         JsonListResult<ApiDocServiceDto> result = new JsonListResult<>();
         if (Collections3.isNotEmpty(list)) {
             List<ApiDocServiceDto> resultList = JSON.parseArray(JSON.toJSONString(list), ApiDocServiceDto.class);
+            resultList.forEach(serviceDto -> {
+                serviceDto.setServiceType(ResponseType.valueOf(serviceDto.getServiceType()).getMsg());
+            });
             result.setRows(resultList);
             result.setTotal(Long.valueOf(resultList.size()));
         }
@@ -150,6 +163,9 @@ public class ApiDocSchemeRestPortalController {
         JsonListResult<ApiDocServiceDto> result = new JsonListResult<>();
         if (Collections3.isNotEmpty(contentServicesByKey.getPageResults())) {
             List<ApiDocServiceDto> resultList = JSON.parseArray(JSON.toJSONString(contentServicesByKey.getPageResults()), ApiDocServiceDto.class);
+            resultList.forEach(serviceDto -> {
+                serviceDto.setServiceType(ResponseType.valueOf(serviceDto.getServiceType()).getMsg());
+            });
             result.setRows(resultList);
             result.setTotal(pageInfo.getTotalCount());
             result.setHasNext(pageInfo.hasNext());
