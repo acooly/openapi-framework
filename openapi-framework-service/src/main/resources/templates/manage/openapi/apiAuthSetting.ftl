@@ -97,7 +97,8 @@
      */
     function loadServices() {
         var permissions = "${apiAuth.permissions}";
-        $.acooly.ajax({
+        $.acooly.loading();
+        $.ajax({
             url: '/manage/openapi/apiAuth/getAllService.json',
             success: function (result) {
                 if (!result.success) {
@@ -112,6 +113,7 @@
                 loadACLs();
             },
             error: function (r, s, e) {
+                $.acooly.loaded();
                 $.messager.show({title: '失败', msg: e});
             }
         });
@@ -133,6 +135,7 @@
      */
     function loadACLs() {
         var authNo = "${apiAuth.authNo}";
+        //$.acooly.loading();
         $.ajax({
             url: '/manage/openapi/apiAuth/loadAcls.json',
             data: {authNo: authNo},
@@ -156,6 +159,9 @@
             },
             error: function (r, s, e) {
                 $.messager.show({title: '失败', msg: e});
+            },
+            complete : function () {
+                $.acooly.loaded();
             }
         });
     }
@@ -164,7 +170,7 @@
      * 保存ACLs
      */
     function saveAcls(tobj) {
-        $.acooly.loading();
+        $.acooly.loading("保存中...");
         $.ajax({
             url: '/manage/openapi/apiAuth/settingSave.json',
             data: {
@@ -172,7 +178,6 @@
                 "serviceNo": getServiceNoValues()
             },
             success: function (result) {
-                $.acooly.loaded();
                 if (result.success) {
                     tobj.dialog('close');
                     $.messager.show({title: '设置成功', msg: '设置成功'});
@@ -180,6 +185,9 @@
             },
             error: function (r, s, e) {
                 $.messager.show({title: '失败', msg: e});
+            },
+            complete : function () {
+                $.acooly.loaded();
             }
         });
     }
