@@ -59,4 +59,17 @@ public interface ApiDocSchemeServiceService extends EntityService<ApiDocSchemeSe
      * @param id
      */
     void moveUp(Long id);
+
+    /**
+     * 置顶
+     *
+     * @param id
+     */
+    void moveTop(Long id);
+
+    /**
+     * 删除关联关系
+     * @param id
+     */
+    void remove(Long id);
 }
