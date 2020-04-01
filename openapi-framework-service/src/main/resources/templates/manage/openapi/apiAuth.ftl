@@ -21,7 +21,8 @@
                     {
                         text: '<i class="fa fa-floppy-o fa-lg fa-fw fa-col"></i> 保存',
                         handler: function () {
-                            saveAcls();
+                            var d = $(this).closest('.window-body');
+                            saveAcls(d);
                         }
                     }, {
                         text: '<i class="fa fa-times-circle-o fa-lg fa-fw fa-col"></i> 关闭',
@@ -32,6 +33,7 @@
                     }],
                 onClose: function () {
                     $(this).dialog('destroy');
+                    $('#manage_apiAuth_datagrid').datagrid('reload');
                 }
             });
         });
@@ -57,7 +59,7 @@
                     <td align="left">
                         <div>
                             接入方编码: <input type="text" class="text" size="15" name="search_LIKE_partnerId"/>
-                            AccessKey: <input type="text" class="text" size="15" name="search_LIKE_accessKey"/>
+                            访问帐号: <input type="text" class="text" size="15" name="search_LIKE_accessKey"/>
                             修改时间: <input size="15" type="text" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
                             至 <input size="15" type="text" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
                             <a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_apiAuth_searchform','manage_apiAuth_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
@@ -80,8 +82,8 @@
                 <th field="partnerName" data-options="formatter:function(value,row){return formatRefrence('manage_apiAuth_datagrid','allPartners',row.partnerId);} ">接入方名称</th>
                 <th field="secretType" formatter="mappingFormatter">安全类型</th>
                 <th field="signType" formatter="mappingFormatter">签名类型</th>
-                <th field="accessKey">AccessKey</th>
-                <th field="secretKey">安全码</th>
+                <th field="accessKey">访问帐号</th>
+                <th field="secretKey">访问秘钥</th>
                 <th field="permissions" data-options="formatter:function(value,row){return formatContent(value.replace(eval('/'+row.partnerId+':/g'),'\r\n'),50);} " width="150px">已配置权限</th>
                 <th field="comments">备注</th>
                 <th field="rowActions" data-options="formatter:function(value, row, index){return manage_apiAuth_action_show(row)}">动作</th>

@@ -63,6 +63,7 @@
         <div>
             关键字 : <input type="text" class="text" id="keywords" />
             <a href="javascript:void(0);" class="easyui-linkbutton" onclick="searchService()"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
+            <a href="javascript:void(0);" class="easyui-linkbutton" onclick="showAllService()">显示全部服务</a>
         </div>
     </div>
     <div id="manage_openapi_apilist_container" class="servicelist" style="border-bottom: cornflowerblue;">
@@ -96,7 +97,7 @@
      */
     function loadServices() {
         var permissions = "${apiAuth.permissions}";
-        $.ajax({
+        $.acooly.ajax({
             url: '/manage/openapi/apiAuth/getAllService.json',
             success: function (result) {
                 if (!result.success) {
@@ -162,7 +163,8 @@
     /**
      * 保存ACLs
      */
-    function saveAcls() {
+    function saveAcls(tobj) {
+        $.acooly.loading();
         $.ajax({
             url: '/manage/openapi/apiAuth/settingSave.json',
             data: {
@@ -170,7 +172,9 @@
                 "serviceNo": getServiceNoValues()
             },
             success: function (result) {
+                $.acooly.loaded();
                 if (result.success) {
+                    tobj.dialog('close');
                     $.messager.show({title: '设置成功', msg: '设置成功'});
                 }
             },
@@ -201,6 +205,11 @@
                 tobj.show();
             }
         })
+    }
+
+    function showAllService() {
+        $("#keywords").val('');
+        $(".openapi-apilist > li").show();
     }
 
     $(function () {
