@@ -110,7 +110,7 @@ public class ApiDocSchemeRestPortalController {
         if (apiDocSchemeDesc != null) {
             dto.setContent(HtmlUtils.htmlUnescape(apiDocSchemeDesc.getSchemeDesc()));
         }
-        List<ApiDocService> schemeServices = apiDocSchemeServiceService.findContentServices(apiDocScheme.getSchemeNo());
+        List<ApiDocService> schemeServices = apiDocSchemeServiceService.findSchemeApiDocServices(apiDocScheme.getSchemeNo());
 
         if (Collections3.isNotEmpty(schemeServices)) {
             List<ApiDocServiceDto> serviceList = JSON.parseArray(JSON.toJSONString(schemeServices), ApiDocServiceDto.class);
