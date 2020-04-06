@@ -122,7 +122,7 @@
     function bindCheckBox(event) {
         var checkbox = $(event.target);
         var linode = checkbox.parent().parent();
-        if (checkbox.attr("checked") == "checked") {
+        if (checkbox.is(':checked')) {
             $(linode).addClass("selected");
         } else {
             $(linode).removeClass("selected");
@@ -169,7 +169,7 @@
     /**
      * 保存ACLs
      */
-    function saveAcls(tobj) {
+    function saveAcls(dial) {
         $.acooly.loading("保存中...");
         $.ajax({
             url: '/manage/openapi/apiAuth/settingSave.json',
@@ -179,7 +179,6 @@
             },
             success: function (result) {
                 if (result.success) {
-                    tobj.dialog('close');
                     $.messager.show({title: '设置成功', msg: '设置成功'});
                 }
             },
@@ -187,6 +186,7 @@
                 $.messager.show({title: '失败', msg: e});
             },
             complete : function () {
+                dial.dialog('close');
                 $.acooly.loaded();
             }
         });

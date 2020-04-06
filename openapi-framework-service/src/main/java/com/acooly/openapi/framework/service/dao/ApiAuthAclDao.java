@@ -8,6 +8,7 @@ package com.acooly.openapi.framework.service.dao;
 
 import com.acooly.module.mybatis.EntityMybatisDao;
 import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
+import com.acooly.openapi.framework.service.domain.ApiMetaService;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -48,5 +49,15 @@ public interface ApiAuthAclDao extends EntityMybatisDao<ApiAuthAcl> {
      */
     @Select("delete * from api_auth_acl  where auth_no =#{authNo}")
     void removeByAuthNo(@Param("authNo") String authNo);
+
+    /**
+     * 查询授权列表
+     * @param authNo
+     * @return
+     */
+    @Select("SELECT ms.id,ms.service_name,ms.service_desc,ms.busi_type,ms.note,acl.create_time,acl.update_time " +
+            " FROM api_auth_acl acl LEFT JOIN api_meta_service ms ON ms.service_name=acl.name AND ms.version=acl.version " +
+            " WHERE acl.auth_no=#{authNo} order by acl.create_time desc ")
+    List<ApiMetaService> findMetaServicesByAuthNo(@Param("authNo") String authNo);
 
 }

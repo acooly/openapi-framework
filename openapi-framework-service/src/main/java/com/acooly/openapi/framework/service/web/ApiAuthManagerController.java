@@ -18,6 +18,7 @@ import com.acooly.openapi.framework.common.enums.SignType;
 import com.acooly.openapi.framework.common.utils.AccessKeys;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
 import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
+import com.acooly.openapi.framework.service.domain.ApiMetaService;
 import com.acooly.openapi.framework.service.domain.ApiPartner;
 import com.acooly.openapi.framework.service.service.ApiAuthAclService;
 import com.acooly.openapi.framework.service.service.ApiAuthService;
@@ -66,6 +67,20 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
             result.setRows(acls);
         } catch (Exception e) {
             handleException(result, "加载ACL", e);
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "loadMetaServices")
+    @ResponseBody
+    public JsonListResult<ApiMetaService> loadMetaServices(HttpServletRequest request, HttpServletResponse response) {
+        JsonListResult<ApiMetaService> result = new JsonListResult<>();
+        try {
+            String authNo = Servlets.getParameter(request, "authNo");
+            List<ApiMetaService> acls = apiAuthAclService.loadMetaServices(authNo);
+            result.setRows(acls);
+        } catch (Exception e) {
+            handleException(result, "加载MetaServices", e);
         }
         return result;
     }

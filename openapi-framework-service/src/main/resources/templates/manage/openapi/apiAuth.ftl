@@ -12,7 +12,7 @@
      */
     function manage_apiAuth_showSetting() {
         $.acooly.framework.fireSelectRow('manage_apiAuth_datagrid', function (row) {
-            $('<div/>').dialog({
+            var dial = $('<div/>').dialog({
                 class:'testclass',
                 href: '/manage/openapi/apiAuth/setting.json?id=' + row.id,
                 width: 1000, height: 630, modal: true,
@@ -21,19 +21,17 @@
                     {
                         text: '<i class="fa fa-floppy-o fa-lg fa-fw fa-col"></i> 保存',
                         handler: function () {
-                            var d = $(this).closest('.window-body');
-                            saveAcls(d);
+                            saveAcls(dial);
                         }
                     }, {
                         text: '<i class="fa fa-times-circle-o fa-lg fa-fw fa-col"></i> 关闭',
                         handler: function () {
-                            var d = $(this).closest('.window-body');
-                            d.dialog('close');
+                            dial.dialog('close');
                         }
                     }],
                 onClose: function () {
                     $(this).dialog('destroy');
-                    $('#manage_apiAuth_datagrid').datagrid('reload');
+                    reloadSubList(row.authNo);
                 }
             });
         });
@@ -73,7 +71,7 @@
     <!-- 列表和工具栏 -->
     <div data-options="region:'center',border:false">
         <table id="manage_apiAuth_datagrid" class="easyui-datagrid" url="/manage/openapi/apiAuth/listJson.html" toolbar="#manage_apiAuth_toolbar" fit="true" border="false" fitColumns="false"
-               pagination="true" idField="id" pageSize="20" pageList="[ 10, 20, 30, 40, 50 ]" sortName="id" sortOrder="desc" checkOnSelect="true" selectOnCheck="true" singleSelect="true">
+               pagination="true" idField="id" pageSize="20" pageList="[ 10, 20, 30, 40, 50 ]" sortName="id" sortOrder="desc" checkOnSelect="true" selectOnCheck="true" singleSelect="true" data-options="onClickRow:manage_apiAuth_onClickRow" >
             <thead>
             <tr>
                 <th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
@@ -84,7 +82,7 @@
                 <th field="signType" formatter="mappingFormatter">签名类型</th>
                 <th field="accessKey">访问帐号</th>
                 <th field="secretKey">访问秘钥</th>
-                <th field="permissions" data-options="formatter:function(value,row){return formatContent(value.replace(eval('/'+row.partnerId+':/g'),'\r\n'),50);} " width="150px">已配置权限</th>
+                <th field="permissions" width="150px">已配置权限</th>
                 <th field="comments">备注</th>
                 <th field="rowActions" data-options="formatter:function(value, row, index){return manage_apiAuth_action_show(row)}">动作</th>
             </tr>
@@ -105,4 +103,40 @@
             <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_apiAuth_showSetting();"><i class="fa fa-cog fa-lg fa-fw fa-col"></i>设置权限</a>
         </div>
     </div>
+
+    <div data-options="region:'south',border:false" style="height:45%;">
+        <div class="easyui-tabs" fit="true">
+            <div title="关联api列表">
+                <table id="manage_apiAuthMetaService_datagrid" class="easyui-datagrid" toolbar="#manage_apiAuthMetaService_toolbarZZ" fit="true" border="false" fitColumns="false" idField="id" sortName="id" sortOrder="desc">
+                    <thead>
+                    <tr>
+                        <th field="id" sum="false">id</th>
+                        <th field="serviceName">服务编号</th>
+                        <th field="serviceDesc">服务名称</th>
+                        <th field="note">服务说明</th>
+                        <th field="busiType" formatter="mappingFormatter">业务类型</th>
+                        <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
+                        <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
+<script type="text/javascript">
+
+    function manage_apiAuth_onClickRow(rowid,rowData) {
+        reloadSubList(rowData.authNo);
+    }
+
+    function reloadSubList(authNo) {
+        $.acooly.framework.loadGrid({
+            gridId: "manage_apiAuthMetaService_datagrid",
+            url: '${pageContext.request.contextPath}/manage/openapi/apiAuth/loadMetaServices.html',
+            ajaxData: {"authNo": authNo}
+        });
+    }
+
+</script>

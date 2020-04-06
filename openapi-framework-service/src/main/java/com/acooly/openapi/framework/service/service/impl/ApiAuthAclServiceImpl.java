@@ -12,6 +12,7 @@ import com.acooly.core.utils.Collections3;
 import com.acooly.module.event.EventBus;
 import com.acooly.openapi.framework.service.dao.ApiAuthAclDao;
 import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
+import com.acooly.openapi.framework.service.domain.ApiMetaService;
 import com.acooly.openapi.framework.service.event.ApiAuthUpdateEvent;
 import com.acooly.openapi.framework.service.service.ApiAuthAclService;
 import com.google.common.collect.Lists;
@@ -74,6 +75,11 @@ public class ApiAuthAclServiceImpl extends EntityServiceImpl<ApiAuthAcl, ApiAuth
     @Override
     public List<ApiAuthAcl> queryAcls(String accessKey) {
         return getEntityDao().findByAccessKey(accessKey);
+    }
+
+    @Override
+    public List<ApiMetaService> loadMetaServices(String authNo) {
+        return getEntityDao().findMetaServicesByAuthNo(authNo);
     }
 
     private void cleanupCache(ApiAuthAcl apiAuthAcl) {
