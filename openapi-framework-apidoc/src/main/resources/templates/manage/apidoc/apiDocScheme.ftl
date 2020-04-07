@@ -142,10 +142,10 @@
 
                 <!-- 每行的Action动作模板 -->
                 <div id="manage_apiDocSchemeService_action" style="display: none;">
-                    <a onclick="$.acooly.framework.confirmSubmit('/manage/apidoc/apiDocScheme/changeSchemaServiceOrder.html?direction=up','{0}','manage_apiDocSchemeService_datagrid${category}','确定','您是否要进行该操作?',reloadApisList('{1}'));" href="#" title="上移"><i class="fa fa-long-arrow-up fa-fw fa-col"></i></a>
-                    <a onclick="$.acooly.framework.confirmSubmit('/manage/apidoc/apiDocScheme/changeSchemaServiceOrder.html?direction=down','{0}','manage_apiDocSchemeService_datagrid${category}','确定','您是否要进行该操作?',reloadApisList('{1}'));" href="#" title="下移"><i class="fa fa-long-arrow-down fa-fw fa-col"></i></a>
-                    <a onclick="$.acooly.framework.confirmSubmit('/manage/apidoc/apiDocScheme/changeSchemaServiceOrder.html?direction=top','{0}','manage_apiDocSchemeService_datagrid${category}','确定','您是否要进行该操作?',reloadApisList('{1}'));" href="#" title="置顶"><i class="fa fa-eject fa-fw fa-col"></i></a>
-                    <a onclick="$.acooly.framework.confirmSubmit('/manage/apidoc/apiDocScheme/removeSchemaService.html?','{0}','manage_apiDocSchemeService_datagrid${category}','确定','您是否要进行该操作?',reloadApisList('{1}'));" href="#" title="删除"><i class="fa fa-remove fa-fw fa-col"></i></a>
+                    <a onclick="$.acooly.framework.confirmSubmit('/manage/apidoc/apiDocScheme/changeSchemaServiceOrder.html?direction=up','{0}','manage_apiDocSchemeService_datagrid${category}','确定','您是否要进行该操作?',reloadApisList);" href="#" title="上移"><i class="fa fa-long-arrow-up fa-fw fa-col"></i></a>
+                    <a onclick="$.acooly.framework.confirmSubmit('/manage/apidoc/apiDocScheme/changeSchemaServiceOrder.html?direction=down','{0}','manage_apiDocSchemeService_datagrid${category}','确定','您是否要进行该操作?',reloadApisList);" href="#" title="下移"><i class="fa fa-long-arrow-down fa-fw fa-col"></i></a>
+                    <a onclick="$.acooly.framework.confirmSubmit('/manage/apidoc/apiDocScheme/changeSchemaServiceOrder.html?direction=top','{0}','manage_apiDocSchemeService_datagrid${category}','确定','您是否要进行该操作?',reloadApisList);" href="#" title="置顶"><i class="fa fa-eject fa-fw fa-col"></i></a>
+                    <a onclick="$.acooly.framework.confirmSubmit('/manage/apidoc/apiDocScheme/removeSchemaService.html?','{0}','manage_apiDocSchemeService_datagrid${category}','确定','您是否要删除选中的服务吗?',reloadApisList);" href="#" title="删除"><i class="fa fa-remove fa-fw fa-col"></i></a>
                 </div>
 
             </div>
@@ -154,6 +154,9 @@
 </div>
 <#--<div id="edit_scheme_id${category}"></div>-->
 <script type="text/javascript">
+
+    var lastSchemeNo = "";
+
     function manage_apiDocScheme_action_formatter${category}(value, row, index){
         let actionHtml = "";
         actionHtml += formatString($('#manage_apiDocScheme_action_create${category}').html(), row.id);
@@ -177,6 +180,7 @@
 
     function manage_apiDocScheme_onClickRow${category}(rowData) {
         reloadApisList(rowData.schemeNo);
+        lastSchemeNo = rowData.schemeNo;
     }
 
     /**
@@ -192,7 +196,8 @@
             height: 450,
             onClose:function(){
                 $(this).dialog('destroy');
-                reloadApisList(schemeNo);
+                lastSchemeNo = schemeNo;
+                reloadApisList();
             }
         });
     }
@@ -200,11 +205,11 @@
     /**
      * 刷新关联API列表
      */
-    function reloadApisList(schemeNo) {
+    function reloadApisList() {
         $.acooly.framework.loadGrid({
             gridId: "manage_apiDocSchemeService_datagrid${category}",
             url: '${pageContext.request.contextPath}/manage/apidoc/apiDocScheme/schemeServiceList.html',
-            ajaxData: {"schemeNo": schemeNo}
+            ajaxData: {"schemeNo": lastSchemeNo}
         });
     }
 </script>
