@@ -24,7 +24,7 @@
     }
 
     .openapi-apilist li {
-        width: 235px;
+        width: 23.8%;
         margin: 0 10px 10px 0;
         padding: 0 8px 0 8px;
         border: 1px solid #dfdfdf;
@@ -170,6 +170,11 @@
      * 保存ACLs
      */
     function saveAcls(dial) {
+        var serviceNoValues = getServiceNoValues();
+        if(!serviceNoValues || serviceNoValues ===''){
+            $.messager.show({title: '提示信息', msg: '请至少选择一个服务'});
+            return;
+        }
         $.acooly.loading("保存中...");
         $.ajax({
             url: '/manage/openapi/apiAuth/settingSave.json',
