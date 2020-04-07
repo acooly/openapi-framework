@@ -179,8 +179,8 @@
     }
 
     function manage_apiDocScheme_onClickRow${category}(rowData) {
-        reloadApisList(rowData.schemeNo);
         lastSchemeNo = rowData.schemeNo;
+        reloadApisList();
     }
 
     /**
