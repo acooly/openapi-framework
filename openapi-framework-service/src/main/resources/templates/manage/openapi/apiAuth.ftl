@@ -106,7 +106,7 @@
 
     <div data-options="region:'south',border:false" style="height:45%;">
         <div class="easyui-tabs" fit="true">
-            <div title="关联api列表">
+            <div title="已配置权限">
                 <table id="manage_apiAuthMetaService_datagrid" class="easyui-datagrid" toolbar="#manage_apiAuthMetaService_toolbarZZ" fit="true" border="false" fitColumns="false" idField="id" sortName="id" sortOrder="desc">
                     <thead>
                     <tr>
