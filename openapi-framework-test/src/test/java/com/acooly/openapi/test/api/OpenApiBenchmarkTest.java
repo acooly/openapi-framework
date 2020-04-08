@@ -1,18 +1,17 @@
 package com.acooly.openapi.test.api;
 
 import com.acooly.core.utils.Ids;
-import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.common.message.builtin.LoginRequest;
 import com.acooly.openapi.framework.common.message.builtin.LoginResponse;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
-import com.acooly.openapi.framework.service.test.request.OrderCashierPayApiRequest;
-import com.acooly.openapi.framework.service.test.request.OrderCreateApiRequest;
-import com.acooly.openapi.framework.service.test.request.WithdrawApiRequest;
-import com.acooly.openapi.framework.service.test.response.OrderCreateApiResponse;
-import com.acooly.openapi.framework.service.test.response.WithdrawApiResponse;
+import com.acooly.openapi.framework.demo.message.request.OrderCashierPayApiRequest;
+import com.acooly.openapi.framework.demo.message.request.OrderCreateApiRequest;
+import com.acooly.openapi.framework.demo.message.request.WithdrawApiRequest;
+import com.acooly.openapi.framework.demo.message.response.OrderCreateApiResponse;
+import com.acooly.openapi.framework.demo.message.response.WithdrawApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 

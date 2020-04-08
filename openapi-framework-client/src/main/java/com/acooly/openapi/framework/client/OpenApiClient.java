@@ -11,7 +11,7 @@ import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
-import com.acooly.openapi.framework.common.enums.SignTypeEnum;
+import com.acooly.openapi.framework.common.enums.SignType;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiMessage;
 import com.acooly.openapi.framework.common.message.ApiRequest;
@@ -39,7 +39,7 @@ import java.util.Map;
 public class OpenApiClient {
     private static final String DEFAULT_VERSION = "1.0";
     private static Map<Class, List<Field>> securityFieldsMap = Maps.newConcurrentMap();
-    private String signType = SignTypeEnum.MD5.toString();
+    private String signType = SignType.MD5.code();
     private String gatewayUrl;
     private String accessKey;
     private String secretKey;
@@ -93,7 +93,6 @@ public class OpenApiClient {
             if (!sign(ApiUtils.getWaitForSignString(map)).equals(map.get(ApiConstants.SIGN))) {
                 throw new RuntimeException("验证失败");
             }
-
         }
         ApiMessage response = JsonMarshallor.INSTANCE.parse(responseContext.getBody(), clazz);
         doSecurity(response, CryptoType.decrypt);

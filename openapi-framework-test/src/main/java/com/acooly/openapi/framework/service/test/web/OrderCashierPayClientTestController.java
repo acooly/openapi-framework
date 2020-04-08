@@ -5,11 +5,10 @@ import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Servlets;
 import com.acooly.openapi.framework.client.OpenApiClient;
-import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
-import com.acooly.openapi.framework.service.test.request.OrderCashierPayApiRequest;
-import com.acooly.openapi.framework.service.test.request.OrderCreateApiRequest;
-import com.acooly.openapi.framework.service.test.response.OrderCreateApiResponse;
+import com.acooly.openapi.framework.demo.message.request.OrderCashierPayApiRequest;
+import com.acooly.openapi.framework.demo.message.request.OrderCreateApiRequest;
+import com.acooly.openapi.framework.demo.message.response.OrderCreateApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,7 +41,6 @@ public class OrderCashierPayClientTestController extends AbstractStandardEntityC
      */
     @Autowired
     private OpenApiClient openApiClient;
-
 
     /**
      * 接入方：订单支付界面：MOCK

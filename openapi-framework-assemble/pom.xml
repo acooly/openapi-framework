@@ -43,6 +43,10 @@
             <artifactId>openapi-framework-extensions</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.acooly</groupId>
+            <artifactId>openapi-framework-demo-service</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.acooly</groupId>

@@ -81,24 +81,24 @@
             url: '/manage/openapi/apiAuth/getAllService.json',
             success: function (result) {
                 if (!result.success) {
-                    $.messager.show({title: '失败', msg: result.detail});
+                    $.acooly.messager('失败', result.detail, 'danger');
                 }
                 $('#manage_openapi_apilist_container').html($.acooly.template.render("manage_openapi_apilist_template", result));
                 // 注册事件：点击行联动checkbox
                 $('.openapi-api-item').click(function () {
                     var checkbox = $(this).children().first().children();
-                    bindCheckBox($(this),checkbox);
+                    bindCheckBox($(this), checkbox);
                 });
                 loadACLs();
 
             },
             error: function (r, s, e) {
-                $.messager.show({title: '失败', msg: e});
+                $.acooly.messager('失败', e, 'danger');
             }
         });
     }
 
-    function bindCheckBox(container,checkbox) {
+    function bindCheckBox(container, checkbox) {
         if ($(checkbox).attr("checked")) {
             $(checkbox).prop("checked", false);
             $(container).removeClass("selected")
@@ -118,7 +118,7 @@
             data: {authNo: authNo},
             success: function (result) {
                 if (!result.success) {
-                    $.messager.show({title: '失败', msg: result.message});
+                    $.acooly.messager('失败', result.message, 'danger');
                     return;
                 }
                 var acls = result.rows;
@@ -134,7 +134,7 @@
                 });
             },
             error: function (r, s, e) {
-                $.messager.show({title: '失败', msg: e});
+                $.acooly.messager('失败', e, 'danger');
             }
         });
     }
@@ -150,12 +150,10 @@
                 "serviceNo": getServiceNoValues()
             },
             success: function (result) {
-                if (result.success) {
-                    $.messager.show({title: '设置成功', msg: '设置成功'});
-                }
+                $.acooly.messager("设置ACL", result.message, result.success?'success':'danger');
             },
             error: function (r, s, e) {
-                $.messager.show({title: '失败', msg: e});
+                $.acooly.messager('失败', e, 'danger');
             }
         });
     }

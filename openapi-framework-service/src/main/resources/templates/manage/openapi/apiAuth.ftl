@@ -12,7 +12,7 @@
      */
     function manage_apiAuth_showSetting() {
         $.acooly.framework.fireSelectRow('manage_apiAuth_datagrid', function (row) {
-            $('<div/>').dialog({
+            var d = $('<div/>').dialog({
                 href: '/manage/openapi/apiAuth/setting.json?id=' + row.id,
                 width: 1000, height: 600, modal: true,
                 title: '<i class="fa fa-cog fa-lg fa-fw fa-col"></i> 设置访问权限: ' + row.accessKey,
@@ -25,7 +25,6 @@
                     }, {
                         text: '<i class="fa fa-times-circle-o fa-lg fa-fw fa-col"></i> 关闭',
                         handler: function () {
-                            var d = $(this).closest('.window-body');
                             d.dialog('close');
                         }
                     }],

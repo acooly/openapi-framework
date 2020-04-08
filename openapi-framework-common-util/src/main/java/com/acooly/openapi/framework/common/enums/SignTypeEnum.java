@@ -4,8 +4,6 @@
  */
 package com.acooly.openapi.framework.common.enums;
 
-import com.acooly.core.utils.enums.Messageable;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,8 +14,10 @@ import java.util.Map;
  *
  * @author zhangpu
  * @date 2014年8月3日
+ * @see com.acooly.openapi.framework.common.enums.SignType instance
  */
-public enum SignTypeEnum implements Messageable {
+@Deprecated
+public enum SignTypeEnum {
     MD5("MD5", "MD5"),
     SHA1HEX("SHA1HEX", "SHA1HEX"),
     SHA256HEX("SHA256HEX", "SHA256HEX"),
@@ -38,12 +38,10 @@ public enum SignTypeEnum implements Messageable {
         return message;
     }
 
-    @Override
     public String code() {
         return code;
     }
 
-    @Override
     public String message() {
         return message;
     }

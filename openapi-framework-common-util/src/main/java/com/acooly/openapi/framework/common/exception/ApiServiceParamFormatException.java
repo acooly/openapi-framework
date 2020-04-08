@@ -18,32 +18,31 @@ import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
  * @author qiubo@qq.com
  * @author zhangpu
  */
-public class ApiServiceParamFormatException extends ApiServiceException {
+public class ApiServiceParamFormatException extends ApiException {
 
-  /** serialVersionUID */
-  private static final long serialVersionUID = -3257528330627711814L;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = -3257528330627711814L;
 
-  private String requiredTypeOrFormat;
+    private String requiredTypeOrFormat;
 
-  /**
-   * @param paramName 参数名
-   * @param paramValue 参数值
-   * @param requiredTypeOrFormat 期望的类型.
-   */
-  public ApiServiceParamFormatException(
-      String paramName, Object paramValue, String requiredTypeOrFormat) {
-    super(
-        ApiServiceResultCode.PARAM_FORMAT_ERROR.getCode(),
-        ApiServiceResultCode.PARAM_FORMAT_ERROR.getMessage(),
-        "参数" + paramName + "=" + paramValue + ",格式错误,需要的:" + requiredTypeOrFormat);
-    this.requiredTypeOrFormat = requiredTypeOrFormat;
-  }
+    /**
+     * @param paramName            参数名
+     * @param paramValue           参数值
+     * @param requiredTypeOrFormat 期望的类型.
+     */
+    public ApiServiceParamFormatException(
+            String paramName, Object paramValue, String requiredTypeOrFormat) {
+        super(ApiServiceResultCode.PARAM_FORMAT_ERROR, "参数" + paramName + "=" + paramValue + ",格式错误,需要的:" + requiredTypeOrFormat);
+        this.requiredTypeOrFormat = requiredTypeOrFormat;
+    }
 
-  public String getRequiredTypeOrFormat() {
-    return requiredTypeOrFormat;
-  }
+    public String getRequiredTypeOrFormat() {
+        return requiredTypeOrFormat;
+    }
 
-  public void setRequiredTypeOrFormat(String requiredTypeOrFormat) {
-    this.requiredTypeOrFormat = requiredTypeOrFormat;
-  }
+    public void setRequiredTypeOrFormat(String requiredTypeOrFormat) {
+        this.requiredTypeOrFormat = requiredTypeOrFormat;
+    }
 }

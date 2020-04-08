@@ -15,7 +15,6 @@
     <name>openapi-framework</name>
     <properties>
         <caffeine.version>2.6.2</caffeine.version>
-        <acooly.version>5.0.0-SNAPSHOT</acooly.version>
     </properties>
 
     <dependencyManagement>
@@ -24,13 +23,13 @@
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-common-util</artifactId>
-                <version>${parent.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-common</artifactId>
-                <version>${parent.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
@@ -48,12 +47,6 @@
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-mock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.acooly</groupId>
-                <artifactId>openapi-framework-test</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -86,6 +79,25 @@
                 <artifactId>openapi-framework-apidoc</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>openapi-framework-test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>openapi-framework-demo-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.acooly</groupId>
+                <artifactId>openapi-framework-demo-message</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
         </dependencies>
 
     </dependencyManagement>
@@ -103,6 +115,7 @@
         <module>openapi-framework-mock</module>
         <module>openapi-framework-client</module>
         <module>openapi-framework-notify</module>
+        <module>openapi-framework-demo</module>
 
     </modules>
 
