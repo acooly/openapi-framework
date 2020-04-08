@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class OrderCreateApiRequest extends ApiRequest {
+public class DemoOrderCreateApiRequest extends ApiRequest {
 
     @NotBlank
     @Size(max = 64)

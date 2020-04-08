@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class OrderCreateApiResponse extends ApiResponse {
+public class DemoOrderCreateApiResponse extends ApiResponse {
 
     @OpenApiField(desc = "测试金额", demo = "120.00", ordinal = 1)
     private Money testMoney;

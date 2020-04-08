@@ -9,9 +9,9 @@ import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.core.service.base.AbstractAsyncApiService;
-import com.acooly.openapi.framework.demo.message.notify.OrderCashierPayNotify;
-import com.acooly.openapi.framework.demo.message.request.OrderCashierPayApiRequest;
-import com.acooly.openapi.framework.demo.message.response.OrderCashierPayApiRedirect;
+import com.acooly.openapi.framework.demo.message.notify.DemoOrderCashierPayNotify;
+import com.acooly.openapi.framework.demo.message.request.DemoOrderCashierPayApiRequest;
+import com.acooly.openapi.framework.demo.message.response.DemoOrderCashierPayApiRedirect;
 import com.acooly.openapi.framework.demo.service.DemoApiUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,11 +29,11 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @ApiDocType(code = DemoApiUtils.API_DEMO_DOC_TYPE_CODE, name = DemoApiUtils.API_DEMO_DOC_TYPE_NAME)
 @ApiDocNote("测试同步请求，跳转支付，异步通知整个过程。<b/>第二步：跳转：订单收银台支付")
-@OpenApiService(name = "orderCashierPay", desc = "测试：订单收银台支付", responseType = ResponseType.REDIRECT, owner = "acooly", busiType = ApiBusiType.Trade)
-public class OrderCashierPayApiService extends AbstractAsyncApiService<OrderCashierPayApiRequest, OrderCashierPayApiRedirect, OrderCashierPayNotify> {
+@OpenApiService(name = "demoOrderCashierPay", desc = "测试：订单收银台支付", responseType = ResponseType.REDIRECT, owner = "acooly", busiType = ApiBusiType.Trade)
+public class DemoOrderCashierPayApiService extends AbstractAsyncApiService<DemoOrderCashierPayApiRequest, DemoOrderCashierPayApiRedirect, DemoOrderCashierPayNotify> {
 
     @Override
-    protected void doService(OrderCashierPayApiRequest request, OrderCashierPayApiRedirect redirect) {
+    protected void doService(DemoOrderCashierPayApiRequest request, DemoOrderCashierPayApiRedirect redirect) {
         // 1、对request进行必要的逻辑检查，也可以调用下层facade完成；
         //   也可以是中转参数，如没有很大的必要，建议不调用，传入下层服务处理
         // ...

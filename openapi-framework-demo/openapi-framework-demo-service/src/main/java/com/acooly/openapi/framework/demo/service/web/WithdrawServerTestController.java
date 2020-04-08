@@ -6,7 +6,7 @@ import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.demo.message.notify.WithdrawApiNotify;
+import com.acooly.openapi.framework.demo.message.notify.DemoWithdrawApiNotify;
 import com.acooly.openapi.framework.facade.api.OpenApiRemoteService;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +53,7 @@ public class WithdrawServerTestController {
         // 2、组织mock异步通知报文
         // 这里线mock默认值，也可以从请求报文中覆盖
         // 注意：异步通知的协议是以发送请求时的协议为准
-        WithdrawApiNotify notify = new WithdrawApiNotify();
+        DemoWithdrawApiNotify notify = new DemoWithdrawApiNotify();
         notify.setMerchOrderNo(merchOrderNo);
         notify.setAmountIn(Money.amout("199.60"));
         notify.setFee(Money.amout("0.40"));
@@ -89,7 +89,7 @@ public class WithdrawServerTestController {
 
         // 2、组织mock异步通知报文
         // 注意：异步通知的协议是以发送请求时的协议为准
-        WithdrawApiNotify notify = new WithdrawApiNotify();
+        DemoWithdrawApiNotify notify = new DemoWithdrawApiNotify();
         // 必选报文
         notify.setRequestNo(Ids.getDid());
         // 注意：因为没有OpenApi的原始订单，所以默认协议是JSON，这里可以设置为老协议

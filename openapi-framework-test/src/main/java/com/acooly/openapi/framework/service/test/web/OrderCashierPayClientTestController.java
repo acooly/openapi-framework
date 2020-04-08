@@ -6,9 +6,9 @@ import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Servlets;
 import com.acooly.openapi.framework.client.OpenApiClient;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
-import com.acooly.openapi.framework.demo.message.request.OrderCashierPayApiRequest;
-import com.acooly.openapi.framework.demo.message.request.OrderCreateApiRequest;
-import com.acooly.openapi.framework.demo.message.response.OrderCreateApiResponse;
+import com.acooly.openapi.framework.demo.message.request.DemoOrderCashierPayApiRequest;
+import com.acooly.openapi.framework.demo.message.request.DemoOrderCreateApiRequest;
+import com.acooly.openapi.framework.demo.message.response.DemoOrderCreateApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -59,8 +59,8 @@ public class OrderCashierPayClientTestController extends AbstractStandardEntityC
      *
      * @param httpRequest
      */
-    private OrderCreateApiRequest getOrderCreateApiRequest(HttpServletRequest httpRequest) {
-        OrderCreateApiRequest request = new OrderCreateApiRequest();
+    private DemoOrderCreateApiRequest getOrderCreateApiRequest(HttpServletRequest httpRequest) {
+        DemoOrderCreateApiRequest request = new DemoOrderCreateApiRequest();
         try {
             bindNotValidator(httpRequest, request);
         } catch (Exception e) {
@@ -86,13 +86,13 @@ public class OrderCashierPayClientTestController extends AbstractStandardEntityC
     @RequestMapping("pay")
     public void mockPay(HttpServletRequest request, HttpServletResponse response) {
         // 1.创建支付订单 mock
-        OrderCreateApiRequest orderCreateApiRequest = getOrderCreateApiRequest(request);
-        openApiClient.send(orderCreateApiRequest, OrderCreateApiResponse.class);
+        DemoOrderCreateApiRequest orderCreateApiRequest = getOrderCreateApiRequest(request);
+        openApiClient.send(orderCreateApiRequest, DemoOrderCreateApiResponse.class);
 
         // 2.请求支付网关收银台跳转支付
         String merchOrderNo = orderCreateApiRequest.getMerchOrderNo();
         String amount = orderCreateApiRequest.getAmount().toString();
-        OrderCashierPayApiRequest apiRequest = new OrderCashierPayApiRequest();
+        DemoOrderCashierPayApiRequest apiRequest = new DemoOrderCashierPayApiRequest();
         apiRequest.setRequestNo(Ids.gid());
         apiRequest.setService("orderCashierPay");
         apiRequest.setMerchOrderNo(merchOrderNo);

@@ -18,5 +18,5 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2020-03-05 13:45
  */
 @Slf4j
-public class GoodsListApiResponse extends PageApiResponse<GoodsInfo> {
+public class DemoGoodsListApiResponse extends PageApiResponse<GoodsInfo> {
 }

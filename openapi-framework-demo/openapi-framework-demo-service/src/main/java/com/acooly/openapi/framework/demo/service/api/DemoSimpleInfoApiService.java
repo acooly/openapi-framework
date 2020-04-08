@@ -26,8 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApiDocType(code = DemoApiUtils.API_DEMO_DOC_TYPE_CODE, name = DemoApiUtils.API_DEMO_DOC_TYPE_NAME)
 @ApiDocNote("特殊字符专用简单测试")
-@OpenApiService(name = "simpleInfo", desc = "测试：特殊字符报文", responseType = ResponseType.SYN, owner = "zhangpu", busiType = ApiBusiType.Trade)
-public class SimpleInfoApiService extends BaseApiService<ApiRequest, ApiResponse> {
+@OpenApiService(name = "demoSimpleInfo", desc = "测试：特殊字符报文", responseType = ResponseType.SYN, owner = "zhangpu", busiType = ApiBusiType.Trade)
+public class DemoSimpleInfoApiService extends BaseApiService<ApiRequest, ApiResponse> {
     @Override
     protected void doService(ApiRequest request, ApiResponse response) {
 

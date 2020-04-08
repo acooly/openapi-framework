@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
  */
 @Getter
 @Setter
-public class WithdrawApiResponse extends ApiResponse {
+public class DemoWithdrawApiResponse extends ApiResponse {
 
     @NotBlank
     @Size(max = 64)

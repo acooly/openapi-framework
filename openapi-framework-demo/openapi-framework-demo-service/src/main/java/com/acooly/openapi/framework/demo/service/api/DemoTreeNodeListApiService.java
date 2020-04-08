@@ -18,8 +18,8 @@ import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.core.service.base.BaseApiService;
 import com.acooly.openapi.framework.demo.message.dto.GoodsInfo;
 import com.acooly.openapi.framework.demo.message.dto.TreeNode;
-import com.acooly.openapi.framework.demo.message.request.TreeNodeListApiRequest;
-import com.acooly.openapi.framework.demo.message.response.TreeNodeListApiResponse;
+import com.acooly.openapi.framework.demo.message.request.DemoTreeNodeListApiRequest;
+import com.acooly.openapi.framework.demo.message.response.DemoTreeNodeListApiResponse;
 import com.acooly.openapi.framework.demo.service.DemoApiUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -33,15 +33,15 @@ import java.util.Map;
 @ApiDocType(code = DemoApiUtils.API_DEMO_DOC_TYPE_CODE, name = DemoApiUtils.API_DEMO_DOC_TYPE_NAME)
 @ApiDocNote("树形递归结构报文测试")
 @OpenApiService(
-        name = "treeNodeList",
+        name = "demoTreeNodeList",
         desc = "测试：树形结构查询",
         responseType = ResponseType.SYN,
-        owner = "openApi-arch",
+        owner = "acooly",
         busiType = ApiBusiType.Trade
 )
-public class TreeNodeListApiService extends BaseApiService<TreeNodeListApiRequest, TreeNodeListApiResponse> {
+public class DemoTreeNodeListApiService extends BaseApiService<DemoTreeNodeListApiRequest, DemoTreeNodeListApiResponse> {
     @Override
-    protected void doService(TreeNodeListApiRequest request, TreeNodeListApiResponse response) {
+    protected void doService(DemoTreeNodeListApiRequest request, DemoTreeNodeListApiResponse response) {
 
         List<GoodsInfo> goodsInfos = DemoApiUtils.buildGoodsList(2, null);
         GoodsInfo goodsInfo = Collections3.getFirst(goodsInfos);

@@ -4,7 +4,7 @@ import com.acooly.core.utils.Money;
 import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.message.ApiNotify;
-import com.acooly.openapi.framework.demo.message.request.WithdrawApiRequest;
+import com.acooly.openapi.framework.demo.message.request.DemoWithdrawApiRequest;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +20,7 @@ import javax.validation.constraints.Size;
  */
 @Getter
 @Setter
-public class WithdrawApiNotify extends ApiNotify {
+public class DemoWithdrawApiNotify extends ApiNotify {
 
     @NotBlank
     @Size(max = 64)
@@ -46,7 +46,7 @@ public class WithdrawApiNotify extends ApiNotify {
 
     @OpenApiField(desc = "到账方式", constraint = "到账方式,默认:T1", demo = "T1", ordinal = 6)
     @Size(max = 1, min = 1, message = "长度为1字符")
-    private WithdrawApiRequest.DelayEnum delay = WithdrawApiRequest.DelayEnum.T1;
+    private DemoWithdrawApiRequest.DelayEnum delay = DemoWithdrawApiRequest.DelayEnum.T1;
 
     @NotNull
     @Size(max = 16)

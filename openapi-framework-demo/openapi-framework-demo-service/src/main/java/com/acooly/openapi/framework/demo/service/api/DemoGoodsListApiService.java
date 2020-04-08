@@ -15,8 +15,8 @@ import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.enums.ResponseType;
 import com.acooly.openapi.framework.core.service.base.BaseApiService;
 import com.acooly.openapi.framework.demo.message.dto.GoodsInfo;
-import com.acooly.openapi.framework.demo.message.request.GoodsListApiRequest;
-import com.acooly.openapi.framework.demo.message.response.GoodsListApiResponse;
+import com.acooly.openapi.framework.demo.message.request.DemoGoodsListApiRequest;
+import com.acooly.openapi.framework.demo.message.response.DemoGoodsListApiResponse;
 import com.acooly.openapi.framework.demo.service.DemoApiUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,10 +29,10 @@ import java.util.List;
 @Slf4j
 @ApiDocType(code = DemoApiUtils.API_DEMO_DOC_TYPE_CODE, name = DemoApiUtils.API_DEMO_DOC_TYPE_NAME)
 @ApiDocNote("提供OpenApi的标准分页列表查询Demo：商品列表分页条件查询，注意：数据都是MOCK的，重点演示结构")
-@OpenApiService(name = "goodsList", desc = "商品列表", responseType = ResponseType.SYN, owner = "zhangpu", busiType = ApiBusiType.Trade)
-public class GoodsListApiService extends BaseApiService<GoodsListApiRequest, GoodsListApiResponse> {
+@OpenApiService(name = "demoGoodsList", desc = "商品列表", responseType = ResponseType.SYN, owner = "zhangpu", busiType = ApiBusiType.Trade)
+public class DemoGoodsListApiService extends BaseApiService<DemoGoodsListApiRequest, DemoGoodsListApiResponse> {
     @Override
-    protected void doService(GoodsListApiRequest request, GoodsListApiResponse response) {
+    protected void doService(DemoGoodsListApiRequest request, DemoGoodsListApiResponse response) {
         List<GoodsInfo> goodsInfoList = DemoApiUtils.buildGoodsList(request.getLimit(), request.getName());
         response.setRows(goodsInfoList);
         response.setTotalPages(1);

@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
  */
 @Getter
 @Setter
-public class GoodsListApiRequest extends PageApiRequest {
+public class DemoGoodsListApiRequest extends PageApiRequest {
 
     @Size(max = 32)
     @OpenApiField(desc = "商品名称", constraint = "名称模糊查询条件", demo = "牛肉", ordinal = 1)

@@ -1,23 +1,24 @@
-package com.acooly.openapi.framework.demo.message.notify;
+package com.acooly.openapi.framework.demo.message.response;
 
 import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.acooly.openapi.framework.common.message.ApiNotify;
-import com.acooly.openapi.framework.demo.message.enums.OrderPayStatus;
+import com.acooly.openapi.framework.common.message.ApiResponse;
 import lombok.Getter;
 import lombok.Setter;
-
 import javax.validation.constraints.NotBlank;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
+ * 收银台支付 跳转到下层服务的报文
+ *
  * @author zhangpu
- * @date 2016/2/12
+ * @date 2019-01-28 15:03
  */
 @Getter
 @Setter
-public class OrderCashierPayNotify extends ApiNotify {
+public class DemoOrderCashierPayApiRedirect extends ApiResponse {
 
     @NotBlank
     @Size(max = 64)
@@ -29,12 +30,7 @@ public class OrderCashierPayNotify extends ApiNotify {
     private Money amount;
 
     @NotBlank
-    @OpenApiField(desc = "买家用户ID", demo = "1212121212", ordinal = 3)
+    @OpenApiField(desc = "买家用户ID", demo = "12312312312", ordinal = 3)
     private String payerUserId;
-
-    @NotNull
-    @OpenApiField(desc = "状态", ordinal = 4)
-    private OrderPayStatus payStatus;
-
 
 }

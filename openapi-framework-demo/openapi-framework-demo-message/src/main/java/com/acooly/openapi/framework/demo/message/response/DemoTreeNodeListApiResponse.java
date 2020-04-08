@@ -15,5 +15,5 @@ import com.acooly.openapi.framework.demo.message.dto.TreeNode;
 /**
  * @author zhangpu 2019-01-07 17:58
  */
-public class TreeNodeListApiResponse extends PageApiResponse<TreeNode> {
+public class DemoTreeNodeListApiResponse extends PageApiResponse<TreeNode> {
 }

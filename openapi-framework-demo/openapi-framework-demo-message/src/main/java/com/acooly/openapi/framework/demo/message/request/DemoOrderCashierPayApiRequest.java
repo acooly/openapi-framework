@@ -1,24 +1,24 @@
-package com.acooly.openapi.framework.demo.message.response;
+package com.acooly.openapi.framework.demo.message.request;
 
 import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.common.message.ApiAsyncRequest;
 import lombok.Getter;
 import lombok.Setter;
-import javax.validation.constraints.NotBlank;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * 收银台支付 跳转到下层服务的报文
+ * 收银台跳转支付 请求报文
  *
  * @author zhangpu
- * @date 2019-01-28 15:03
+ * @date 2019-1-28
  */
 @Getter
 @Setter
-public class OrderCashierPayApiRedirect extends ApiResponse {
+public class DemoOrderCashierPayApiRequest extends ApiAsyncRequest {
 
     @NotBlank
     @Size(max = 64)
@@ -26,11 +26,10 @@ public class OrderCashierPayApiRedirect extends ApiResponse {
     private String merchOrderNo;
 
     @NotNull
-    @OpenApiField(desc = "支付金额", ordinal = 2)
+    @OpenApiField(desc = "支付金额", demo = "200.01", ordinal = 2)
     private Money amount;
 
-    @NotBlank
-    @OpenApiField(desc = "买家用户ID", demo = "12312312312", ordinal = 3)
+    @OpenApiField(desc = "买家用户ID", demo = "23412341234", ordinal = 3)
     private String payerUserId;
 
 }

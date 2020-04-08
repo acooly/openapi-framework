@@ -14,5 +14,5 @@ import com.acooly.openapi.framework.common.message.PageApiRequest;
 /**
  * @author zhangpu 2019-01-07 17:57
  */
-public class TreeNodeListApiRequest extends PageApiRequest {
+public class DemoTreeNodeListApiRequest extends PageApiRequest {
 }

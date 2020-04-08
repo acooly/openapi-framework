@@ -9,8 +9,8 @@ import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests4;
 import com.acooly.openapi.framework.demo.message.dto.GoodsInfo;
 import com.acooly.openapi.framework.demo.message.enums.GoodType;
-import com.acooly.openapi.framework.demo.message.request.OrderCreateApiRequest;
-import com.acooly.openapi.framework.demo.message.response.OrderCreateApiResponse;
+import com.acooly.openapi.framework.demo.message.request.DemoOrderCreateApiRequest;
+import com.acooly.openapi.framework.demo.message.response.DemoOrderCreateApiResponse;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class OrderOpenApiTest4 extends AbstractApiServieTests4 {
     @Test
     public void testCreateOrder() throws Exception {
         service = "createOrder";
-        OrderCreateApiRequest request = new OrderCreateApiRequest();
+        DemoOrderCreateApiRequest request = new DemoOrderCreateApiRequest();
         request.setRequestNo(Ids.getDid());
         request.setMerchOrderNo(Ids.getDid());
         request.setService("orderCreate");
@@ -57,7 +57,7 @@ public class OrderOpenApiTest4 extends AbstractApiServieTests4 {
 
         request.setGoodsInfos(goodsInfos);
 //        request.ext("xx", "oo");
-        OrderCreateApiResponse response = request(request, OrderCreateApiResponse.class);
+        DemoOrderCreateApiResponse response = request(request, DemoOrderCreateApiResponse.class);
         log.info("{}", response);
         log.info("订单号: {}", request.getMerchOrderNo());
         assertThat(response).isNotNull();

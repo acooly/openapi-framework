@@ -2,7 +2,7 @@ package com.acooly.openapi.framework.service.test.web;
 
 import com.acooly.core.utils.Servlets;
 import com.acooly.openapi.framework.common.OpenApiTools;
-import com.acooly.openapi.framework.demo.message.notify.WithdrawApiNotify;
+import com.acooly.openapi.framework.demo.message.notify.DemoWithdrawApiNotify;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class WithdrawClientTestController {
 
         try {
             // 1、接收通知报文；2、验签和解密；3、组织报文为报文对象
-            WithdrawApiNotify withdrawApiNotify = openApiTools.notice(request, WithdrawApiNotify.class);
+            DemoWithdrawApiNotify withdrawApiNotify = openApiTools.notice(request, DemoWithdrawApiNotify.class);
             if (!withdrawApiNotify.isSuccess()) {
                 // 通知的业务失败，但通知是正常接收的。你需要进行对应的业务处理。
                 log.warn("提现 [客户端] 异步通知业务不成功");
