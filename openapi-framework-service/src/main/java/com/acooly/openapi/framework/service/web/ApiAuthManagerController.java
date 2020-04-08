@@ -98,8 +98,9 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
                 acls.add(apiAuthAcl);
             }
             apiAuthAclService.merge(acls);
+            result.setMessage("设置ACL权限成功");
         } catch (Exception e) {
-            handleException(result, "保持ACL权限", e);
+            handleException(result, "设置ACL权限", e);
         }
         return result;
     }
