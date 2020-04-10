@@ -67,7 +67,7 @@
 
 <script id="modal-template" type="text/html">
     <div class="layer multi-layer cross_box" style="">
-        <form id="xForm" style="width: 600px;">
+        <form id="xForm" style="width: 650px;">
             <div class="row fn-clear">
                 <div class="left-box fn-left">
                     <select name="from[]" id="search" class="select-box form-control" size="8" multiple="multiple">
