@@ -4,14 +4,13 @@
  */
 package com.acooly.openapi.test.api;
 
-import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Ids;
-import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
+import com.acooly.core.utils.Money;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests4;
-import com.acooly.openapi.framework.service.test.dto.GoodInfo;
-import com.acooly.openapi.framework.service.test.enums.GoodType;
-import com.acooly.openapi.framework.service.test.request.OrderCreateApiRequest;
-import com.acooly.openapi.framework.service.test.response.OrderCreateApiResponse;
+import com.acooly.openapi.framework.demo.message.dto.GoodsInfo;
+import com.acooly.openapi.framework.demo.message.enums.GoodType;
+import com.acooly.openapi.framework.demo.message.request.DemoOrderCreateApiRequest;
+import com.acooly.openapi.framework.demo.message.response.DemoOrderCreateApiResponse;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -34,7 +33,7 @@ public class OrderOpenApiTest4 extends AbstractApiServieTests4 {
     @Test
     public void testCreateOrder() throws Exception {
         service = "createOrder";
-        OrderCreateApiRequest request = new OrderCreateApiRequest();
+        DemoOrderCreateApiRequest request = new DemoOrderCreateApiRequest();
         request.setRequestNo(Ids.getDid());
         request.setMerchOrderNo(Ids.getDid());
         request.setService("orderCreate");
@@ -48,17 +47,17 @@ public class OrderOpenApiTest4 extends AbstractApiServieTests4 {
         request.setBuyerCertNo("330702194706165014");
         request.setPassword(encrypt("12312312"));
         request.setContext(content);
-        List<GoodInfo> goodInfos = Lists.newArrayList();
-        GoodInfo goodInfo = new GoodInfo();
-        goodInfo.setGoodType(GoodType.actual);
-        goodInfo.setName("天子精品");
-        goodInfo.setPrice(Money.amout("400.00"));
-        goodInfo.setReferUrl("http://acooly.cn/tianzi");
-        goodInfos.add(goodInfo);
+        List<GoodsInfo> goodsInfos = Lists.newArrayList();
+        GoodsInfo goodsInfo = new GoodsInfo();
+        goodsInfo.setGoodType(GoodType.actual);
+        goodsInfo.setName("天子精品");
+        goodsInfo.setPrice(Money.amout("400.00"));
+        goodsInfo.setReferUrl("http://acooly.cn/tianzi");
+        goodsInfos.add(goodsInfo);
 
-        request.setGoodsInfos(goodInfos);
+        request.setGoodsInfos(goodsInfos);
 //        request.ext("xx", "oo");
-        OrderCreateApiResponse response = request(request, OrderCreateApiResponse.class);
+        DemoOrderCreateApiResponse response = request(request, DemoOrderCreateApiResponse.class);
         log.info("{}", response);
         log.info("订单号: {}", request.getMerchOrderNo());
         assertThat(response).isNotNull();

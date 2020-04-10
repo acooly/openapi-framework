@@ -12,21 +12,20 @@
      */
     function manage_apiAuth_showSetting() {
         $.acooly.framework.fireSelectRow('manage_apiAuth_datagrid', function (row) {
-            var dial = $('<div/>').dialog({
-                class:'testclass',
+            var d = $('<div/>').dialog({
                 href: '/manage/openapi/apiAuth/setting.json?id=' + row.id,
-                width: 1000, height: 630, modal: true,
+                width: 1000, height: 600, modal: true,
                 title: '<i class="fa fa-cog fa-lg fa-fw fa-col"></i> 设置访问权限: ' + row.accessKey,
                 buttons: [
                     {
                         text: '<i class="fa fa-floppy-o fa-lg fa-fw fa-col"></i> 保存',
                         handler: function () {
-                            saveAcls(dial);
+                            saveAcls(d);
                         }
                     }, {
                         text: '<i class="fa fa-times-circle-o fa-lg fa-fw fa-col"></i> 关闭',
                         handler: function () {
-                            dial.dialog('close');
+                            d.dialog('close');
                         }
                     }],
                 onClose: function () {
@@ -56,8 +55,8 @@
                 <tr>
                     <td align="left">
                         <div>
-                            接入方编码: <input type="text" class="text" size="15" name="search_LIKE_partnerId"/>
-                            访问帐号: <input type="text" class="text" size="15" name="search_LIKE_accessKey"/>
+                            PartnerId: <input type="text" class="text" size="15" name="search_LIKE_partnerId"/>
+                            AccessKey: <input type="text" class="text" size="15" name="search_LIKE_accessKey"/>
                             修改时间: <input size="15" type="text" class="text" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
                             至 <input size="15" type="text" class="text" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
                             <a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false" onclick="$.acooly.framework.search('manage_apiAuth_searchform','manage_apiAuth_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>

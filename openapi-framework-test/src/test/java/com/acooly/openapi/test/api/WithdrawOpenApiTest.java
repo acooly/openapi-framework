@@ -5,8 +5,8 @@ import com.acooly.core.utils.Money;
 import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
-import com.acooly.openapi.framework.service.test.request.WithdrawApiRequest;
-import com.acooly.openapi.framework.service.test.response.WithdrawApiResponse;
+import com.acooly.openapi.framework.demo.message.request.DemoWithdrawApiRequest;
+import com.acooly.openapi.framework.demo.message.response.DemoWithdrawApiResponse;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -47,19 +47,18 @@ public class WithdrawOpenApiTest extends AbstractApiServieTests {
      */
     @Test
     public void testWithdraw() throws Exception {
-        WithdrawApiRequest request = new WithdrawApiRequest();
-//        request.setProtocol(ApiProtocol.HTTP_FORM_JSON);
+        DemoWithdrawApiRequest request = new DemoWithdrawApiRequest();
         request.setRequestNo(Ids.RandomNumberGenerator.getNewString(20));
         request.setMerchOrderNo(Ids.RandomNumberGenerator.getNewString(20));
         request.setUserId(request.getMerchOrderNo());
-        request.setService("withdraw");
+        request.setService("demoWithdraw");
         request.setAmount(amount);
-        request.setDelay(WithdrawApiRequest.DelayEnum.T1);
+        request.setDelay(DemoWithdrawApiRequest.DelayEnum.T1);
         request.setContext("会话信息，透传返回");
         request.ext("xx", "oo");
         // 该地址是test模块使用controller模拟的客户notifyUrl地址,实现在测试中，客户端打印接受的通知信息
         request.setNotifyUrl(TEST_NOTIFY_URL);
-        WithdrawApiResponse response = request(request, WithdrawApiResponse.class);
+        DemoWithdrawApiResponse response = request(request, DemoWithdrawApiResponse.class);
         log.info("提现申请提交成功，订单号: {}", request.getMerchOrderNo());
     }
 
@@ -84,7 +83,7 @@ public class WithdrawOpenApiTest extends AbstractApiServieTests {
         Map<String, String> parameters = Maps.newHashMap();
         parameters.put(ApiConstants.GID, gid);
         parameters.put(ApiConstants.PARTNER_ID, partnerId);
-        parameters.put("merchOrderNo", "62374886002201201786");
+        parameters.put("merchOrderNo", "50672933596955771549");
         parameters.put("amountIn", "199.60");
         parameters.put("fee", "0.40");
         parameters.put("delay", "T1");

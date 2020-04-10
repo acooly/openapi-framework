@@ -1,500 +1,254 @@
-<!-- title: OpenApi接入开发指南 -->
+<!-- title: OpenApi接入工具 -->
 <!-- type: openapi -->
 <!-- author: zhangpu -->
-<!-- date: 2019-01-07 -->
-## 1. 网关地址
-
-测试环境：
-https://api.xxx.com/gateway.do
-
-正式环境：
-https://api.xxx.com/gateway.do
-
-## 2. 交互流程
-
-1. 接入方：根据报文协议组织参数，并根据协议对需要加密的参数进行加密替换值
-2. 接入方：对报文体整体签名并设置到x-api-sign中
-3. 接入方：通过http协议请求网关发送报文头和报文体数据
-4. 网关方：接受请求后，解析，验证，处理，组织返回报文，签名返回报文后响应给接入方
-5. 接入方：接受响应或通知报文数据，并对需要解码（URLEncoding的非西文或特殊字符）
-6. 接入方：根据报文协议定义按需解码数据
-7. 接入方：获得可读响应/通知报文，进行本地业务处理。
-
-## 3. 通讯模式
-
-文档中涉及的通讯机制和交互模式总共有四种，请文档使用开发人员特别注意各服务的通讯机制便于正确的进行通讯对接。
-
-### 3.1 同步通讯
-
-1. **构造请求数据**：商户根据服务平台提供的接口规则，通过程序生成得到签名结果及要传输给服务平台的数据集合。
-2. **发送请求数**：把构造完成的数据集合，通过页面链接跳转或表单提交的方式传递给服务平台。
-3. **服务处理**：服务平台得到这些集合后，会先进行安全校验等验证，一系列验证通过后便会处理这次发送过来的数据请求。
-4. **同步响应数据**：对于处理完成的交易，服务平台以同步响应的方式返回处理结果和数据，响应数据在同一个http连接的response报文的body体中返回，以JSON格式进行传输。
-5. **响应数据处理**：商户系统同步接收到http响应后，获取Http响应的body体中的JSON报文体，根据具体服务接
-
-### 3.2 异步通讯
-
-1. **构造请求数据**：商户根据服务平台提供的接口规则，通过程序生成得到签名结果及要传输给服务平台的数据集合。特别的为保障异步通知能正确的通知到商户系统，请保证服务器异步通知URL链接（notifyUrl）上无任何特别字符，如空格、HTML标签、开发系统自带抛出的异常提示信息等，也不能后接queryString。notifyUrl格式实例如下：
-	* http://merchant-site/notifyUrl.html (正确)
-	* http://merchant-site/notifyUrl.html?busiType=2 (错误，不能后接queryString)
-	* http://merchant-site/ notifyUrl.html (错误，url中间不能有空格)
-2. **发送请求数据**：商户系统通过HTTP-POST方式发送请求数据到服务平台网关。
-3. **服务同步处理**：服务平台接收商户系统请求数据，进行同步业务处理。
-4. **同步返回结果**：服务平台同步响应商户系统服务同步处理结果，一般情况返回的结果如果是成功则表示请求已接收或完成部分处理，需要商户系统等待异步通知业务最终处理结果；如果是失败则表示业务处理已终止，无后续异步通知。
-5. **同步返回数据处理**：商户系统收到服务平台同步响应数据后，进行相关的业务或状态处理。
-6. **服务异步处理**：服务平台返回同步处理结果后，会继续异步处理业务逻辑（如：等待银行处理结果返回后，进行进一步处理等）。
-7. **异步通知处理结果**：服务平台在异步完成业务处理，得到该笔业务最终处理结果后，通过商户系统请求时传入的notifyUrl, 使用http-post方式请求notifyUrl，通知最后处理结果。
-8. **异步通知数据处理**：商户系统在成功收到异步通知后，需要在响应体(http响应的body中)中打印输出”success” （不包含引号）表示商户系统已成功收到异步通知。如果商户反馈给服务平台的字符不是success这7个字符，服务平台服务器会不断重发通知，直到超过24小时。一般情况下，24小时以内完成8次通知（通知的间隔频率一般是：2m,10m,10m,1h,2h,6h,15h）
-
->注意：异步通讯的交易最终结果以异步通知为准，商户端必须处理异步通知结果（如没有异步通知的特别情况，请以具体API服务说明为准）。
-
-### 3.3 同步转异步
-
-
-同步转异步的主体交互模式完全同异步通讯。不同的是异步通知是可选的，只有在同步响应返回code=PROCESSING的时候才会有异步通知。具体根据"异步通讯"第5步的时候商户系统需要对返回的code进行如下判断：
-
-* 如果code=PROCESSING,那么表示该业务返回时没有完成最终处理，当前正在处理中，需要等待后续异步通知最终结果；
-* 如果code=SUCCESS表示该业务已经完成最终处理，后续无异步通知。
-* 如果code为其他值的情况表示处理错误响应，已经是最终结果，无后续异步处理。
-
-### 3.4 跳转通讯
-
-跳转通讯主要提供商户发起请求直接跳转到服务平台的页面进行业务处理的场景。如上图所示，主要流程描述如下：
-
-1. **构造请求数据**：商户根据服务平台提供的接口规则，通过程序生成得到签名结果及要传输给服务平台的数据集合。
-2. **构造请求**：使用第1步签名后的完整报文，组织页面form表单或对应的POST报文，请求服务平台网关（如果是form表单，action为服务平台网关）。
-3. **http-form表单请求**：把构造完成的数据集合，通过页面链接跳转或表单提交的方式传递给服务平台。
-4. **服务处理**：服务平台得到这些数据后，会先进行安全校验等验证，验证通过后便会处理这次发送过来的数据请求。
-5. **重定向返回**：完成服务处理后，服务平台使用重定向返回服务平台对应功能页面的URL和参数（queryString方式）。
-6. **重定向跳转到服务平台功能页面**：用户浏览器收到重定向响应后，会自动重新请求跳转的地址，跳转到对应的服务平台功能页面。
-7. **服务平台页面操作和处理**：用户在服务平台功能界面提交相关业务数据后由服务平台完成业务处理。
-8. **同步跳转回商户页面**： 用户通过第7步完成业务操作后，服务平台请求第1步请求中的returnUrl，跳转回商户界面，同时通过get参数(queryString方式)同步通知处理结果。
-9. **处理和显示结果**：商户系统收到同步通知后，可根据同步通知参数进行业务处理和界面显示。
-10. **异步通知处理结果**：在完成同步通知和跳转后，服务平台会根据商户系统请求时传入的notifyUrl进行POST异步通知商户系统处理结果。处理默认同异步通讯。
-11. **异步通知数据处理**：根据具体服务接口定义的结构解析获取数据后，进行商户系统的业务处理。
-
-## 4. 通讯协议
-
-通讯协议模块主要定义API接口的技术通信协议的详细说明和报文定义规则。
-
-### 4.1 通信协议
-
-所有的基础通信采用http/https协议进行网络通讯，主要推荐以POST为主，同时支持GET。
-
-### 4.2 报文协议
-
-报文协议定义请求，响应，通知等报文的组装模式（序列化）。目前我们采用HTTP/JSON模式。
-
-#### 4.2.1 报文结构
-
-所有的报文都采用HTTP头参数+HTTP-BODY数据体两部分。如下：
-
-| HTTP-HEADER   |
-|---------|
-|Content-Type: application/json;charset=UTF-8|
-|x-api-accesskey|
-|x-api-signType|
-|x-api-sign|
-|其他标准HTTP头参数...|
-
-
-|HTTP-BODY|
-|---------|
-|JSON结构报文体：包含公共和自定义两部分。|
-
-
-* **HTTP-HEADER**: 必须传入协议定义的三个标准参数，其他参数遵循标准HTTP协议头参数行为。注意，http的Content-Type请设置为：application/json格式。详细协议定义，请参考后面章节的报文定义。
-* **HTTP-BODY**：请求的报文数据体，纯JSON结构体
-
-#### 4.2.2 报文编码
-
-编码格式采用UTF-8，对参数值中所有非西文数据采用UTF-8的URLEncoding
-
-#### 4.2.3 报文示例
-
-
-* **请求报文**：采用post表单或get-queryString模式组装报文, 所有参数的值在发送前需要进行UTF-8的URLEncode。
-
-	POST实例：
-	
-	```http
-	POST /gateway.do HTTP/1.1
-	Content-Length: 374
-	Content-Type: application/json;charset=UTF-8
-	Host: api.xxx.com
-	x-api-accessKey: U19021017340062100003
-	x-api-signType: MD5
-	x-api-sign:262402fcbe91259091b46b8e2497088a
-	Connection: Keep-Alive
-	
-	{
-		"service": "withdraw",
-		"context": "会话参数，请求传入，响应和通知报文透传回。",
-		"notifyUrl": "`RT;",
-		"partnerId": "20141229020000062199",
-		...
-	}
-	```
-
-	get-queryString实例:
-	
-	```http
-	http://api.xxx.com/geteway.do?key1=value1&key2=value2&key3=%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6
-	```
-
-* **响应报文**：网关处理完成后的同步响应报文采用http-body-json模式组装报文，所有的响应参数采用UTF-8编码json格式，直接写入响应报文的body体数据流。
-
-	实例：
-	
-	```http
-	HTTP/1.1 200 OK
-	Date: Sun Feb 10 17:34:00 CST 2019
-	Content-Type: application/json;charset=UTF-8
-	Content-Length: 300
-	Keep-Alive: timeout=15, max=100
-	x-api-accessKey: U19021017340048100004
-	x-api-signType: MD5
-	x-api-sign:d6426e6e4299952a2da51caad0ef0e9b
-	Connection: Keep-Alive
-
-	{
-		"amount":"88.66",
-		"amountIn":"88.66",
-		"requestNo":"20150821000001",
-		"tradeNo":"1234567980",
-		"code":"EXECUTE_SUCCESS",
-		"sign":"05d37ec6daa420c23d13db403d920123",
-		"message":"成功",
-		...
-	}
-	```
-
-* **通知报文**：通知报文是网关完成处理后，主动请求商户端通知处理的结果。其中包括同步通知和异步通知，同步通知的地址为请求报文中传入的returnUrl, 异步通知的地址为请求报文中商户端传入的notifyUrl。同步通知采用http/redirect方式跳转returnUrl通知，采用http-get方式，异步通知采用http-post方式后台同步请求通知商户端。
-
-	同步通知报文实例：
-	
-	```
-	http://www.merchant.com/returnUrl.html?key1=value1&key2=value2&key3=%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6
-	```
-	
-	>其中：http://www.merchant.com/returnUrl.html 是商户端请求时传入的returnUrl.
-	
-	异步通知报文实例：
-	
-	```http
-	POST www.mechant.com/notify.html HTTP/1.1
-	Content-Length: 331
-	Content-Type: application/json;charset=UTF-8
-	Host: www.mechant.com
-	x-api-accessKey: U19021017340005100005
-	x-api-signType: MD5
-	x-api-sign:9eaa5e12e5a36b1c3f7b5dcbdb29cd83
-	Connection: Keep-Alive
-	
-	{
-		"code": "SUCCESS",
-		"service": "withdraw",
-		"message": "处理成功",
-		"status": "success",
-		...
-	}
-	```
-	
-### 4.4 报文语义
-
-所有API服务的报文定义中，我们采用统一的数据类型和状态表示语义。
-
-#### 4.4.1 类型
-
-类型表示报文数据项的数据类型和长度，主要的表示语义如下：
-
-* S(x)：x为数字，表示字符串最大长度为x，最小长度为0，如果该字段状态为必选则最小长度为1
-* S(x-y)：x和y为数字，表示字符串长度范围为：x-y，包含x和y
-* SF(x): x为数字，表示字符串固定长度为x。
-* n(x), x为数字，表示为数字类型，最大长度为x， n(x-y)和nf(x)与字符串同理。
-* M：表示money类型，支持两位小数点的元。如:2000.01，10000或100.00
-* Object/JSON: 表示对象类型，下面会紧跟Object的子报文结构定义。
-* Array/JSON-ARRAY: 表示数组对象类型，下面会紧跟数组成员对象的子报文结构定义。
-
-#### 4.4.2 状态
-状态该数据项在段中的填充状态，有三种情况，必选，可选，条件选择。
-
-* “M”：为必选型(Mandatory),表示必须报送该数据项。
-* “O”：为可选型(Optional),表示可以填写也可以不填写该数据项，如果不填写则为空。
-* “C”：为有条件选择型(Conditional),表示在符合条件的情况下,必须填写此数据项,不符
-合条件的情况下,可以不填写此数据项，相关条件一般会在具体报文说明中明确说明。
-
-### 4.5 报文定义
-
-网关所有通讯模式的报文定义都遵循统一的规则，所有报文都基于**报文头**，**报文体公共报文（我们简称：公共报文）**，后续的所有业务报文定义只定义业务部分，公共部分以本模块定义的公共报文作为准，完整的报文由公共报文加上业务报文组成。同时，所有报文数据项的定义都明确类型，长度等关键信息。
-
-完整的报文定义 = 报文头 + 公共报文 + 具体接口定义的业务报文
-
-#### 4.5.1 报文头
-
-报文头是每个请求，响应或通知报文都必须传入的头参数，采用HTTP协议头（Header）方式传入，包含一个标准参数和三个框架自定义参数。
-
-|参数名			     |参数描述		|类型		 |状态    |参数说明           |示例
-|-------------------|----------------|----------|-------|--------------|-----------
-|Content-Type	|Http内容类型	    |S	       |M      |JSON类型请求   |application/json;charset=UTF-8
-|x-api-accesskey|访问码			|S(20)	   |M       |网关为接入方分配的访问编|UASDFASDERWER234
-|x-api-signType	|签名方式		|S(16)		|O      |签名认证方式，可选值为MD5,SHA1和RSA，MD5为默认值|MD5
-|x-api-sign		|签名值			|S(128)	|M      |报根据接入方分配的x-api-accesskey对应的secretkey对HTTP-BODY的签名值。签名|fasdfasdfasdfasdf...
-
-
-#### 4.5.2 请求公共报文
-
-|参数名			|参数描述			|类型		 |状态    |实例           |备注
-|------------|----------------|----------|-------|--------------|-----------
-|requestNo	|请求号				|S(16-40)	 |M      |2016089983    |请求号，要求商户唯一。
-|partnerId	|商户ID				|SF(20)	 |M      |20160809223120000001|签约的商户或合作商的ID,由平台分配。定长20字符
-|service	   |服务名称			|S(32)		 |M      |userRegister  |Api服务名称，与服务版本一起唯一标志一个服务
-|version		|服务版本			|S(8)		 |O      |1.0           |Api服务版本，与服务名称一起唯一标志一个服务
-|protocol    |协议类型			|S(16)     |O      |HTTP/JSON|协议格式。HTTP/JSON(默认)
-|context		|会话参数			|S(128)	 |O      |{userId:1,busiId:2}|调用端的API调用会话参数，请求参数任何合法值，在响应时会回传给调用端。
-|ext		   |扩展参数			|S(1024)	 |O      |{ext1:1,ext2:2}|JSON单层结构，对应Map<String,String>,由具体接口自定义说明。
-|returnUrl	|页面跳转地址	|S(128)	 |O      |http://merc.com/return.html|当服务为跳转服务时，如果传入该值，网关在处理完后会回跳该参数指定的URL。
-|notifyUrl	|异步通知地址	|S(128)	 |O      |http://merc.com/notice.html|当服务为跳转服务或异步通知时，如果传入该值，网关在处理完后会异步后台通知该地址处理结果。
-
-
-
-#### 4.5.3 公共响应报文
-
-|参数名			|参数描述			|类型		 |状态    |实例           |备注
-|------------|----------------|----------|-------|--------------|-----------
-|success		|成功标识			|S(8)		 |M      |true          |表示接口调用是否成功。true：成功false：失败
-|requestNo	|请求号				|S(16-40)	 |M      |2016089983    |请求号，要求商户唯一。
-|partnerId	|商户ID				|SF(20)	 |M      |20160809223120000001|签约的商户或合作商的ID,由平台分配。定长20字符
-|service	   |服务名称			|S(32)		 |M      |userRegister  |Api服务名称，与服务版本一起唯一标志一个服务
-|version		|服务版本			|S(8)		 |O      |1.0           |Api服务版本，与服务名称一起唯一标志一个服务
-|protocol    |协议类型			|S(16)     |O      |HTTP/JSON|协议格式。HTTP/JSON(默认)
-|context		|会话参数			|S(128)	 |O      |{userId:1,busiId:2}|调用端的API调用会话参数，请求参数任何合法值，在响应时会回传给调用端。
-|ext		   |扩展参数			|S(1024)	 |O      |{ext1:1,ext2:2}|JSON单层结构，对应Map<String,String>,由具体接口自定义说明。
-|code	|响应编码			|S(32)		 |M|PARAM_ERROR|返回码,SUCCESS：为处理成功，其他请参考“返回码”
-|message|响应消息|S(128)|M|参数错误|响应编码对应的消息描述
-|detail|响应详情|S(128)|O|手机号码格式错误|服务响应信息详情
-
->结果判断：
->* success返回的标志只是标志该服务是否执行成功，并不一定确定该服务对应的业务处理成功，请根据具体接口进行判断。比如：异步提现接口，请求后的同步响应success=true,code=SUCCESS 则表示：异步提现提交成功，正常处理中，提现并没有成功完成。
->* code=SUCCESS和code=PROCESSING表示处理成功，其他表示失败。
-
-
-#### 4.5.4 公共通知报文
-
-网关在设计处理通知报文时，为提高商户端的使用简便和体验，服务的同步通知（跳转通知）和异步通知采用完全相同的结构，只是在同步通知和异步通知时部分数据项填充不一定一致，请根据具体api服务及业务进行处理。所以我们同步和异步通知的公共报文部分是完全相同的。
-
-结构同通知报文
-
-
-## 5 错误码与错误处理
-
-### 5.1 错误码
-
-错误码的定义在报文中统一使用响应码表示。响应码中除了SUCCESS和PROCESSING外的其他响应码都表示错误码。
-
-所有API服务都是通过错误码标识处理结果，包括同步响应，跳转同步通知和异步通知我们采用这一统一的原则。错误码的表示方式采用三元错误消息方式，由code,message和resultDetai三个数据项表示唯一的错误消息，其中detail为可选。
-
-* code: 表示错误消息的编码Key，如果商户端需对特定的错误场景进行处理，请根据错误码进行处理。
-* message: 表示错误码对应的描述文字。
-* detail: 表示错误的详细描述，该数据线为可选。
-
-错误码主要分为系统错误码和业务错误码两大类，系统错误码表示网关做的基础验证和处理失败对应的错误码；业务错误码表示具体api服务业务处理错误对应的错误码。系统错误码有明确的定义，请参考下表，业务错误码根据具体的业务定义，不做统一定义。
-
-|错误代码|含义
-|-------|------
-|SUCCESS|成功
-|PROCESSING|处理中
-|FAILURE|执行失败
-|INTERNAL\_ERROR|内部错误
-|PARAMETER\_ERROR|参数错误
-|UNAUTHENTICATED\_ERROR|认证(签名)错误
-|PARAM\_FORMAT\_ERROR|参数格式错误
-|REQUEST\_NO\_NOT\_UNIQUE|请求号重复
-|FIELD\_NOT\_UNIQUE|对象字段重复
-|TOO\_MANY\_REQUEST|请求数太多
-|MOCK\_NOT\_FOUND|MOCK请求不匹配
-|REQUEST\_GID\_NOT\_EXSIT|gid不存在
-|SERVICE\_NOT\_FOUND\_ERROR|服务不存在
-|UNAUTHORIZED\_ERROR|未授权的服务
-|REDIRECT\_URL\_NOT\_EXIST|跳转服务需设置redirectUrl
-|PARTNER\_NOT\_REGISTER|商户没有注册
-|PARTNER\_NOT\_PRODUCT|商户没有配置产品
-|NOTIFY\_ERROR|异步通知失败
-|OBJECT\_NOT\_EXIST|对象不存在
-
-
-### 5.2 结果判断原则
-
-所有交易同步响应和异步通知的响应结果中都有code数据项，请根据code的响应值判断交易的最终结果。具体判断方法如下：
-* code=SUCCESS : 表示最终结果为成功。
-* code=PROCESSING：表示交易正在处理中，需要等待异步通知来确定最终交易结果
-* code=其他： 表示交易错误或失败。
-
-## 6 安全
-
-网关API服务的安全方案中，需要商户端完成的主要是签名验签和加解密数据。提供两种安全方案：
-
-1. **摘要方案**：摘要签名(MD5)/对称加密(ASE)
-2. **证书方案**：证书签名(RSA)/非对称加密(RSA)
-
-**安全方案选择**
-具体采用哪种方案，根据商户开户时确定。在技术实现上，通过请求报文中的signType确定选择哪种方案。具体要求如下：
-
-* signType=RSA: 表示选择证书方案。需要使用商户证书私钥对请求报文签名；使用网关证书对收到的报文验签；使用网关证书按需对数据加密；使用商户证书私钥对收到的密文数据项解密。
-* signType为其他: 包括MD5,Sha1Hex，Sha2Hex等，表示选择摘要方案。商户使用商户安全码对报文进行摘要签名和验签，对安全数据项按需进行ASE对称加密和解密。
-
-### 6.1 商户秘钥
-
-商户开户后，网关运营会邮件方式发送商户开户的账户信息，认证信息和商户秘钥信息给商户接口人。这里对商户端通过邮件获取的商户秘钥进行介绍说明，主要用于后续的安全签名和数据加解密。
-
-* **摘要安全模式**：通讯报文的签名，验签使用摘要算法（MD5，Sha1Hex和Sha256Hex等）实现和数据加解密采用ASE对称加密算法，商户收到的秘钥为32字节的字符串秘钥，我们命名为secrtKey，用于报文的摘要签名，验签和对称加解密的秘钥。 例如：c9cef22553afujh64b04a012f9cb8ea9
-
-* **证书安全模式**：如果商户采用的是证书安全模式，通讯报文的签名，验签和加解密都使用RSA算法。商户会收到一对秘钥，包含商户证书（${partnerId}.pfx）和网关证书(server.cer)的两个文件。商户端的秘钥对(文件)为：
-
-	* 商户证书: 商户的keystore证书（PFX格式），包含用户的私钥和公钥证书，主要用于请求报文签名和收到报文的数据解密，例如：20160010101010101.pfx, 如果是联调试环境，一般命名为: 20160010101010101.snet.pfx，同时会邮件发送给商户商户证书文件的保护密码(keystorePassword)。
-	
-	* 网关证书：网关的公钥证书，主要用户对收到的报文（响应，通知）验签和发送数据的加密.例如：server.cer,如果是联调环境，一般命名为:server.snet.cer
-
-
-
-### 6.2 签名和验签
-
-所有Api服务的安全认证采用数字签名方式，目前支持的签名和验签算法主要包括摘要签名和证书签名两种方式，其中摘要签名支持MD5，Sha1Hex和Sha256Hex，证书方式签名支持RSA算法。
-
-在签名和验签前，我们首先需要处理的是生成报文对应的待签字符串，下面我们首先介绍待签字符串的生成，然后在分别介绍两种签名方式的具体计算和验证方法。
-
-
-#### 6.2.1 待签字符串生成
-
-**需要参与签名的参数**
-
-请求报文，响应报文和通知报文，都采用相同的规则：对发送或接收到的所有参数（包括公共报文部分）都是需要参与计算待签名字符串的参数。
-
-**待签名字符串**
-所有的HTTP-BODY参数字符串形式为待签名字符串。例如：
-
-var waitForSignString = {"service": "withdraw","context": "会话参数。","notifyUrl": "`RT;","partnerId":"20141229020000062199","requestNo":"o19021017340006100002","version":"1.0","bankCode": "ABC","amount": "200.15","delay": "1","bankCardNo": "6226998032873746","merchOrderNo": "20912213123sdf","busiType": "BUSI2","returnUrl": "1q`k=E","userId": "20198982938272827232"}
-
->注意：
->1. 没有值的参数无需传递，也无需包含到待签名数据中；
->2. 签名时将字符转化成字节流时指定字符集全部采用UTF-8；
->3. 待签字符串中的特殊字符无需签名，根据HTTP协议，传递参数的值中如果存在特殊字符（如：&、@等）和中文字符，那么该值需要做UTF-8编码的URL-Encoding，这样请求接收方才能接收到正确的参数值。这种情况下，待签名数据应该是原生值而不是encoding之后的值。例如：调用某接口需要对请求参数email进行数字签名，那么待签名数据应该是email=test@msn.com，而不是email=test%40msn.com。
-
-#### 6.2.2 摘要签名验签
-
-摘要方式签名主要支持MD5，Sha1Hex和Sha256Hex，他们都采用标准的摘要算法实现。算法原则如下：
-
-1. **签名明文**: 签名和验签的明文为代签字符串后接商户安全码（我们这里命名为secretKey商户开户时已邮件发送给商户联系人），请注意待签字符串与secretKey间没有任何连接字符。
-
-	例如:
-
-	* 代签字符串为：{"service": "withdraw","context": ...}
-	* secretKey为: c9cef22553afujh64b04a012f9cb8ea9, 
-	* 则计算签名的明文为：{"service": "withdraw","context": ...}<span style="color:red">c9cef22553afujh64b04a012f9cb8ea9</span>
-
-2. **签名计算**：首先转换签名明文(P)为UTF-8的字节数组（byte[]）,通过标准摘要算法计算出摘要值的字节数组形式（byte[]），然后转换摘要的字节数组为Hex（小写字母的16进制形式）的字符串格式(S)则为摘要签名。
-	**伪代码公式为: S=Hex(MD5(P.getBytes("UTF-8")))**
-
-	>摘要签名计算出的值作为请求报文的sign参数值一并请求网关。
-
-3. **验证签名**：验证签名是在商户端收到网站的同步响应报文或通知报文后，对这些报文进行签名验证。原则为，使用“2. **签名计算**”的方法对报文计算签名值为signClient,然后与报文中传入的sign参数值（服务器端计算的签名）进行字符串比较，如果相同则表示验证签名通过，报文在传输过程中未被篡改。
-
-
-#### 6.2.3 证书签名和验签
-
-证书签名和验签基于商户证书，使用非对称加密算法RSA实现。如果我们选择使用证书签名方式，则要求商户在开通服务时选择证书加密选项，商户完成开户时，会收到包含商户证书（pfx）和网关证书(cer)的两个文件，这两个文件是完成我们签名和后续数据加密的秘钥对文件。同时另外一种获取秘钥文件的方式是登录开放平台，自助下载证书文件。
-
->在开始介绍证书签名和验签前，商户端开发人员需要具备一定的证书和非对称加密的技术和理论基础。
-
-**商户证书说明：**
-
-* 商户证书格式为pfx格式,keystore类型（keystoreType）为PKCS12，keystore保护密码(keystorePassword)联调环境为6个1（111111），计算RSA签名时，需要从pfx文件中获取私钥数据，你可以使用各语言的通用API加载并获取（推荐方案），也可以通过openssl命令导出私钥文件。
-* RSA算法实现：JCE标准实现
-* RSA秘钥长度：2048位。
-* RSA算法名称：SHA1withRSA
-
-
-**签名和验签计算：**
-
-1. **签名明文**: 签名和验签的明文为代签字符串。这里请注意与摘要方式的区别是无需后接任何秘钥。
-2. **签名计算**: 签名的计算使用标准RSA签名算法，请根据商户端语言环境选择具体的实现，使用商户证书的**商户私钥**对请求报文进行签名计算，计算出的结果为256字节（byte数组）的签名数据,请对签名数据进行标准base64编码，最后得到344字节的字符串则为报文的签名。
-3. **验证签名**: 验证签名的计算仍然使用RSA标准算法，使用网关的证书公钥进行验签。
-
->注意：请参考客户端工具中的java代码示例。
-
-### 6.3 加密和解密
-
-为保证报文中私密信息的安全性，我们在传输过程中，要求报文的部分数据项需要加密传输。根据报文定义中，明确说明的需要密文的数据项，对数据项的数据进行加密和解密处理。
-
->注意：请求方数据加密在签名前完成，签名的待签数据以密文计算；解密数据在验签后处理，验签明文以密文计算。
-
-#### 6.3.1 ASE加密和解密
-
-如果报文的signType采用非RSA方式，我们采用ASE算法对需要加密的数据项加密。
-
-**加解密说明**：
-
-* 加密秘钥为商户安全码(secrtKey，全数组和字母组合)的前16字节，长度为128位, 使用16字节字符串转换为UTF-8编码的byte数组。
-* ASE算法的模式为ECB，填充方式为PKCS5Padding。算法/模式/填充为：AES/ECB/PKCS5Padding
-* 加密的明文以UTF-8编码转换为byte数组作为加密入参
-* 加密后密文需要Base64编码默认作为最终加密数据用于签名和传输
-* 解密时，需要对密文进行Base64解码后作为解密入参
-* 解密后的明文byte数组需要以UTF-8编码转换为字符串，作为最终的明文数据。
-
-**加密伪代码(java)**
-
-```java
-//ASE 秘钥：商户安全码前16字节
-byte[] aseKey = secrtKey.substring(0,16).getBytes();
-String cipherText = Base64Encode( AESEncrypt( plainText.getByte("UTF-8"), aseKey) );
+<!-- date: 2020-02-01 -->
+## 1. 简介
+提供最小依赖的OpenApi网关接入客户端工具包，以轻量化应用于商户系统中，帮助商户快速完成OpenApi服务的接入工作。
+工具包只有提供一个专用的工具类`OpenApiTools`,提供接入OpenApi网关时，客户端需要的所有基础功能和静态方法，配合OpenApi开放平台的ApiDoc快速对接。
+主要包括的功能有：通讯，参数验证，签名验签加解密，解析和反解析报文，同步，异步和调整接口的处理等。
+
+特性：
+
+* 最小依赖建立OpenApi客户端工具
+* 支持同步，异步和调整三种模式的通讯接入
+* 支持三种接收通知和模式模式：全自动，半自动（全自动组装对象+手动回执），手动（接收，解析，验签，解密，组装对象，发送回执）
+* [todo] 根据开放平台Apidoc文档自动生成报文对象。
+
+## 2. 集成
+
+### 2.1 Maven工程POM配置
+
+请拷贝工具的坐标到你工程pom.xml文件的dependencies节点下。
+
+```xml
+<dependency>
+    <groupId>com.acooly</groupId>
+    <artifactId>openapi-framework-common-util</artifactId>
+    <version>5.0.1-SNAPSHOT</version>
+</dependency>
 ```
 
-**解密伪代码(java)**
+>支持版本号：5.0.0-SNAPSHOT和5.0.1-SNAPSHOT(临时开发版本)
 
-```java
-//ASE 秘钥：商户安全码前16字节
-byte[] aseKey = secrtKey.substring(0,16).getBytes();
-String plainText = new String(AESDecrypt(Base64Decode(cipherText), aseKey), "UTF-8");
+### 2.2 Maven Setting设置
+
+因为工具包没有上传到maven中央仓库，需要你调整下你的Maven的conf目录下的setting.xml文件配置。
+
+如果你的setting.xml中配置配置mirror，建议你配置阿里镜像（如果你在中国，这样会快些），请在mirrors节点下添加以下配置：
+
+```xml
+<mirror>
+   <id>aliyun-repo</id>
+   <mirrorOf>*,!acooly-repo</mirrorOf>
+   <name>aliyun maven repository</name>
+   <url>https://maven.aliyun.com/repository/public</url>
+</mirror>
 ```
 
-#### 6.3.2 RSA加密和解密
+>这里的重点是mirrorOf的配置，`*,!acooly-repo`,如果你有mirror配置，则在你的配置后面加上`!acooly-repo`。这里是表示除开`acooly-repo`的repository外都用你的mirror配置，而使用你的工程pom.xml里面的配置`acooly-repo`仓库。
 
-如果报文的signType为RSA,表示我们采用RSA（证书）非对称加解密数据项。在介绍RSA加密和解密前，需要你先了解和参考：“商户秘钥” 和 “证书签名和验签”。
+### 2.3 上传到你的nexus
 
-RSA加密和解密与摘要方式的使用场景一样，都是按报文定义，明确需要加密和解密的数据项才进行加解密处理。不同摘要方式加解密的是RSA是非对称加密算法，加密和解密采用的是一对秘钥。商户的秘钥对都保持在商户证书文件(pfx)中。
+请直接下周最新版本的jar包，然后上传到你的nexus。
 
-在本场景中，涉及商户测对请求报文按需加密和对收到的报文按需解密，我们分别介绍两种场景对秘钥和算法使用详情。
+>注意，这种方式，请自行添加相关依赖。
 
->注意：RSA加密是采用分段加密方式，每次加密的明文数据长度为秘钥长度减去11个字节，然后把分段加密的数据连接起来则为密文，解密逻辑相同，只是反向行为。
+**相关Jar包依赖：**
 
+* acooly-common-type:(同本工具版本)：acooly的基础类型和初级工具。（本身只依赖：validation-api）
+* servlet-api:4.0.1：Servlet容器
+* commons-codec:1.11及以上：签名/编码
+* slf4j-api:1.7.26及以上：日志
+* github:http-request:6.0：http客户端工具
+* fastjson:1.2.48.sec06及以上：JSON工具
+* lombok:1.18.8：动态生成getter/setter。
 
-**加密**
+>你可以通过`openapi-framework-common-util`jar包内的pom.xml查看详细的依赖配置。
 
-* 秘钥：使用的秘钥为网关的证书公钥（server.cer）进行加密，秘钥长度2048位。
-* 算法：模式为ECB，填充方式为PKCS5Padding。算法/模式/填充为：RSA/ECB/PKCS5Padding(java的JCE默认参数)
-* 编码：明文数据采用UTF-8编码，密文使用BASE64编码。
+## 3. 应用
 
-伪代码：
+OpenApiTools工具核心就是提供一个OpenApiTools的客户端工具类，解决客户端接入访问网关的所有工作帮助。
+
+工具类名：`com.acooly.openapi.framework.common.OpenApiTools`
+
+OpenApiTools是非静态工具类，需要在你的工程根据场景需要进行实例化。
+
+### 3.1 实例化
+
+**直接New方式**
+
+直接new的方式，一般建议使用在简单场景或单元测试中。
 
 ```java
-// 从服务网关公钥加载公钥。
-PublicKey publicKey = loadPublicKeyFormCert("/path/server.cer");
-// 使用标准RSA加密原始数据，然后使用Base64编码
-String cipherText = Base64Encode(RSAEncrypt(plainText.getBytes("UTF-8"), publicKey));
+OpenApiTools openApiTools = new OpenApiTools(gateway, accessKey, secretKey);
+
+// 同步请求
+openApiTools.send(...)
+// 跳转页面请求
+openApiTools.redirectSend(...)
+// 接收网关通知
+openApiTools.notice(...)
+
 ```
 
-**解密**
+>你可以参考示例工程`openapi-client-demo`的单元测试[com.acooly.openapi.client.demo.OpenApiToolsTest](https://gitlab.acooly.cn/acoolys/openapi/openapi-client-demo/blob/master/src/test/java/com/acooly/openapi/client/demo/OpenApiToolsTest.java)
 
-* 秘钥：使用的秘钥为商户证书的私钥（merchant.pfx）进行解密，秘钥长度2048位。
-* 算法：模式为ECB，填充方式为PKCS5Padding。算法/模式/填充为：RSA/ECB/PKCS5Padding(java的JCE默认参数)
-* 编码：解密后的明文byte数组使用UTF-8编码转换为字符串。
 
-伪代码：
+**Spring方式**
+
+如果你采用Spring方式实例化，一般用于整个服务（工程）共享OpenApiTools工具和配置。以下是springboot的实例化方式。
+
+1. 在你是工程的主配置内增加`openapi`的配置参数(包括：网络连接参数，网关地址，认证相关等)，一般可采用内置类。请参考：[OpenApiClientDemoProperties.java](https://gitlab.acooly.cn/acoolys/openapi/openapi-client-demo/blob/master/src/main/java/com/acooly/openapi/client/demo/OpenApiClientDemoProperties.java)
+
+2. 新增或在你现有的@Configuration类中，通过代码方式为容器创建一个openApiTools实例。请参考：[OpenApiClientDemoConfiguration.java](https://gitlab.acooly.cn/acoolys/openapi/openapi-client-demo/blob/master/src/main/java/com/acooly/openapi/client/demo/OpenApiClientDemoConfiguration.java)
 
 ```java
-// 从商户证书加载私钥。
-PrivateKey merchantPrivateKey = loadPrivateKeyFormPfx("/path/merchant.pfx");
-// 使用标准RSA解密密文数据，然后使用转换为UTF-8的字符串
-String plainText = new String(RSAEncrypt(Base64Decode(cipherText), merchantPrivateKey), "UTF-8");
+    /**
+     * 注入你的目标工程自己配置化的OpenApiTools客户端参数，以适应多环境感知配置
+     */
+    @Autowired
+    private OpenApiClientDemoProperties openApiClientDemoProperties;
+    
+    /**
+     * 如果你是spring-boot环境，可以通过springboot方式创建一个容器共用的OpenApiTools实例，直接注入使用。
+     *
+     * @return
+     */
+    @Bean
+    public OpenApiTools openApiTools() {
+        OpenApiClientDemoProperties.Openapi openapi = openApiClientDemoProperties.getOpenapi();
+        OpenApiTools openApiTools = new OpenApiTools(openapi.getGateway(), openapi.getAccessKey(), openapi.getSecretKey());
+        openApiTools.setCharset(openapi.getCharset());
+        openApiTools.setConnTimeout(openapi.getConnTimeout());
+        openApiTools.setReadTimeout(openapi.getReadTimeout());
+        openApiTools.setShowLog(openapi.isShowLog());
+        return openApiTools;
+    }
 ```
 
+### 3.2 客户端报文
+
+OpenApiTools工具要求通讯过程中的报文必须是对象(POJO)，并需要继承工具包中提供的基类`ApiMessage`或其子类。
+
+* [必须] `ApiMessage`: 提供公共报文的基类，你无需处理公共报文。请参考：[公共报文定义](http://acooly.cn/docs/component/openapi-framework-common-util.html#toc317)
+* `ApiRequest`: 通用请求报文基类
+* `ApiResponse`: 通用响应报文基类
+* `ApiAsyncRequest`: 如果是异步接口，请使用异步基类，增加了：returnUrl和notifyUrl支持。
+* `PageApiRequest`: 分页查询请求基类
+* `PageApiResponse`: 分页查询响应基类
+
+>注意：以上基类，除了`ApiMessage`是推荐使用，但不是必须的，你可以根据文档自行构建报文对象。
+
+**构建报文对象的方式？**
+
+1. 你可以通过服务提供商的开放平台的在线API文档及元数据，自由构建你工程下任意包路径的报文对象。你可以收到复制/粘贴，也可以自己写程序解析元数据。
+2. [todo] 官方下个版本会发布基于在线文档的自动生成报文的工具。你只需传入服务名则自动为你的工程指定包路径下生成对应的报文对象。
+
+>小彩蛋：请求报文对象的命名请以：服务名+ApiRequest模式，如果你遵循该小约定，OpenApiTools会帮你猜猜当前服务名称，无需你手动`apiRequest.setService()`.
+
+>OK，你已拿到文档，并根据文档生成了Api服务对应的报文对象，也许只生成一个先试试。下一节正式进入开发...
+
+### 3.3 使用
+
+#### 3.3.1 同步接口
+
+下面是`OpenApiTools`工具可的同步接口请求工具方法
+
+```java
+    /**
+     * [同步接口] 发送同步请求到网关.
+     * 并对标注加密的字段自动加密
+     *
+     * @param request 请求对象
+     * @param clazz   响应类型
+     * @param <T>     响应类
+     * @return 响应对象
+     */
+    public <T extends ApiMessage> T send(ApiRequest request, Class<T> clazz) {
+    	// ...
+    }
+```
+
+**案例：**
+
+```java
+// 登录认证
+LoginApiRequest apiRequest = new LoginApiRequest("zhangpu",openApiTools.encrypt("Ab112121212"));
+LoginApiResponse apiResponse = openApiTools.send(apiRequest, LoginApiResponse.class);
+```
+
+#### 3.3.2 分页查询
+
+```java
+GoodsListApiRequest apiRequest = new GoodsListApiRequest(1,5);
+GoodsListApiResponse apiResponse = openApiTools.send(apiRequest, GoodsListApiResponse.class);
+```
+
+#### 3.3.3 异步接口
+
+异步接口的处理分两个部分
+
+1. 组装同步请求（包含notifyUrl），网关返回收到，code为PROCESSING处理中。
+2. 网关通过你请求时的notifyUrl异步通知你处理最终结果。
+
+第1步与同步接口的处理方式完全一致。第2步这里重点说明。
+
+**异步通知的接收**：注意notifyUrl必须是公网可访问的地址，如果你工程CSRF防御或其他认证，请忽略该URL，该URL的安全认证通过验证签名方式处理。
+
+**异步通知的处理**：异步通知的处理步骤逻辑为：接受通知数据，验证签名，组装通知报文对象(POJO), 解密字段数据（根据文档按需），本地业务逻辑处理，回写接收结果给网关。`OpenApiTools`提供三种方式的通知处理。
+
+具体实现请参考demo工程的：[WithdrawClientDemoController](https://gitlab.acooly.cn/acoolys/openapi/openapi-client-demo/blob/master/src/main/java/com/acooly/openapi/client/demo/web/WithdrawClientDemoController.java)
+
+* 全自动：自动完成所有的接收和处理工作。参考方法：`notifyUrlAuto`
+* 半自动：完成接收和解析处理（组装为通知对象），不包含回写接收结果。参考方法：`notifyUrlSemiAuto`
+* 全手动：接收和处理逻辑中所有的步骤逐步完成。参考方法：`notifyUrlManual`
+
+
+#### 3.3.4 跳转接口
+
+调整接口是客户端界面通过POST/GET方式跳转到开放平台的网关视图界面进行业务处理，完成后从网关界面调回通知结果的接口方式，接口的处理逻辑包含：
+
+1. 收集和组装调整请求报文对象（	ApiRequest的子类），并对报文进行序列化和签名
+2. 通过POS/GET方式跳转发送请求到网关。
+	* 服务端直接跳转：直接在controller层组装报文，采用307方式重定向到网关。`openApiTools.redirectSend`
+	* 前后端分离模式：完成组装报文后，响应给前端，有前端组装POST/GET方式跳转到网关。`openApiTools.redirectParse`方法返回`ApiMessageContext`对象的`buildRedirectUrl`方法，包含请求网关的所有参数。
+3. 同步通知（returnUrl）是网关界面处理完后，跳行到你的界面的操作，一般用于给用户显示处理结果（非最终确定结果）。（处理逻辑与异步通知一致）
+4. 异步通知（notifyUrl）是网关业务处理完成后，后端通知你的服务最终处理的结果。
+
+参考案例：[OrderCashierPayClientDemoController](https://gitlab.acooly.cn/acoolys/openapi/openapi-client-demo/blob/master/src/main/java/com/acooly/openapi/client/demo/web/OrderCashierPayClientDemoController.java)
+
+### 3.4 异常处理
+
+OpenApiTools工具对外只负责抛出通讯和解析相关的异常，业务相关的异常处理由您自行处理。
+
+`ApiResponse`基类（你的所有响应和通知报文都应该是它的子类）中定义了code，message和detai三元的结果码，足以支持你进行相关的业务结果处理。无需定义单独的错误码列表。
+
+结果判断通过code的值：
+
+* SUCCESS: 表示成功
+* PROCESSING: 表示处理中(正常状态)
+* 其他: 对应的错误码
+
+你也可以通过ApiResponse对象提供的isSuccess()方法直接判断服务器端是否处理成功。
+
+关于详细的错误码和处理处理，请参考OpenApi接入开发指南的：[错误码与错误处理](http://acooly.cn/docs/component/openapi-framework-common-util.html#toc222)
+
+
+
+## 4. 演示工程
+
+本文涉及的所有内容都在演示工程中通过工程代码呈现，请移步查看或拉取后运行。
+
+Demo工程采用springboot2.x构建。
+
+[openapi-client-demo](https://gitlab.acooly.cn/acoolys/openapi/openapi-client-demo)
+
+使用参考：
+
+1. 演示工程的所有演示，都通过单元测试方式：`OpenApiToolsTest`
+2. 异步和调整接口的演示依赖容器（需要接受通知），请直接启动该工程。
+3. 参数配置说明，请直接参见工程内的`application.properties`,都有参数说明。
+
+>演示工程内每个板块都有详细的javadoc和参数说明，这里不做重复描述。
+
+完成配置启动工程后，你可以通过`OpenApiToolsTest`的单元测试方法逐个验证。

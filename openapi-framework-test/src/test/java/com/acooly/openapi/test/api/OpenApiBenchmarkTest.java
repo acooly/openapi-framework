@@ -1,18 +1,17 @@
 package com.acooly.openapi.test.api;
 
 import com.acooly.core.utils.Ids;
-import com.acooly.openapi.framework.common.enums.ApiProtocol;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.common.message.builtin.LoginRequest;
 import com.acooly.openapi.framework.common.message.builtin.LoginResponse;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
-import com.acooly.openapi.framework.service.test.request.OrderCashierPayApiRequest;
-import com.acooly.openapi.framework.service.test.request.OrderCreateApiRequest;
-import com.acooly.openapi.framework.service.test.request.WithdrawApiRequest;
-import com.acooly.openapi.framework.service.test.response.OrderCreateApiResponse;
-import com.acooly.openapi.framework.service.test.response.WithdrawApiResponse;
+import com.acooly.openapi.framework.demo.message.request.DemoOrderCashierPayApiRequest;
+import com.acooly.openapi.framework.demo.message.request.DemoOrderCreateApiRequest;
+import com.acooly.openapi.framework.demo.message.request.DemoWithdrawApiRequest;
+import com.acooly.openapi.framework.demo.message.response.DemoOrderCreateApiResponse;
+import com.acooly.openapi.framework.demo.message.response.DemoWithdrawApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -43,8 +42,8 @@ public class OpenApiBenchmarkTest extends AbstractApiServieTests {
      */
     @Test
     public void testSync() {
-        OrderCreateApiRequest request = OpenApiBenchmarkTestUtils.buildOrderCreateApiRequest();
-        OrderCreateApiResponse response = request(request, OrderCreateApiResponse.class);
+        DemoOrderCreateApiRequest request = OpenApiBenchmarkTestUtils.buildOrderCreateApiRequest();
+        DemoOrderCreateApiResponse response = request(request, DemoOrderCreateApiResponse.class);
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isTrue();
         assertThat(response.isSuccess()).isTrue();
@@ -94,10 +93,10 @@ public class OpenApiBenchmarkTest extends AbstractApiServieTests {
     @Test
     public void testAsyncRequiredNotifyUrlError() {
         // 异步接口，必须传入notifyUrl
-        WithdrawApiRequest request = OpenApiBenchmarkTestUtils.buildWithdrawApiRequest();
+        DemoWithdrawApiRequest request = OpenApiBenchmarkTestUtils.buildWithdrawApiRequest();
         // 手动标记为null，期望返回错误码:PARAMETER_ERROR, detail:notifyUrl不能为空
         request.setNotifyUrl(null);
-        WithdrawApiResponse response = request(request, WithdrawApiResponse.class);
+        DemoWithdrawApiResponse response = request(request, DemoWithdrawApiResponse.class);
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isFalse();
         assertThat(response.getCode()).isEqualTo(ApiServiceResultCode.PARAMETER_ERROR.code());
@@ -111,10 +110,10 @@ public class OpenApiBenchmarkTest extends AbstractApiServieTests {
     @Test
     public void testRedirectRequiredNotifyUrlAndReturnUrl() {
         // 异步接口，必须传入notifyUrl
-        OrderCashierPayApiRequest request = OpenApiBenchmarkTestUtils.buildOrderCashierPayApiRequest();
+        DemoOrderCashierPayApiRequest request = OpenApiBenchmarkTestUtils.buildOrderCashierPayApiRequest();
         // 手动标记为null，期望返回错误码:PARAMETER_ERROR, detail:returnUrl不能为空
         request.setReturnUrl(null);
-        WithdrawApiResponse response = request(request, WithdrawApiResponse.class);
+        DemoWithdrawApiResponse response = request(request, DemoWithdrawApiResponse.class);
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isFalse();
         assertThat(response.getCode()).isEqualTo(ApiServiceResultCode.PARAMETER_ERROR.code());

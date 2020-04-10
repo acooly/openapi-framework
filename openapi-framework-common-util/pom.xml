@@ -14,17 +14,57 @@
     <dependencies>
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>acooly-common</artifactId>
+            <artifactId>acooly-common-type</artifactId>
         </dependency>
 
-
+        <!-- Servlet -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
+
+        <!-- 摘要 -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+
+        <!-- 日志 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <!-- 通讯：http client tool -->
+        <dependency>
+            <groupId>com.github.kevinsawicki</groupId>
+            <artifactId>http-request</artifactId>
+            <version>6.0</version>
+        </dependency>
+
+        <!-- 组报：JSON TOOL -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>acooly-releases</id>
+            <name>acooly Internal Releases</name>
+            <url>
+                http://acooly.cn/nexus/content/repositories/releases/
+            </url>
+        </repository>
+
+        <repository>
+            <id>acooly-snapshots</id>
+            <name>acooly Internal snapshot</name>
+            <url>
+                http://acooly.cn/nexus/content/repositories/snapshots/
+            </url>
+        </repository>
+    </repositories>
+
 </project>

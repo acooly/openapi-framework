@@ -1,12 +1,15 @@
+/**
+ * openapi-framework
+ * <p>
+ * Copyright 2014 Acooly.cn, Inc. All rights reserved.
+ *
+ * @author zhangpu
+ * @date 2019-09-16 09:31
+ */
 package com.acooly.openapi.framework.common.message;
 
-import com.acooly.core.common.dao.support.PageInfo;
-import com.acooly.core.common.facade.OrderBase;
-import com.acooly.core.common.facade.PageOrder;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -15,9 +18,8 @@ import javax.validation.constraints.Min;
  * 分页请求报文
  *
  * @author zhangpu
+ * @date 2019-12-1
  */
-@Getter
-@Setter
 public abstract class PageApiRequest extends ApiRequest {
 
     @Min(1)
@@ -31,12 +33,19 @@ public abstract class PageApiRequest extends ApiRequest {
             demo = "20", ordinal = ApiConstants.ORDINAL_MAX + 2)
     private int limit = 20;
 
-    @Override
-    public <T extends OrderBase> T toOrder(Class<T> clazz) {
-        T order = super.toOrder(clazz);
-        if (PageOrder.class.isAssignableFrom(clazz)) {
-            ((PageOrder) order).setPageInfo(new PageInfo<T>(this.getLimit(), this.getStart()));
-        }
-        return order;
+    public int getStart() {
+        return start;
+    }
+
+    public void setStart(int start) {
+        this.start = start;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
     }
 }

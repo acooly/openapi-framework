@@ -102,7 +102,7 @@
             url: '/manage/openapi/apiAuth/getAllService.json',
             success: function (result) {
                 if (!result.success) {
-                    $.messager.show({title: '失败', msg: result.detail});
+                    $.acooly.messager('失败', result.detail, 'danger');
                 }
                 $('#manage_openapi_apilist_container').html($.acooly.template.render("manage_openapi_apilist_template", result));
                 // 注册事件：点击行联动checkbox
@@ -114,7 +114,7 @@
             },
             error: function (r, s, e) {
                 $.acooly.loaded();
-                $.messager.show({title: '失败', msg: e});
+                $.acooly.messager('失败', e, 'danger');
             }
         });
     }
@@ -141,7 +141,7 @@
             data: {authNo: authNo},
             success: function (result) {
                 if (!result.success) {
-                    $.messager.show({title: '失败', msg: result.message});
+                    $.acooly.messager('失败', result.message, 'danger');
                     return;
                 }
                 var acls = result.rows;
@@ -158,7 +158,8 @@
                 });
             },
             error: function (r, s, e) {
-                $.messager.show({title: '失败', msg: e});
+                $.acooly.messager('失败', e, 'danger');
+
             },
             complete : function () {
                 $.acooly.loaded();
@@ -172,7 +173,7 @@
     function saveAcls(dial) {
         var serviceNoValues = getServiceNoValues();
         if(!serviceNoValues || serviceNoValues ===''){
-            $.messager.show({title: '提示信息', msg: '请至少选择一个服务'});
+            $.acooly.messager("提示信息","请至少选择一个服务",'danger');
             return;
         }
         $.acooly.loading("保存中...");
@@ -184,11 +185,12 @@
             },
             success: function (result) {
                 if (result.success) {
-                    $.messager.show({title: '设置成功', msg: '设置成功'});
+                    $.acooly.messager("设置ACL", result.message, result.success?'success':'danger');
                 }
             },
             error: function (r, s, e) {
-                $.messager.show({title: '失败', msg: e});
+                $.acooly.messager('失败', e, 'danger');
+
             },
             complete : function () {
                 dial.dialog('close');

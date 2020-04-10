@@ -1,5 +1,7 @@
 package com.acooly.openapi.framework.common;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -44,6 +46,9 @@ public final class ApiConstants {
     public static final String DETAIL = "detail";
     public static final String SUCCESS = "success";
 
+    public static final String SUCCESS_RESULT_CODE = "SUCCESS";
+    public static final String PROCESSING_RESULT_CODE = "PROCESSING";
+    public static final String SUCCESS_RESULT_MESSAGE = "成功";
     /**
      * v3老协议
      */
@@ -61,6 +66,7 @@ public final class ApiConstants {
     public static final String BODY = "body";
 
     public static final String NOTIFY_SUCCESS_CONTENT = "success";
+    public static final String NOTIFY_FAILURE_CONTENT = "failure";
 
     public static final String LOGIN_SERVICE_NAME = "login";
     public static final String WILDCARD_TOKEN = "*";
@@ -79,6 +85,14 @@ public final class ApiConstants {
 
     public static final int ORDINAL_MAX = 100000;
     public static final int ORDINAL_MIN = -100000;
+
+    public static final List<String> API_REQUEST_POSTFIX = new ArrayList<>();
+
+    static {
+        API_REQUEST_POSTFIX.add("ApiRequest");
+        API_REQUEST_POSTFIX.add("Request");
+    }
+
 
     private ApiConstants() {
         super();

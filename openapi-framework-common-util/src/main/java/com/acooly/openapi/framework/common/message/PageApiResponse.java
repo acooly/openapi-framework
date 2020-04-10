@@ -1,25 +1,24 @@
+/**
+ * openapi-framework
+ * <p>
+ * Copyright 2014 Acooly.cn, Inc. All rights reserved.
+ *
+ * @author zhangpu
+ * @date 2019-09-16 09:31
+ */
 package com.acooly.openapi.framework.common.message;
 
-import com.acooly.core.common.dao.support.PageInfo;
-import com.acooly.core.common.facade.PageResult;
-import com.acooly.core.utils.Reflections;
-import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
-import com.google.common.collect.Lists;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 /**
  * 分页响应报文
  *
  * @author zhangpu
  */
-@Getter
-@Setter
 public abstract class PageApiResponse<T> extends ApiResponse {
 
     @NotNull
@@ -31,29 +30,33 @@ public abstract class PageApiResponse<T> extends ApiResponse {
     private long totalPages = 0;
 
     @OpenApiField(desc = "页数据", constraint = "当totalRows大于0时，rows不为空", ordinal = 3)
-    private List<T> rows = Lists.newArrayList();
+    private List<T> rows = new ArrayList();
 
     public void append(T t) {
         rows.add(t);
     }
 
-    public <U> void setPageResult(PageResult<U> pageResult) {
-        this.setPageResult(pageResult, null);
+    public long getTotalRows() {
+        return totalRows;
     }
 
-    public <U> void setPageResult(PageResult<U> pageResult, BiConsumer<U, T> consumer) {
-        Class<?> responseClass = Reflections.getSuperClassGenricType(getClass());
-        PageInfo<U> pageInfo = pageResult.getDto();
-        List<T> rows = Lists.newArrayList();
-        for (U dto : pageInfo.getPageResults()) {
-            T o = BeanCopier.copy(dto, (Class<T>) responseClass);
-            if (consumer != null) {
-                consumer.accept(dto, o);
-            }
-            rows.add(o);
-        }
-        this.setTotalPages(pageInfo.getTotalPage());
-        this.setTotalRows(pageInfo.getTotalCount());
-        this.setRows(rows);
+    public void setTotalRows(long totalRows) {
+        this.totalRows = totalRows;
+    }
+
+    public long getTotalPages() {
+        return totalPages;
+    }
+
+    public void setTotalPages(long totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    public List<T> getRows() {
+        return rows;
+    }
+
+    public void setRows(List<T> rows) {
+        this.rows = rows;
     }
 }

@@ -9,26 +9,24 @@
  */
 package com.acooly.openapi.framework.common.utils;
 
-import com.acooly.core.utils.Dates;
-import com.acooly.core.utils.Servlets;
-import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.system.IPUtil;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.dto.ApiMessageContext;
-import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
-import com.acooly.openapi.framework.common.exception.ApiServiceException;
+import com.acooly.openapi.framework.common.exception.ApiParameterException;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.google.common.net.HttpHeaders;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.validator.routines.UrlValidator;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.Map;
-import java.util.TreeMap;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
+import java.io.*;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.security.GeneralSecurityException;
+import java.util.*;
 
 import static com.acooly.openapi.framework.common.ApiConstants.BODY;
 
@@ -37,25 +35,11 @@ import static com.acooly.openapi.framework.common.ApiConstants.BODY;
  *
  * @author acooly
  */
-@Slf4j
 public final class ApiUtils {
 
-    private static UrlValidator httpUrlValidator = null;
-
-    static {
-        String[] schemes = {"http", "https"};
-        httpUrlValidator = new UrlValidator(schemes);
-    }
+    public static final String USER_AGENT = "User-Agent";
 
     private ApiUtils() {
-    }
-
-    public static Map parseJsonBody(String jsonBody) {
-        try {
-            return (JSONObject) JSON.parse(jsonBody);
-        } catch (Exception e) {
-            throw new ApiServiceException(ApiServiceResultCode.JSON_BODY_PARSING_FAILED);
-        }
     }
 
     /**
@@ -122,41 +106,22 @@ public final class ApiUtils {
         context.header(ApiConstants.X_API_ACCESS_KEY, request.getHeader(ApiConstants.X_API_ACCESS_KEY));
         context.header(ApiConstants.X_API_SIGN_TYPE, request.getHeader(ApiConstants.X_API_SIGN_TYPE));
         context.header(ApiConstants.X_API_SIGN, request.getHeader(ApiConstants.X_API_SIGN));
-        context.header(HttpHeaders.USER_AGENT, request.getHeader(HttpHeaders.USER_AGENT));
-        context.header(ApiConstants.REQUEST_IP, IPUtil.getIpAddr(request));
-        context.setParameters(Servlets.getParameters(request));
+        context.header(USER_AGENT, request.getHeader(USER_AGENT));
+        context.header(ApiConstants.REQUEST_IP, getIpAddr(request));
+        context.setParameters(getHttpParameters(request));
         String body = null;
         try {
-            body = Servlets.getBody(request);
+            body = getHttpBody(request, null);
         } catch (Exception e) {
-            log.error("读取请求报文体失败: {}", e.getMessage());
+            //ig
         }
-        if (Strings.isBlank(body)) {
+        if (isBlank(body)) {
             body = context.getValue(BODY);
         }
         context.setBody(body);
         return context;
     }
 
-
-    public static boolean isHttpUrl(String str) {
-        return httpUrlValidator.isValid(str);
-    }
-
-    public static void checkOpenAPIUrl(String str, String name) {
-        if (Strings.isBlank(str)) {
-            throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, name + "不能为空");
-        }
-        if (isHttpUrl(str)) {
-            if (str.contains("?")) {
-                throw new ApiServiceException(
-                        ApiServiceResultCode.PARAMETER_ERROR, "必须传入格式正确的" + name + "参数,请求参数不能包含?");
-            }
-        } else {
-            throw new ApiServiceException(
-                    ApiServiceResultCode.PARAMETER_ERROR, "必须传入格式正确的" + name + "参数");
-        }
-    }
 
     public static String getParameter(Map<String, String> requestData, String key) {
         return requestData.get(key);
@@ -165,12 +130,259 @@ public final class ApiUtils {
     public static boolean isJson(String json) {
         try {
             JSON.parse(json);
-            String first = Strings.substring(json, 0, 1);
-            String last = Strings.substring(json, json.length() - 1, json.length());
-            return (Strings.contains("[{", first) && Strings.contains("]}", last));
+            String first = substring(json, 0, 1);
+            String last = substring(json, json.length() - 1, json.length());
+            return ("[{".contains(first) && "]}".contains(last));
         } catch (Exception e) {
             //ig
         }
         return false;
+    }
+
+
+    public static String getIpAddr(HttpServletRequest request) {
+        if (request == null) {
+            return "unknown";
+        } else {
+            String ip = request.getHeader("x-forwarded-for");
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("Proxy-Client-IP");
+            }
+
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("WL-Proxy-Client-IP");
+            }
+
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getRemoteAddr();
+            }
+
+            return ip;
+        }
+    }
+
+    public static Map<String, String> getHttpParameters(ServletRequest request) {
+        Enumeration<String> paramNames = request.getParameterNames();
+        Map<String, String> params = new LinkedHashMap();
+        while (paramNames != null && paramNames.hasMoreElements()) {
+            String key = paramNames.nextElement();
+            String value = request.getParameter(key);
+            if (!isBlank(value)) {
+                params.put(key, value);
+            }
+        }
+        return params;
+    }
+
+    public static Map<String, String> transformMap(Map<String, Object> objectMap) {
+        Map<String, String> map = new HashMap<>();
+        for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
+            if (entry.getValue() != null) {
+                map.put(entry.getKey(), entry.getValue().toString());
+            }
+        }
+        return map;
+    }
+
+    public static String getHttpBody(HttpServletRequest request, String encoding) {
+        try (InputStream in = request.getInputStream()) {
+            if (encoding == null || "".equals(encoding)) {
+                encoding = "UTF-8";
+            }
+            return copyToString(in, Charset.forName(encoding));
+        } catch (Exception e) {
+            throw new RuntimeException("读取HttpRequest的body失败", e);
+        }
+    }
+
+    public static String copyToString(InputStream in, Charset charset) throws IOException {
+        if (in == null) {
+            return "";
+        }
+        StringBuilder out = new StringBuilder();
+        InputStreamReader reader = new InputStreamReader(in, charset);
+        char[] buffer = new char[4096];
+        int bytesRead = -1;
+        while ((bytesRead = reader.read(buffer)) != -1) {
+            out.append(buffer, 0, bytesRead);
+        }
+        return out.toString();
+    }
+
+
+    public static boolean isNoneBlank(String text) {
+        return !isBlank(text);
+    }
+
+    public static boolean isBlank(String text) {
+        int strLen;
+        if (text == null || (strLen = text.length()) == 0) {
+            return true;
+        }
+        for (int i = 0; i < strLen; i++) {
+            if (!Character.isWhitespace(text.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static String substring(final String str, int start, int end) {
+        if (str == null) {
+            return null;
+        }
+
+        // handle negatives
+        if (end < 0) {
+            // remember end is negative
+            end = str.length() + end;
+        }
+        if (start < 0) {
+            // remember start is negative
+            start = str.length() + start;
+        }
+
+        // check length next
+        if (end > str.length()) {
+            end = str.length();
+        }
+
+        // if start is greater than end, return ""
+        if (start > end) {
+            return "";
+        }
+
+        if (start < 0) {
+            start = 0;
+        }
+        if (end < 0) {
+            end = 0;
+        }
+
+        return str.substring(start, end);
+    }
+
+    public static String defaultString(final String str, final String defaultStr) {
+        return str == null ? defaultStr : str;
+    }
+
+    public static String trimToEmpty(final String str) {
+        return str == null ? "" : str.trim();
+    }
+
+    public static boolean startsWithIgnoreCase(String text, String prefix) {
+        return trimToEmpty(text).toLowerCase().startsWith(trimToEmpty(prefix).toLowerCase());
+    }
+
+    public static boolean contains(final String text, final String searchText) {
+        if (isBlank(text) || isBlank(searchText)) {
+            return false;
+        }
+        return text.indexOf(searchText) > -1;
+    }
+
+    public static String substringBeforeLast(final String str, final String separator) {
+        if (isBlank(str) || isBlank(separator)) {
+            return str;
+        }
+        final int pos = str.lastIndexOf(separator);
+        if (pos == -1) {
+            return str;
+        }
+        return str.substring(0, pos);
+    }
+
+    public static String uncapitalize(final String str) {
+        int strLen;
+        if (str == null || (strLen = str.length()) == 0) {
+            return str;
+        }
+
+        final int firstCodepoint = str.codePointAt(0);
+        final int newCodePoint = Character.toLowerCase(firstCodepoint);
+        if (firstCodepoint == newCodePoint) {
+            // already capitalized
+            return str;
+        }
+        // cannot be longer than the char array
+        final int[] newCodePoints = new int[strLen];
+        int outOffset = 0;
+        // copy the first codepoint
+        newCodePoints[outOffset++] = newCodePoint;
+        for (int inOffset = Character.charCount(firstCodepoint); inOffset < strLen; ) {
+            final int codepoint = str.codePointAt(inOffset);
+            // copy the remaining ones
+            newCodePoints[outOffset++] = codepoint;
+            inOffset += Character.charCount(codepoint);
+        }
+        return new String(newCodePoints, 0, outOffset);
+    }
+
+    public static String substringAfter(final String str, final String separator) {
+        if (isBlank(str)) {
+            return str;
+        }
+        if (separator == null) {
+            return "";
+        }
+        final int pos = str.indexOf(separator);
+        if (pos == -1) {
+            return "";
+        }
+        return str.substring(pos + separator.length());
+    }
+
+    public static void notBlank(Object object, String message) {
+        if (object == null) {
+            if (isBlank(message)) {
+                message = "参数不能为空值或空字符串";
+            }
+            throw new ApiParameterException(message);
+        }
+    }
+
+
+    public static byte[] aes(byte[] input, byte[] key, int mode) {
+        try {
+            SecretKey secretKey = new SecretKeySpec(key, "AES");
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(mode, secretKey);
+            return cipher.doFinal(input);
+        } catch (GeneralSecurityException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String urlEncode(String part) {
+        try {
+            return URLEncoder.encode(part, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String urlDecode(String part) {
+        try {
+            return URLDecoder.decode(part, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 写入字符串到HttpServletResponse
+     *
+     * @param response
+     * @param data
+     */
+    public static void writeResponse(@NotNull HttpServletResponse response, @NotNull String data) {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/plain; charset=utf-8");
+        try (PrintWriter writer = response.getWriter()) {
+            writer.println(data);
+            writer.flush();
+        } catch (Exception e) {
+            throw new RuntimeException("响应请求(flushResponse)失败:" + e.getMessage());
+        }
     }
 }
