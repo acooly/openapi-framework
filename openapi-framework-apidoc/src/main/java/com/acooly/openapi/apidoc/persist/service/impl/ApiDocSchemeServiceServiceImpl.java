@@ -6,6 +6,8 @@
  */
 package com.acooly.openapi.apidoc.persist.service.impl;
 
+import com.acooly.core.common.dao.support.PageInfo;
+import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.apidoc.persist.dao.ApiDocSchemeServiceDao;
@@ -54,5 +56,80 @@ public class ApiDocSchemeServiceServiceImpl extends EntityServiceImpl<ApiDocSche
     @Override
     public List<ApiDocService> findContentServices(String schemeNo) {
         return this.getEntityDao().findContentServices(schemeNo);
+    }
+
+    @Override
+    public PageInfo<ApiDocService> findContentServicesByKey(PageInfo<ApiDocService> pageInfo, String keywords) {
+        int totalCount = this.getEntityDao().countServicesByKey(keywords);
+        List<ApiDocService> contentServicesByKey = this.getEntityDao().findContentServicesByKey(keywords, (pageInfo.getCurrentPage() - 1) * pageInfo.getCountOfCurrentPage(), pageInfo.getCountOfCurrentPage());
+        pageInfo.setTotalCount(totalCount);
+        pageInfo.setPageResults(contentServicesByKey);
+        pageInfo.setTotalPage(pageInfo.getTotalPage());
+        return pageInfo;
+
+    }
+
+    @Override
+    public void moveDown(Long id) {
+
+        try {
+            ApiDocSchemeService apiDocSchemeService = get(id);
+            long current = apiDocSchemeService.getSortTime();
+            ApiDocSchemeService beforeSchemeService = getEntityDao().findAlfterOne(current, apiDocSchemeService.getSchemeNo(), id);
+            exchangeSortTime(apiDocSchemeService, current, beforeSchemeService);
+        } catch (Exception e) {
+            throw new BusinessException("下移失败", e);
+        }
+    }
+
+    @Override
+    public void moveUp(Long id) {
+        try {
+            ApiDocSchemeService apiDocSchemeService = get(id);
+            long current = apiDocSchemeService.getSortTime();
+            ApiDocSchemeService beforeSchemeService = getEntityDao().findBeforeOne(current, apiDocSchemeService.getSchemeNo(), id);
+            if (beforeSchemeService == null) {
+                return;
+            }
+            exchangeSortTime(apiDocSchemeService, current, beforeSchemeService);
+        } catch (Exception e) {
+            throw new BusinessException("操作失败", e);
+        }
+    }
+
+    @Override
+    public void moveTop(Long id) {
+        try {
+            ApiDocSchemeService apiDocSchemeService = get(id);
+            ApiDocSchemeService topSchemeService = getEntityDao().findTopOne(apiDocSchemeService.getSchemeNo());
+            //如果当前已经是第一条则不做任何处理
+            if (apiDocSchemeService.getId().equals(topSchemeService.getId())) {
+                return;
+            }
+            //sort_time减1
+            apiDocSchemeService.setSortTime(topSchemeService.getSortTime() - 1);
+            getEntityDao().update(apiDocSchemeService);
+        } catch (Exception e) {
+            throw new BusinessException("操作失败", e);
+        }
+    }
+
+    @Override
+    public void remove(Long id) {
+        try {
+            this.getEntityDao().removeById(id);
+        } catch (Exception e) {
+            throw new BusinessException("操作失败", e);
+        }
+    }
+
+    private void exchangeSortTime(ApiDocSchemeService apiDocSchemeService, long current, ApiDocSchemeService targetSchemeService) {
+        if (targetSchemeService == null) {
+            return;
+        }
+        apiDocSchemeService.setSortTime(targetSchemeService.getSortTime());
+        targetSchemeService.setSortTime(current);
+        this.update(apiDocSchemeService);
+        this.update(targetSchemeService);
     }
 }

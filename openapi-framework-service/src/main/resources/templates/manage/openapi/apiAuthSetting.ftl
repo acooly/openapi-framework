@@ -3,80 +3,101 @@
 </#if>
 <style>
     .openapi-apilist {
-        display: flex;
-        display: -webkit-flex;
-        justify-content: space-between;
-        flex-direction: row;
-        flex-wrap: wrap;
         margin-top: 10px;
+        font-size: 0;
+        height: 485px;
+        overflow: scroll;
+        -webkit-user-select: none;
     }
 
-    .openapi-apilist .openapi-api {
-        width: 25%;
-    }
-
-    .openapi-apilist .openapi-api .openapi-api-item {
-        cursor: pointer;
-        display: flex;
-        border: 1px solid #dfdfdf;
-        border-radius: 3px;
-        padding: 5px;
-        margin: 0 0 10px 10px;
-    }
-
-    .openapi-apilist .openapi-api .openapi-api-item .left {
-        width: 25px;
-        line-height: 40px;
-    }
-
-    .openapi-apilist .openapi-api .openapi-api-item .right {
-        display: flex;
-        flex: 1;
-        height: 100%;
-    }
-
-    .openapi-apilist .openapi-api-empty {
-        width: 25%;
-        height: 0px;
-    }
-
-    .openapi-apilist .openapi-api .selected {
+    .openapi-apilist li.selected {
         background-color: #01AAED;
         color: #fff;
-        border-color: #1E9FFF;
+        font-weight: bold;
+    }
+
+    .openapi-apilist li {
+        display: inline-block;
+        vertical-align: middle;
+        *display: inline;
+        *zoom: 1;
+    }
+
+    .openapi-apilist li {
+        width: 23.8%;
+        margin: 0 10px 10px 0;
+        padding: 0 8px 0 8px;
+        border: 1px solid #dfdfdf;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .openapi-apilist li:hover {
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, .1);
+    }
+
+    .openapi-api-item {
+        position: relative;
+        padding: 8px 0px 0 18px;
+    }
+
+    .openapi-api-item .ckbox {
+        position: absolute;
+        left: 0;
+        top: 15px;
+    }
+
+    .openapi-api-item .text-elip {
+        margin: 0 0 5px;
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .servicelist{
+        padding-left: 10px;
     }
 </style>
 <div id="manage_apiAuth_setting_layout" class="easyui-layout" data-options="fit:true,border:true">
-    <div id="manage_openapi_apilist_container" class="servicelist" style="border-bottom: cornflowerblue"></div>
+    <div style="padding-left: 10px;padding-right:20px;margin-top:5px;text-align: left;" class="tableForm">
+        <div>
+            关键字 : <input type="text" class="text" id="keywords" />
+            <a href="javascript:void(0);" class="easyui-linkbutton" onclick="searchService()"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
+            <a href="javascript:void(0);" class="easyui-linkbutton" onclick="showAllService()">显示全部服务</a>
+        </div>
+    </div>
+    <div id="manage_openapi_apilist_container" class="servicelist" style="border-bottom: cornflowerblue;">
+    </div>
 </div>
 
 <script id="manage_openapi_apilist_template" type="text/html">
-    <div class="openapi-apilist">
+    <ul class="openapi-apilist">
         <%
         for(i in data) {
         var e = data[i];
         %>
-        <div class="openapi-api">
+        <li>
             <div class="openapi-api-item">
-                <div class="left"><input type="checkbox" name="serviceNo" value="<%=e.serviceNo%>" onclick="bindCheckBox($(this).parent().parent(),$(this))"></div>
-                <div class="right"><%=e.serviceNo%> <br> <%=e.serviceDesc%></div>
+                <p class="text-elip" title="<%=e.serviceNo%>"><%=e.busiType%> | <%=e.serviceNo%></p>
+                <p class="text-elip" title="<%=e.serviceDesc%>"><%=e.serviceDesc%></p>
+                <input type="checkbox" class="ckbox" name="serviceNo" value="<%=e.serviceNo%>" onclick="bindCheckBox(event)"/>
             </div>
-        </div>
+        </li>
         <%}%>
-        <div class="openapi-api-empty"></div>
-        <div class="openapi-api-empty"></div>
-        <div class="openapi-api-empty"></div>
-    </div>
+    </ul>
 </script>
 
 <script>
 
+    var totalService = 0;
+    var authService = 0;
 
     /**
      * 加载全部服务API
      */
     function loadServices() {
         var permissions = "${apiAuth.permissions}";
+        $.acooly.loading();
         $.ajax({
             url: '/manage/openapi/apiAuth/getAllService.json',
             success: function (result) {
@@ -86,26 +107,27 @@
                 $('#manage_openapi_apilist_container').html($.acooly.template.render("manage_openapi_apilist_template", result));
                 // 注册事件：点击行联动checkbox
                 $('.openapi-api-item').click(function () {
-                    var checkbox = $(this).children().first().children();
-                    bindCheckBox($(this), checkbox);
+                    var checkbox = $(this).children(".ckbox");
+                    checkbox.click();
                 });
                 loadACLs();
-
             },
             error: function (r, s, e) {
+                $.acooly.loaded();
                 $.acooly.messager('失败', e, 'danger');
             }
         });
     }
 
-    function bindCheckBox(container, checkbox) {
-        if ($(checkbox).attr("checked")) {
-            $(checkbox).prop("checked", false);
-            $(container).removeClass("selected")
+    function bindCheckBox(event) {
+        var checkbox = $(event.target);
+        var linode = checkbox.parent().parent();
+        if (checkbox.is(':checked')) {
+            $(linode).addClass("selected");
         } else {
-            $(checkbox).prop("checked", true);
-            $(container).addClass("selected")
+            $(linode).removeClass("selected");
         }
+        event.stopPropagation();
     }
 
     /**
@@ -113,6 +135,7 @@
      */
     function loadACLs() {
         var authNo = "${apiAuth.authNo}";
+        //$.acooly.loading();
         $.ajax({
             url: '/manage/openapi/apiAuth/loadAcls.json',
             data: {authNo: authNo},
@@ -126,15 +149,20 @@
                     var that = $(this);
                     var serviceNo = $(that).val();
                     for (var i in acls) {
+                        totalService++;
                         if (acls[i].serviceNo == serviceNo) {
-                            $(that).prop("checked", true)
-                            $(that).parent().parent().addClass("selected")
+                            $(that).click();
+                            authService++;
                         }
                     }
                 });
             },
             error: function (r, s, e) {
                 $.acooly.messager('失败', e, 'danger');
+
+            },
+            complete : function () {
+                $.acooly.loaded();
             }
         });
     }
@@ -142,7 +170,13 @@
     /**
      * 保存ACLs
      */
-    function saveAcls() {
+    function saveAcls(dial) {
+        var serviceNoValues = getServiceNoValues();
+        if(!serviceNoValues || serviceNoValues ===''){
+            $.acooly.messager("提示信息","请至少选择一个服务",'danger');
+            return;
+        }
+        $.acooly.loading("保存中...");
         $.ajax({
             url: '/manage/openapi/apiAuth/settingSave.json',
             data: {
@@ -150,10 +184,17 @@
                 "serviceNo": getServiceNoValues()
             },
             success: function (result) {
-                $.acooly.messager("设置ACL", result.message, result.success?'success':'danger');
+                if (result.success) {
+                    $.acooly.messager("设置ACL", result.message, result.success?'success':'danger');
+                }
             },
             error: function (r, s, e) {
                 $.acooly.messager('失败', e, 'danger');
+
+            },
+            complete : function () {
+                dial.dialog('close');
+                $.acooly.loaded();
             }
         });
     }
@@ -167,11 +208,26 @@
         return vals.join(",");
     }
 
+    function searchService() {
+        var keyval = $("#keywords").val();
+        if(keyval === '' ){
+            $(".openapi-apilist > li").show();
+        }
+        $(".openapi-apilist > li").each(function(){
+            var tobj = $(this);
+            tobj.hide();
+            if(tobj.text().indexOf(keyval) > -1){
+                tobj.show();
+            }
+        })
+    }
+
+    function showAllService() {
+        $("#keywords").val('');
+        $(".openapi-apilist > li").show();
+    }
 
     $(function () {
         loadServices();
-
     });
-
-
 </script>

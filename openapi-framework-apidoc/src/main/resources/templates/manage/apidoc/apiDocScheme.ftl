@@ -8,9 +8,6 @@
                 $(this).treegrid('enableDnd', row?row.id:null);
             },
             onBeforeDrop :function(targetRow, sourceRow, point){
-                // console.info("targetRow:" + targetRow.title);
-                // console.info("sourceRow:" + sourceRow.title);
-                // console.info("point:" + JSON.stringify(point));
                 if (!point || point == null|| !targetRow || targetRow == null || !sourceRow || sourceRow == null){
                     return false;
                 }
@@ -46,7 +43,7 @@
                         标题: <input type="text" class="text" size="15" name="search_LIKE_title"/>
                         <a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false"
                            onclick="$.acooly.framework.search('manage_apiDocScheme_searchform${category}','manage_apiDocScheme_datagrid${category}');"><i
-                                    class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
+                                class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
                     </div>
                 </td>
             </tr>
@@ -104,15 +101,15 @@
         <div id="manage_apiDocScheme_action_api${category}" style="display: none;">
             <a href="#" onclick="showApis${category}('{0}','{1}')" title="关联api">关联api</a>
         </div>
-        <#--            <a onclick="$.acooly.framework.show('/manage/module/security/apiDocScheme/show.html?id={0}',600,500);" href="#" title="查看"><i-->
-        <#--                        class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>-->
+    <#--            <a onclick="$.acooly.framework.show('/manage/module/security/apiDocScheme/show.html?id={0}',600,500);" href="#" title="查看"><i-->
+    <#--                        class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>-->
 
 
         <!-- 表格的工具栏 -->
         <div id="manage_apiDocScheme_toolbar${category}">
             <a href="#" class="easyui-linkbutton" plain="true"
                onclick="$.acooly.framework.create({url:'/manage/apidoc/apiDocScheme/create.html?category=${category}',form: 'manage_apiDocScheme_editform${category}', datagrid: 'manage_apiDocScheme_datagrid${category}',width:400,height:280})"><i
-                        class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
+                    class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
         </div>
     </div>
 
@@ -134,21 +131,32 @@
                         <th field="manualNote" formatter="contentFormatter">手工说明</th>
                         <th field="serviceType" formatter="mappingFormatter">服务类型</th>
                         <th field="busiType" formatter="mappingFormatter">业务类型</th>
-<#--                        <th field="sortTime" sum="true">排序值</th>-->
                         <th field="comments">备注</th>
                         <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
                         <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>
                         <th field="signature">签名</th>
-<#--                        <th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_apiDocService_action',value,row)}">动作</th>-->
+                        <th field="rowActions" data-options="formatter:function(value, row, index){return apiDocSchemeServiceAction('manage_apiDocSchemeService_action',value,row)}">动作</th>
                     </tr>
                     </thead>
                 </table>
+
+                <!-- 每行的Action动作模板 -->
+                <div id="manage_apiDocSchemeService_action" style="display: none;">
+                    <a onclick="$.acooly.framework.confirmSubmit('/manage/apidoc/apiDocScheme/changeSchemaServiceOrder.html?direction=up','{0}','manage_apiDocSchemeService_datagrid${category}','确定','您是否要进行该操作?',reloadApisList);" href="#" title="上移"><i class="fa fa-long-arrow-up fa-fw fa-col"></i></a>
+                    <a onclick="$.acooly.framework.confirmSubmit('/manage/apidoc/apiDocScheme/changeSchemaServiceOrder.html?direction=down','{0}','manage_apiDocSchemeService_datagrid${category}','确定','您是否要进行该操作?',reloadApisList);" href="#" title="下移"><i class="fa fa-long-arrow-down fa-fw fa-col"></i></a>
+                    <a onclick="$.acooly.framework.confirmSubmit('/manage/apidoc/apiDocScheme/changeSchemaServiceOrder.html?direction=top','{0}','manage_apiDocSchemeService_datagrid${category}','确定','您是否要进行该操作?',reloadApisList);" href="#" title="置顶"><i class="fa fa-eject fa-fw fa-col"></i></a>
+                    <a onclick="$.acooly.framework.confirmSubmit('/manage/apidoc/apiDocScheme/removeSchemaService.html?','{0}','manage_apiDocSchemeService_datagrid${category}','确定','您是否要删除选中的服务吗?',reloadApisList);" href="#" title="删除"><i class="fa fa-remove fa-fw fa-col"></i></a>
+                </div>
+
             </div>
         </div>
     </div>
 </div>
 <#--<div id="edit_scheme_id${category}"></div>-->
 <script type="text/javascript">
+
+    var lastSchemeNo = "";
+
     function manage_apiDocScheme_action_formatter${category}(value, row, index){
         let actionHtml = "";
         actionHtml += formatString($('#manage_apiDocScheme_action_create${category}').html(), row.id);
@@ -166,12 +174,13 @@
         return actionHtml;
     }
 
+    function apiDocSchemeServiceAction(actionContainer, value, row) {
+        return formatString($('#' + actionContainer).html(), row.id,row.schemeNo);
+    }
+
     function manage_apiDocScheme_onClickRow${category}(rowData) {
-        $.acooly.framework.loadGrid({
-            gridId: "manage_apiDocSchemeService_datagrid${category}",
-            url: '${pageContext.request.contextPath}/manage/apidoc/apiDocScheme/schemeServiceList.html',
-            ajaxData: {"schemeNo": rowData.schemeNo}
-        });
+        lastSchemeNo = rowData.schemeNo;
+        reloadApisList();
     }
 
     /**
@@ -187,13 +196,20 @@
             height: 450,
             onClose:function(){
                 $(this).dialog('destroy');
-                $.acooly.framework.loadGrid({
-                    gridId: "manage_apiDocSchemeService_datagrid${category}",
-                    url: '${pageContext.request.contextPath}/manage/apidoc/apiDocScheme/schemeServiceList.html',
-                    ajaxData: {"schemeNo": schemeNo}
-                });
+                lastSchemeNo = schemeNo;
+                reloadApisList();
             }
         });
     }
-</script>
 
+    /**
+     * 刷新关联API列表
+     */
+    function reloadApisList() {
+        $.acooly.framework.loadGrid({
+            gridId: "manage_apiDocSchemeService_datagrid${category}",
+            url: '${pageContext.request.contextPath}/manage/apidoc/apiDocScheme/schemeServiceList.html',
+            ajaxData: {"schemeNo": lastSchemeNo}
+        });
+    }
+</script>

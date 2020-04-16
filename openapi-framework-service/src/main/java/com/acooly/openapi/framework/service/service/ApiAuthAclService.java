@@ -9,6 +9,7 @@ package com.acooly.openapi.framework.service.service;
 
 import com.acooly.core.common.service.EntityService;
 import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
+import com.acooly.openapi.framework.service.domain.ApiMetaService;
 
 import java.util.List;
 
@@ -41,4 +42,11 @@ public interface ApiAuthAclService extends EntityService<ApiAuthAcl> {
      * @return
      */
     List<ApiAuthAcl> queryAcls(String accessKey);
+
+    /**
+     * 获取已配置权限列表
+     * @param authNo
+     * @return
+     */
+    List<ApiMetaService> loadMetaServices(String authNo);
 }
