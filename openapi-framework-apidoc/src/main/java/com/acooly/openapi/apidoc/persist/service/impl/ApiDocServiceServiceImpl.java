@@ -48,7 +48,7 @@ public class ApiDocServiceServiceImpl extends EntityServiceImpl<ApiDocService, A
         if (Collections3.isNotEmpty(mergeResults)) {
             log.info("Service合并 [成功] size: {}", mergeResults.size());
             for (MergeResult result : mergeResults) {
-                log.info("Service合并 {}", result.toString());
+                log.debug("Service合并 {}", result.toString());
             }
         }
 

@@ -51,7 +51,7 @@ public class ApiDocMessageServiceImpl extends EntityServiceImpl<ApiDocMessage, A
         if (Collections3.isNotEmpty(mergeResults)) {
             log.info("Message合并 [成功] serviceNo:{}, size: {}", serviceNo, mergeResults.size());
             for (MergeResult result : mergeResults) {
-                log.info("Message合并 {}", result.toString());
+                log.debug("Message合并 {}", result.toString());
             }
         }
     }

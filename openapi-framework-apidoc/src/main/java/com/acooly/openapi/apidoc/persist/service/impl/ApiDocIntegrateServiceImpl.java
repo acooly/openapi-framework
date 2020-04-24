@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -76,7 +77,7 @@ public class ApiDocIntegrateServiceImpl implements ApiDocIntegrateService {
             }
 
             if (Collections3.isNotEmpty(removeEntities)) {
-                apiDocSchemeServiceService.removes(removeEntities.toArray(new Long[]{}));
+                apiDocSchemeServiceService.removes(removeEntities.toArray(new Serializable[]{}));
             }
 
             // 合并处理：保存新增
@@ -92,9 +93,9 @@ public class ApiDocIntegrateServiceImpl implements ApiDocIntegrateService {
             if (Collections3.isNotEmpty(unsaveEntities)) {
                 apiDocSchemeServiceService.saves(unsaveEntities);
             }
-            log.info("构建方案 成功。scheme:{} , 新增: {}， 删除冗余:{}", apiDocScheme.getTitle(), unsaveEntities.size(), removeEntities.size());
+            log.info("构建方案：{} [成功], 新增: {}， 删除冗余:{}", apiDocScheme.getTitle(), unsaveEntities.size(), removeEntities.size());
         } catch (Exception e) {
-            log.warn("构建方案 失败. scheme:{}. error:{}", apiDocScheme, e.getMessage());
+            log.warn("构建方案：{}  [失败]. scheme:{}. error:{}", apiDocScheme.getTitle(), e.getMessage());
             throw new RuntimeException("构建方案 失败", e);
         }
     }

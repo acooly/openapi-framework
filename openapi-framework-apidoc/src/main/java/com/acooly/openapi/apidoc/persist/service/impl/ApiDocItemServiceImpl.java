@@ -53,7 +53,7 @@ public class ApiDocItemServiceImpl extends EntityServiceImpl<ApiDocItem, ApiDocI
         if (Collections3.isNotEmpty(mergeResults)) {
             log.info("Item合并 [成功] messageNo:{}, size: {}", messageNo, mergeResults.size());
             for (MergeResult result : mergeResults) {
-                log.info("Item合并 {}", result.toString());
+                log.debug("Item合并 {}", result.toString());
             }
         }
     }

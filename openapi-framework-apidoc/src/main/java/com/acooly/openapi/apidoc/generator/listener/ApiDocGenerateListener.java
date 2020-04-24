@@ -23,15 +23,13 @@ import org.springframework.stereotype.Component;
 public class ApiDocGenerateListener implements ApplicationListener<ApiMetaParseFinish> {
 
     @Autowired
-    private ApiDocProperties apiDocProperties;
-    @Autowired
     private ApiDocGenerator apiDocBuilder;
 
     @Override
     public void onApplicationEvent(ApiMetaParseFinish event) {
-        log.info("ApiDoc生成事件 [启动]");
+        log.debug("ApiDoc生成事件 [启动]");
         apiDocBuilder.build();
-        log.info("ApiDoc生成事件 [完成]");
+        log.debug("ApiDoc生成事件 [完成]");
     }
 
 }

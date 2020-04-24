@@ -59,7 +59,7 @@ public class ApiMetaParseApplicationListener implements ApplicationListener<Appl
                     apiMetaServiceService.merge(apiMetaServices);
                     event.getApplicationContext().publishEvent(
                             new ApiMetaParseFinish(event.getSpringApplication(), event.getArgs(), apiServices));
-                    log.info("api服务元数据解析完毕");
+                    log.info("Api服务元数据解析完毕");
                 })
                 .start();
     }
