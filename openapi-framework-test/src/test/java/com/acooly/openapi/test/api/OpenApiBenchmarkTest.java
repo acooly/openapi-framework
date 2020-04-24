@@ -34,6 +34,7 @@ public class OpenApiBenchmarkTest extends AbstractApiServieTests {
         testRequestNoDuplicateError();
         testAsyncRequiredNotifyUrlError();
         testRedirectRequiredNotifyUrlAndReturnUrl();
+        testEmojiAndSpecialChar();
     }
 
     /**
@@ -48,7 +49,7 @@ public class OpenApiBenchmarkTest extends AbstractApiServieTests {
         assertThat(response.isSuccess()).isTrue();
         assertThat(response.isSuccess()).isTrue();
         assertThat(response.getContext()).isEqualTo(OpenApiBenchmarkTestUtils.CONTEXT);
-        log.info("测试：标准同步接口 - [通过]");
+        log.info("[通过] 测试：标准同步接口：demoOrderCreateApi ");
     }
 
 
@@ -64,7 +65,7 @@ public class OpenApiBenchmarkTest extends AbstractApiServieTests {
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isFalse();
         assertThat(response.getCode()).isEqualTo(ApiServiceResultCode.PARAMETER_ERROR.code());
-        log.info("测试：JSR303参数错误验证 - [通过]");
+        log.info("[通过] 测试：JSR303参数错误验证。");
     }
 
     /**
@@ -83,7 +84,7 @@ public class OpenApiBenchmarkTest extends AbstractApiServieTests {
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isFalse();
         assertThat(response.getCode()).isEqualTo(ApiServiceResultCode.REQUEST_NO_NOT_UNIQUE.code());
-        log.info("测试：请求号唯一 - [通过]");
+        log.info("[通过] 测试：请求号唯一");
     }
 
 
@@ -101,7 +102,7 @@ public class OpenApiBenchmarkTest extends AbstractApiServieTests {
         assertThat(response.isSuccess()).isFalse();
         assertThat(response.getCode()).isEqualTo(ApiServiceResultCode.PARAMETER_ERROR.code());
         assertThat(response.getDetail()).isEqualTo("notifyUrl不能为空");
-        log.info("测试：异步报文的notifyUrl不为空 - [通过]");
+        log.info("[通过] 测试：异步报文的notifyUrl不为空");
     }
 
     /**
@@ -118,19 +119,24 @@ public class OpenApiBenchmarkTest extends AbstractApiServieTests {
         assertThat(response.isSuccess()).isFalse();
         assertThat(response.getCode()).isEqualTo(ApiServiceResultCode.PARAMETER_ERROR.code());
         assertThat(response.getDetail()).isEqualTo("returnUrl不能为空");
-        log.info("测试：跳转报文的returnUrl不为空 - [通过]");
+        log.info("[通过] 测试：跳转报文的returnUrl不为空");
     }
 
 
+    /**
+     * 测试表情符号和特殊字符
+     */
     @Test
-    public void testServiceInnerBusinessException() {
+    public void testEmojiAndSpecialChar() {
         ApiRequest request = new ApiRequest();
-        request.setService("simpleInfo");
-        request.setContext("1212");
+        request.setService("demoSimpleInfo");
+        String specialStr = "😁🀀εǚ☏©\uD83D\uDC3E ";
+        request.setContext(specialStr);
         ApiResponse response = request(request, ApiResponse.class);
         assertThat(response).isNotNull();
-        assertThat(response.isSuccess()).isFalse();
-        assertThat(response.getCode()).isEqualTo("TEST_ERROR_CODE");
+        assertThat(response.isSuccess()).isTrue();
+        assertThat(response.getContext()).isEqualTo(specialStr);
+        log.info("[通过] 测试：表情符号和特殊字符");
     }
 
 }

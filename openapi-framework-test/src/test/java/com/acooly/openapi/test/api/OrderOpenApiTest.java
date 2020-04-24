@@ -52,7 +52,7 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
         // 可修改协议，目前支持：HTTP_FORM_JSON，JSON
         request.setRequestNo(Ids.RandomNumberGenerator.getNewString(20));
         request.setMerchOrderNo(Ids.RandomNumberGenerator.getNewString(20));
-        request.setService("orderCreate");
+        request.setService("demoOrderCreate");
         request.setTitle("同步请求创建订单\uD83D\uDC3E一休哥\uD83D\uDC3E ");
         request.setAmount(amount);
         request.setPayeeUserId("12345678900987654321");
@@ -62,7 +62,7 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
         request.setBuyeryMobileNo("13898765453");
         request.setBuyerCertNo("330702194706165014");
         request.setPassword("12312312");
-        request.setContext(content);
+        request.setContext("这是透传参数，服务器原样回传");
         List<GoodsInfo> goodsInfos = Lists.newArrayList();
         GoodsInfo goodsInfo = new GoodsInfo();
         goodsInfo.setGoodType(GoodType.actual);
@@ -77,7 +77,6 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
         log.info("订单号: {}", request.getMerchOrderNo());
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isTrue();
-        assertThat(response.getContext()).isEqualTo(content);
     }
 
 }

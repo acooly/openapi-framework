@@ -74,13 +74,20 @@ public class OrderCashierPayClientDemoController extends AbstractStandardEntityC
             //ig;
         }
 
-        request.setService("orderCreate");
+        request.setAmount(Money.amout("1200"));
+        request.setBuyeryMobileNo("13387648765");
+        request.setPayeeUserId(Ids.did());
+        request.setMerchOrderNo(Ids.did());
+        request.setTitle("测试订单");
+
+        request.setService("demoOrderCreate");
         request.setRequestNo(Ids.getDid());
         request.setPayerUserId(request.getPayeeUserId());
         request.setBuyerUserId("09876543211234567890");
         request.setBuyeryEmail("zhangpu@acooly.cn");
         request.setBuyerCertNo("330702194706165014");
         request.setPassword("12312312");
+        request.setContext("这是同步接口demoOrderCreate的context内容");
         return request;
     }
 
@@ -101,12 +108,13 @@ public class OrderCashierPayClientDemoController extends AbstractStandardEntityC
         String amount = orderCreateApiRequest.getAmount().toString();
         DemoOrderCashierPayApiRequest apiRequest = new DemoOrderCashierPayApiRequest();
         apiRequest.setRequestNo(Ids.gid());
-        apiRequest.setService("orderCashierPay");
+        apiRequest.setService("demoOrderCashierPay");
         apiRequest.setMerchOrderNo(merchOrderNo);
         apiRequest.setAmount(Money.amout(amount));
         apiRequest.setPayerUserId(payerUserId);
-        apiRequest.setReturnUrl("http://127.0.0.1:8089/openapi/test/orderCashierPay/client/returnUrl.html");
-        apiRequest.setNotifyUrl("http://127.0.0.1:8089/openapi/test/orderCashierPay/client/notifyUrl.html");
+        apiRequest.setContext("这是跳转接口demoOrderCashierPay的context内容");
+        apiRequest.setReturnUrl("http://127.0.0.1:8089/openapi/demo/orderCashierPay/client/returnUrl.html");
+        apiRequest.setNotifyUrl("http://127.0.0.1:8089/openapi/demo/orderCashierPay/client/notifyUrl.html");
         openApiTools.redirectSend(apiRequest, response);
     }
 
