@@ -81,8 +81,8 @@ public class ApiResponse extends ApiMessage {
             this.code = code;
             return;
         }
-        if (code.equals(ApiConstants.SUCCESS_RESULT_CODE)
-                || code.equals(ApiConstants.PROCESSING_RESULT_CODE)) {
+        if (code.equalsIgnoreCase(ApiConstants.SUCCESS_RESULT_CODE)
+                || code.equalsIgnoreCase(ApiConstants.PROCESSING_RESULT_CODE)) {
             success = true;
         } else {
             success = false;
