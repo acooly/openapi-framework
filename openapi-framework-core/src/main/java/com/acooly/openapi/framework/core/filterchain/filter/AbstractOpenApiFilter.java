@@ -12,6 +12,7 @@ import com.acooly.module.filterchain.Filter;
 import com.acooly.module.filterchain.FilterChain;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
+import com.acooly.openapi.framework.core.filterchain.OpenApiFilterEnum;
 import com.acooly.openapi.framework.core.log.OpenApiLoggerHandler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,6 +58,18 @@ public abstract class AbstractOpenApiFilter implements Filter<ApiContext> {
     protected void doInternalFilter(ApiContext context, FilterChain<ApiContext> filterChain) {
 
     }
+
+    @Override
+    public int getOrder() {
+        return openApiFilter().ordinal();
+    }
+
+    @Override
+    public String getName() {
+        return openApiFilter().name();
+    }
+
+    protected abstract OpenApiFilterEnum openApiFilter();
 
 
 }

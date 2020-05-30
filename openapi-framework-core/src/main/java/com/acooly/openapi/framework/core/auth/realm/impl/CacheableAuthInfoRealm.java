@@ -7,6 +7,7 @@
 package com.acooly.openapi.framework.core.auth.realm.impl;
 
 import com.acooly.core.common.boot.Apps;
+import com.acooly.core.utils.Collections3;
 import com.acooly.openapi.framework.common.cache.OpenApiCacheManager;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
@@ -76,6 +77,25 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
         return value;
     }
 
+    @Override
+    public Set<String> getIpWhitelist(String accessKey) {
+        String key = authIpKey(accessKey);
+        Set<String> value = (Set<String>) openApiCacheManager.get(key);
+        if (value == null) {
+            value = getAuthIpWhitelist(accessKey);
+            // 如果没有查询到权限信息,不设置缓存,有可能是网络或者权限系统内部错误
+            if (Collections3.isEmpty(value)) {
+                return null;
+            }
+            openApiCacheManager.add(key, value);
+        }
+        return value;
+    }
+
+    private String authIpKey(String accessKey) {
+        return Apps.getAppName() + ":" + AUTHIP_CACHE_KEY_PREFIX + accessKey;
+    }
+
     private String authorizationKey(String accessKey) {
         return Apps.getAppName() + ":" + AUTHZ_CACHE_KEY_PREFIX + accessKey;
     }
@@ -87,6 +107,7 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
     public void removeCache(String accessKey) {
         openApiCacheManager.cleanup(authenticationKey(accessKey));
         openApiCacheManager.cleanup(authorizationKey(accessKey));
+        openApiCacheManager.cleanup(authIpKey(accessKey));
     }
 
     /**
@@ -104,4 +125,6 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
      * @return
      */
     public abstract Set<String> getAuthorizedServices(String accessKey);
+
+    public abstract Set<String> getAuthIpWhitelist(String accessKey);
 }

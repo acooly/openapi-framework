@@ -13,6 +13,7 @@ import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.core.exception.ApiServiceExceptionHander;
+import com.acooly.openapi.framework.core.filterchain.OpenApiFilterEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
@@ -52,9 +53,8 @@ public class ExceptionHandlerOpenApiFilter extends AbstractOpenApiFilter {
         }
 
     }
-
     @Override
-    public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE - 3;
+    protected OpenApiFilterEnum openApiFilter() {
+        return OpenApiFilterEnum.ExceptionHandler;
     }
 }

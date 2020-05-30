@@ -10,6 +10,7 @@ package com.acooly.openapi.framework.service.domain;
 import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.arithmetic.tree.TreeNode;
+import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.openapi.framework.common.enums.SecretType;
 import com.acooly.openapi.framework.common.enums.SignType;
 import com.google.common.collect.Lists;
@@ -86,6 +87,16 @@ public class ApiAuth extends AbstractEntity implements TreeNode<ApiAuth> {
      */
     @Size(max = 512)
     private String permissions;
+
+    /**
+     * 白名单检查开关
+     */
+    private WhetherStatus whitelistCheck;
+
+    /**
+     * 白名单
+     */
+    private String whitelist;
 
     /**
      * 备注

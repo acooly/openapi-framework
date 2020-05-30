@@ -15,10 +15,10 @@ import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.core.filterchain.OpenApiFilterEnum;
 import com.acooly.openapi.framework.core.service.factory.ApiServiceFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
 /**
@@ -64,10 +64,9 @@ public class ApiContextInitOpenApiFilter extends AbstractOpenApiFilter {
                 ApiConstants.REQUEST_IP + ": " + apiContext.getApiRequestContext().getRequestIp());
     }
 
-
     @Override
-    public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE;
+    protected OpenApiFilterEnum openApiFilter() {
+        return OpenApiFilterEnum.InitContext;
     }
 }
 

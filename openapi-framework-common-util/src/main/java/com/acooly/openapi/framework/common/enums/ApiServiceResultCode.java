@@ -35,6 +35,7 @@ public enum ApiServiceResultCode implements Messageable {
     ACCESS_KEY_NOT_EXIST("ACCESS_KEY_NOT_EXIST", "访问码非法"),
     UNAUTHENTICATED_ERROR("UNAUTHENTICATED_ERROR", "签名认证错误"),
     UNAUTH_PASSWORD_ERROR("UNAUTH_PASSWORD_ERROR", "密码或账户错误"),
+    UNAUTH_IP_ERROR("UNAUTH_IP_ERROR", "请求IP未通过白名单认证"),
     REQUEST_NO_NOT_UNIQUE("REQUEST_NO_NOT_UNIQUE", "请求号重复"),
     FIELD_NOT_UNIQUE("FIELD_NOT_UNIQUE", "对象字段重复"),
     TOO_MANY_REQUEST("TOO_MANY_REQUEST", "请求数太多"),

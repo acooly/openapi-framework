@@ -3,12 +3,14 @@ package com.acooly.openapi.framework.service.service.impl;
 import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
 import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
 import com.acooly.openapi.framework.service.service.ApiAuthAclService;
 import com.acooly.openapi.framework.service.service.ApiAuthService;
 import com.acooly.openapi.framework.service.service.AuthInfoRealmManageService;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,5 +88,14 @@ public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageSer
         }
 
         return permissions;
+    }
+
+    @Override
+    public Set<String> getIpWhitelist(String accessKey) {
+        ApiAuth apiAuth = apiAuthService.findByAccesskey(accessKey);
+        if (apiAuth != null && apiAuth.getWhitelistCheck() == WhetherStatus.yes && Strings.isNotBlank(apiAuth.getWhitelist())) {
+            return Sets.newHashSet(Splitter.on(",").omitEmptyStrings().trimResults().split(apiAuth.getWhitelist()));
+        }
+        return null;
     }
 }

@@ -18,6 +18,7 @@ import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.core.filterchain.OpenApiFilterEnum;
 import com.acooly.openapi.framework.core.listener.multicaster.EventPublisher;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
@@ -88,7 +89,7 @@ public class ServiceExecuteOpenApiFilter extends AbstractOpenApiFilter {
     }
 
     @Override
-    public int getOrder() {
-        return 10;
+    protected OpenApiFilterEnum openApiFilter() {
+        return OpenApiFilterEnum.ServiceExecute;
     }
 }

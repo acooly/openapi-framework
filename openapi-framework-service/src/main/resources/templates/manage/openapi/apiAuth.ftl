@@ -82,6 +82,7 @@
                 <th field="accessKey">访问帐号</th>
                 <th field="secretKey">访问秘钥</th>
                 <th field="permissions" width="150px">已配置权限</th>
+                <th field="whitelistCheck" formatter="mappingFormatter">启用白名单</th>
                 <th field="comments">备注</th>
                 <th field="rowActions" data-options="formatter:function(value, row, index){return manage_apiAuth_action_show(row)}">动作</th>
             </tr>
@@ -112,7 +113,7 @@
                         <th field="id" sum="false">id</th>
                         <th field="serviceName">服务编号</th>
                         <th field="serviceDesc">服务名称</th>
-                        <th field="note">服务说明</th>
+                        <th field="note" formatter="contentFormatter">服务说明</th>
                         <th field="busiType" formatter="mappingFormatter">业务类型</th>
                         <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
                         <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>

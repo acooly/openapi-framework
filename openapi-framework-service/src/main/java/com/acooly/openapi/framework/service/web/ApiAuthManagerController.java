@@ -13,6 +13,8 @@ import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.enums.AbleStatus;
+import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.openapi.framework.common.enums.SecretType;
 import com.acooly.openapi.framework.common.enums.SignType;
 import com.acooly.openapi.framework.common.utils.AccessKeys;
@@ -180,6 +182,7 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
         model.put("allSecretTypes", SecretType.mapping());
         model.put("allSignTypes", SignType.mapping());
         model.put("allPartners", getAllPartner());
+        model.put("allWhitelistChecks", WhetherStatus.mapping());
     }
 
     /**

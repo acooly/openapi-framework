@@ -32,4 +32,5 @@ public abstract class AnonymousSupportAuthInfoRealm extends CacheableAuthInfoRea
   }
 
   protected abstract Set<String> doGetAuthorizedServices(String accessKey);
+
 }

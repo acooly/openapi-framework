@@ -14,6 +14,7 @@ import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiRequest;
+import com.acooly.openapi.framework.core.filterchain.OpenApiFilterEnum;
 import com.acooly.openapi.framework.core.marshall.ApiMarshallFactory;
 import com.acooly.openapi.framework.core.marshall.ApiRequestMarshall;
 import com.acooly.openapi.framework.service.service.OrderInfoService;
@@ -87,7 +88,7 @@ public class RequestMarshallOpenApiFilter extends AbstractOpenApiFilter {
     }
 
     @Override
-    public int getOrder() {
-        return 3;
+    protected OpenApiFilterEnum openApiFilter() {
+        return OpenApiFilterEnum.RequestMarshall;
     }
 }

@@ -11,8 +11,8 @@ package com.acooly.openapi.framework.core.filterchain.filter;
 import com.acooly.module.filterchain.FilterChain;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
+import com.acooly.openapi.framework.core.filterchain.OpenApiFilterEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
 /**
@@ -42,7 +42,7 @@ public class FinishOpenApiFilter extends AbstractOpenApiFilter {
     }
 
     @Override
-    public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
+    protected OpenApiFilterEnum openApiFilter() {
+        return OpenApiFilterEnum.FinishHandle;
     }
 }
