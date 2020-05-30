@@ -104,6 +104,8 @@ public class ApiAuth extends AbstractEntity implements TreeNode<ApiAuth> {
     @Size(max = 128)
     private String comments;
 
+    @Transient
+    private String state = "closed";
 
     @Transient
     public List<String> getAllowServices() {

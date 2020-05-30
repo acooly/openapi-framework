@@ -10,6 +10,8 @@ package com.acooly.openapi.framework.service.service;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
 
+import java.util.List;
+
 /**
  * 认证授权信息管理 Service接口
  * <p>
@@ -32,4 +34,6 @@ public interface ApiAuthService extends EntityService<ApiAuth> {
      * @return
      */
     ApiAuth findByAuthNo(String authNo);
+
+    List<ApiAuth> findByParent(Long parentId);
 }

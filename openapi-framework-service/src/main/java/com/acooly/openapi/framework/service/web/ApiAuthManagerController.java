@@ -6,6 +6,7 @@
  */
 package com.acooly.openapi.framework.service.web;
 
+import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.view.ViewResult;
 import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.core.common.web.support.JsonListResult;
@@ -13,7 +14,6 @@ import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.enums.AbleStatus;
 import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.openapi.framework.common.enums.SecretType;
 import com.acooly.openapi.framework.common.enums.SignType;
@@ -58,6 +58,30 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
     private ApiAuthAclService apiAuthAclService;
     @Autowired
     private ApiPartnerService apiPartnerService;
+
+    @RequestMapping(value = "loadLevel")
+    @ResponseBody
+    public JsonListResult<ApiAuth> loadLevel(HttpServletRequest request) {
+        JsonListResult<ApiAuth> result = new JsonListResult();
+        try {
+            Long parentId = Servlets.getLongParameter("id");
+            Map<String, Object> map = getSearchParams(request);
+            if(parentId == null){
+                map.put("NULL_parentId", 0L);
+            }else{
+                map.put("EQ_parentId", parentId);
+            }
+            PageInfo<ApiAuth> pageInfo = apiAuthService.query(getPageInfo(request),map,getSortMap(request));
+            result.setTotal(pageInfo.getTotalCount());
+            result.setRows(pageInfo.getPageResults());
+            result.setHasNext(pageInfo.hasNext());
+            result.setPageNo(pageInfo.getCurrentPage());
+            result.setPageSize(pageInfo.getCountOfCurrentPage());
+        } catch (Exception e) {
+            handleException(result, "列表查询", e);
+        }
+        return result;
+    }
 
     @RequestMapping(value = "loadAcls")
     @ResponseBody

@@ -20,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 认证授权信息管理 Service实现
  * <p>
@@ -76,5 +78,13 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
     public void remove(ApiAuth o) throws BusinessException {
         super.remove(o);
         eventBus.publish(new ApiAuthUpdateEvent(o));
+    }
+
+    @Override
+    public List<ApiAuth> findByParent(Long parentId) {
+        if (parentId == null) {
+            return getEntityDao().findTops();
+        }
+        return getEntityDao().findByParentId(parentId);
     }
 }

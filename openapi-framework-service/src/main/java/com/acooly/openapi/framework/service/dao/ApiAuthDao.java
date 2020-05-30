@@ -11,6 +11,8 @@ import com.acooly.openapi.framework.service.domain.ApiAuth;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * 认证授权信息管理 Mybatis Dao
  * <p>
@@ -22,6 +24,7 @@ public interface ApiAuthDao extends EntityMybatisDao<ApiAuth> {
 
     /**
      * 根据accesskey查询
+     *
      * @param accesskey
      * @return
      */
@@ -30,9 +33,22 @@ public interface ApiAuthDao extends EntityMybatisDao<ApiAuth> {
 
     /**
      * 根据编码查询
+     *
      * @param authNo
      * @return
      */
     @Select("select * from api_auth  where auth_no =#{authNo}")
     ApiAuth findByAuthNo(@Param("authNo") String authNo);
+
+    /**
+     * 根据父节点ID查询子列表
+     *
+     * @param parentId
+     * @return
+     */
+    @Select("select * from api_auth  where parent_id = #{parentId} order by id desc")
+    List<ApiAuth> findByParentId(@Param("parentId") Long parentId);
+
+    @Select("select * from api_auth  where parent_id is null order by id desc")
+    List<ApiAuth> findTops();
 }
