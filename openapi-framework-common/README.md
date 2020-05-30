@@ -20,6 +20,13 @@ OpenApi开放平台框架提供完善的网关服务开放平台的完整解决�
 
 ## 3. 版本
 
+### v5.0.0-SNAPSHOT(2020-05-30)
+
+* 2020-05-30 - issue #14: 完成IP白名单的能力开发，默认不开启，可通过后台针对每个AccessKey配置开启和设置 - [zhangpu] b9724fa
+* 2020-05-30 - 优化OpenApi后台功能的体验 - [zhangpu] b9724fa
+* 2020-05-09 - BUGFIX-修复code忽略大小写SUCCESS判断 - [xiyang] 5bba455
+* 2020-04-25 - Issue #1： 清理apidoc的冗余日志，跳转明细日志为debug - [zhangpu] bf14b8d
+
 ### v5.0.0-SNAPSHOT(2020-02-13)
 
 本版本主要重构了OpenApi核心认证和授权结构，缓存实现等功能，涉及数据结构变更。主要内容如下：
