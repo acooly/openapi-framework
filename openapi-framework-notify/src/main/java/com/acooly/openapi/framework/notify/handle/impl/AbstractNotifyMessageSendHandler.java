@@ -10,7 +10,6 @@ package com.acooly.openapi.framework.notify.handle.impl;
 
 import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.common.dto.ApiMessageContext;
 import com.acooly.openapi.framework.common.enums.TaskExecuteStatus;
 import com.acooly.openapi.framework.common.enums.TaskStatus;
 import com.acooly.openapi.framework.notify.OpenApiNotifyProperties;
@@ -19,7 +18,6 @@ import com.acooly.openapi.framework.service.domain.NotifyMessage;
 import com.acooly.openapi.framework.service.service.NotifyMessageService;
 import com.github.kevinsawicki.http.HttpRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.entity.ContentType;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
@@ -100,6 +98,7 @@ public abstract class AbstractNotifyMessageSendHandler implements NotifyMessageS
             int sendCount = notifyMessage.getSendCount();
             if (sendCount >= notifyCount) {
                 taskStatus = TaskStatus.Finish;
+                notifyMessage.setNextSendTime(null);
                 log.info("第{}次通知 [失败]，通知失败次数达到阀值，结束通知任务", sendCount);
             } else {
                 taskStatus = TaskStatus.Waitting;

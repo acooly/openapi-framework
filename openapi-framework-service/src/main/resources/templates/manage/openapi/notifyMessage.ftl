@@ -12,19 +12,20 @@
         <form id="manage_apiNotifyMessage_searchform" class="form-inline ac-form-search" onsubmit="return false">
             <div class="form-group">
                 <label class="col-form-label">GID：</label>
-                <input type="text" class="form-control form-control-sm" style="width: 150px;" name="search_EQ_gid"/>
+                <input type="text" class="form-control form-control-sm" style="width: 150px;" name="search_LLIKE_gid"/>
             </div>
             <div class="form-group">
-                <label class="col-form-label">requestNo：</label>
-                <input type="text" class="form-control form-control-sm" style="width: 150px;" name="search_EQ_requestNo"/>
+                <label class="col-form-label">请求号(外部)：</label>
+                <input type="text" class="form-control form-control-sm" style="width: 150px;" name="search_LLIKE_requestNo"/>
             </div>
             <div class="form-group">
-                <label class="col-form-label">商户ID：</label>
+                <label class="col-form-label">partnerId：</label>
                 <input type="text" class="form-control form-control-sm" name="search_EQ_partnerId"/>
             </div>
             <div class="form-group">
-                <label class="col-form-label">商户订单号：</label>
-                <input type="text" class="form-control form-control-sm" name="search_LLIKE_merchOrderNo"/>
+                <label class="col-form-label">首次通知时间：</label>
+                <input type="text" class="form-control form-control-sm" id="search_GTE_createTime" name="search_GTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
+                <span class="mr-1 ml-1">至</span> <input type="text" class="form-control form-control-sm" id="search_LTE_createTime" name="search_LTE_createTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
             </div>
             <div class="form-group">
                 <label class="col-form-label">通知状态：</label>
@@ -44,15 +45,15 @@
             <thead>
             <tr>
                 <th field="id">id</th>
-                <th field="gid" data-options="formatter:function(v,r){  var s=v; if(r.merchOrderNo){ s+='<div style=\'margin-top:2px;\'>'+r.merchOrderNo+'</div>'} return s; }">GID|订单号</th>
+                <th field="gid">GID</th>
                 <th field="partnerId" data-options="formatter:function(v,r){  var s=v; if(r.requestNo){ s+='<div style=\'margin-top:2px;\'>'+r.requestNo+'</div>'} return s; }">接入方ID|请求号</th>
                 <th field="service" data-options="formatter:function(v,r){ return v + '_' + r.version }">服务名</th>
                 <th field="sendCount">已通知次数</th>
                 <th field="nextSendTime">下次通知时间</th>
                 <th field="status">通知状态</th>
                 <th field="executeStatus">执行状态</th>
-                <th field="createTime">创建时间</th>
-                <th field="updateTime">更新时间</th>
+                <th field="createTime">首次通知时间</th>
+                <th field="updateTime">最后通知时间</th>
                 <th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_apiNotifyMessage_action',value,row)}">动作</th>
             </tr>
             </thead>

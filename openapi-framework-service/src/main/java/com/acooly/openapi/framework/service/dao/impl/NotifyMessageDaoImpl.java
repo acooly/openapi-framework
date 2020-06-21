@@ -8,6 +8,7 @@
 package com.acooly.openapi.framework.service.dao.impl;
 
 import com.acooly.core.common.dao.support.PageInfo;
+import com.acooly.core.utils.Dates;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.ds.AbstractJdbcTemplateDao;
 import com.acooly.openapi.framework.common.enums.ApiProtocol;
@@ -111,6 +112,22 @@ public class NotifyMessageDaoImpl extends AbstractJdbcTemplateDao implements Not
         if (Strings.isNotBlank(executeStatus)) {
             sb.append(" and execute_status = '").append(executeStatus).append("'");
         }
+
+        String startTime = (String) map.get("GTE_createTime");
+        if (Strings.isNotBlank(startTime)) {
+            sb.append(" and create_time >= '" + startTime + "'");
+        }
+        String endTime = (String) map.get("LTE_createTime");
+        if (Strings.isNotBlank(endTime)) {
+            try {
+                endTime = Dates.format(Dates.addDay(Dates.parse(endTime)), Dates.CHINESE_DATE_FORMAT_LINE);
+            } catch (Exception e) {
+                // ig
+            }
+
+            sb.append(" and create_time <= '" + endTime + "'");
+        }
+
 
         if (orderMap == null || orderMap.size() == 0) {
             sb.append(" order by id desc");
