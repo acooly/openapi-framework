@@ -40,7 +40,9 @@ public class NotifyMessageSendServiceImpl implements NotifyMessageSendService {
     @Override
     public void sendNotifyMessage(final NotifyMessage notifyMessage) {
         try {
-            notifyMessageService.insert(notifyMessage);
+            if (notifyMessage.getId() == null) {
+                notifyMessageService.insert(notifyMessage);
+            }
             notifyMessageSendDispatcher.dispatch(notifyMessage);
         } catch (BusinessException be) {
             throw be;

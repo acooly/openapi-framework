@@ -13,23 +13,32 @@ import com.acooly.openapi.framework.service.domain.NotifyMessage;
 import java.util.List;
 import java.util.Map;
 
-/** @author zhangpu */
+/**
+ * @author zhangpu
+ */
 public interface NotifyMessageService {
 
-  NotifyMessage get(Long id);
+    NotifyMessage get(Long id);
 
-  void insert(NotifyMessage notifyMessage);
+    /**
+     * 更新数据为待重新发送
+     *
+     * @param id
+     */
+    void updateForRetrySend(Long id);
 
-  void updateForManage(NotifyMessage notifyMessage);
+    void insert(NotifyMessage notifyMessage);
 
-  void updateStatus(NotifyMessage notifyMessage);
+    void updateForManage(NotifyMessage notifyMessage);
 
-  int updateProccessingStatus(NotifyMessage notifyMessage);
+    void updateStatus(NotifyMessage notifyMessage);
 
-  void updateProccessingStatus(List<NotifyMessage> notifyMessages);
+    int updateProccessingStatus(NotifyMessage notifyMessage);
 
-  List<NotifyMessage> listUnProcessed(Integer topNum);
+    void updateProccessingStatus(List<NotifyMessage> notifyMessages);
 
-  PageInfo<NotifyMessage> query(
-      PageInfo<NotifyMessage> pageInfo, Map<String, Object> map, Map<String, Boolean> orderMap);
+    List<NotifyMessage> listUnProcessed(Integer topNum);
+
+    PageInfo<NotifyMessage> query(
+            PageInfo<NotifyMessage> pageInfo, Map<String, Object> map, Map<String, Boolean> orderMap);
 }

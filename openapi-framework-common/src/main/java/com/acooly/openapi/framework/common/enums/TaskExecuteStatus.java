@@ -16,9 +16,9 @@ import java.util.Map;
 
 /** @author zhangpu */
 public enum TaskExecuteStatus implements Messageable {
-  Processing("Processing", "处理中"),
+  Processing("Processing", "发送中"),
 
-  Unprocessed("Unprocessed", "未处理");
+  Unprocessed("Unprocessed", "待执行");
 
   private final String code;
   private final String message;

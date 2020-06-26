@@ -4,6 +4,9 @@ import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.web.AbstractJsonEntityController;
 import com.acooly.core.common.web.MappingMethod;
 import com.acooly.core.common.web.support.JsonEntityResult;
+import com.acooly.core.common.web.support.JsonResult;
+import com.acooly.core.utils.Servlets;
+import com.acooly.openapi.framework.common.enums.TaskExecuteStatus;
 import com.acooly.openapi.framework.common.enums.TaskStatus;
 import com.acooly.openapi.framework.service.domain.NotifyMessage;
 import com.acooly.openapi.framework.service.service.NotifyMessageService;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -57,6 +61,21 @@ public class NotifyMessageManagerController extends AbstractJsonEntityController
         return getEditView();
     }
 
+    @ResponseBody
+    @RequestMapping("retrySend")
+    public JsonResult retrySend(HttpServletRequest request, HttpServletResponse response) {
+        JsonResult result = new JsonResult();
+        allow(request, response, MappingMethod.update);
+        try {
+            Long id = Servlets.getLongParameter("id");
+            notifyMessageService.updateForRetrySend(id);
+            result.setMessage("立即重发提交成功，请等待下次定时任务触发执行");
+        } catch (Exception e) {
+            handleException(result, "立即重发提交失败", e);
+        }
+        return result;
+    }
+
     @Override
     public JsonEntityResult updateJson(HttpServletRequest request, HttpServletResponse response) {
         allow(request, response, MappingMethod.update);
@@ -76,6 +95,7 @@ public class NotifyMessageManagerController extends AbstractJsonEntityController
 
     @Override
     protected void referenceData(HttpServletRequest request, Map model) {
-        model.put("allStatus", TaskStatus.mapping());
+        model.put("allStatuss", TaskStatus.mapping());
+        model.put("allExecuteStatuss", TaskExecuteStatus.mapping());
     }
 }

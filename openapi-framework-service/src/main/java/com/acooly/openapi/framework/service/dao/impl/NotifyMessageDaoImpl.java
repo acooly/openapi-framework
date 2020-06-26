@@ -222,9 +222,11 @@ public class NotifyMessageDaoImpl extends AbstractJdbcTemplateDao implements Not
     public void updateForManage(NotifyMessage notifyMessage) {
         StringBuilder sb = new StringBuilder();
         sb.append("update ").append(TABLE_NAME).append(" set update_time = ").append(getSqlDate());
+        sb.append(", send_count=?");
         sb.append(", url=?").append(",status=?").append(",next_send_time=?").append(" where id=?");
         jdbcTemplate.update(
                 sb.toString(),
+                notifyMessage.getSendCount(),
                 notifyMessage.getUrl(),
                 notifyMessage.getStatus().code(),
                 notifyMessage.getNextSendTime(),

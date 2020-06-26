@@ -116,7 +116,6 @@ public abstract class AbstractNotifyMessageSendHandler implements NotifyMessageS
         notifyMessageService.updateStatus(notifyMessage);
         MDC.clear();
     }
-
     /**
      * 组装发送内容
      * 如果需要，可以在此进行再次签名处理
@@ -145,6 +144,9 @@ public abstract class AbstractNotifyMessageSendHandler implements NotifyMessageS
     private static Date getNextNotifyTime(int num) {
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTime(new Date());
+        if (num >= notifyCount - 1) {
+            num = notifyCount - 1;
+        }
         calendar.add(Calendar.MINUTE, notifyTime[num]);
         return calendar.getTime();
     }

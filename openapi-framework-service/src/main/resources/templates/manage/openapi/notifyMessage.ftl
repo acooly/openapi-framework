@@ -30,7 +30,7 @@
             <div class="form-group">
                 <label class="col-form-label">通知状态：</label>
                 <select name="search_EQ_status" class="form-control input-sm select2bs4">
-                    <option value="">所有</option><#list allStatus as k,v>
+                    <option value="">所有</option><#list allStatuss as k,v>
                     <option value="${k}">${k}:${v}</option></#list></select>
             </div>
             <div class="form-group">
@@ -50,8 +50,8 @@
                 <th field="service" data-options="formatter:function(v,r){ return v + '_' + r.version }">服务名</th>
                 <th field="sendCount">已通知次数</th>
                 <th field="nextSendTime">下次通知时间</th>
-                <th field="status">通知状态</th>
-                <th field="executeStatus">执行状态</th>
+                <th field="status" formatter="mappingFormatter">通知状态</th>
+                <th field="executeStatus" formatter="mappingFormatter">执行状态</th>
                 <th field="createTime">首次通知时间</th>
                 <th field="updateTime">最后通知时间</th>
                 <th field="rowActions" data-options="formatter:function(value, row, index){return formatAction('manage_apiNotifyMessage_action',value,row)}">动作</th>
@@ -61,6 +61,7 @@
 
         <!-- 每行的Action动作模板 -->
         <div id="manage_apiNotifyMessage_action" style="display: none;">
+            <a onclick="$.acooly.framework.confirmSubmit('/manage/openapi/notifyMessage/retrySend.html','{0}','manage_apiNotifyMessage_datagrid','发送通知','请求确定立即发送异步通知');" href="#" title="立即发送"><i class="fa fa-play fa-lg fa-fw fa-col"></i></a>
             <a onclick="$.acooly.framework.edit({url:'/manage/openapi/notifyMessage/edit.html',id:'{0}',entity:'apiNotifyMessage',width:500,height:450});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
         </div>
     </div>

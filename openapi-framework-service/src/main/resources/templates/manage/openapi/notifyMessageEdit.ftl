@@ -30,7 +30,7 @@
 			</tr>					
 			<tr>
 				<th>已通知次数：</th>
-				<td>${notifyMessage.sendCount}</td>
+				<td><input type="text" name="sendCount" size="25" class="easyui-validatebox text" data-options="required:true"></td>
 			</tr>
 			<tr>
 				<th>通知地址：</th>
@@ -44,7 +44,7 @@
 				<th>通知状态：</th>
 				<td>
                     <select name="status" editable="false" style="height:27px;" panelHeight="auto" class="easyui-combobox" data-options="required:true">
-						<#list allStatus as k,v><option <#if notifyMessage.status.code()==k>selected</#if> value="${k}">${v}</option></#list>
+						<#list allStatuss as k,v><option <#if notifyMessage.status.code()==k>selected</#if> value="${k}">${v}</option></#list>
 					</select>
                 </td>
 			</tr>
