@@ -124,8 +124,8 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
             sb.append("Content-Length: " + contentLength + "\n");
             sb.append("Keep-Alive: timeout=15, max=100\n");
             sb.append(ApiConstants.X_API_ACCESS_KEY + ": " + Ids.getDid("U") + "\n");
-            sb.append(ApiConstants.SIGN_TYPE + ": MD5\n");
-            sb.append(ApiConstants.SIGN + ":" + sign + "\n");
+            sb.append(ApiConstants.X_API_SIGN_TYPE + ": MD5\n");
+            sb.append(ApiConstants.X_API_SIGN + ":" + sign + "\n");
             sb.append("Connection: Keep-Alive\n");
         } else if (messageType == MessageTypeEnum.Request) {
             sb.append("POST /gateway.do HTTP/1.1\n");
@@ -133,17 +133,17 @@ public class ApiDocMessageBuilderImpl implements ApiDocMessageBuilder {
             sb.append("Content-Type: application/json;charset=UTF-8\n");
             sb.append("Host: api.xxx.com\n");
             sb.append(ApiConstants.X_API_ACCESS_KEY + ": " + Ids.getDid("U") + "\n");
-            sb.append(ApiConstants.SIGN_TYPE + ": MD5\n");
-            sb.append(ApiConstants.SIGN + ":" + sign + "\n");
+            sb.append(ApiConstants.X_API_SIGN_TYPE + ": MD5\n");
+            sb.append(ApiConstants.X_API_SIGN + ":" + sign + "\n");
             sb.append("Connection: Keep-Alive\n");
         } else {
-            sb.append("POST /www.mechant.com/" + (messageType == MessageTypeEnum.Notify ? "notify" : "return") + ".html HTTP/1.1\n");
+            sb.append("POST /www.merchant.com/" + (messageType == MessageTypeEnum.Notify ? "notify" : "return") + ".html HTTP/1.1\n");
             sb.append("Content-Length: " + contentLength + "\n");
             sb.append("Content-Type: application/json;charset=UTF-8\n");
-            sb.append("Host: www.mechant.com\n");
+            sb.append("Host: www.merchant.com\n");
             sb.append(ApiConstants.X_API_ACCESS_KEY + ": " + Ids.getDid("U") + "\n");
-            sb.append(ApiConstants.SIGN_TYPE + ": MD5\n");
-            sb.append(ApiConstants.SIGN + ":" + sign + "\n");
+            sb.append(ApiConstants.X_API_SIGN_TYPE + ": MD5\n");
+            sb.append(ApiConstants.X_API_SIGN + ":" + sign + "\n");
             sb.append("Connection: Keep-Alive\n");
         }
 
