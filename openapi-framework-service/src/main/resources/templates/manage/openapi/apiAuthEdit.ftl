@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">访问帐号</label>
+                    <label class="col-sm-2 col-form-label">访问秘钥</label>
                     <div class="col-sm-10">
                         <div class="input-group">
                             <input type="text" id="manage_editform_secretKey" name="secretKey" placeholder="点击生成访问秘钥..." class="easyui-validatebox form-control" data-options="validType:['length[1,45]']" required="true"/>

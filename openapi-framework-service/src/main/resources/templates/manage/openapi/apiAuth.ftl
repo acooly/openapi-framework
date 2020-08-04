@@ -60,8 +60,12 @@
                 <select name="search_EQ_partnerId" class="form-control input-sm select2bs4"><option value="">所有</option><#list allPartners as k,v><option value="${k}">${k}:${v}</option></#list></select>
             </div>
             <div class="form-group">
-                <label class="col-form-label">AccessKey：</label>
+                <label class="col-form-label">访问帐号：</label>
                 <input type="text" class="form-control form-control-sm" style="width: 200px;" name="search_LIKE_accessKey"/>
+            </div>
+            <div class="form-group">
+                <label class="col-form-label">服务码：</label>
+                <input type="text" class="form-control form-control-sm" style="width: 200px;" name="serviceCode" id="serviceCode" />
             </div>
             <div class="form-group">
                 <label class="col-form-label">时间：</label>
@@ -144,5 +148,24 @@
             ajaxData: {"authNo": authNo}
         });
     }
+
+    //服务码选择
+    $('#serviceCode').combobox({
+        url:'/manage/openapi/apiAuth/getAllService.json',
+        valueField:'serviceName',
+        textField:'serviceDesc',
+        groupField:"busiType",
+        formatter: function(row){
+            var opts = $(this).combobox('options');
+            return row[opts.valueField]+"-"+row[opts.textField];
+        },
+        loadFilter:function(data){
+            return data.data;
+        },
+        filter: function(q, row){
+            var opts = $(this).combobox('options');
+            return row[opts.textField].indexOf(q) == 0 || row[opts.valueField].indexOf(q) == 0;
+        }
+    });
 
 </script>
