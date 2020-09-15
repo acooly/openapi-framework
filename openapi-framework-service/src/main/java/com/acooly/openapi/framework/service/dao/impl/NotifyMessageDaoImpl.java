@@ -275,6 +275,16 @@ public class NotifyMessageDaoImpl extends AbstractJdbcTemplateDao implements Not
         jdbcTemplate.update(sql);
     }
 
+
+    /**
+     * 拉取首次发生没有成功的重发
+     * <p>
+     * 1、发生失败次数少的优先
+     * 2、最新提交的通知优先
+     *
+     * @param topNum
+     * @return
+     */
     @Override
     public List<NotifyMessage> listUnProcessed(Integer topNum) {
         String sql =
@@ -283,9 +293,9 @@ public class NotifyMessageDaoImpl extends AbstractJdbcTemplateDao implements Not
                         + TaskStatus.Waitting.code()
                         + "' and execute_status = '"
                         + TaskExecuteStatus.Unprocessed.code()
-                        + "' and next_send_time<=now() order by id";
+                        + "' and next_send_time<=now() order by send_count ,id";
         if (getDbType() == DbType.mysql) {
-            sql += " limit 0,5";
+            sql += " limit 0," + topNum;
         } else if (getDbType() == DbType.oracle) {
             sql = "select * from (" + sql + ") where ROWNUM <= " + topNum;
         }
