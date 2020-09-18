@@ -18,8 +18,6 @@ import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.openapi.framework.common.enums.SecretType;
 import com.acooly.openapi.framework.common.enums.SignType;
 import com.acooly.openapi.framework.common.utils.AccessKeys;
-import com.acooly.openapi.framework.core.auth.permission.Permission;
-import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
 import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
 import com.acooly.openapi.framework.service.domain.ApiMetaService;
@@ -35,11 +33,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,8 +59,8 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
     @Autowired
     private ApiPartnerService apiPartnerService;
 
-    @Resource
-    private AuthInfoRealm authInfoRealm;
+//    @Resource
+//    private AuthInfoRealm authInfoRealm;
 
     @RequestMapping(value = "loadLevel")
     @ResponseBody
@@ -82,27 +78,27 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
             }
             PageInfo<ApiAuth> pageInfo = apiAuthService.query(getPageInfo(request), map, getSortMap(request));
             List<ApiAuth> apiAuthList = pageInfo.getPageResults();
-            if (Strings.isNoneBlank(serviceCode)) {
-                List<ApiAuth> hasPermList = new ArrayList<>(apiAuthList.size());
-
-                outFor:
-                for (ApiAuth apiPartner : apiAuthList) {
-                    String resource = apiPartner.getAccessKey() + ":" + serviceCode;
-                    //在缓存中获取
-                    List<Permission> permissionList = (List<Permission>) authInfoRealm.getAuthorizationInfo(apiPartner.getAccessKey());
-                    if (permissionList == null || permissionList.size() == 0) {
-                        continue;
-                    }
-                    innerFor:
-                    for (Permission perm : permissionList) {
-                        if (perm.implies(resource)) {
-                            hasPermList.add(apiPartner);
-                            continue outFor;
-                        }
-                    }
-                }
-                pageInfo.setPageResults(hasPermList);
-            }
+//            if (Strings.isNoneBlank(serviceCode)) {
+//                List<ApiAuth> hasPermList = new ArrayList<>(apiAuthList.size());
+//
+//                outFor:
+//                for (ApiAuth apiPartner : apiAuthList) {
+//                    String resource = apiPartner.getAccessKey() + ":" + serviceCode;
+//                    //在缓存中获取
+//                    List<Permission> permissionList = (List<Permission>) authInfoRealm.getAuthorizationInfo(apiPartner.getAccessKey());
+//                    if (permissionList == null || permissionList.size() == 0) {
+//                        continue;
+//                    }
+//                    innerFor:
+//                    for (Permission perm : permissionList) {
+//                        if (perm.implies(resource)) {
+//                            hasPermList.add(apiPartner);
+//                            continue outFor;
+//                        }
+//                    }
+//                }
+//                pageInfo.setPageResults(hasPermList);
+//            }
             result.setTotal(pageInfo.getTotalCount());
             result.setRows(pageInfo.getPageResults());
             result.setHasNext(pageInfo.hasNext());

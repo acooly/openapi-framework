@@ -9,7 +9,7 @@
         <version>5.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>openapi-framework</artifactId>
-    <version>5.0.0-SNAPSHOT</version>
+    <version>5.0.0-SNAPSHOT-optimize</version>
     <packaging>pom</packaging>
 
     <name>openapi-framework</name>
@@ -23,37 +23,37 @@
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-common-util</artifactId>
-                <version>${project.version}</version>
+                <version>${project.parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-common</artifactId>
-                <version>${project.version}</version>
+                <version>${project.parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-core</artifactId>
-                <version>${project.version}</version>
+                <version>${project.parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-service</artifactId>
-                <version>${project.version}</version>
+                <version>${project.parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-mock</artifactId>
-                <version>${project.version}</version>
+                <version>${project.parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-notify</artifactId>
-                <version>${project.version}</version>
+                <version>${project.parent.version}</version>
             </dependency>
 
             <dependency>
@@ -65,13 +65,13 @@
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-facade</artifactId>
-                <version>${project.version}</version>
+                <version>${project.parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-client</artifactId>
-                <version>${project.version}</version>
+                <version>${project.parent.version}</version>
             </dependency>
 
             <dependency>
@@ -83,19 +83,19 @@
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-test</artifactId>
-                <version>${project.version}</version>
+                <version>${project.parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-demo-service</artifactId>
-                <version>${project.version}</version>
+                <version>${project.parent.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.acooly</groupId>
                 <artifactId>openapi-framework-demo-message</artifactId>
-                <version>${project.version}</version>
+                <version>${project.parent.version}</version>
             </dependency>
 
         </dependencies>

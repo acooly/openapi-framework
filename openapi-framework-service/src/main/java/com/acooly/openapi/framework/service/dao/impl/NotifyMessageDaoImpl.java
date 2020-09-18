@@ -124,11 +124,8 @@ public class NotifyMessageDaoImpl extends AbstractJdbcTemplateDao implements Not
             } catch (Exception e) {
                 // ig
             }
-
             sb.append(" and create_time <= '" + endTime + "'");
         }
-
-
         if (orderMap == null || orderMap.size() == 0) {
             sb.append(" order by id desc");
         } else {
@@ -166,6 +163,7 @@ public class NotifyMessageDaoImpl extends AbstractJdbcTemplateDao implements Not
                     @Override
                     public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                         PreparedStatement ps = con.prepareStatement(sql, new int[]{1});
+                        Date now = new Date();
                         ps.setString(1, notifyMessage.getGid());
                         ps.setString(2, notifyMessage.getPartnerId());
                         ps.setString(3, notifyMessage.getMessageType().code());
@@ -174,10 +172,9 @@ public class NotifyMessageDaoImpl extends AbstractJdbcTemplateDao implements Not
                         ps.setString(6, notifyMessage.getUrl());
                         ps.setString(7, notifyMessage.getContent());
                         ps.setInt(8, notifyMessage.getSendCount());
-                        ps.setTimestamp(9, null);
+                        ps.setTimestamp(9, new Timestamp(now.getTime()));
                         ps.setString(10, notifyMessage.getStatus().code());
                         ps.setString(11, notifyMessage.getExecuteStatus().code());
-                        Date now = new Date();
                         ps.setTimestamp(12, new Timestamp(now.getTime()));
                         ps.setTimestamp(13, new Timestamp(now.getTime()));
                         if (Strings.isBlank(notifyMessage.getRespInfo())) {
