@@ -18,11 +18,6 @@
         </dependency>
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>openapi-framework-core</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
             <artifactId>acooly-component-mybatis</artifactId>
         </dependency>
         <dependency>

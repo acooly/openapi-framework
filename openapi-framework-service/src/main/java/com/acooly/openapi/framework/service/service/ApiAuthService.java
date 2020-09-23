@@ -7,10 +7,12 @@
  */
 package com.acooly.openapi.framework.service.service;
 
+import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.service.EntityService;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 认证授权信息管理 Service接口
@@ -36,4 +38,7 @@ public interface ApiAuthService extends EntityService<ApiAuth> {
     ApiAuth findByAuthNo(String authNo);
 
     List<ApiAuth> findByParent(Long parentId);
+
+
+    PageInfo<ApiAuth> query(PageInfo<ApiAuth> pageInfo, Map<String, Object> map, Map<String, Boolean> sortMap, String serviceCode);
 }

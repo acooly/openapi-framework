@@ -6,6 +6,7 @@
  */
 package com.acooly.openapi.framework.service.service.impl;
 
+import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.exception.CommonErrorCodes;
 import com.acooly.core.common.service.EntityServiceImpl;
@@ -14,13 +15,16 @@ import com.acooly.core.utils.Strings;
 import com.acooly.module.event.EventBus;
 import com.acooly.openapi.framework.service.dao.ApiAuthDao;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
+import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
 import com.acooly.openapi.framework.service.event.ApiAuthUpdateEvent;
+import com.acooly.openapi.framework.service.service.ApiAuthAclService;
 import com.acooly.openapi.framework.service.service.ApiAuthService;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * 认证授权信息管理 Service实现
@@ -39,6 +43,9 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
      */
     @Autowired(required = false)
     private EventBus eventBus;
+
+    @Autowired
+    private ApiAuthAclService apiAuthAclService;
 
     @Override
     public ApiAuth findByAccesskey(String accesskey) {
@@ -86,5 +93,45 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
             return getEntityDao().findTops();
         }
         return getEntityDao().findByParentId(parentId);
+    }
+
+    @Override
+    public PageInfo<ApiAuth> query(PageInfo<ApiAuth> pageInfo, Map<String, Object> map, Map<String, Boolean> sortMap, String serviceCode) {
+
+        PageInfo<ApiAuth> innerPageInfo = this.query(pageInfo, map, sortMap);
+
+        if (Strings.isNoneBlank(serviceCode)) {
+            List<ApiAuth> apiAuthList = innerPageInfo.getPageResults();
+
+            List<ApiAuth> hasPermList = new ArrayList<>(apiAuthList.size());
+            //先查询所有配置了*.*的接入方
+            List<ApiAuth> allPermitList = this.getEntityDao().findAllPermitAuth();
+            log.info(JSONObject.toJSONString(allPermitList));
+            HashSet<String> allPertmitSet = new HashSet();
+            allPermitList.forEach(apiAuth -> {
+                allPertmitSet.add(apiAuth.getAccessKey());
+            });
+
+            //通过具体的服务码查询,接入方
+            Map<String, Object> queryMap = new HashMap<>();
+            queryMap.put("EQ_name", serviceCode);
+
+            List<ApiAuthAcl> authAclList = this.apiAuthAclService.query(queryMap, null);
+            HashSet<String> authAclSet = new HashSet();
+            authAclList.forEach(apiAuthAcl -> {
+                authAclSet.add(apiAuthAcl.getAccessKey());
+            });
+
+            for (ApiAuth apiPartner : apiAuthList) {
+                //先判断是否配置了*:*或存在对应的权限
+                if (allPertmitSet.contains(apiPartner.getAccessKey()) || authAclSet.contains(apiPartner.getAccessKey())) {
+                    hasPermList.add(apiPartner);
+                    continue;
+                }
+            }
+            innerPageInfo.setPageResults(hasPermList);
+        }
+
+        return innerPageInfo;
     }
 }
