@@ -9,8 +9,8 @@ import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.demo.message.notify.DemoWithdrawApiNotify;
 import com.acooly.openapi.framework.facade.api.OpenApiRemoteService;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
+import com.alibaba.dubbo.config.annotation.Reference;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +32,8 @@ import javax.servlet.http.HttpServletResponse;
 public class WithdrawServerTestController {
 
     // 也可以是注入dubbo客户端
-    // @Reference(version = "1.0")
-    @Autowired
+    @Reference(version = "1.0")
+//    @Autowired
     private OpenApiRemoteService openApiRemoteService;
 
     /**

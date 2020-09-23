@@ -28,14 +28,14 @@ public class WithdrawOpenApiTest extends AbstractApiServieTests {
     /**
      * 下层业务系统发起通知的MOCK实现CONTROLLER
      */
-    String CALL_ASYNC_NOTIFY_URL = "http://127.0.0.1:8089/openapi/test/withdraw/server/notifyCall.html";
+    String CALL_ASYNC_NOTIFY_URL = "http://127.0.0.1:8089/openapi/demo/withdraw/server/notifyCall.html";
 
-    String CALL_SEND_NOTIFY_URL = "http://127.0.0.1:8089/openapi/test/withdraw/server/sendNotify.html";
+    String CALL_SEND_NOTIFY_URL = "http://127.0.0.1:8089/openapi/demo/withdraw/server/sendNotify.html";
 
     /**
      * 客户端通知地址
      */
-    String TEST_NOTIFY_URL = "http://127.0.0.1:8089/openapi/test/withdraw/client/notifyUrl.html";
+    String TEST_NOTIFY_URL = "http://127.0.0.1:8089/openapi/demo/withdraw/client/notifyUrl.html";
 
     /**
      * 同步请求提现

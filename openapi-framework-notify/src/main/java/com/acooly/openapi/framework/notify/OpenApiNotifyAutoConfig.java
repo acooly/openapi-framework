@@ -39,7 +39,7 @@ public class OpenApiNotifyAutoConfig {
 
 
     @Bean
-    @ConditionalOnProperty(value = PREFIX + ".enableFacade", matchIfMissing = false, havingValue = "true")
+    @ConditionalOnProperty(value = {PREFIX + ".enableFacade"}, matchIfMissing = false, havingValue = "true")
     @ConditionalOnBean(ProtocolConfig.class)
     @DependsOn({"applicationConfig", "registryConfig", "protocolConfig"})
     public ServiceConfig<OpenApiRemoteService> feedbackFacadeConfig(ApplicationConfig applicationConfig,
