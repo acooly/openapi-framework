@@ -108,6 +108,7 @@ public final class ApiUtils {
         context.header(ApiConstants.X_API_SIGN, request.getHeader(ApiConstants.X_API_SIGN));
         context.header(USER_AGENT, request.getHeader(USER_AGENT));
         context.header(ApiConstants.REQUEST_IP, getIpAddr(request));
+        context.header(ApiConstants.REQUEST_PORT, getRequestPort(request));
         context.setParameters(getHttpParameters(request));
         String body = null;
         try {
@@ -158,6 +159,14 @@ public final class ApiUtils {
             }
 
             return ip;
+        }
+    }
+
+    public static String getRequestPort(HttpServletRequest request) {
+        if (request == null) {
+            return null;
+        } else {
+            return String.valueOf(request.getRemotePort());
         }
     }
 

@@ -36,7 +36,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return orderInfoDao.query(pageInfo, map, orderMap);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public void insert(OrderDto orderInfo) {
         try {

@@ -49,7 +49,8 @@
                 <th field="service">服务码</th>
                 <th field="notifyUrl">通知地址</th>
                 <th field="returnUrl">返回地址</th>
-                <th field="context" formatter="jsonFormatter">会话信息</th>
+                <th field="context" formatter="contentFormatter">会话信息</th>
+                <th field="businessInfo" formatter="jsonFormatter">扩展信息</th>
             </tr>
             </thead>
         </table>

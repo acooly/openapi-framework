@@ -5,6 +5,7 @@
 package com.acooly.openapi.framework.core.service.base;
 
 import com.acooly.core.utils.mapper.BeanCopier;
+import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.dto.OrderDto;
@@ -17,6 +18,8 @@ import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
 import com.acooly.openapi.framework.core.OpenAPIProperties;
 import com.acooly.openapi.framework.facade.order.ApiNotifyOrder;
 import com.acooly.openapi.framework.service.service.OrderInfoService;
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,6 +144,12 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
             orderInfo.setSignType(apiContext.getSignType().name());
             orderInfo.setContext(request.getContext());
             orderInfo.setProtocol(apiContext.getApiProtocol());
+            // 扩展信息中存储客户端请求IP和端口
+            Map<String, String> busiInfos = Maps.newHashMap();
+            busiInfos.put(ApiConstants.REQUEST_IP, apiContext.getRequestIp());
+            busiInfos.put(ApiConstants.REQUEST_PORT, apiContext.getApiRequestContext().getValue(ApiConstants.REQUEST_PORT));
+            orderInfo.setBusinessInfo(JSON.toJSONString(busiInfos));
+
             orderInfoService.insert(orderInfo);
         } catch (Exception e) {
             logger.warn("订单写入失败，忽略错误，继续执行服务:" + e.getMessage());
