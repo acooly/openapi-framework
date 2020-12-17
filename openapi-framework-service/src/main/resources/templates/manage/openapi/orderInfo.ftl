@@ -1,5 +1,5 @@
 <#if ssoEnable>
-    <#include "*/include.ftl">
+    <#include "/manage/common/ssoInclude.ftl">
 </#if>
 <div class="easyui-layout" data-options="fit : true,border : false">
     <!-- 查询条件 -->
