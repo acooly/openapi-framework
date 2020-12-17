@@ -59,9 +59,6 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
     @Autowired
     private ApiPartnerService apiPartnerService;
 
-//    @Resource
-//    private AuthInfoRealm authInfoRealm;
-
     @RequestMapping(value = "loadLevel")
     @ResponseBody
     public JsonListResult<ApiAuth> loadLevel(HttpServletRequest request) {
@@ -76,29 +73,7 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
             } else {
                 map.put("EQ_parentId", parentId);
             }
-            PageInfo<ApiAuth> pageInfo = apiAuthService.query(getPageInfo(request), map, getSortMap(request));
-            List<ApiAuth> apiAuthList = pageInfo.getPageResults();
-//            if (Strings.isNoneBlank(serviceCode)) {
-//                List<ApiAuth> hasPermList = new ArrayList<>(apiAuthList.size());
-//
-//                outFor:
-//                for (ApiAuth apiPartner : apiAuthList) {
-//                    String resource = apiPartner.getAccessKey() + ":" + serviceCode;
-//                    //在缓存中获取
-//                    List<Permission> permissionList = (List<Permission>) authInfoRealm.getAuthorizationInfo(apiPartner.getAccessKey());
-//                    if (permissionList == null || permissionList.size() == 0) {
-//                        continue;
-//                    }
-//                    innerFor:
-//                    for (Permission perm : permissionList) {
-//                        if (perm.implies(resource)) {
-//                            hasPermList.add(apiPartner);
-//                            continue outFor;
-//                        }
-//                    }
-//                }
-//                pageInfo.setPageResults(hasPermList);
-//            }
+            PageInfo<ApiAuth> pageInfo = apiAuthService.query(getPageInfo(request), map, getSortMap(request), serviceCode);
             result.setTotal(pageInfo.getTotalCount());
             result.setRows(pageInfo.getPageResults());
             result.setHasNext(pageInfo.hasNext());
