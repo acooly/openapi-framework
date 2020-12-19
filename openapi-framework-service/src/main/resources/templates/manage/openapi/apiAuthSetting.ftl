@@ -1,6 +1,3 @@
-<#if ssoEnable>
-    <#include "/manage/common/ssoInclude.ftl">
-</#if>
 <style>
     .openapi-apilist {
         margin-top: 10px;
