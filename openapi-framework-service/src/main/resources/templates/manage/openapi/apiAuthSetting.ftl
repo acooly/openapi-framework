@@ -1,5 +1,5 @@
 <#if ssoEnable>
-    <#include "*/include.ftl">
+    <#include "/manage/common/ssoInclude.ftl">
 </#if>
 <style>
     .openapi-apilist {
