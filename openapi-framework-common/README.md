@@ -15,7 +15,7 @@ OpenApi开放平台框架提供完善的网关服务开放平台的完整解决�
 
 ### 2.2 接入开发
 
-* [OpenApi接入开发指南](https://acooly.cn/docs/component/openapi-framework-common.html)
+* [OpenApi接入开发指南](https://acooly.cn/docs/component/openapi-framework-client.html)
 * [OpenApiClient工具](https://acooly.cn/docs/component/openapi-framework-common-util.html)
 
 ## 3. 版本
