@@ -84,6 +84,14 @@
                     </div>
                 </div>
                 <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">状态</label>
+                    <div class="col-sm-10">
+                        <select name="status" class="form-control select2bs4">
+                            <#list allStatuss as k,v><option value="${k}">${v}</option></#list>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
                     <label class="col-sm-2 col-form-label">备注</label>
                     <div class="col-sm-10">
                         <input type="text" name="comments" placeholder="请输入备注..." class="easyui-validatebox form-control" data-options="validType:['length[1,128]']"/>

@@ -28,6 +28,12 @@ public class ApiServiceComponentInitializer implements ComponentInitializer {
                 "ADD COLUMN `whitelist_check` VARCHAR(16) NULL COMMENT '白名单验证' AFTER `permissions`,\n" +
                 "ADD COLUMN `whitelist` VARCHAR(127) NULL COMMENT '白名单' AFTER `whitelist_check`;");
 
+        /** 升级增加apiAuth的状态 */
+        setPropertyIfMissing("acooly.ds.dbPatchs.api_auth[1].columnName", "status");
+        setPropertyIfMissing("acooly.ds.dbPatchs.api_auth[1].patchSql", "ALTER TABLE `api_auth`" +
+                " ADD COLUMN `status` VARCHAR(16) NULL DEFAULT 'enable' COMMENT '状态' AFTER `whitelist`;");
+
+
         // change tenant_no to tenant_id
         setPropertyIfMissing("acooly.ds.dbPatchs.api_partner[0].columnName", "tenant_id");
         setPropertyIfMissing("acooly.ds.dbPatchs.api_partner[0].patchSql", "ALTER TABLE `api_partner`" +

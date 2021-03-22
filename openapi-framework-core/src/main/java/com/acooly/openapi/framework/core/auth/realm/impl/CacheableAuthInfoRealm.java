@@ -11,6 +11,7 @@ import com.acooly.core.utils.Collections3;
 import com.acooly.openapi.framework.common.cache.OpenApiCacheManager;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
+import com.acooly.openapi.framework.core.OpenAPIProperties;
 import com.acooly.openapi.framework.core.auth.permission.Permission;
 import com.acooly.openapi.framework.core.auth.permission.PermissionResolver;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
@@ -39,6 +40,9 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
     @Resource
     PermissionResolver permissionResolver;
 
+    @Autowired
+    private OpenAPIProperties openAPIProperties;
+
     @Override
     public Object getAuthenticationInfo(String accessKey) {
         String key = authenticationKey(accessKey);
@@ -65,11 +69,20 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
             if (permStrList == null || permStrList.isEmpty()) {
                 return null;
             }
+
             List<Permission> perms = Lists.newArrayList();
             for (String permStr : permStrList) {
-                if (!Strings.isNullOrEmpty(permStr)) {
-                    perms.add(permissionResolver.resolvePermission(permStr));
+                if (Strings.isNullOrEmpty(permStr)) {
+                    continue;
                 }
+
+                // 判断是否支持script配置
+                boolean isScriptPermi = com.acooly.core.utils.Strings.contains(permStr, "*");
+                if (isScriptPermi && !openAPIProperties.getPermi().getScriptEnable()) {
+                    continue;
+                }
+
+                perms.add(permissionResolver.resolvePermission(permStr));
             }
             value = perms;
             openApiCacheManager.add(key, value);

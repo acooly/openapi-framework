@@ -3,8 +3,11 @@ package com.acooly.openapi.framework.service.service.impl;
 import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.core.utils.mapper.BeanCopier;
+import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
+import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
 import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
 import com.acooly.openapi.framework.service.service.ApiAuthAclService;
@@ -12,6 +15,7 @@ import com.acooly.openapi.framework.service.service.ApiAuthService;
 import com.acooly.openapi.framework.service.service.AuthInfoRealmManageService;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +26,7 @@ import java.util.Set;
  * @author qiuboboy@qq.com
  * @date 2017-11-23 14:35
  */
+@Slf4j
 @Service
 public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageService {
 
@@ -65,12 +70,17 @@ public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageSer
         if (apiAuth == null) {
             return null;
         }
+        if (apiAuth.getStatus() != SimpleStatus.enable) {
+            log.warn("获取SecretKey 失败 AccessKey:{}, ApiAuth对象状态非法:{}", accessKey, apiAuth.getStatus());
+            throw new ApiServiceException(ApiServiceResultCode.ACCESS_KEY_NOT_EXIST, "AccessKey对应的认证对象状态非法");
+        }
         return apiAuth.getSecretKey();
     }
 
     @Override
     public Set<String> getAuthorizationInfo(String accessKey) {
         Set<String> permissions = Sets.newHashSet();
+
         // 解析添加特殊权限
         String perms = apiAuthService.findByAccesskey(accessKey).getPermissions();
         if (Strings.isNotBlank(perms)) {

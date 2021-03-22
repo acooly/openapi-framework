@@ -10,6 +10,7 @@ package com.acooly.openapi.framework.service.domain;
 import com.acooly.core.common.domain.AbstractEntity;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.arithmetic.tree.TreeNode;
+import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.openapi.framework.common.enums.SecretType;
 import com.acooly.openapi.framework.common.enums.SignType;
@@ -104,6 +105,15 @@ public class ApiAuth extends AbstractEntity implements TreeNode<ApiAuth> {
     @Size(max = 128)
     private String comments;
 
+    /**
+     * 状态
+     */
+    @Enumerated(EnumType.STRING)
+    private SimpleStatus status;
+
+    /**
+     * 试图状态（非持久化）
+     */
     @Transient
     private String state = "closed";
 

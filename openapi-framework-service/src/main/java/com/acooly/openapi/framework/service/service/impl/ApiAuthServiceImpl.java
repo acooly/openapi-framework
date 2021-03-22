@@ -10,6 +10,7 @@ import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.exception.CommonErrorCodes;
 import com.acooly.core.common.service.EntityServiceImpl;
+import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
 import com.acooly.module.event.EventBus;
@@ -23,7 +24,9 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -85,6 +88,29 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
     public void remove(ApiAuth o) throws BusinessException {
         super.remove(o);
         eventBus.publish(new ApiAuthUpdateEvent(o));
+    }
+
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
+    public void removes(Serializable... ids) throws BusinessException {
+        for (Serializable id : ids) {
+            removeById(id);
+        }
+    }
+
+    @Override
+    public void removeById(Serializable id) throws BusinessException {
+        ApiAuth apiAuth = get(id);
+        if (apiAuth == null) {
+            log.warn("ApiAuth 删除 失败：id（{}）对应的对象不存在。", id);
+            throw new BusinessException(CommonErrorCodes.OBJECT_NOT_EXIST);
+        }
+        if (Collections3.isNotEmpty(apiAuthAclService.queryAcls(apiAuth.getAccessKey()))) {
+            log.warn("ApiAuth 删除 失败：该认证对象还存在已分配的ACL权限", id);
+            throw new BusinessException(CommonErrorCodes.UNSUPPORTED_ERROR, "该认证对象还存在已分配的ACL权限");
+        }
+        super.removeById(id);
+        eventBus.publish(new ApiAuthUpdateEvent(apiAuth));
     }
 
     @Override

@@ -17,7 +17,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -32,7 +31,10 @@ import static com.acooly.openapi.framework.common.ApiConstants.ANONYMOUS_SECRET_
 import static com.acooly.openapi.framework.core.OpenAPIProperties.PREFIX;
 
 /**
+ * OpenApi 全局配置文件
+ *
  * @author qiubo@yiji.com
+ * @author zhangpu
  */
 @Data
 @ConfigurationProperties(prefix = PREFIX)
@@ -69,6 +71,11 @@ public class OpenAPIProperties {
      * 流控配置
      */
     private List<Rate> rates = Lists.newArrayList();
+
+    /**
+     * 权限配置
+     */
+    private Permi permi = new Permi();
 
     @PostConstruct
     public void init() {
@@ -192,6 +199,21 @@ public class OpenAPIProperties {
         private String safetyIgnores;
 
         private String safetyMasks;
+    }
+
+
+    /**
+     * 权限参数配置
+     */
+    @Data
+    public static class Permi {
+
+        /**
+         * 是否开启权限脚本配置
+         * 形如: *:*, accesKey:query*
+         */
+        Boolean scriptEnable = false;
+
     }
 
 

@@ -57,43 +57,45 @@
         <form id="manage_apiAuth_searchform" class="form-inline ac-form-search" onsubmit="return false">
             <div class="form-group">
                 <label class="col-form-label">接入方：</label>
-                <select name="search_EQ_partnerId" class="form-control input-sm select2bs4"><option value="">所有</option><#list allPartners as k,v><option value="${k}">${k}:${v}</option></#list></select>
+                <select name="search_EQ_partnerId" class="form-control input-sm select2bs4">
+                    <option value="">所有</option><#list allPartners as k,v>
+                    <option value="${k}">${k}:${v}</option></#list></select>
             </div>
             <div class="form-group">
                 <label class="col-form-label">访问帐号：</label>
-                <input type="text" class="form-control form-control-sm" style="width: 200px;" name="search_LIKE_accessKey"/>
+                <input type="text" class="form-control form-control-sm" placeholder="AccessKey" style="width: 190px;" name="search_LIKE_accessKey"/>
             </div>
             <div class="form-group">
                 <label class="col-form-label">服务码：</label>
-                <input type="text" class="form-control form-control-sm" style="width: 200px;" name="serviceCode" id="serviceCode" />
+                <select class="form-control input-sm select2bs4" name="serviceCode" id="manage_apiAuth_searchform_serviceCode"></select>
             </div>
             <div class="form-group">
-                <label class="col-form-label">时间：</label>
+                <label class="col-form-label">修改时间：</label>
                 <input type="text" class="form-control form-control-sm" id="search_GTE_updateTime" name="search_GTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
                 <span class="mr-1 ml-1">至</span> <input type="text" class="form-control form-control-sm" id="search_LTE_updateTime" name="search_LTE_updateTime" onFocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
             </div>
             <div class="form-group">
-                <button class="btn btn-sm btn-primary" type="button" onclick="$.acooly.framework.search('manage_apiAuth_searchform','manage_apiAuth_datagrid');"><i class="fa fa-search fa-lg fa-fw fa-col"></i> 查询</button>
+                <button class="btn btn-sm btn-primary" type="button" onclick="$.acooly.framework.search('manage_apiAuth_searchform','manage_apiAuth_datagrid');"><i class="fa fa-search fa-fw fa-col"></i> 查询</button>
             </div>
         </form>
     </div>
 
     <!-- 列表和工具栏 -->
     <div data-options="region:'center',border:false">
-        <table id="manage_apiAuth_datagrid" class="easyui-treegrid" url="/manage/openapi/apiAuth/loadLevel.html" toolbar="#manage_apiAuth_toolbar" fit="true" border="false" fitColumns="false"
+        <table id="manage_apiAuth_datagrid" class="easyui-datagrid" url="/manage/openapi/apiAuth/loadLevel.html" toolbar="#manage_apiAuth_toolbar" fit="true" border="false" fitColumns="false"
                pagination="true" idField="id" pageSize="20" pageList="[ 10, 20, 30, 40, 50 ]" sortName="id" sortOrder="desc" checkOnSelect="true" selectOnCheck="true" singleSelect="true"
-               treeField="accessKey" data-options="loadFilter:manage_apiAuth_datagrid_loadFilter, onSelect:manage_apiAuth_onClickRow">
+               treeField="accessKey">
             <thead>
             <tr>
                 <th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
                 <th field="id" sum="true">ID</th>
                 <th field="partnerId">接入方编码</th>
                 <th field="partnerName" data-options="formatter:function(value,row){return formatRefrence('manage_apiAuth_datagrid','allPartners',row.partnerId);} ">接入方名称</th>
-                <th field="accessKey">访问帐号</th>
-                <th field="secretKey">访问秘钥</th>
-                <th field="permissions" width="150px">配置权限</th>
+                <th field="accessKey">访问帐号(AccessKey)</th>
+                <th field="secretKey">访问秘钥(SecretKey)</th>
                 <th field="whitelistCheck" formatter="mappingFormatter">启用白名单</th>
                 <th field="whitelist">白名单</th>
+                <th field="status" formatter="mappingFormatter">状态</th>
                 <th field="rowActions" data-options="formatter:function(value, row, index){return manage_apiAuth_action_show(row)}">动作</th>
             </tr>
             </thead>
@@ -114,58 +116,31 @@
         </div>
     </div>
 
-    <div data-options="region:'south',border:false" style="height:45%;">
-        <div class="easyui-tabs" fit="true">
-            <div title="已配置权限">
-                <table id="manage_apiAuthMetaService_datagrid" class="easyui-datagrid" toolbar="#manage_apiAuthMetaService_toolbarZZ" fit="true" border="false" fitColumns="false" idField="id" sortName="id" sortOrder="desc">
-                    <thead>
-                    <tr>
-                        <th field="id" sum="false">id</th>
-                        <th field="serviceName">服务编号</th>
-                        <th field="serviceDesc">服务名称</th>
-                        <th field="note" formatter="contentFormatter">服务说明</th>
-                        <th field="busiType" formatter="mappingFormatter">业务类型</th>
-                        <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
-                        <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>
-                    </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-    </div>
-
 </div>
 <script type="text/javascript">
 
-    function manage_apiAuth_onClickRow(rowData) {
-        reloadSubList(rowData.authNo);
-    }
-
-    function reloadSubList(authNo) {
-        $.acooly.framework.loadGrid({
-            gridId: "manage_apiAuthMetaService_datagrid",
-            url: '${pageContext.request.contextPath}/manage/openapi/apiAuth/loadMetaServices.html',
-            ajaxData: {"authNo": authNo}
+    function manage_apiAuth_loadService() {
+        $('#manage_apiAuth_searchform_serviceCode').select2({
+            ajax: {
+                url: '/manage/openapi/apiAuth/getAllService.json',
+                processResults: function (data) {
+                    var results = new Array();
+                    $.each(data.data, function (i, e) {
+                        results.push({id: e.serviceName, text: e.serviceName + " | " + e.serviceDesc})
+                    });
+                    return {
+                        results: results
+                    };
+                }
+            },
+            allowClear : true,
+            placeholder : '根据服务名查询所属访问码',
+            width : 240,
+            theme: 'bootstrap4'
         });
     }
 
-    //服务码选择
-    $('#serviceCode').combobox({
-        url:'/manage/openapi/apiAuth/getAllService.json',
-        valueField:'serviceName',
-        textField:'serviceDesc',
-        groupField:"busiType",
-        formatter: function(row){
-            var opts = $(this).combobox('options');
-            return row[opts.valueField]+"-"+row[opts.textField];
-        },
-        loadFilter:function(data){
-            return data.data;
-        },
-        filter: function(q, row){
-            var opts = $(this).combobox('options');
-            return row[opts.textField].indexOf(q) == 0 || row[opts.valueField].indexOf(q) == 0;
-        }
+    $(function () {
+        manage_apiAuth_loadService();
     });
-
 </script>

@@ -14,6 +14,7 @@ import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
+import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.openapi.framework.common.enums.SecretType;
 import com.acooly.openapi.framework.common.enums.SignType;
@@ -64,7 +65,7 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
     public JsonListResult<ApiAuth> loadLevel(HttpServletRequest request) {
         JsonListResult<ApiAuth> result = new JsonListResult();
         try {
-            result.appendData("allPartners", getAllPartner());
+            result.appendData(referenceData(request));
             Long parentId = Servlets.getLongParameter("id");
             String serviceCode = Servlets.getParameter("serviceCode");
             Map<String, Object> map = getSearchParams(request);
@@ -208,6 +209,7 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
         model.put("allSecretTypes", SecretType.mapping());
         model.put("allSignTypes", SignType.mapping());
         model.put("allPartners", getAllPartner());
+        model.put("allStatuss", SimpleStatus.mapping());
         model.put("allWhitelistChecks", WhetherStatus.mapping());
     }
 
