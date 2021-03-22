@@ -56,7 +56,7 @@ public class ApiPartner extends AbstractEntity {
      * 预留用于支持多租户
      */
     @Size(max = 64)
-    private String tenantNo;
+    private String tenantId;
 
     /**
      * 备注

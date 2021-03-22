@@ -73,8 +73,7 @@
                     <label class="col-sm-2 col-form-label">启用白名单</label>
                     <div class="col-sm-10">
                         <select name="whitelistCheck" class="form-control select2bs4">
-                            <#list allWhitelistChecks as k,v>
-                                <option value="${k}">${v}</option></#list>
+                            <#list allWhitelistChecks as k,v><option value="${k}">${v}</option></#list>
                         </select>
                     </div>
                 </div>

@@ -11,8 +11,6 @@ package com.acooly.openapi.framework.service;
 
 import com.acooly.core.common.boot.component.ComponentInitializer;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
@@ -29,5 +27,15 @@ public class ApiServiceComponentInitializer implements ComponentInitializer {
         setPropertyIfMissing("acooly.ds.dbPatchs.api_auth[0].patchSql", "ALTER TABLE `api_auth` \n" +
                 "ADD COLUMN `whitelist_check` VARCHAR(16) NULL COMMENT '白名单验证' AFTER `permissions`,\n" +
                 "ADD COLUMN `whitelist` VARCHAR(127) NULL COMMENT '白名单' AFTER `whitelist_check`;");
+
+        // change tenant_no to tenant_id
+        setPropertyIfMissing("acooly.ds.dbPatchs.api_partner[0].columnName", "tenant_id");
+        setPropertyIfMissing("acooly.ds.dbPatchs.api_partner[0].patchSql", "ALTER TABLE `api_partner`" +
+                " CHANGE COLUMN `tenant_no` `tenant_id` VARCHAR(64) NULL DEFAULT NULL COMMENT '租户编码' ;");
+
+        // add tenant_name
+        setPropertyIfMissing("acooly.ds.dbPatchs.api_partner[1].columnName", "tenant_name");
+        setPropertyIfMissing("acooly.ds.dbPatchs.api_partner[1].patchSql", "ALTER TABLE `api_partner` \n" +
+                "ADD COLUMN `tenant_name` VARCHAR(32) NULL COMMENT '租户名称' AFTER `comments`;\n");
     }
 }
