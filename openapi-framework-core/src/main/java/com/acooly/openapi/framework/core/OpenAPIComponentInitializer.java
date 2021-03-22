@@ -24,7 +24,8 @@ public class OpenAPIComponentInitializer implements ComponentInitializer {
     public void initialize(ConfigurableApplicationContext applicationContext) {
         System.setProperty(
                 "acooly.jpa.entityPackagesToScan.api", "com.acooly.openapi.framework.domain");
-        if (Apps.buildProperties(OpenAPIProperties.class).getQueryLogSeparationEnable()) {
+        if (Apps.buildProperties(OpenAPIProperties.class).getQueryLogSeparationEnable()
+                || Apps.buildProperties(OpenAPIProperties.class).getLog().getMultFileEnable()) {
             System.setProperty("openapi.queryLogSeparationEnable", "true");
         }
         System.setProperty("acooly.mybatis.daoScanPackages.api", "com.acooly.openapi.framework.serviceimpl.manage");

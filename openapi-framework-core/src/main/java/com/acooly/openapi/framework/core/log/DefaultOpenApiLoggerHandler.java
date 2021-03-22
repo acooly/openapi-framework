@@ -70,7 +70,7 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
     @Override
     public void log(String label, ApiMessage apiMessage, String msg, Map<String, String> headers, String ext) {
         long start = System.currentTimeMillis();
-        if (openAPIProperties.getLogSafety()) {
+        if (openAPIProperties.getLogSafety() || openAPIProperties.getLog().getSafetyEnable()) {
             if (ApiUtils.isJson(msg)) {
                 if (apiMessage == null) {
                     msg = safetyJson(msg, null);
@@ -106,7 +106,7 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
             return;
         }
         Map logData = null;
-        if (openAPIProperties.getLogSafety()) {
+        if (openAPIProperties.getLogSafety() || openAPIProperties.getLog().getSafetyEnable()) {
             logData = Maps.newTreeMap();
             for (Map.Entry<String, ?> entry : data.entrySet()) {
                 if (entry.getValue() == null) {
@@ -133,7 +133,7 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
 
 
     private boolean isSep() {
-        if (!openAPIProperties.getQueryLogSeparationEnable()) {
+        if (!openAPIProperties.getQueryLogSeparationEnable() || !openAPIProperties.getLog().getMultFileEnable()) {
             return false;
         }
         ApiContext apiContext = ApiContextHolder.getApiContext();
@@ -203,8 +203,12 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
             synchronized (this) {
                 if (masks == null) {
                     masks = Sets.newHashSet(StringUtils.split(DEF_MASK_KEYS, ","));
-                    if (Strings.isNoneBlank(openAPIProperties.getLogSafetyMasks())) {
-                        masks.addAll(Sets.newHashSet(StringUtils.split(openAPIProperties.getLogSafetyMasks(), ",")));
+                    String safetyMasks = openAPIProperties.getLogSafetyMasks();
+                    if (Strings.isBlank(safetyMasks)) {
+                        safetyMasks = openAPIProperties.getLog().getSafetyMasks();
+                    }
+                    if (Strings.isNoneBlank()) {
+                        masks.addAll(Sets.newHashSet(StringUtils.split(safetyMasks, ",")));
                     }
                     logger.info("初始化全局 safetylog-mask keys：{}", masks);
                 }
@@ -218,8 +222,12 @@ public class DefaultOpenApiLoggerHandler implements OpenApiLoggerHandler {
             synchronized (this) {
                 if (ignores == null) {
                     ignores = Sets.newHashSet(StringUtils.split(DEF_IGNORE_KEYS, ","));
-                    if (StringUtils.isNotBlank(openAPIProperties.getLogSafetyIgnores())) {
-                        ignores.addAll(Sets.newHashSet(StringUtils.split(openAPIProperties.getLogSafetyIgnores(), ",")));
+                    String safetyIgnores = openAPIProperties.getLogSafetyIgnores();
+                    if (Strings.isBlank(safetyIgnores)) {
+                        safetyIgnores = openAPIProperties.getLog().getSafetyIgnores();
+                    }
+                    if (StringUtils.isNotBlank(safetyIgnores)) {
+                        ignores.addAll(Sets.newHashSet(StringUtils.split(safetyIgnores, ",")));
                     }
                     logger.info("初始化全局 safetylog-ignore keys：{}", ignores);
                 }

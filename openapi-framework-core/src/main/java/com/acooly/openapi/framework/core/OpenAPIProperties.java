@@ -34,53 +34,46 @@ import static com.acooly.openapi.framework.core.OpenAPIProperties.PREFIX;
 /**
  * @author qiubo@yiji.com
  */
-@ConfigurationProperties(prefix = PREFIX)
 @Data
-@Slf4j
+@ConfigurationProperties(prefix = PREFIX)
 public class OpenAPIProperties {
     public static final String PREFIX = "acooly.openapi";
 
     /**
-     * 查询日志分离到不同的日志文件
-     */
-    private Boolean queryLogSeparationEnable = false;
-
-    /**
-     * 是否启用openapi性能日志
-     */
-    private Boolean enablePerfLog = true;
-
-    /**
-     * 日志脱敏(默认关闭)
-     */
-    private Boolean logSafety = false;
-
-    private String logSafetyIgnores;
-
-    private String logSafetyMasks;
-
-    /**
      * 是否在api中存储非查询类请求
+     * 注意：如果开启，则默认查询类请求无法检测requestNo唯一性
      */
     private Boolean saveOrder = true;
+
+    /**
+     * 日志配置
+     */
+    private Log log = new Log();
+
     /**
      * 匿名访问
      */
     private Anonymous anonymous = new Anonymous();
+
     /**
-     * 登录
+     * 登录认证配置
      */
     private Login login = new Login();
 
+    /**
+     * 认证授权信息缓存配置
+     */
     private AuthInfoCache authInfoCache = new AuthInfoCache();
 
+    /**
+     * 流控配置
+     */
     private List<Rate> rates = Lists.newArrayList();
 
     @PostConstruct
     public void init() {
         this.getAnonymous().getPermissions().put("openapicore", "*:login");
         this.getAnonymous().getPermissionSet().forEach(Permission::permMatch);
-        log.info("匿名访问服务配置:{}", this.getAnonymous());
         Validators.assertJSR303(anonymous);
     }
 
@@ -175,4 +168,53 @@ public class OpenAPIProperties {
             return method.equals(ApiConstants.WILDCARD_TOKEN);
         }
     }
+
+    @Data
+    public static class Log {
+
+        /**
+         * 开始查询日志分离多个日志文件
+         * 原: acooly.openapi.queryLogSeparationEnable
+         */
+        private Boolean multFileEnable = false;
+
+        /**
+         * 是否启用openapi性能日志
+         * 原：acooly.openapi.enablePerfLog
+         */
+        private Boolean perfLogEnable = true;
+
+        /**
+         * 日志脱敏(默认关闭)
+         */
+        private Boolean safetyEnable = false;
+
+        private String safetyIgnores;
+
+        private String safetyMasks;
+    }
+
+
+    /**
+     * 查询日志分离到不同的日志文件
+     */
+    @Deprecated
+    private Boolean queryLogSeparationEnable = false;
+
+    /**
+     * 是否启用openapi性能日志
+     */
+    @Deprecated
+    private Boolean enablePerfLog = true;
+
+    /**
+     * 日志脱敏(默认关闭)
+     */
+    @Deprecated
+    private Boolean logSafety = false;
+    @Deprecated
+    private String logSafetyIgnores;
+    @Deprecated
+    private String logSafetyMasks;
+
 }
