@@ -58,36 +58,41 @@
                         <div class="input-group">
                             <input type="text" id="manage_editform_secretKey" name="secretKey" placeholder="点击生成访问秘钥..." class="easyui-validatebox form-control" data-options="validType:['length[1,45]']" required="true"/>
                             <div class="input-group-append">
-                                <a href="javascript:;" onclick="generateSecretKey()" class="input-group-text"><i class="fa fa-refresh"></i></a>
+                                <a href="javascript:;" title="点击生成新的安全码SecretKey" onclick="generateSecretKey()" class="input-group-text easyui-tooltip"><i class="fa fa-refresh"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">访问权限</label>
+                    <label class="col-sm-2 col-form-label"><a title="注意: 通过acooly.openapi.permi.script-enable参数控制开启，默认false，特别强调下个版本(2021-6-30前)，online环境强制关闭" class="easyui-tooltip">访问权限 <i class="fa fa-info-circle" aria-hidden="true"></i></a></label>
                     <div class="col-sm-10">
                         <textarea rows="2" cols="40" placeholder="格式：accessKey:service,多个逗号分隔，支持通配符:'*'.例如：test:order*,test:queryInfo,app*:login" name="permissions" class="easyui-validatebox  form-control" data-options="validType:['perms','length[1,512]']"></textarea>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">启用白名单</label>
+                    <label title="是否开启IP白名单，IP白名单" class="col-sm-2 col-form-label easyui-tooltip">启用白名单</label>
                     <div class="col-sm-10">
-                        <select name="whitelistCheck" class="form-control select2bs4">
-                            <#list allWhitelistChecks as k,v><option value="${k}">${v}</option></#list>
+                        <select name="whitelistCheck" id="manage_apiAuth_whitelistCheck" class="form-control select2bs4">
+                            <#list allWhitelistChecks as k,v>
+                                <option value="${k}">${v}</option></#list>
                         </select>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="form-group row" id="manage_auth_whitelist_row">
                     <label class="col-sm-2 col-form-label">IP白名单</label>
                     <div class="col-sm-10">
-                        <textarea id="manage_auth_whitelist" rows="2" cols="40" placeholder="请输入访问权限,格式：xxx.xxx.xxx.xxx, yyy.yyy.yyy.yyy 多个逗号分隔." name="whitelist" class="easyui-validatebox  form-control" data-options="validType:['ips','length[1,127]']"></textarea>
+                        <textarea rows="2" cols="40" placeholder="请输入访问权限,格式：xxx.xxx.xxx.xxx, yyy.yyy.yyy.yyy 多个逗号分隔." name="whitelist" class="easyui-validatebox  form-control" data-options="validType:['ips','length[1,127]']"></textarea>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">状态</label>
+                    <label class="col-sm-2 col-form-label">
+                        <a data-toggle="tooltip" data-placement="right" title="状态修改为非'正常'时，该认证对象不可用">状态
+                        <i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                    </label>
                     <div class="col-sm-10">
                         <select name="status" class="form-control select2bs4">
-                            <#list allStatuss as k,v><option value="${k}">${v}</option></#list>
+                            <#list allStatuss as k,v>
+                                <option value="${k}">${v}</option></#list>
                         </select>
                     </div>
                 </div>
@@ -153,4 +158,20 @@
             }
         });
     }
+
+    function toggle_manage_apiAuth_whitelist(val) {
+        if (val == 'yes') {
+            $('#manage_auth_whitelist_row').show();
+        } else {
+            $('#manage_auth_whitelist_row').hide();
+        }
+    }
+
+    $(function () {
+        $('#manage_apiAuth_whitelistCheck').on("select2:select", function (e) {
+            toggle_manage_apiAuth_whitelist(e.params.data.id);
+        });
+
+        toggle_manage_apiAuth_whitelist($('#manage_apiAuth_whitelistCheck').val());
+    });
 </script>
