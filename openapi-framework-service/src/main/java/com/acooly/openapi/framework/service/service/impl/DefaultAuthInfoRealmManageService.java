@@ -6,12 +6,15 @@ import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.core.utils.mapper.BeanCopier;
+import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
 import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
+import com.acooly.openapi.framework.service.domain.ApiPartner;
 import com.acooly.openapi.framework.service.service.ApiAuthAclService;
 import com.acooly.openapi.framework.service.service.ApiAuthService;
+import com.acooly.openapi.framework.service.service.ApiPartnerService;
 import com.acooly.openapi.framework.service.service.AuthInfoRealmManageService;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
@@ -30,6 +33,8 @@ import java.util.Set;
 @Service
 public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageService {
 
+    @Autowired
+    ApiPartnerService apiPartnerService;
     @Autowired
     ApiAuthService apiAuthService;
     @Autowired
@@ -68,12 +73,21 @@ public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageSer
     public String getSercretKey(String accessKey) {
         ApiAuth apiAuth = apiAuthService.findByAccesskey(accessKey);
         if (apiAuth == null) {
-            return null;
+            log.warn("获取SecretKey 失败 AccessKey:{}, 认证对象(ApiAuth)不存在。", accessKey);
+            throw new ApiServiceException(ApiServiceResultCode.ACCESS_KEY_NOT_EXIST);
         }
+
         if (apiAuth.getStatus() != SimpleStatus.enable) {
             log.warn("获取SecretKey 失败 AccessKey:{}, ApiAuth对象状态非法:{}", accessKey, apiAuth.getStatus());
-            throw new ApiServiceException(ApiServiceResultCode.ACCESS_KEY_NOT_EXIST, "AccessKey对应的认证对象状态非法");
+            throw new ApiServiceException(ApiServiceResultCode.ACCESS_KEY_STATE_ERROR, "AccessKey对应的认证对象状态非法");
         }
+
+        ApiPartner apiPartner = apiPartnerService.getPartner(apiAuth.getPartnerId());
+        if (apiPartner == null) {
+            log.warn("获取SecretKey 失败 AccessKey:{}, partnerId:{}, 合作接入方(ApiPartner)不存在。", accessKey, apiAuth.getPartnerId());
+            throw new ApiServiceException(ApiServiceResultCode.ACCESS_KEY_NOT_EXIST, "合作接入方(ApiPartner)不存在");
+        }
+
         return apiAuth.getSecretKey();
     }
 

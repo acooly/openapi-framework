@@ -12,11 +12,19 @@ import com.acooly.openapi.framework.service.domain.ApiPartner;
 
 /**
  * 租户管理 Service接口
- *
+ * <p>
  * Date: 2018-08-21 14:31:05
- * @author qiubo
  *
+ * @author qiubo
  */
 public interface ApiPartnerService extends EntityService<ApiPartner> {
+
+    /**
+     * 根据partnerId查询
+     *
+     * @param partnerId
+     * @return
+     */
+    ApiPartner getPartner(String partnerId);
 
 }
