@@ -17,7 +17,7 @@ import com.acooly.module.event.EventBus;
 import com.acooly.openapi.framework.service.dao.ApiAuthDao;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
 import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
-import com.acooly.openapi.framework.service.event.ApiAuthUpdateEvent;
+import com.acooly.openapi.framework.service.event.ApiUpdateEvent;
 import com.acooly.openapi.framework.service.service.ApiAuthAclService;
 import com.acooly.openapi.framework.service.service.ApiAuthService;
 import com.alibaba.fastjson.JSONObject;
@@ -80,14 +80,14 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
             o.setAuthNo(Ids.did());
         }
         super.update(o);
-        eventBus.publish(new ApiAuthUpdateEvent(oldApiAuth));
+        eventBus.publish(new ApiUpdateEvent(oldApiAuth));
     }
 
 
     @Override
     public void remove(ApiAuth o) throws BusinessException {
         super.remove(o);
-        eventBus.publish(new ApiAuthUpdateEvent(o));
+        eventBus.publish(new ApiUpdateEvent(o));
     }
 
     @Override
@@ -110,7 +110,7 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
             throw new BusinessException(CommonErrorCodes.UNSUPPORTED_ERROR, "该认证对象还存在已分配的ACL权限");
         }
         super.removeById(id);
-        eventBus.publish(new ApiAuthUpdateEvent(apiAuth));
+        eventBus.publish(new ApiUpdateEvent(apiAuth));
     }
 
     @Override
@@ -119,6 +119,11 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
             return getEntityDao().findTops();
         }
         return getEntityDao().findByParentId(parentId);
+    }
+
+    @Override
+    public List<ApiAuth> findByPartnerId(String partnerId) {
+        return getEntityDao().findByPartnerId(partnerId);
     }
 
     @Override

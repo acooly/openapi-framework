@@ -46,7 +46,7 @@ public class MultiLevelOpenApiCacheManager implements OpenApiCacheManager, Initi
         try {
             String namedKey = getKey(key);
             // 设置一级缓存：本地缓存
-            localCache.put(namedKey, value);
+            putLocalCache(namedKey, value);
             // 设置二级缓存：Redis缓存
             if (redisTemplate == null) {
                 return;
@@ -68,7 +68,7 @@ public class MultiLevelOpenApiCacheManager implements OpenApiCacheManager, Initi
         try {
             String namedKey = getKey(key);
             // 获取一级缓存
-            Object value = localCache.getIfPresent(namedKey);
+            Object value = getLocalCache(namedKey);
             if (value != null) {
                 return value;
             }
@@ -91,8 +91,29 @@ public class MultiLevelOpenApiCacheManager implements OpenApiCacheManager, Initi
     @Override
     public void cleanup(String key) {
         String namedKey = getKey(key);
-        localCache.invalidate(namedKey);
+        invalidateLocalCache(namedKey);
         redisTemplate.delete(namedKey);
+    }
+
+    protected void putLocalCache(String key, Object val) {
+        if (!openAPIProperties.getAuthInfoCache().isLevelOneEnable()) {
+            return;
+        }
+        localCache.put(key, val);
+    }
+
+    protected Object getLocalCache(String key) {
+        if (!openAPIProperties.getAuthInfoCache().isLevelOneEnable()) {
+            return null;
+        }
+        return localCache.getIfPresent(key);
+    }
+
+    protected void invalidateLocalCache(String key) {
+        if (!openAPIProperties.getAuthInfoCache().isLevelOneEnable()) {
+            return;
+        }
+        localCache.invalidate(key);
     }
 
 
@@ -106,11 +127,14 @@ public class MultiLevelOpenApiCacheManager implements OpenApiCacheManager, Initi
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        if (!openAPIProperties.getAuthInfoCache().isLevelOneEnable()) {
+            return;
+        }
         localCache = Caffeine.newBuilder().expireAfter(new Expiry<String, Object>() {
             @Override
             public long expireAfterCreate(
                     String key, Object value, long currentTime) {
-                return TimeUnit.MILLISECONDS.toNanos(getMillisecondTimeout());
+                return TimeUnit.MILLISECONDS.toNanos(openAPIProperties.getAuthInfoCache().getLevelOneTimeout());
             }
 
             @Override

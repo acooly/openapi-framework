@@ -14,6 +14,7 @@ public interface AuthInfoRealm {
     String AUTHC_CACHE_KEY_PREFIX = "api_authc:";
     String AUTHZ_CACHE_KEY_PREFIX = "api_authz:";
     String AUTHIP_CACHE_KEY_PREFIX = "api_authip:";
+    String TENANT_CACHE_KEY_PREFIX = "api_tenant:";
 
     /**
      * 获取认证信息
@@ -38,4 +39,13 @@ public interface AuthInfoRealm {
      * @return
      */
     Set<String> getIpWhitelist(String accessKey);
+
+    /**
+     * 获取租户ID
+     *
+     * @param accessKey
+     * @return
+     */
+    String getTenantId(String accessKey);
+
 }

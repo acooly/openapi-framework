@@ -108,6 +108,8 @@ public class ApiContext extends Context {
 
     private String accessKey;
 
+    private String tenantId;
+
     private String requestBody;
 
     private String requestIp;

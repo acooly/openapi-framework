@@ -52,6 +52,9 @@ public interface ApiAuthDao extends EntityMybatisDao<ApiAuth> {
     @Select("select * from api_auth  where parent_id is null order by id desc")
     List<ApiAuth> findTops();
 
+    @Select("select * from api_auth  where partner_id = #{partnerId} order by id desc")
+    List<ApiAuth> findByPartnerId(@Param("partnerId") String partnerId);
+
     @Select("select * from api_auth aa where aa.permissions='*:*' and not exists (select 1 from api_auth_acl aaa where aaa.auth_no = aa.auth_no) ")
     List<ApiAuth> findAllPermitAuth();
 

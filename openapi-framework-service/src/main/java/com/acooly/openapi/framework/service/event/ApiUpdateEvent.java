@@ -10,6 +10,7 @@ package com.acooly.openapi.framework.service.event;
 
 import com.acooly.openapi.framework.service.domain.ApiAuth;
 import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
+import com.acooly.openapi.framework.service.domain.ApiPartner;
 import lombok.Data;
 
 /**
@@ -17,20 +18,26 @@ import lombok.Data;
  * @date 2019-02-12 23:13
  */
 @Data
-public class ApiAuthUpdateEvent {
+public class ApiUpdateEvent {
 
     private ApiAuth apiAuth;
 
     private ApiAuthAcl apiAuthAcl;
 
-    public ApiAuthUpdateEvent() {
+    private ApiPartner apiPartner;
+
+    public ApiUpdateEvent() {
     }
 
-    public ApiAuthUpdateEvent(ApiAuth apiAuth) {
+    public ApiUpdateEvent(ApiAuth apiAuth) {
         this.apiAuth = apiAuth;
     }
 
-    public ApiAuthUpdateEvent(ApiAuthAcl apiAuthAcl) {
+    public ApiUpdateEvent(ApiAuthAcl apiAuthAcl) {
         this.apiAuthAcl = apiAuthAcl;
+    }
+
+    public ApiUpdateEvent(ApiPartner apiPartner) {
+        this.apiPartner = apiPartner;
     }
 }

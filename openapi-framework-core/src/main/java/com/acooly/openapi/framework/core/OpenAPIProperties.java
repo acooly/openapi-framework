@@ -126,10 +126,21 @@ public class OpenAPIProperties {
          * 认证授权信息缓存是否开启
          */
         private boolean enable = true;
+
         /**
-         * 缓存信息过期时间,单位：ms,默认60分钟
+         * 是否开始一级本地缓存（注意：一级缓存为本地缓存，多节点时无法通过管理界面变更设置其他节点自动失效，智能通过到期时间）
          */
-        private int defaultTimeout = 10 * 60 * 1000;
+        private boolean levelOneEnable = true;
+
+        /**
+         * 缓存信息过期时间,单位：ms,默认10分钟
+         */
+        private int levelOneTimeout = 10 * 60 * 1000;
+
+        /**
+         * 二级缓存信息过期时间,单位：ms,默认60分钟（二级缓存开启收enable控制）
+         */
+        private int defaultTimeout = 60 * 60 * 1000;
     }
 
     @Data

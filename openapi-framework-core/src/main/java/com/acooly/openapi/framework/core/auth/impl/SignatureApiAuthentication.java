@@ -2,6 +2,7 @@ package com.acooly.openapi.framework.core.auth.impl;
 
 import com.acooly.core.common.boot.Env;
 import com.acooly.core.utils.enums.Messageable;
+import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
@@ -13,6 +14,7 @@ import com.acooly.openapi.framework.core.security.sign.Signer;
 import com.acooly.openapi.framework.core.security.sign.SignerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -48,10 +50,14 @@ public class SignatureApiAuthentication implements ApiAuthentication {
                 }
             }
             verify(apiContext.getRequestBody(), accessKey, apiContext.getSignType(), requestSign);
+            // 读取当前对应的租户信息
+            String tenantId = authInfoRealm.getTenantId(accessKey);
+            apiContext.setTenantId(tenantId);
+            MDC.put(ApiConstants.TENANT_ID, tenantId);
         } catch (ApiServiceException asae) {
             throw asae;
         } catch (Exception e) {
-            logger.warn("签名认证异常", e);
+            logger.warn("认证异常", e);
             throw new ApiServiceAuthenticationException();
         }
     }

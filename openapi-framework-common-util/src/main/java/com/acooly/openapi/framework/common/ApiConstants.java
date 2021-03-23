@@ -38,6 +38,8 @@ public final class ApiConstants {
     public static final String NOTIFY_URL = "notifyUrl";
     public static final String RETURN_URL = "returnUrl";
 
+    public static final String TENANT_ID = "tenantId";
+
 
     public static final String MERCH_ORDER_NO = "merchOrderNo";
     public static final String REQUEST_IP = "requestIp";

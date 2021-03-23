@@ -13,7 +13,7 @@ import com.acooly.module.event.EventBus;
 import com.acooly.openapi.framework.service.dao.ApiAuthAclDao;
 import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
 import com.acooly.openapi.framework.service.domain.ApiMetaService;
-import com.acooly.openapi.framework.service.event.ApiAuthUpdateEvent;
+import com.acooly.openapi.framework.service.event.ApiUpdateEvent;
 import com.acooly.openapi.framework.service.service.ApiAuthAclService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +83,6 @@ public class ApiAuthAclServiceImpl extends EntityServiceImpl<ApiAuthAcl, ApiAuth
     }
 
     private void cleanupCache(ApiAuthAcl apiAuthAcl) {
-        eventBus.publish(new ApiAuthUpdateEvent(apiAuthAcl));
+        eventBus.publish(new ApiUpdateEvent(apiAuthAcl));
     }
 }

@@ -38,4 +38,14 @@ public interface AuthInfoRealmService {
      * @return
      */
     Set<String> getIpWhitelist(String accessKey);
+
+
+    /**
+     * 获取租户ID
+     *
+     * @param accessKey
+     * @return
+     */
+    String getTenantId(String accessKey);
+
 }

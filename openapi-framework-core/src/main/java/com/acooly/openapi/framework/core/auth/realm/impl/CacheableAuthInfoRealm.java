@@ -105,8 +105,28 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
         return value;
     }
 
+
+    @Override
+    public String getTenantId(String accessKey) {
+        String key = tenantKey(accessKey);
+        String value = (String) openApiCacheManager.get(key);
+        if (value == null) {
+            value = loadTenantId(accessKey);
+            // 如果没有查询到权限信息,不设置缓存,有可能是网络或者权限系统内部错误
+            if (Strings.isNullOrEmpty(value)) {
+                return null;
+            }
+            openApiCacheManager.add(key, value);
+        }
+        return value;
+    }
+
     private String authIpKey(String accessKey) {
         return Apps.getAppName() + ":" + AUTHIP_CACHE_KEY_PREFIX + accessKey;
+    }
+
+    private String tenantKey(String accessKey) {
+        return Apps.getAppName() + ":" + TENANT_CACHE_KEY_PREFIX + accessKey;
     }
 
     private String authorizationKey(String accessKey) {
@@ -121,7 +141,10 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
         openApiCacheManager.cleanup(authenticationKey(accessKey));
         openApiCacheManager.cleanup(authorizationKey(accessKey));
         openApiCacheManager.cleanup(authIpKey(accessKey));
+        openApiCacheManager.cleanup(tenantKey(accessKey));
     }
+
+    public abstract String loadTenantId(String accessKey);
 
     /**
      * 获取安全码

@@ -28,6 +28,7 @@ public class DemoOrderCreateApiService extends BaseApiService<DemoOrderCreateApi
     @Override
     protected void doService(DemoOrderCreateApiRequest request, DemoOrderCreateApiResponse response) {
         log.info("OrderCreateApiService doService request: {}", request);
+        log.info("gid/tenantId:{}/{}",gid(),tenantId());
         response.setExt(request.getExt());
         response.setTestMoney(request.getAmount());
         response.setGoodsInfos(request.getGoodsInfos());

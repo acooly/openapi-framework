@@ -127,6 +127,18 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
         return ApiContextHolder.getApiContext().getGid();
     }
 
+    protected String gid() {
+        return getGid();
+    }
+
+    protected String getTenantId() {
+        return ApiContextHolder.getApiContext().getTenantId();
+    }
+
+    protected String tenantId() {
+        return getTenantId();
+    }
+
     public final void saveOrder(ApiContext apiContext) {
         try {
             ApiRequest request = apiContext.getRequest();

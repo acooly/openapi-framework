@@ -32,13 +32,37 @@ public interface ApiAuthService extends EntityService<ApiAuth> {
 
     /**
      * 根据编码查询
+     *
      * @param authNo
      * @return
      */
     ApiAuth findByAuthNo(String authNo);
 
+    /**
+     * 根据parentId查询
+     *
+     * @param parentId
+     * @return
+     */
     List<ApiAuth> findByParent(Long parentId);
 
+    /**
+     * 查询partnerId所属所有认证对象
+     *
+     * @param parentId
+     * @return
+     */
+    List<ApiAuth> findByPartnerId(String parentId);
 
+
+    /**
+     * 定制分页查询
+     *
+     * @param pageInfo
+     * @param map
+     * @param sortMap
+     * @param serviceCode
+     * @return
+     */
     PageInfo<ApiAuth> query(PageInfo<ApiAuth> pageInfo, Map<String, Object> map, Map<String, Boolean> sortMap, String serviceCode);
 }
