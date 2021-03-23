@@ -135,6 +135,7 @@
             method: 'POST',
             success: function (result) {
                 $('#manage_editform_accessKey').val(result.data);
+                $('#manage_editform_accessKey').validatebox("validate")
             },
             error: function (r, s, e) {
                 $.messager.alert('提示', e);
@@ -152,6 +153,7 @@
             method: 'POST',
             success: function (result) {
                 $('#manage_editform_secretKey').val(result.data);
+                $('#manage_editform_secretKey').validatebox("validate")
             },
             error: function (r, s, e) {
                 $.messager.alert('提示', e);
