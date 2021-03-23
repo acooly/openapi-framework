@@ -129,7 +129,7 @@ public class OpenAPIProperties {
         /**
          * 缓存信息过期时间,单位：ms,默认60分钟
          */
-        private int defaultTimeout = 60 * 60 * 1000;
+        private int defaultTimeout = 10 * 60 * 1000;
     }
 
     @Data
