@@ -58,7 +58,7 @@
         <form id="manage_apiAuth_searchform" class="form-inline ac-form-search" onsubmit="return false">
             <div class="form-group">
                 <label class="col-form-label">接入方：</label>
-                <select name="search_EQ_partnerId" class="form-control input-sm select2bs4">
+                <select name="search_EQ_partnerId" style="width:200px;" class="form-control input-sm select2bs4">
                     <option value="">所有</option><#list allPartners as k,v>
                     <option value="${k}">${k}:${v}</option></#list></select>
             </div>
@@ -113,16 +113,18 @@
         <div id="manage_apiAuth_toolbar">
             <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/openapi/apiAuth/create.html',entity:'apiAuth',width:600,height:600})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
             <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/openapi/apiAuth/deleteJson.html','manage_apiAuth_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>
-            <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_apiAuth_showSetting();"><i class="fa fa-cog fa-lg fa-fw fa-col"></i>设置权限</a>
         </div>
     </div>
 
     <div data-options="region:'south',border:false" style="height:45%;">
         <div class="easyui-tabs" fit="true">
-            <div title="已配置权限">
-                <table id="manage_apiAuthMetaService_datagrid" class="easyui-datagrid" toolbar="#manage_apiAuthMetaService_toolbarZZ" fit="true" border="false" fitColumns="false" idField="id" sortName="id" sortOrder="desc">
+            <div title="服务ACL列表">
+                <table id="manage_apiAuthAcl_datagrid" class="easyui-datagrid" toolbar="#manage_apiAuthAcl_toolbar"
+                       fit="true" border="false" fitColumns="false" idField="id" sortName="id" sortOrder="desc"
+                       checkOnSelect="true" selectOnCheck="true" singleSelect="true">
                     <thead>
                     <tr>
+                        <th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
                         <th field="id" sum="false">id</th>
                         <th field="serviceName">服务编号</th>
                         <th field="serviceDesc">服务名称</th>
@@ -133,13 +135,24 @@
                     </tr>
                     </thead>
                 </table>
+
+                <!-- 每行的Action动作模板 -->
+<#--                <div id="manage_apiAuthAcl_action" style="display: none;">-->
+<#--                    <a onclick="$.acooly.framework.edit({url:'/manage/openapi/apiAuth/edit.html',id:'{0}',entity:'apiAuth',width:500,height:400});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>-->
+<#--                    <a onclick="$.acooly.framework.show('/manage/openapi/apiAuth/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>-->
+<#--                    <a onclick="$.acooly.framework.remove('/manage/openapi/apiAuth/deleteJson.html','{0}','manage_apiAuth_datagrid');" href="#" title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>-->
+<#--                </div>-->
+
+                <div id="manage_apiAuthAcl_toolbar">
+<#--                    <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/openapi/apiAuthAcl/deleteJson.html','manage_apiAuthAcl_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>-->
+                    <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_apiAuth_showSetting();"><i class="fa fa-cog fa-lg fa-fw fa-col"></i>设置ACL权限</a>
+                </div>
             </div>
         </div>
     </div>
 
 </div>
 <script type="text/javascript">
-
 
     function manage_apiAuth_loadService() {
         $('#manage_apiAuth_searchform_serviceCode').select2({
@@ -162,14 +175,13 @@
         });
     }
 
-
-    function manage_apiAuth_onClickRow(rowid,rowData) {
+    function manage_apiAuth_onClickRow(rowid, rowData) {
         manage_apiAuth_reloadSubList(rowData.authNo);
     }
 
     function manage_apiAuth_reloadSubList(authNo) {
         $.acooly.framework.loadGrid({
-            gridId: "manage_apiAuthMetaService_datagrid",
+            gridId: "manage_apiAuthAcl_datagrid",
             url: '/manage/openapi/apiAuth/loadMetaServices.html',
             ajaxData: {"authNo": authNo}
         });
