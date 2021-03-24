@@ -40,7 +40,7 @@ public class OrderInfoDaoImpl extends AbstractJdbcTemplateDao implements OrderIn
     private static final String SELECT_FIELDS =
             "id,gid,partner_id as partnerId,service,version,raw_add_time as rawAddTime,"
                     + "raw_update_time as rawUpdateTime,protocol as protocol,notify_url as notifyUrl,return_url as returnUrl,business_info as businessInfo,"
-                    + "sign_type as signType, request_no as requestNo,context,access_key as accessKey";
+                    + "sign_type as signType, request_no as requestNo,context,access_key as accessKey,request_ip as requestIp";
     private RowMapper<OrderDto> rowMapper =
             (rs, rowNum) -> {
                 OrderDto orderInfo = new OrderDto();
@@ -60,6 +60,7 @@ public class OrderInfoDaoImpl extends AbstractJdbcTemplateDao implements OrderIn
                 orderInfo.setRequestNo(rs.getString(13));
                 orderInfo.setContext(rs.getString(14));
                 orderInfo.setAccessKey(rs.getString(15));
+                orderInfo.setRequestIp(rs.getString(16));
                 return orderInfo;
             };
 
@@ -93,6 +94,10 @@ public class OrderInfoDaoImpl extends AbstractJdbcTemplateDao implements OrderIn
         String service = (String) map.get("EQ_service");
         if (Strings.isNotBlank(service)) {
             sqlBuilder.append(" and service = '" + service + "'");
+        }
+        String requestIp = (String) map.get("EQ_requestIp");
+        if (Strings.isNotBlank(requestIp)) {
+            sqlBuilder.append(" and request_ip = '" + requestIp + "'");
         }
 
         // todo:临时处理方案,后续再抽象类中提供预处理查询模式,通过JDBC驱动层屏蔽数据类型转换
@@ -140,10 +145,10 @@ public class OrderInfoDaoImpl extends AbstractJdbcTemplateDao implements OrderIn
                         + getTable(orderInfo.getPartnerId())
                         + "("
                         + (getDbType() == DbType.oracle ? "id," : "")
-                        + "gid,access_key,partner_id,service,version,notify_url,return_url,business_info,raw_add_time,raw_update_time,sign_type,request_no,context,protocol) "
+                        + "gid,access_key,partner_id,service,version,notify_url,return_url,business_info,raw_add_time,raw_update_time,sign_type,request_no,context,protocol,request_ip) "
                         + " values("
                         + (getDbType() == DbType.oracle ? "seq_api_order_info.nextval," : "")
-                        + "?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                        + "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(
                 sql,
                 new PreparedStatementSetter() {
@@ -163,6 +168,7 @@ public class OrderInfoDaoImpl extends AbstractJdbcTemplateDao implements OrderIn
                         ps.setString(12, orderInfo.getRequestNo());
                         ps.setString(13, orderInfo.getContext());
                         ps.setString(14, orderInfo.getProtocol().code());
+                        ps.setString(15, orderInfo.getRequestIp());
                     }
                 });
     }

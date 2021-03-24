@@ -23,11 +23,8 @@ import java.util.Date;
 @Setter
 public class OrderDto extends InfoBase {
     private Long id;
-
     private String gid;
-
     private String requestNo;
-
     private String partnerId;
     private String service;
     private String version;
@@ -38,7 +35,7 @@ public class OrderDto extends InfoBase {
     private String businessInfo;
     private Date rawAddTime;
     private Date rawUpdateTime;
-
     private String accessKey;
     private String context;
+    private String requestIp;
 }

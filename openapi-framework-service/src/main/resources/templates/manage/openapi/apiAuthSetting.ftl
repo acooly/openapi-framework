@@ -1,8 +1,8 @@
 <style>
     .openapi-apilist {
-        margin-top: 10px;
+        padding: 10px 0 30px 0;
         font-size: 0;
-        height: 485px;
+        height: 750px;
         overflow: scroll;
         -webkit-user-select: none;
     }
@@ -21,7 +21,7 @@
     }
 
     .openapi-apilist li {
-        width: 23.8%;
+        width: 233px;
         margin: 0 10px 10px 0;
         padding: 0 8px 0 8px;
         border: 1px solid #dfdfdf;
@@ -55,17 +55,24 @@
         padding-left: 10px;
     }
 </style>
+
+
 <div id="manage_apiAuth_setting_layout" class="easyui-layout" data-options="fit:true,border:true">
     <div style="padding-left: 10px;padding-right:20px;margin-top:5px;text-align: left;" class="tableForm">
         <div>
-            关键字 : <input type="text" class="text" id="keywords" />
+            关键字 : <input type="text" class="text" id="keywords" onkeyup="searchService()" />
             <a href="javascript:void(0);" class="easyui-linkbutton" onclick="searchService()"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
             <a href="javascript:void(0);" class="easyui-linkbutton" onclick="showAllService()">显示全部服务</a>
+            显示总数：<span id="manage_apiAuth_setting_showcount"></span>
         </div>
     </div>
+
     <div id="manage_openapi_apilist_container" class="servicelist" style="border-bottom: cornflowerblue;">
     </div>
 </div>
+
+
+
 
 <script id="manage_openapi_apilist_template" type="text/html">
     <ul class="openapi-apilist">
@@ -108,6 +115,7 @@
                     checkbox.click();
                 });
                 loadACLs();
+                showAllService();
             },
             error: function (r, s, e) {
                 $.acooly.loaded();
@@ -210,18 +218,22 @@
         if(keyval === '' ){
             $(".openapi-apilist > li").show();
         }
+        var showCount = 0;
         $(".openapi-apilist > li").each(function(){
             var tobj = $(this);
             tobj.hide();
             if(tobj.text().indexOf(keyval) > -1){
                 tobj.show();
+                showCount++;
             }
         })
+        $('#manage_apiAuth_setting_showcount').text(showCount);
     }
 
     function showAllService() {
         $("#keywords").val('');
         $(".openapi-apilist > li").show();
+        $('#manage_apiAuth_setting_showcount').text($(".openapi-apilist > li").length);
     }
 
     $(function () {

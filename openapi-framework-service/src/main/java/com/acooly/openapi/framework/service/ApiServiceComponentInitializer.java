@@ -22,6 +22,9 @@ public class ApiServiceComponentInitializer implements ComponentInitializer {
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
+
+        setPropertyIfMissing("acooly.framework.custom-scripts.openapi[0]", "/manage/assert/openapi/openapi-manage.js");
+
         /** 升级增加apiAuth白名单 */
         setPropertyIfMissing("acooly.ds.dbPatchs.api_auth[0].columnName", "whitelist");
         setPropertyIfMissing("acooly.ds.dbPatchs.api_auth[0].patchSql", "ALTER TABLE `api_auth` \n" +
@@ -33,7 +36,6 @@ public class ApiServiceComponentInitializer implements ComponentInitializer {
         setPropertyIfMissing("acooly.ds.dbPatchs.api_auth[1].patchSql", "ALTER TABLE `api_auth`" +
                 " ADD COLUMN `status` VARCHAR(16) NULL DEFAULT 'enable' COMMENT '状态' AFTER `whitelist`;");
 
-
         // change tenant_no to tenant_id
         setPropertyIfMissing("acooly.ds.dbPatchs.api_partner[0].columnName", "tenant_id");
         setPropertyIfMissing("acooly.ds.dbPatchs.api_partner[0].patchSql", "ALTER TABLE `api_partner`" +
@@ -43,5 +45,12 @@ public class ApiServiceComponentInitializer implements ComponentInitializer {
         setPropertyIfMissing("acooly.ds.dbPatchs.api_partner[1].columnName", "tenant_name");
         setPropertyIfMissing("acooly.ds.dbPatchs.api_partner[1].patchSql", "ALTER TABLE `api_partner` \n" +
                 "ADD COLUMN `tenant_name` VARCHAR(32) NULL COMMENT '租户名称' AFTER `comments`;\n");
+
+        // add request_id in orderInfo
+        setPropertyIfMissing("acooly.ds.dbPatchs.api_order_info[0].columnName", "request_ip");
+        setPropertyIfMissing("acooly.ds.dbPatchs.api_order_info[0].patchSql", "ALTER TABLE `api_order_info`\n" +
+                " ADD COLUMN `request_ip` VARCHAR(16) NULL COMMENT '请求IP' AFTER `return_url`;");
+
+
     }
 }

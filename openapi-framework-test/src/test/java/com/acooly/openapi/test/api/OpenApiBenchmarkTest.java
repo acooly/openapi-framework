@@ -15,6 +15,8 @@ import com.acooly.openapi.framework.demo.message.response.DemoWithdrawApiRespons
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import static com.acooly.openapi.framework.common.ApiConstants.TEST_ACCESS_KEY;
+import static com.acooly.openapi.framework.common.ApiConstants.TEST_SECRET_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -25,6 +27,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @Slf4j
 public class OpenApiBenchmarkTest extends AbstractApiServieTests {
+
+    {
+        accessKey = "210323212041022F0007";
+        secretKey = "8f00a552a051c3cb3c480f2620b662d1";
+    }
 
     @Test
     public void testBenchmark() {

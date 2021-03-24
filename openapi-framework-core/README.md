@@ -35,6 +35,13 @@ OpenApi服务框架核心提供API服务的统一处理和执行能力，只需�
 
 网关的以下核心配置所有都是可选的，默认可以不配置，以下的配置案例中的参数值都是默认的参数值，你可以根据项目需求，修改配置。
 
+<del>
+```
+ acooly.openapi.enablePerfLog=true 
+```
+
+
+
 ```ini
 # 网关性能日志开关
 acooly.openapi.enablePerfLog=true

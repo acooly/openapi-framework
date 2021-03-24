@@ -15,6 +15,7 @@
             var d = $('<div/>').dialog({
                 href: '/manage/openapi/apiAuth/setting.json?id=' + row.id,
                 width: 1000, height: 600, modal: true,
+                maximizable: true,
                 title: '<i class="fa fa-cog fa-lg fa-fw fa-col"></i> 设置访问权限: ' + row.accessKey,
                 buttons: [
                     {
@@ -30,7 +31,7 @@
                     }],
                 onClose: function () {
                     $(this).dialog('destroy');
-                    reloadSubList(row.authNo);
+                    manage_apiAuth_reloadSubList(row.authNo);
                 }
             });
         });
@@ -84,7 +85,7 @@
     <div data-options="region:'center',border:false">
         <table id="manage_apiAuth_datagrid" class="easyui-datagrid" url="/manage/openapi/apiAuth/loadLevel.html" toolbar="#manage_apiAuth_toolbar" fit="true" border="false" fitColumns="false"
                pagination="true" idField="id" pageSize="20" pageList="[ 10, 20, 30, 40, 50 ]" sortName="id" sortOrder="desc" checkOnSelect="true" selectOnCheck="true" singleSelect="true"
-               treeField="accessKey">
+               treeField="accessKey" data-options="onClickRow:manage_apiAuth_onClickRow">
             <thead>
             <tr>
                 <th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
@@ -116,8 +117,29 @@
         </div>
     </div>
 
+    <div data-options="region:'south',border:false" style="height:45%;">
+        <div class="easyui-tabs" fit="true">
+            <div title="已配置权限">
+                <table id="manage_apiAuthMetaService_datagrid" class="easyui-datagrid" toolbar="#manage_apiAuthMetaService_toolbarZZ" fit="true" border="false" fitColumns="false" idField="id" sortName="id" sortOrder="desc">
+                    <thead>
+                    <tr>
+                        <th field="id" sum="false">id</th>
+                        <th field="serviceName">服务编号</th>
+                        <th field="serviceDesc">服务名称</th>
+                        <th field="note" formatter="contentFormatter">服务说明</th>
+                        <th field="busiType" formatter="mappingFormatter">业务类型</th>
+                        <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
+                        <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
 <script type="text/javascript">
+
 
     function manage_apiAuth_loadService() {
         $('#manage_apiAuth_searchform_serviceCode').select2({
@@ -133,10 +155,23 @@
                     };
                 }
             },
-            allowClear : true,
-            placeholder : '根据服务名查询所属访问码',
-            width : 240,
+            allowClear: true,
+            placeholder: '根据服务名查询所属访问码',
+            width: 240,
             theme: 'bootstrap4'
+        });
+    }
+
+
+    function manage_apiAuth_onClickRow(rowid,rowData) {
+        manage_apiAuth_reloadSubList(rowData.authNo);
+    }
+
+    function manage_apiAuth_reloadSubList(authNo) {
+        $.acooly.framework.loadGrid({
+            gridId: "manage_apiAuthMetaService_datagrid",
+            url: '/manage/openapi/apiAuth/loadMetaServices.html',
+            ajaxData: {"authNo": authNo}
         });
     }
 

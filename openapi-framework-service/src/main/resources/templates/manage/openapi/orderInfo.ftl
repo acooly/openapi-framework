@@ -46,11 +46,9 @@
                 <th field="rawAddTime">请求时间</th>
                 <th field="partnerId">商户ID</th>
                 <th field="accessKey">访问码</th>
+                <th field="signType">签名算法</th>
                 <th field="service">服务码</th>
-                <th field="notifyUrl">通知地址</th>
-                <th field="returnUrl">返回地址</th>
-                <th field="context" formatter="contentFormatter">会话信息</th>
-                <th field="businessInfo" formatter="jsonFormatter">扩展信息</th>
+                <th field="requestIp">请求IP</th>
             </tr>
             </thead>
         </table>
@@ -74,9 +72,34 @@
             <a href="#" class="easyui-linkbutton" iconCls="icon-import" plain="true" onclick="$.acooly.framework.imports({url:'/manage/openapi/orderInfo/importView.html',uploader:'manage_orderInfo_import_uploader_file'});">批量导入</a>
         </div>
     </div>
+
+    <script id="manage_openapi_orderInfo_list_detail_template" type="text/html">
+        <div class="form-horizontal">
+            <div class="card-body">
+                <div class="form-group row">
+                    <label class="col-sm-1 col-form-label">通知地址</label>
+                    <div class="col-sm-11 col-form-content"><%=row.notifyUrl%></div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-1 col-form-label">跳转地址</label>
+                    <div class="col-sm-11 col-form-content"><%=row.returnUrl%></div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-1 col-form-label">扩展信息</label>
+                    <div class="col-sm-11 col-form-content"><%=$.acooly.format.json(row.businessInfo)%></div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-1 col-form-label">会话信息</label>
+                    <div class="col-sm-11 col-form-content"><%=row.context%></div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+
     <script type="text/javascript">
         $(function () {
-            $.acooly.framework.initPage('manage_orderInfo_searchform', 'manage_orderInfo_datagrid');
+            $.acooly.openapi.manage.order.init();
         });
     </script>
 </div>

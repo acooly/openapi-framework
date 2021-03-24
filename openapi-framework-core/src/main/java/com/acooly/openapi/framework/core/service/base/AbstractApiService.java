@@ -156,6 +156,7 @@ public abstract class AbstractApiService<O extends ApiRequest, R extends ApiResp
             orderInfo.setSignType(apiContext.getSignType().name());
             orderInfo.setContext(request.getContext());
             orderInfo.setProtocol(apiContext.getApiProtocol());
+            orderInfo.setRequestIp(apiContext.getRequestIp());
             // 扩展信息中存储客户端请求IP和端口
             Map<String, String> busiInfos = Maps.newHashMap();
             busiInfos.put(ApiConstants.REQUEST_IP, apiContext.getRequestIp());
