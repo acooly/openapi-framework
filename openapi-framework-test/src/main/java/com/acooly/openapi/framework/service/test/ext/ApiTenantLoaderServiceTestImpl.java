@@ -29,7 +29,6 @@ public class ApiTenantLoaderServiceTestImpl implements ApiTenantLoaderService {
 
     @Override
     public List<ApiTenant> load() {
-
         // 直接数据MOCK进行测试。
         // 实际应用场景中：由集成项目通过读取数据或则facade获取管理或配置的数据
         List<ApiTenant> apiTenants = Lists.newArrayList();
