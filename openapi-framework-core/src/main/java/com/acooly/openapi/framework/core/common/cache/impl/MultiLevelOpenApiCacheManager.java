@@ -80,7 +80,7 @@ public class MultiLevelOpenApiCacheManager implements OpenApiCacheManager, Initi
             if (value != null) {
                 return value;
             }
-            log.warn("OpenApi缓存 获取 不存在 key: {}", key);
+            log.debug("OpenApi缓存 获取 不存在 key: {}", key);
         } catch (Exception e) {
             log.warn("OpenApi缓存 获取 失败。key: {}", key, e);
             //ig
