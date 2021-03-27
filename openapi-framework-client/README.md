@@ -16,6 +16,10 @@ https://api.xxx.com/gateway.do
 
 ## 2. 交互流程
 
+下图为OpenApi商户系统（客户端）与网关的通用交互流程
+
+<img width="70%" src="http://acooly.cn/resource/images/openapi/asyn.jpg" alt="交互流程">
+
 1. 接入方：根据报文协议组织参数，并根据协议对需要加密的参数进行加密替换值
 2. 接入方：对报文体整体签名并设置到x-api-sign中
 3. 接入方：通过http协议请求网关发送报文头和报文体数据
@@ -30,6 +34,8 @@ https://api.xxx.com/gateway.do
 
 ### 3.1 同步通讯
 
+<img width="70%" src="http://acooly.cn/resource/images/openapi/sync.jpg" alt="同步通讯">
+
 1. **构造请求数据**：商户根据服务平台提供的接口规则，通过程序生成得到签名结果及要传输给服务平台的数据集合。
 2. **发送请求数**：把构造完成的数据集合，通过页面链接跳转或表单提交的方式传递给服务平台。
 3. **服务处理**：服务平台得到这些集合后，会先进行安全校验等验证，一系列验证通过后便会处理这次发送过来的数据请求。
@@ -37,6 +43,8 @@ https://api.xxx.com/gateway.do
 5. **响应数据处理**：商户系统同步接收到http响应后，获取Http响应的body体中的JSON报文体，根据具体服务接
 
 ### 3.2 异步通讯
+
+<img width="70%" src="http://acooly.cn/resource/images/openapi/asyn.jpg" alt="异步通讯">
 
 1. **构造请求数据**：商户根据服务平台提供的接口规则，通过程序生成得到签名结果及要传输给服务平台的数据集合。特别的为保障异步通知能正确的通知到商户系统，请保证服务器异步通知URL链接（notifyUrl）上无任何特别字符，如空格、HTML标签、开发系统自带抛出的异常提示信息等，也不能后接queryString。notifyUrl格式实例如下：
 	* http://merchant-site/notifyUrl.html (正确)
@@ -62,6 +70,8 @@ https://api.xxx.com/gateway.do
 * 如果code为其他值的情况表示处理错误响应，已经是最终结果，无后续异步处理。
 
 ### 3.4 跳转通讯
+
+<img width="70%" src="http://acooly.cn/resource/images/openapi/redirect.jpg" alt="跳转通讯">
 
 跳转通讯主要提供商户发起请求直接跳转到服务平台的页面进行业务处理的场景。如上图所示，主要流程描述如下：
 
@@ -232,7 +242,7 @@ https://api.xxx.com/gateway.do
 
 网关所有通讯模式的报文定义都遵循统一的规则，所有报文都基于**报文头**，**报文体公共报文（我们简称：公共报文）**，后续的所有业务报文定义只定义业务部分，公共部分以本模块定义的公共报文作为准，完整的报文由公共报文加上业务报文组成。同时，所有报文数据项的定义都明确类型，长度等关键信息。
 
-完整的报文定义 = 报文头 + 公共报文 + 具体接口定义的业务报文
+完整的报文定义 = 报文头 + 报文体(公共报文 + 具体接口定义的业务报文)
 
 #### 4.5.1 报文头
 
@@ -502,9 +512,123 @@ PrivateKey merchantPrivateKey = loadPrivateKeyFormPfx("/path/merchant.pfx");
 String plainText = new String(RSAEncrypt(Base64Decode(cipherText), merchantPrivateKey), "UTF-8");
 ```
 
-## 7. 接入工具
+## 7. 代码与工具
 
-### 7.1 Java接入工具/SDK
+### 7.1 Java示例代码
+
+代码工具中提供的代码块以java语言编写，作为商户端开发接入的参考实现.
+
+#### 7.1.1 摘要签名和验签
+
+摘要方式签名，这里采用MD5方式提供参考，目前采用apache-commons的标准工具实现。
+
+依赖第三方组件：apache commons-codec-1.8
+
+```xml
+<dependency>
+    <groupId>commons-codec</groupId>
+    <artifactId>commons-codec</artifactId>
+    <version>1.8</version>
+</dependency>
+```
+
+**签名**
+
+```java
+/**
+     * MD5摘要签名
+     *
+     * @param waitToSignStr
+     * @param key
+     * @return
+     */
+    public static String signMD5(String waitToSignStr, String key) {
+        // MD5摘要签名计算
+		return DigestUtils.md5Hex(waitToSignStr + key);
+    }
+```
+
+**验签**
+
+```java
+/**
+     * 验证MD5签名
+     *
+     * @param waitToSignStr 待签字符串
+     * @param key           商户安全码
+     * @param verifySign    待验证签名
+     * @return 验签结果。 true: 成功, false: 失败
+     */
+    public static boolean verifyMD5(String waitToSignStr, String key, String verifySign) {
+        // MD5摘要签名计算
+        String signature = DigestUtils.md5Hex(waitToSignStr + key);
+        return verifySign.equals(signature);
+    }
+```
+
+#### 7.1.2 对称加解密
+
+**AES加密**
+
+```java
+/**
+     * ASE加密
+     *
+     * @param plainText 明文
+     * @param secretKey 商户安全码
+     * @return 密文
+     */
+    public static String AESEncrypt(String plainText, String secretKey) {
+        try {
+            // 使用商户安全码前16字节作为加密秘钥
+            byte[] secretKeyBytes = secretKey.substring(0, 16).getBytes("UTF-8");
+            // 明文数据
+            byte[] plainBytes = plainText.getBytes("UTF-8");
+            SecretKey key = new SecretKeySpec(secretKeyBytes, "AES");
+            // 获取Cipher对象较为耗费资源,如追求性能,请对cipher做缓存方案;
+            // 通过算法/模式/填充获取cipher对象时,采用默认AES,表示: AES/ECB/PKCS5Padding
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            byte[] cipherBytes = cipher.doFinal(plainBytes);
+            // 转换为base64(utf-8)字符串作为密文
+            return Base64.encodeBase64String(cipherBytes);
+        } catch (Exception e) {
+            throw new RuntimeException("AES加密失败: " + e.getMessage());
+        }
+    }
+```
+
+**AES解密**
+
+```java
+/**
+     * ASE解密
+     *
+     * @param cipherText 密文
+     * @param secretKey  商户安全码
+     * @return 明文
+     */
+    public static String AESDecrypt(String cipherText, String secretKey) {
+        try {
+            // 使用商户安全码前16字节作为加密秘钥
+            byte[] secretKeyBytes = secretKey.substring(0, 16).getBytes("UTF-8");
+            // 密文数据: base64(utf-8)字符串
+            byte[] cipherBytes = Base64.decodeBase64(cipherText);
+            SecretKey key = new SecretKeySpec(secretKeyBytes, "AES");
+            // 获取Cipher对象较为耗费资源,如追求性能,请对cipher做缓存方案;
+            // 通过算法/模式/填充获取cipher对象时,采用默认AES,表示: AES/ECB/PKCS5Padding
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.DECRYPT_MODE, key);
+            byte[] plainBytes = cipher.doFinal(cipherBytes);
+            // 转换为utf-8字符串则为明文
+            return new String(cipherBytes, "UTF-8");
+        } catch (Exception e) {
+            throw new RuntimeException("AES加密失败: " + e.getMessage());
+        }
+    }
+```
+
+### 7.2 Java接入工具/SDK
 
 请参考： [OpenApiClient工具](https://acooly.cn/docs/component/openapi-framework-common-util.html)
 

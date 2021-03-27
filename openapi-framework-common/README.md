@@ -20,6 +20,26 @@ OpenApi开放平台框架提供完善的网关服务开放平台的完整解决�
 
 ## 3. 版本
 
+### v5.1.0
+
+以5.1.0为基准，首次回归为release版本管理。
+
+* 2021-03-26 - 提交本次变更特性的文档说明，重构服务端开发文档说明 - [zhangpu] f2434eb
+* 2021-03-26 - 更新openapi初始SQL(openapi-v5_SNAPSHOT-upgrade-v5.1.0_release.sql) - [zhangpu] 6b4a38f
+* 2021-03-24 - 优化：认证管理模块界面显示，视图调整为bootstrap模式 - [zhangpu] c3df174
+* 2021-03-24 - 优化：OpenApi订单查询，URL和长数据字段使用detailView方式显示 - [zhangpu] e2f15b1
+* 2021-03-23 - 优化：认证管理编辑界面，动态生成accessKey和secretKey后，自动完成表单验证（去除未验证的提示） - [zhangpu] bc626c2
+* 2021-03-23 - 优化：调整OpenApi本地缓存时间默认值，从60分钟调整为10分钟，新增一级本地缓存开关（默认开启）和一级缓存过期时间（默认10分钟） - [zhangpu] 290ab3c
+* 2021-03-23 - 优化：为认证逻辑增加partnerId和accesskey存在和状态的检测 - [zhangpu] c4cb86e
+* 2021-03-23 - 优化：为认证对象管理添加tip说明 - [zhangpu] 3dd2e38
+* 2021-03-22 - 优化：ApiAuth对象新增状态管理能力 - [zhangpu] 8de163c
+* 2021-03-22 - 优化：日志相关的配置文件，废弃acooly.openapi.下相关的日志的配置（兼容），全部迁移到acooly.openapi.log.xxx下。 - [zhangpu] 7088614
+* 2021-03-22 - 多租户特性：增加ApiTenant接口，支持外部接口扩展方式（ApiTenantLoaderService.load）实现租户类别信息的集成，集成后可在接入管理中选择租户与partnerId关联。 - [zhangpu] 9516522
+* 2021-03-23 - 多租户特性：新增tenantId集成到OpenApi请求会员ApiContext中，同时支持在Api服务中通过tenantId()方法获取 - [zhangpu] 22a7d9d
+* 2021-03-19 - 在openapi-framework-client中还原商户接入指南，恢复`商户接入指南`标准文档。 - [zhangpu] 2df9d82
+
+>注意：本版本对数据库有结构调整，online环境需执行`openapi-framework-service`模块下的`openapi-v5_SNAPSHOT-upgrade-v5.1.0_release.sql`，非online环境组件会自动更新。
+
 ### v5.0.0-SNAPSHOT(2020-06-26)
 
 * 2020-06-26 - 在BOSS界面的异步通知模块增加手动立即通知按钮功能。 - [zhangpu] ae1c91e
