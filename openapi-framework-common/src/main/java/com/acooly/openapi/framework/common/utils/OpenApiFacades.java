@@ -79,7 +79,7 @@ public class OpenApiFacades {
     public static void result(ResultBase result, ApiResponse response) {
         // 设置结果
         response.setResult(result.getStatus(), result.getDetail());
-        if (result.getStatus() != ResultStatus.success || result.getStatus() != ResultStatus.processing) {
+        if (result.failure()) {
             return;
         }
         if (PageResult.class.isAssignableFrom(result.getClass())
