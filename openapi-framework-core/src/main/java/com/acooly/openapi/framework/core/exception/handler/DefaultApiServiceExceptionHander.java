@@ -7,6 +7,8 @@
  */
 package com.acooly.openapi.framework.core.exception.handler;
 
+import com.acooly.core.common.exception.BusinessException;
+import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.Messageable;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
@@ -30,6 +32,8 @@ public class DefaultApiServiceExceptionHander implements ApiServiceExceptionHand
             ApiRequest apiRequest, ApiResponse apiResponse, Throwable ase) {
         if (ApiServiceException.class.isAssignableFrom(ase.getClass())) {
             handleApiServiceException(apiResponse, (ApiServiceException) ase);
+        } else if (BusinessException.class.isAssignableFrom(ase.getClass())) {
+            handleBusinessException(apiResponse, (BusinessException) ase);
         } else if (Messageable.class.isAssignableFrom(ase.getClass())) {
             handleMessageable(apiResponse, (Messageable) ase);
         } else {
@@ -57,6 +61,23 @@ public class DefaultApiServiceExceptionHander implements ApiServiceExceptionHand
     protected void handleApiServiceException(ApiResponse apiResponse, ApiServiceException ase) {
         apiResponse.setCode(ase.getResultCode());
         apiResponse.setMessage(ase.getResultMessage());
+        apiResponse.setDetail(ase.getDetail());
+    }
+
+    /**
+     * 业务异常处理
+     *
+     * @param apiResponse
+     * @param ase
+     */
+    protected void handleBusinessException(ApiResponse apiResponse, BusinessException ase) {
+        apiResponse.setCode(ase.code());
+        //增强兼容性
+        if (Strings.isNotBlank(ase.getDetail())) {
+            apiResponse.setMessage(ase.message() + ":" + ase.getDetail());
+        } else {
+            apiResponse.setMessage(ase.message());
+        }
         apiResponse.setDetail(ase.getDetail());
     }
 
