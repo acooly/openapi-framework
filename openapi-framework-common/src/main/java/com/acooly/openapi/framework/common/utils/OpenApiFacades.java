@@ -9,10 +9,11 @@
 package com.acooly.openapi.framework.common.utils;
 
 import com.acooly.core.common.dao.support.PageInfo;
-import com.acooly.core.common.facade.*;
+import com.acooly.core.common.facade.OrderBase;
+import com.acooly.core.common.facade.PageOrder;
+import com.acooly.core.common.facade.PageResult;
+import com.acooly.core.common.facade.ResultBase;
 import com.acooly.core.utils.Reflections;
-import com.acooly.core.utils.Types;
-import com.acooly.core.utils.enums.ResultStatus;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
@@ -68,8 +69,6 @@ public class OpenApiFacades {
      * 特性：
      * <li>自动填充结果状态和detail信息</li>
      * <li>PageResult: 完全自动填充，包括:分页信息和当页列表数据</li>
-     * <li>SingleResult: 如果DTO对象是JavaBean,则BeanCopier(dto,response),如不满足，请自行补充填值</li>
-     * <li>自定义Result: 直接BeanCopier(result,response)，如不满足，请自行补充填值</li>
      * </p>
      *
      * @param result   facade返回的result对象
@@ -77,28 +76,19 @@ public class OpenApiFacades {
      */
     public static void result(ResultBase result, ApiResponse response) {
         // 设置结果
-        response.setResult(result.getStatus(), result.getDetail());
-        if (result.getStatus() != ResultStatus.success || result.getStatus() != ResultStatus.processing) {
+        response.setResult(result.getCode(), result.getMessage(), result.getDetail());
+        if (result.failure()) {
             return;
         }
+        // 针对PageResult的自动填充
         if (PageResult.class.isAssignableFrom(result.getClass())
                 && PageApiResponse.class.isAssignableFrom(response.getClass())) {
-            //PageResult
             PageResult pageResult = (PageResult) result;
             PageApiResponse pageApiResponse = (PageApiResponse) response;
             PageInfo pageInfo = pageResult.getDto();
             pageApiResponse.setRows(pageInfo.getPageResults());
             pageApiResponse.setTotalRows(pageInfo.getTotalCount());
             pageApiResponse.setTotalPages(pageInfo.getTotalPage());
-        } else if (SingleResult.class.isAssignableFrom(result.getClass())) {
-            // SingleResult,制作dto的基础拷贝
-            Object dto = ((SingleResult) result).getDto();
-            if (dto != null && Types.isJavaBean(dto.getClass())) {
-                BeanCopier.copy(dto, response, BeanCopier.CopyStrategy.IGNORE_NULL, BeanCopier.NoMatchingRule.IGNORE);
-            }
-        } else {
-            // 其他自定义Result，直接拷贝
-            BeanCopier.copy(result, response, BeanCopier.CopyStrategy.IGNORE_NULL, BeanCopier.NoMatchingRule.IGNORE);
         }
     }
 
