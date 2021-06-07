@@ -22,7 +22,18 @@ OpenApi开放平台框架提供完善的网关服务开放平台的完整解决�
 
 ## 3. 版本
 
+### v5.1.1
+
+2021-06-07
+
+* 2021-06-07 - 修正：apidoc的文档浏览界面的左侧菜单选择无效问题，调整左侧菜单采用服务端URL访问模式。 - [zhangpu] 08f4d32
+* 2021-06-07 - 优化：优化apidoc的服务列表展示效果，升级为最新ftl界面，同时查看功能调整为直接跳转apidoc前端通用界面。 - [zhangpu] cdfb4db
+* 2021-06-07 - 新增：@ApidocHide标签，用于标记openapi服务外部不可见（不加入任何scheme中），不再前端apidoc文件列表中可见，但仍然生成apidoc数据，在后台可查，前台手动输入URL可访问 - [zhangpu] 44ff714
+* 2021-05-11 - 添加三元业务异常BusinessException转换为openAPIResponse - [lilin] aa38bf7
+
 ### v5.1.0
+
+2021-03-30
 
 以5.1.0为基准，首次回归为release版本管理。
 
