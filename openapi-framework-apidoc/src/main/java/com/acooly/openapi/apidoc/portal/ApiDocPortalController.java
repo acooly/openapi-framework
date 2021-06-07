@@ -91,6 +91,7 @@ public class ApiDocPortalController extends AbstractPortalController {
                          HttpServletRequest request, HttpServletResponse response, Model model) {
         try {
             doSchemeApi(id, serviceNo, request, response, model);
+            model.addAttribute("serviceNo", serviceNo);
         } catch (Exception e) {
             handleException("", e, request);
         }

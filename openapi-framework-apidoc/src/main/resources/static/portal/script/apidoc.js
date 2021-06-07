@@ -6,7 +6,7 @@ function loadData(serviceNo) {
     baidu.template.ESCAPE = false;
     $.acooly.portal.ajaxRender(url, jsonData, renderTo, template, null, function (result) {
         // 选中菜单
-        selectMenu(result.entity.id);
+        // selectMenu(result.entity.id);
         $('#apidoc_nav_name').html(result.entity.serviceName);
         // 示例报文
         loadMessageDemos(result.entity.id);

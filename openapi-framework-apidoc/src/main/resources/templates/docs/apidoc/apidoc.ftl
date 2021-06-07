@@ -45,7 +45,7 @@
 		<@includePage path="/docs/common/footer.html"/>
 		<!--end-->
 
-<script id="apidoc_template" type="text/html">
+    <script id="apidoc_template" type="text/html">
     <div class="doc-header">
         <div class="doc-header-title"><i class="layui-icon">&#xe62a;</i> <%=entity.title%></div>
         <div class="doc-header-more">
@@ -95,7 +95,7 @@
                             var anchor;
                             if(e.messageType == 'Request'){ anchor = 'toc421'; }else if(e.messageType == 'Response'){ anchor = 'toc422'; }else{ anchor = 'toc423'; }
                             %>
-                            <td colspan="7">公共参数: <a href="http://acooly.cn/docs/component/openapi-framework-common.html#<%=anchor%>" target="_blank">公共<%=e.messageType%>报文</a></td>
+                            <td colspan="7">公共参数: <a href="https://acooly.cn/docs/component/openapi-framework-client.html#toc318" target="_blank">公共<%=e.messageType%>报文</a></td>
                         </tr>
                         <%
                         if(e.apiDocItems && e.apiDocItems.length > 0){
