@@ -1,4 +1,5 @@
 <!-- title: OpenApi框架简介 -->
+<!-- title: openapi-framework -->
 <!-- type: openapi -->
 <!-- author: zhangpu -->
 <!-- date: 2020-02-13 -->
@@ -20,7 +21,7 @@ OpenApi开放平台框架提供完善的网关服务开放平台的完整解决�
 * [OpenApi接入开发指南](https://acooly.cn/docs/component/openapi-framework-client.html)
 * [OpenApiClient工具](https://acooly.cn/docs/component/openapi-framework-common-util.html)
 
-## 3. 版本
+## 3. changelog
 
 ### v5.1.1
 
@@ -29,13 +30,10 @@ OpenApi开放平台框架提供完善的网关服务开放平台的完整解决�
 * 2021-06-07 - 修正：apidoc的文档浏览界面的左侧菜单选择无效问题，调整左侧菜单采用服务端URL访问模式。 - [zhangpu] 08f4d32
 * 2021-06-07 - 优化：优化apidoc的服务列表展示效果，升级为最新ftl界面，同时查看功能调整为直接跳转apidoc前端通用界面。 - [zhangpu] cdfb4db
 * 2021-06-07 - 新增：@ApidocHide标签，用于标记openapi服务外部不可见（不加入任何scheme中），不再前端apidoc文件列表中可见，但仍然生成apidoc数据，在后台可查，前台手动输入URL可访问 - [zhangpu] 44ff714
-* 2021-05-11 - 添加三元业务异常BusinessException转换为openAPIResponse - [lilin] aa38bf7
 
 ### v5.1.0
 
 2021-03-30
-
-以5.1.0为基准，首次回归为release版本管理。
 
 * 2021-03-30 - 为OpenApi调用facade提供专用工具：`OpenApiFacades` - [zhangpu] f2434eb
 * 2021-03-26 - 提交本次变更特性的文档说明，重构服务端开发文档说明 - [zhangpu] f2434eb
@@ -52,18 +50,18 @@ OpenApi开放平台框架提供完善的网关服务开放平台的完整解决�
 * 2021-03-23 - 多租户特性：新增tenantId集成到OpenApi请求会员ApiContext中，同时支持在Api服务中通过tenantId()方法获取 - [zhangpu] 22a7d9d
 * 2021-03-19 - 在openapi-framework-client中还原商户接入指南，恢复`商户接入指南`标准文档。 - [zhangpu] 2df9d82
 
-> 注意：本版本对数据库有结构调整，online环境需执行`openapi-framework-service`模块下的`openapi-v5_SNAPSHOT-upgrade-v5.1.0_release.sql`，非online环境组件会自动更新。
-
 ### v5.0.0-SNAPSHOT(2020-06-26)
 
-* 2020-06-26 - 在BOSS界面的异步通知模块增加手动立即通知按钮功能。 - [zhangpu] ae1c91e
-    * 发起手动通知时，不占用总的通知次数（当前sendCount - 1）
-    * 无论原有主状态是否success，都更新为Waiting，等待定时任务触发发送
-    * 下次发送时间立即调整为现在。
-    * 下次定时任务自动触发发送该记录（目前默认是2分钟）
-* 2020-06-21 - 修复异步通知的查询条件。 - [zhangpu] 22b70e3
-    * GID：全站跟踪唯一请求。
-    * requestNo：从外部查询唯一请求。
+2020-06-26
+
+* 在BOSS界面的异步通知模块增加手动立即通知按钮功能。 - [zhangpu] ae1c91e
+* 发起手动通知时，不占用总的通知次数（当前sendCount - 1）
+* 无论原有主状态是否success，都更新为Waiting，等待定时任务触发发送
+* 下次发送时间立即调整为现在。
+* 下次定时任务自动触发发送该记录（目前默认是2分钟）
+* 修复异步通知的查询条件。 - [zhangpu] 22b70e3
+* GID：全站跟踪唯一请求。
+* requestNo：从外部查询唯一请求。
 
 ### v5.0.0-SNAPSHOT(2020-05-30)
 
@@ -74,98 +72,64 @@ OpenApi开放平台框架提供完善的网关服务开放平台的完整解决�
 
 ### v5.0.0-SNAPSHOT(2020-02-13)
 
-本版本主要重构了OpenApi核心认证和授权结构，缓存实现等功能，涉及数据结构变更。主要内容如下：
+2020-02-13
 
-#### 权限认证重构 [不兼容]
-
-1. 完成权限认证改造，模型结构升级。`partner(接入方)`-(1-n)->`apiAuth(accessKey)`-(1-n)->apiAuthAcl(服务权限列表)。
-2. 支持配置方式权限（原有perm）和ACL两种默认。你可以在后台`认证授权`->`访问权限`中配置特殊权限（`*:*`模式），也可以通过`认证授权`->`设置权限`配置ACL权限（1.0版本的功能），你配置的两种权限OpenApi会合并并集使用。
-
-> 升级注意：
->1. 在目标库执行升级SQL: [openapi-v4-upgrade-v5.sql](https://gitlab.acooly.cn/acoolys/openapi/openapi-framework/raw/master/openapi-framework-service/src/main/resources/META-INF/database/openapi/mysql/openapi-v4-upgrade-v5.sql)
->2. 启动登录后台BOSS，在`接入管理`和`认证授权`模块中，手动更新部分字段内容。包括：商户号等
-
-#### 动态秘钥改造 [不兼容]
-
-动态密码认证逻辑中，缓存无法更新问题，造成动态密码方案无法实现。修正后的逻辑为：
-
-1. 请求登录接口（login）使用的accessKey作为父AccessKey。每次login用户/密码认证通过后，后返回子动态秘钥：accessKey#username及对应的secretKey。
-2. 如果开启动态密码，secretKey为每次登录成功后新生成。该动态密码在该username下次登录前一直有效；否则以首次登录成功时生成的动态密码不变（暂时不支持秘钥有效期，应用场景不对，管理困难）。
-3. 访问码：accessKey#username的权限同父accessKey的权限配置。 注意：原有逻辑是登录成功后，动态秘钥的权限是所有服务（\*:\*），是非常安全的。
-
-> 升级注意：
-> 基于以上修正的逻辑，请所有5.0以上为App/客户端提供服务的内部OpenApi新增专用的客户端使用accessKey，配置对应的权限用于登录（login）
-
-#### 缓存重构 [兼容]
-
-1. 重构缓存实现，废弃config组件方案（存在持久化到数据库），采用二级缓存（本地+redis），调整默认缓存过期时间为10分钟。
-2. 修正：多套OpenApi服务公用redis时，缓存key重复不能隔离的问题（添加key前缀为：AppName）
-3. 在管理系统中任何对权限和秘钥变更（updae和delete）的操作通过事件刷新缓存。(遗留问题，事件通知暂未实现多节点同步，多节点时，需 要等待缓存失效，默认10分钟)
+* 完成权限认证改造，模型结构升级。`partner(接入方)`-(1-n)->`apiAuth(accessKey)`-(1-n)->apiAuthAcl(服务权限列表)。
+* 支持配置方式权限（原有perm）和ACL两种默认。你可以在后台`认证授权`->`访问权限`中配置特殊权限（`*:*`模式），也可以通过`认证授权`->`设置权限`配置ACL权限（1.0版本的功能），你配置的两种权限OpenApi会合并并集使用。
+* 在目标库执行升级SQL: [openapi-v4-upgrade-v5.sql](https://gitlab.acooly.cn/acoolys/openapi/openapi-framework/raw/master/openapi-framework-service/src/main/resources/META-INF/database/openapi/mysql/openapi-v4-upgrade-v5.sql)
+* 启动登录后台BOSS，在`接入管理`和`认证授权`模块中，手动更新部分字段内容。包括：商户号等
+* 请求登录接口（login）使用的accessKey作为父AccessKey。每次login用户/密码认证通过后，后返回子动态秘钥：accessKey#username及对应的secretKey。
+* 如果开启动态密码，secretKey为每次登录成功后新生成。该动态密码在该username下次登录前一直有效；否则以首次登录成功时生成的动态密码不变（暂时不支持秘钥有效期，应用场景不对，管理困难）。
+* 访问码：accessKey#username的权限同父accessKey的权限配置。 注意：原有逻辑是登录成功后，动态秘钥的权限是所有服务（\*:\*），是非常安全的。
+* 重构缓存实现，废弃config组件方案（存在持久化到数据库），采用二级缓存（本地+redis），调整默认缓存过期时间为10分钟。
+* 修正：多套OpenApi服务公用redis时，缓存key重复不能隔离的问题（添加key前缀为：AppName）
+* 在管理系统中任何对权限和秘钥变更（updae和delete）的操作通过事件刷新缓存。(遗留问题，事件通知暂未实现多节点同步，多节点时，需 要等待缓存失效，默认10分钟)
+* 升级注意： 基于以上修正的逻辑，请所有5.0以上为App/客户端提供服务的内部OpenApi新增专用的客户端使用accessKey，配置对应的权限用于登录（login）
 
 ### v5.0.0-SNAPSHOT
+
+2019-09-01
 
 * 与v4.2.2-SNAPSHOT同步维护，支持acoolyV5框架
 * 从acoolys/openapi-framework迁移到/acoolys/openapi/openapi-framework
 
 ### v4.2.2-SNAPSHOT
 
-过度版本，19年内全部升级为v5
+2018-08-01
 
-升级重构：
-
-1. filter方式重构处理核心
-2. 同时支持JSON和FORM_JSON两种协议
+* filter方式重构处理核心
+* 同时支持JSON和FORM_JSON两种协议
 
 ### v4.2.0-SNAPSHOT
 
-#### 1. 请求
+2018-06-01
 
-1. 支持请求参数序列化为json，放在http body中传输
-2. 支持Content-Type=application/x-www-form-urlencoded，请求数据放在form表单body参数中
-3. 安全校验相关参数支持放在http header或者url中
-
-#### 2. 响应
-
-1. 同步响应：响应安全校验信息放在http header中，响应体为json
-2. 跳转响应：服务端响应http code=302，响应相关信息在http header的Location参数中，其中body参数为响应体json
-3. 通知响应：异步响应遵循同步响应规范
-
-#### 3. 匿名登录请求
-
-1. 使用匿名账户登录
-2. 账户信息校验成功后，下发新的accessKey\secretKey
-3. 后续请求使用新的accessKey\secretKey
-
-#### 4. 扩展点
-
-1. 认证授权扩展点
-
-   实现`com.acooly.openapi.framework.service.service.AuthInfoRealmService`
-
-2. 用户登录扩展点
-
-   实现`AppApiLoginService`
-
-3. 用户登录自动下发新认证信息扩展点
-
-   实现`com.acooly.openapi.framework.service.service.AuthInfoRealmManageService`
-
-   此接口继承`AuthInfoRealmService`接口
-
-4. 自定义文档生成扩展点
-
-   监听spring事件`ApiMetaParseFinish`
+* 支持请求参数序列化为json，放在http body中传输
+* 支持Content-Type=application/x-www-form-urlencoded，请求数据放在form表单body参数中
+* 安全校验相关参数支持放在http header或者url中
+* 同步响应：响应安全校验信息放在http header中，响应体为json
+* 跳转响应：服务端响应http code=302，响应相关信息在http header的Location参数中，其中body参数为响应体json
+* 通知响应：异步响应遵循同步响应规范
+* 使用匿名账户登录
+* 账户信息校验成功后，下发新的accessKey\secretKey
+* 后续请求使用新的accessKey\secretKey
 
 ### v4.2.2-SNAPSHOT
+
+2018-05-01
 
 * 在4.1基础上重构openapi的核心实现，采用filterChian方式。
 * 支付双协议：JSON（4.1及以上）和HTTP_FORM_JSON（4.0及以下）
 
 ### v4.0.0-SNAPSHOT
 
-spring-boot化，全面升级为acooly4版本支持。
+2018-01-01
+
+* spring-boot化，全面升级为acooly4版本支持。
 
 ### v1.3.2
+
+2016-11-24
 
 * 2016-11-24 - 修复openapi boss 后台bug 1、修复通知记录查询页面，保存通知响应时将响应报文HtmlUtils.htmlEscape，转移特殊字符 2、修复订单查询页面，修复跳转查询按request_No和merchOrderNo查询异常，将服务名拆分为服务码和版本和查询条件统一 3、修复接入管理页面，查看详情异常 - [志客] efb9ed1
 * 2016-11-22 - 将openapi服务分为通用服务、查询服务、管理服务和交易服务类型，目前只分为了查询和交易类型，增加枚举管理服务（Manage）,开放平台在解析的时候默认所有服务都属于通用服务，然后再根据openapi标注的服务类型将服务分为交易、查询和管理类型服务，默认为交易类型。并将此枚举类移动到openapi-framework-common模块中 - [志客] 3eed5b3
@@ -173,17 +137,22 @@ spring-boot化，全面升级为acooly4版本支持。
 
 ### v1.3.1
 
+2016-11-16
+
 * 2016-11-16 - 修复当商户传入协议类型（protocol）不为空且不等于HTTP_FORM_JSON的时候，由于在组装响应报文的时候根据此值获取ResponseMarshall对象为null,导致调用ResponseMarshall方法时报空指针异常，响应给商户的resultMessage=“内部错误”无法定位错误所在，增加协议类型（protocol)校验 - [zhike] 2bb164c
 
 ### v1.3.0
 
-升级二级版本号为3，对框架提供大模块功能的变动。主要是提供了远程BOSS管理集成能力。详细情况如下：
+2016-11-14
 
+* 升级二级版本号为3，对框架提供大模块功能的变动。主要是提供了远程BOSS管理集成能力。
 * 2016-11-14 - 提供openApi服务集成的三种方式: allinone表示网关服务和本地管理功能; gateway表示纯粹的网关服务+管理功能的provider; manage表示远程管理功能的consumer - [zhangpu] d2cae77
 * 2016-11-14 - 新增boss管理功能的provider和consumer模块,实现可以远程方式管理boss功能 - [zhangpu] cb4fd5d
 * 2016-11-14 - 重构框架基础服务模块,包括分离domain模块;分离出现的service接口模块,新增service本地持久化模块等 - [zhangpu] 7919c72
 
 ### v1.2.3
+
+2016-10-25
 
 * 2016-10-25 - 优化sdk - [志客] c5f7af6
 * 2016-10-25 - 独立导入Openapi-Framwork-sdk模块用到的jar版本 - [志客] f3778f9
@@ -195,12 +164,16 @@ spring-boot化，全面升级为acooly4版本支持。
 
 ### v1.2.1
 
+2016-10-18
+
 * 2016-10-18 - 优化orderInfo管理查询界面,删除不需要的参数,调整显示结构 - [zhangpu] 2b32afa
 * 2016-10-18 - [issue#7]增加条件可选annotaion: OpenApiFiledCondition,用于标注每个报文项为条件可选,并要求必须填写条件说明。 - [zhangpu] cfc3aba
 * 2016-10-18 - 增加管理功能的权限资源菜单配置和更新初始化SQL - [zhangpu] 9b37654
 * 2016-07-31 - 添加2个冗余的配置文件,用于方便模块开发测试 - [zhangpu] aa719c6
 
 ### v1.2.0
+
+2016-07-31
 
 * 2016-07-31 - 完成openapi-framework服务层所有基础开发工程,并完成文档编写,升级为1.2.0版本 - [zhangpu] c4a1162
 * 2016-07-31 - 完成manage模块的integration开发,如果加入manage模块,则可以使用manage对应的authRealm实现。 - [zhangpu] 00cecff
@@ -211,31 +184,16 @@ spring-boot化，全面升级为acooly4版本支持。
 
 ### v1.1.3
 
+2016-07-27
+
 * [new] 更新api_notify_message的初始化DDL, 增加resp_info, requestNo, merchOrderNo三个字段
 * [new] 完成异步通知的管理功能,提供查询和修改(人工方式出发重新发送,免于数据订正)
 * [mod] 调整nms的异步通知扫描频率为2分钟,后续计划修改为可配置,测试环境1分钟,生成环境2-5分钟
 * [fix] 重构nms包结构,修复了异步通知中,失败通知发送失败BUG。 - 2016-07-27 04:08:11
 
-> 注意：本版本需要升级数据库。
-
-升级脚本：
-
-MYSQL:
-
-```sql
-ALTER TABLE `api_notify_message`
-    ADD COLUMN `resp_info` VARCHAR(128) NULL COMMENT '通知响应' AFTER `content`,
-ADD COLUMN `request_no` VARCHAR(40) NULL COMMENT '请求序号' AFTER `partner_id`,
-ADD COLUMN `merch_order_no` VARCHAR(40) NULL COMMENT '商户订单号' AFTER `request_no`;
-```
-
-管理功能：
-
-新增了随包发布的管理功能，主要功能：通知记录查询和人工触发通知（修改状态，通知时间和URL），请直接在BOSS中增加下面的资源并角色授权即可使用。
-
-异步通知记录：/manage/openapi/notifyMessage/index.html
-
 ### v1.1.2
+
+2016-07-13
 
 * [add] 新增特性,支持ORACLE数据库(core和nms)。
 * [fix] nms组件首次通知更新数据库状态是不BUG。 - 2016-07-13 03:07:54 +0800 (3 days ago)
@@ -243,10 +201,14 @@ ADD COLUMN `merch_order_no` VARCHAR(40) NULL COMMENT '商户订单号' AFTER `re
 
 ### v1.1.1
 
+2016-07-06
+
 * 610b22a - zhangpu - [mod] PageApiRequest的基类从AppReqeust修改为ApiRequest - 2016-07-06 11:35:24 +0800 (2 days ago)
 * 5494599 - zhangpu - SDK部分瘦身和提供商户端常用工具类 - 2016-07-06 11:33:20 +0800 (2 days ago)
 
 ### v1.1.1-SNOTSHAP.20160627
+
+2016-06-27
 
 * dc9cfd8 - 给orderInfoDao的查询实现增加debug级别的sql及参数日志 (29 minutes ago)
 * cac2db5 - 增加openApi商户开发规范文档(未完成) (36 minutes ago)
@@ -264,13 +226,15 @@ ADD COLUMN `merch_order_no` VARCHAR(40) NULL COMMENT '商户订单号' AFTER `re
 
 ### v1.1.0
 
-发布时间：2016-06-15
+2016-06-15
 
 * 升级兼容requestNo/orderNo
 * 完成自动化SDK特性开发
 
 ### v1.0.0
 
-1. 基础版本发布,以openApi-arch为基础,重构几乎所有组件的实现(采用spring3方式的接口发现注入方式),大部分模块可以在集成的工作方便的扩展和自定义.
-2. 修改原有的orderNo为requestNo,但兼容orderNo请求,兼容内部openApi全兼容切换.
-3. 可用模块为core和nms,单进程运行.
+2016-04-01
+
+* 基础版本发布,以openApi-arch为基础,重构几乎所有组件的实现(采用spring3方式的接口发现注入方式),大部分模块可以在集成的工作方便的扩展和自定义.
+* 修改原有的orderNo为requestNo,但兼容orderNo请求,兼容内部openApi全兼容切换.
+* 可用模块为core和nms,单进程运行.
