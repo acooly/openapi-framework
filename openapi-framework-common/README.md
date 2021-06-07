@@ -3,7 +3,6 @@
 <!-- type: openapi -->
 <!-- author: zhangpu -->
 <!-- date: 2020-02-13 -->
-
 ## 1. 简介
 
 OpenApi开放平台框架提供完善的网关服务开放平台的完整解决方案。
