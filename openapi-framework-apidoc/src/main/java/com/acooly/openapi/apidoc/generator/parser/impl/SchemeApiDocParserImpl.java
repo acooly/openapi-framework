@@ -10,6 +10,7 @@ import com.acooly.openapi.apidoc.generator.parser.OpenApiDocParserSupport;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocScheme;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocSchemeService;
 import com.acooly.openapi.apidoc.utils.ApiDocs;
+import com.acooly.openapi.framework.common.annotation.ApiDocHide;
 import com.acooly.openapi.framework.common.annotation.ApiDocType;
 import com.acooly.openapi.framework.service.domain.ApiMetaService;
 import com.google.common.collect.Lists;
@@ -43,9 +44,15 @@ public class SchemeApiDocParserImpl extends OpenApiDocParserSupport implements A
             Map<String, List<ApiMetaService>> schemeServices = Maps.newHashMap();
             Set<String> errorCodes = Sets.newHashSet();
             ApiDocType apiDocType = null;
+            ApiDocHide apiDocHide = null;
             String serviceNo = null;
             for (ApiMetaService apiMetaService : apiMetaServices) {
                 Class<?> serviceClass = Class.forName(apiMetaService.getServiceClass());
+                apiDocHide = serviceClass.getAnnotation(ApiDocHide.class);
+                if (apiDocHide != null) {
+                    // 如果标记为隐藏，则不添加到任何scheme中
+                    continue;
+                }
                 serviceNo = ApiDocs.getServiceNo(apiMetaService.getServiceName(), apiMetaService.getVersion());
                 apiDocType = serviceClass.getAnnotation(ApiDocType.class);
                 if (apiDocType != null && Strings.isNotBlank(apiDocType.code())) {
@@ -71,9 +78,15 @@ public class SchemeApiDocParserImpl extends OpenApiDocParserSupport implements A
                 ApiDocScheme defaultScheme = new ApiDocScheme(ApiDocProperties.DEF_SCHEME_NO, ApiDocProperties.DEF_SCHEME_TITLE, null);
                 defaultScheme.setSchemeType(SchemeTypeEnum.common);
                 List<ApiDocSchemeService> allApis = Lists.newArrayList();
-                apiMetaServices.forEach(e -> {
+                for (ApiMetaService e : apiMetaServices) {
+                    Class<?> serviceClass = Class.forName(e.getServiceClass());
+                    apiDocHide = serviceClass.getAnnotation(ApiDocHide.class);
+                    if (apiDocHide != null) {
+                        // 如果标记为隐藏，则不添加到任何scheme中
+                        continue;
+                    }
                     allApis.add(new ApiDocSchemeService(defaultScheme.getSchemeNo(), e.getServiceNo()));
-                });
+                }
                 defaultScheme.setApiDocSchemeServices(allApis);
                 apiDocSchemeMaps.put(defaultScheme.getSchemeNo(), defaultScheme);
             }

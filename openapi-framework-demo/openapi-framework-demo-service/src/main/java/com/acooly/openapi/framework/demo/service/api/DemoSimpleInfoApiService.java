@@ -8,6 +8,7 @@
  */
 package com.acooly.openapi.framework.demo.service.api;
 
+import com.acooly.openapi.framework.common.annotation.ApiDocHide;
 import com.acooly.openapi.framework.common.annotation.ApiDocNote;
 import com.acooly.openapi.framework.common.annotation.ApiDocType;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2019-04-14 14:14
  */
 @Slf4j
+@ApiDocHide
 @ApiDocType(code = DemoApiUtils.API_DEMO_DOC_TYPE_CODE, name = DemoApiUtils.API_DEMO_DOC_TYPE_NAME)
 @ApiDocNote("特殊字符专用简单测试")
 @OpenApiService(name = "demoSimpleInfo", desc = "测试：特殊字符报文", responseType = ResponseType.SYN, owner = "zhangpu", busiType = ApiBusiType.Trade)
