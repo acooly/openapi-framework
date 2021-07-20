@@ -124,6 +124,10 @@ public abstract class AbstractHttpFormJsonResponseMarshall<T, S extends ApiRespo
      * @param responseData
      */
     protected void doEncrypt(ApiResponse apiResponse, Map<String, String> responseData) {
+        ApiContext context = getApiContext();
+        if (!context.isAuthenticated()) {
+            return;
+        }
         String partnerId = apiResponse.getPartnerId();
         if (Strings.isBlank(partnerId)) {
             return;
@@ -160,10 +164,10 @@ public abstract class AbstractHttpFormJsonResponseMarshall<T, S extends ApiRespo
      */
     protected void doSign(ApiResponse apiResponse, Map<String, String> signData) {
         ApiContext context = getApiContext();
-        String signType = context.getSignType().code();
-        String partnerId = apiResponse.getPartnerId();
+        String signType = context.getSignType().getCode();
+        String accessKey = context.getAccessKey();
         String resultCode = apiResponse.getCode();
-        if (Strings.isBlank(signType) || Strings.isBlank(partnerId)) {
+        if (Strings.isBlank(signType) || Strings.isBlank(accessKey)) {
             return;
         }
         // 服务认证失败
@@ -174,8 +178,8 @@ public abstract class AbstractHttpFormJsonResponseMarshall<T, S extends ApiRespo
         if (resultCode != null && resultCode.equals(ApiServiceResultCode.UNAUTHORIZED_ERROR.getCode())) {
             return;
         }
-        if (context.isSignResponse()) {
-            signData.put(ApiConstants.SIGN, apiAuthentication.signature(signData, partnerId, signType));
+        if (context.isAuthenticated()) {
+            signData.put(ApiConstants.SIGN, apiAuthentication.signature(signData, accessKey, signType));
         }
     }
 

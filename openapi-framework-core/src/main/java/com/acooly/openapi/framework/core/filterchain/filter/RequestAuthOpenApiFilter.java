@@ -35,7 +35,6 @@ public class RequestAuthOpenApiFilter extends AbstractOpenApiFilter {
     protected void doInternalFilter(ApiContext context, FilterChain<ApiContext> filterChain) {
         apiAuthentication.authenticate(context);
         apiAuthorization.authorize(context);
-        context.setAuthenticated(true);
     }
     @Override
     protected OpenApiFilterEnum openApiFilter() {

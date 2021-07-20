@@ -1,9 +1,9 @@
 package com.acooly.openapi.framework.core.auth.impl;
 
 import com.acooly.core.common.boot.Env;
-import com.acooly.core.utils.enums.Messageable;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.context.ApiContext;
+import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.utils.ApiUtils;
@@ -30,7 +30,6 @@ import static com.acooly.openapi.framework.common.ApiConstants.TEST_ACCESS_KEY;
 @Component
 public class SignatureApiAuthentication implements ApiAuthentication {
     private static final Logger logger = LoggerFactory.getLogger(SignatureApiAuthentication.class);
-    private static NotSupport notSupport = new NotSupport();
     @Resource
     protected SignerFactory<ApiContext> signerFactory;
     @Resource
@@ -46,14 +45,16 @@ public class SignatureApiAuthentication implements ApiAuthentication {
             String accessKey = apiContext.getAccessKey();
             if (TEST_ACCESS_KEY.equals(accessKey)) {
                 if (Env.isOnline()) {
-                    throw new ApiServiceException(notSupport);
+                    throw new ApiServiceException(ApiServiceResultCode.TEST_NOT_SUPPORT_IN_PRODUCTION);
                 }
             }
             verify(apiContext.getRequestBody(), accessKey, apiContext.getSignType(), requestSign);
+            apiContext.setAuthenticated(true);
             // 读取当前对应的租户信息
             String tenantId = authInfoRealm.getTenantId(accessKey);
             apiContext.setTenantId(tenantId);
             MDC.put(ApiConstants.TENANT_ID, tenantId);
+
         } catch (ApiServiceException asae) {
             throw asae;
         } catch (Exception e) {
@@ -88,19 +89,6 @@ public class SignatureApiAuthentication implements ApiAuthentication {
         } catch (Exception e) {
             logger.warn("签名异常", e);
             throw new ApiServiceAuthenticationException("签名错误");
-        }
-    }
-
-    public static class NotSupport implements Messageable {
-
-        @Override
-        public String code() {
-            return "TEST_NOT_SUPPORT_IN_PRODUCTION";
-        }
-
-        @Override
-        public String message() {
-            return "生产环境不能使用测试帐号";
         }
     }
 

@@ -43,15 +43,6 @@ public class ExceptionHandlerOpenApiFilter extends AbstractOpenApiFilter {
         apiServiceExceptionHander.handleApiServiceException(context.getRequest(),
                 context.getResponse(), context.getException());
 
-        if (ApiServiceException.class.isAssignableFrom(context.getException().getClass())) {
-            ApiServiceException ase = (ApiServiceException) context.getException();
-            ApiServiceResultCode resultCode = ApiServiceResultCode.findStatus(ase.getResultCode());
-            if (ApiServiceResultCode.ACCESS_KEY_NOT_EXIST == resultCode
-                    || ApiServiceResultCode.SERVICE_NOT_FOUND_ERROR == resultCode) {
-                context.setSignResponse(false);
-            }
-        }
-
     }
     @Override
     protected OpenApiFilterEnum openApiFilter() {

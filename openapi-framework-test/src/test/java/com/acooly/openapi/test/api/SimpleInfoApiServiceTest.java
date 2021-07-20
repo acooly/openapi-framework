@@ -30,7 +30,7 @@ public class SimpleInfoApiServiceTest extends AbstractApiServieTests {
     public void testSpecialStr() {
         ApiRequest request = new ApiRequest();
         request.setProtocol(ApiProtocol.HTTP_FORM_JSON);
-        request.setService("simpleInfo");
+        request.setService("demoSimpleInfo");
         request.setContext(specialStr);
         request(request, ApiResponse.class);
     }

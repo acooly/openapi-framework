@@ -116,7 +116,9 @@ public class ApiContext extends Context {
 
     /**
      * 标记返回报文是否需签名
+     * 直接使用：authenticated属性判断，true：则可以加密和签名，false：则无需加密和签名
      */
+    @Deprecated
     private boolean signResponse = true;
 
     /**
