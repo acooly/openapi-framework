@@ -31,6 +31,7 @@ public interface ApiAuthAclService extends EntityService<ApiAuthAcl> {
 
     /**
      * 获取ACL列表
+     *
      * @param authNo
      * @return
      */
@@ -38,6 +39,7 @@ public interface ApiAuthAclService extends EntityService<ApiAuthAcl> {
 
     /**
      * 获取Acl
+     *
      * @param accessKey
      * @return
      */
@@ -45,8 +47,17 @@ public interface ApiAuthAclService extends EntityService<ApiAuthAcl> {
 
     /**
      * 获取已配置权限列表
+     *
      * @param authNo
      * @return
      */
     List<ApiMetaService> loadMetaServices(String authNo);
+
+    /**
+     * 根据认证对象的编码删除所有ACLs
+     *
+     * @param authNo
+     */
+    void removeByAuthNo(String authNo);
+
 }

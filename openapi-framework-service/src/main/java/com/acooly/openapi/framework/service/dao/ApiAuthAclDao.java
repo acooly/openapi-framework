@@ -47,7 +47,7 @@ public interface ApiAuthAclDao extends EntityMybatisDao<ApiAuthAcl> {
      *
      * @param authNo
      */
-    @Select("delete * from api_auth_acl  where auth_no =#{authNo}")
+    @Select("delete from api_auth_acl  where auth_no =#{authNo}")
     void removeByAuthNo(@Param("authNo") String authNo);
 
     /**

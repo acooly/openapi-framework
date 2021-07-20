@@ -8,6 +8,7 @@ package com.acooly.openapi.framework.service.service.impl;
 
 import com.acooly.core.common.exception.BusinessException;
 import com.acooly.core.common.service.EntityServiceImpl;
+import com.acooly.core.utils.Asserts;
 import com.acooly.core.utils.Collections3;
 import com.acooly.module.event.EventBus;
 import com.acooly.openapi.framework.service.dao.ApiAuthAclDao;
@@ -18,6 +19,7 @@ import com.acooly.openapi.framework.service.service.ApiAuthAclService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
@@ -38,9 +40,12 @@ public class ApiAuthAclServiceImpl extends EntityServiceImpl<ApiAuthAcl, ApiAuth
     @Autowired(required = false)
     private EventBus eventBus;
 
+
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void merge(List<ApiAuthAcl> apiAuthAcls) {
         try {
+            Asserts.notEmpty(apiAuthAcls, "ACL列表");
             ApiAuthAcl first = Collections3.getFirst(apiAuthAcls);
             String authNo = first.getAuthNo();
             List<ApiAuthAcl> acls = loadAcls(authNo);
@@ -63,13 +68,25 @@ public class ApiAuthAclServiceImpl extends EntityServiceImpl<ApiAuthAcl, ApiAuth
         } catch (BusinessException be) {
             throw be;
         } catch (Exception e) {
-            throw new BusinessException("合并ACL失败", e, "API_ACL_MERGE_FAIL");
+            throw new BusinessException("API_ACL_MERGE_FAIL", "合并ACL失败", e);
         }
     }
 
     @Override
     public List<ApiAuthAcl> loadAcls(String authNo) {
         return getEntityDao().findByAuthNo(authNo);
+    }
+
+    /**
+     * 注意，这里不发布事件更新缓存，因为该方法一般用于ApiAuth删除对象时级联删除
+     *
+     * @param authNo
+     */
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
+    public void removeByAuthNo(String authNo) {
+        Asserts.notEmpty(authNo,"认证编码");
+        getEntityDao().removeByAuthNo(authNo);
     }
 
     @Override
