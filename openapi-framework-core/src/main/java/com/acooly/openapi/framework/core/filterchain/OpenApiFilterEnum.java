@@ -26,12 +26,13 @@ public enum OpenApiFilterEnum implements Messageable {
     InitContext("InitContext", "初始化会话"),
     IpWhitelistAuth("IpWhitelistAuth", "IP白名单认证"),
     RequestAuth("RequestAuth", "认证授权"),
+    RateLimitAuth("RateLimitAuth", "流控认证"),
     RequestMarshall("RequestMarshall", "请求解析"),
     ServiceExecute("ServiceExecute", "服务执行"),
     ExceptionHandler("ExceptionHandler", "异常处理"),
     ResponseMarshall("ResponseMarshall", "响应组装"),
     FinishHandle("FinishHandle", "回收处理");
-    
+
     private final String code;
     private final String message;
 

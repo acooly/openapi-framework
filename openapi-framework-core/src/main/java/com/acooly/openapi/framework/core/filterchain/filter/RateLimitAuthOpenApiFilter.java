@@ -1,41 +1,52 @@
-package com.acooly.openapi.framework.extension;
+/**
+ * openapi-framework
+ * <p>
+ * Copyright 2014 Acooly.cn, Inc. All rights reserved.
+ *
+ * @author zhangpu
+ * @date 2019-09-06 11:13
+ */
+package com.acooly.openapi.framework.core.filterchain.filter;
 
 import com.acooly.module.cache.limit.RateChecker;
+import com.acooly.module.filterchain.FilterChain;
 import com.acooly.openapi.framework.common.ApiConstants;
-import com.acooly.openapi.framework.common.annotation.OpenApiListener;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.context.ApiContextHolder;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
-import com.acooly.openapi.framework.common.event.dto.BeforeServiceExecuteEvent;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.core.OpenAPIProperties;
-import com.acooly.openapi.framework.core.listener.AbstractListener;
+import com.acooly.openapi.framework.core.auth.ApiAuthentication;
+import com.acooly.openapi.framework.core.auth.ApiAuthorization;
+import com.acooly.openapi.framework.core.filterchain.OpenApiFilterEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
- * @author qiuboboy@qq.com
- * @date 2018-08-10 15:21
- * @See: com.acooly.openapi.framework.core.filterchain.filter.RateLimitAuthOpenApiFilter
+ * 流控认证 filter
+ *
+ * @author zhangpu
+ * @date 2019-09-06 11:13
  */
 @Slf4j
-@Deprecated
-public class RateLimitApiListener extends AbstractListener<BeforeServiceExecuteEvent> {
+@Component
+public class RateLimitAuthOpenApiFilter extends AbstractOpenApiFilter {
     public static final String PREFIX = "openapi-rate-";
     @Autowired
-    private OpenAPIProperties openAPIProperties;
-    @Autowired
     private RateChecker rateChecker;
-
+    @Resource
+    protected OpenAPIProperties openAPIProperties;
 
     @Override
-    public void onOpenApiEvent(BeforeServiceExecuteEvent event) {
+    protected void doInternalFilter(ApiContext context, FilterChain<ApiContext> filterChain) {
         if (openAPIProperties.getRates().isEmpty()) {
             return;
         }
-        ApiContext apiContext = ApiContextHolder.getApiContext();
-        String partnerId = apiContext.getPartnerId();
-        String method = apiContext.getServiceName();
+        String partnerId = context.getPartnerId();
+        String method = context.getServiceName();
         openAPIProperties.getRates().forEach(rate -> {
             if (rate.acceptPartnerId(partnerId) && rate.acceptMethod(method)) {
                 String partnerIdStr = partnerId;
@@ -54,7 +65,7 @@ public class RateLimitApiListener extends AbstractListener<BeforeServiceExecuteE
     }
 
     @Override
-    public int getOrder() {
-        return 0;
+    protected OpenApiFilterEnum openApiFilter() {
+        return OpenApiFilterEnum.RateLimitAuth;
     }
 }
