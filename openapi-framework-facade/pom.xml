@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.acooly</groupId>
         <artifactId>openapi-framework</artifactId>
-        <version>5.1.2</version>
+        <version>5.1.3</version>
     </parent>
     <artifactId>openapi-framework-facade</artifactId>
     <dependencies>
