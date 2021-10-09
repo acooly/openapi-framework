@@ -19,6 +19,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
+ * 多租户扩展
+ *
  * @author zhangpu
  * @date 2021-03-23 16:46
  */

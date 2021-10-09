@@ -60,31 +60,27 @@ public class ServiceExecuteOpenApiFilter extends AbstractOpenApiFilter {
             publishServiceExceptionEvent(apiResponse, apiRequest, apiService, ex);
             throw ex;
         } finally {
-            publishAfterServiceExecuteEvent(apiResponse, apiRequest, apiService);
+            publishAfterServiceExecuteEvent(context);
         }
     }
 
 
-    private void publishBeforeServiceExecuteEvent(ApiContext apiContext) {
-        if (eventPublisher.canPublishEvent(apiContext.getApiService())) {
-            eventPublisher.publishEvent(
-                    new BeforeServiceExecuteEvent(apiContext.getRequest(), apiContext.getResponse()),
-                    apiContext.getApiService());
+    private void publishBeforeServiceExecuteEvent(ApiContext context) {
+        if (eventPublisher.canPublishEvent(context.getApiService())) {
+            eventPublisher.publishEvent(new BeforeServiceExecuteEvent(context), context.getApiService());
         }
     }
 
     private void publishServiceExceptionEvent(
             ApiResponse apiResponse, ApiRequest apiRequest, ApiService apiService, Throwable throwable) {
         if (eventPublisher.canPublishEvent(apiService)) {
-            eventPublisher.publishEvent(
-                    new ServiceExceptionEvent(apiRequest, apiResponse, throwable), apiService);
+            eventPublisher.publishEvent(new ServiceExceptionEvent(apiRequest, apiResponse, throwable), apiService);
         }
     }
 
-    private void publishAfterServiceExecuteEvent(
-            ApiResponse apiResponse, ApiRequest apiRequest, ApiService apiService) {
-        if (eventPublisher.canPublishEvent(apiService)) {
-            eventPublisher.publishEvent(new AfterServiceExecuteEvent(apiRequest, apiResponse), apiService);
+    private void publishAfterServiceExecuteEvent(ApiContext context) {
+        if (eventPublisher.canPublishEvent(context.getApiService())) {
+            eventPublisher.publishEvent(new AfterServiceExecuteEvent(context), context.getApiService());
         }
     }
 

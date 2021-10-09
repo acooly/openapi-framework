@@ -10,6 +10,7 @@
  */
 package com.acooly.openapi.framework.common.event.dto;
 
+import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
 
@@ -18,20 +19,13 @@ import com.acooly.openapi.framework.common.message.ApiResponse;
  *
  * @author qiubo@qq.com
  */
-public class AfterServiceExecuteEvent extends ServiceEvent {
-  private ApiResponse apiResponse = null;
-  private ApiRequest apiRequest = null;
+public class AfterServiceExecuteEvent extends ServiceExecuteEvent {
 
   public AfterServiceExecuteEvent(ApiRequest apiRequest, ApiResponse apiResponse) {
-    this.apiResponse = apiResponse;
-    this.apiRequest = apiRequest;
+    super(apiRequest, apiResponse);
   }
 
-  public ApiResponse getApiResponse() {
-    return apiResponse;
-  }
-
-  public ApiRequest getApiRequest() {
-    return apiRequest;
+  public AfterServiceExecuteEvent(ApiContext apiContext) {
+    super(apiContext);
   }
 }

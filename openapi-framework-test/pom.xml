@@ -58,6 +58,11 @@
 
         <dependency>
             <groupId>com.acooly</groupId>
+            <artifactId>acooly-component-data-ip</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.acooly</groupId>
             <artifactId>acooly-component-test</artifactId>
         </dependency>
 

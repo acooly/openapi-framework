@@ -18,6 +18,10 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 /**
+ * IP白名单认证
+ * <p>
+ * 如果配置了白名单，则只有白名单IP的请求才认证通过
+ *
  * @author zhangpu
  * @date 2019-09-06 11:13
  */
