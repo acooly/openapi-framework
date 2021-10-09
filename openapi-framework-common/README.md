@@ -1,5 +1,5 @@
 <!-- title: OpenApi框架简介 -->
-<!-- name: openapi-framework -->
+<!-- name: openapi-framework-common -->
 <!-- type: openapi -->
 <!-- author: zhangpu -->
 <!-- date: 2020-02-13 -->
