@@ -3,13 +3,13 @@
 <!-- author: qiubo,zhangpu -->
 <!-- date: 2020-02-10 -->
 
-# 简介
+# 1. 简介
 `openapi-framework-core`是开放平台网关的核心，实现了网关的核心架构和能力。结构上网关核心包括服务执行层和服务实现层，能力上包括：多租户，认证，授权，加解密，日志，事件，协议等。
 
-# 集成及配置
+# 2. 集成及配置
 OpenApi服务框架核心提供API服务的统一处理和执行能力，只需在目标工程整合该模块即可实现网关服务。
 
-## 服务端依赖
+## 2.1. 服务端依赖
 请在目标工程的pom.xml中添加该模块的依赖，如下：
 
 ```xml
@@ -17,13 +17,6 @@ OpenApi服务框架核心提供API服务的统一处理和执行能力，只需�
 <dependency>
 	<groupId>com.acooly</groupId>
 	<artifactId>openapi-framework-core</artifactId>
-	<version>${openapi-framework.version}</version>
-</dependency>
-
-<!-- 扩展能力（包括流控） -->
-<dependency>
-	<groupId>com.acooly</groupId>
-	<artifactId>openapi-framework-extensions</artifactId>
 	<version>${openapi-framework.version}</version>
 </dependency>
 
@@ -45,7 +38,7 @@ OpenApi服务框架核心提供API服务的统一处理和执行能力，只需�
 
 >注意：openapi-framework.version，请根据具体情况选择，一般推荐选择最新发布版本。
 
-### 版本说明
+## 2.2. 版本说明
 
 * 1.4.x : acoolyV3版本	 -> YIJI/HTD
 * 4.0.x : acoolyV4.0版本 -> cnevx
@@ -54,13 +47,13 @@ OpenApi服务框架核心提供API服务的统一处理和执行能力，只需�
 * 5.0.x : acoolyV5.x.x 
 
 
-## 配置
+## 2.3. 配置
 
 网关服务的所有核心配置所有都是可选的，默认可以不配置，以下的配置案例中的参数值都是默认的参数值，你可以根据项目需求，修改配置。
 
 >注意：以下所有配置都依赖`openapi-framework-core`核心模块
 
-### 日志配置
+### 2.3.1. 日志配置
 
 ```ini
 ## 日志配置
@@ -87,11 +80,11 @@ acooly.openapi.queryLogSeparationEnable =false  ==>  acooly.openapi.log.multFile
 acooly.openapi.enablePerfLog=false  ==>  acooly.openapi.log.perf-log-enable=false
 ```
 
-### 日志脱敏
+### 2.3.2. 日志脱敏
 
 为保证敏感数据的安全，在日志中提供策略配置通用日志脱敏。同时日志数据的脱敏也兼容在报文体上通过Acooly框架的annotaion标签进行脱敏配置。
 
-#### 配置
+#### 2.3.2.1. 配置
 
 ```ini
 ## 日志脱敏
@@ -120,7 +113,7 @@ acooly.openapi.logSafetyMasks=mobileNo,certNo  ==> acooly.openapi.log.safety-mas
 ```
 
 
-#### 应用
+#### 2.3.2.2. 应用
 
 日志脱敏特性设计为在报文进入（请求）后和报文发出（响应/通知）前对目标报文（例如JSON字符串）进行脱敏处理。框架采用正则匹配替换模式对目标属性值进行脱敏处理，脱敏的方式包括忽略和Mask两种方式。
 
@@ -155,7 +148,7 @@ private String payeeUserId;
 
 
 
-### 缓存配置
+### 2.3.3. 缓存配置
 
 缓存配置主要用于秘钥，ACL权限等核心高频率使用数据，按请求AccessKey为单位进行缓存，以提高处理效率。
 
@@ -171,7 +164,7 @@ acooly.openapi.auth-info-cache.levelOneEnable=true
 acooly.openapi.auth-info-cache.levelOneTimeout=600000
 ```
 
-### 动态秘钥
+### 2.3.4. 动态秘钥
 
 动态秘钥一般用于与App端的直接集成和服务场景，App通过配置的匿名秘钥访问名字为login的openApi接口，在通过认证（通过`com.acooly.openapi.framework.service.service.LoginApiService`接口实现）后，动态分配后续请求的访问秘钥。
 
@@ -189,7 +182,7 @@ acooly.openapi.login.secret-key-dynamic=true
 ```
 
 
-### 流控
+### 2.3.5. 流控
 
 OpenApi框架对流控的支持模式为多级（parentId,service两级）控流（非整流模式），当流量超过流控配置则拒绝请求。
 
@@ -221,19 +214,19 @@ acooly.openapi.rates[2].max-requests=10
 >注意，流控需要引入模块依赖: `openapi-framework-extensions`
 
 
-### 异步通知
+### 2.3.6. 异步通知
 
 异步通知是OpenApi框架内独立的异步通知服务模块，在提供异步或跳转接口时，最后接口的通知由该框架进行统一处理，包括重发机制。目前重发的机制分自动和手动。
 
 详情请参考： [OpenApi异步通知服务](https://acooly.cn/docs/component/openapi-framework-notify.html)
 
-### 文档自动化
+### 2.3.7. 文档自动化
 
 Acooly-OpenApi框架推崇的报文文档方式是：设计及呈现方式，由Api开发者在设计和开发阶段，通过@Annotaion方式对服务和报文字段进行标记，然后通过自动文档化框架自动生成Api文档和网站，提供给接入方使用。
 
 详情请参考：[OpenApi文档自动化](https://acooly.cn/docs/component/openapi-framework-apidoc.html)
 
-### 多租户
+### 2.3.8. 多租户
 
 OpenApi框架提供了多租户的能力集成支撑，但本身不管理和配置，而只是提供请求与租户身份的绑定，并提供下传多租户体系内部的能力。
 
@@ -243,9 +236,9 @@ OpenApi框架提供了多租户的能力集成支撑，但本身不管理和配�
 4. 在Api服务内部，通过`tenantId()`方法获取当前请求对应的租户ID(tenantId),也可以通过`ApiContextHolder.getContext().getTenantId()`静态工具方法获取当前线程对应的租户ID。
 
 
-# 服务开发
+# 3. 服务开发
 
-## 工程规划
+## 3.1. 工程规划
 
 如果目标项目需要提供网关服务，目前情况下，加载依赖配置即可正常开发openApi服务提供服务。这里推荐一个工程结构规划，编译项目管理和报文复用。
 
@@ -272,12 +265,12 @@ xxxx-project
 
 
 
-## 开发说明
+## 3.2. 开发说明
 
 openapi框架提供的Api服务开发模式比较简单，基于接口报文定义，由框架完成报文（请求，响应，通知等）的解析，组装，认证，授权等，开发人员定义具体服务后，框架会提供组装好的客户端请求对象，开发人员按需注入服务进行逻辑处理后，回填数据到定义的响应对象就完成接口开发工作，由框架完成后续的签名，组装报文并响应/发送给客户端请求方。
 
 
-### 报文定义
+### 3.3. 报文定义
 
 服务开发的第一步是根据业务需求分析和设计，完成接口服务的报文定义，根据接口类型的不同，我们可能会定义请求报文，响应报文，通知报文等。定义报文通用的规则是相同的。具体主要规则如下：
 
@@ -331,7 +324,7 @@ public class WithdrawRequest extends ApiAsyncRequest {
 }    
 ```
 
-### 接口开发
+### 3.4. 接口开发
 
 所有的openapi接口开发由框架统一提供基类和泛型约定开发模式，每个类作为一个api服务的实现。具体规范如下：
 
@@ -389,7 +382,7 @@ public class WithdrawApiService extends BaseApiService<WithdrawRequest, Withdraw
 }
 ```
 
-### 单元测试
+### 3.5. 单元测试
 
 完成openapi服务的开发后，我们需要进行单元测试，以保障开发的质量可控。框架提供专用的单元测试基类方便的实现单元测试。
 
@@ -416,13 +409,67 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
 ```
 
 
-# 扩展
+# 4. 扩展
 
-## 认证扩展
+## 4.1 事件扩展
+
+在具体集成项目中，一些特殊的全局或布局的扩展可以通过OpenApi提供事件处理机制，在服务执行时候进行拦截处理。
+
+### 4.1.1 OpenApi事件定义
+
+在每次服务执行时都会执行，按执行顺序包括：
+
+1. BeforeServiceExecuteEvent：服务认证和预处理完成，调用服务执行前事件
+2. ServiceExceptionEvent：服务成功执行异常
+3. AfterServiceExecuteEvent：服务执行完成，可能是成功或失败
+
+### 4.1.2 OpenApi事件监听
+
+我们可以根据需求，自定义事件监听，处理OpenApi发布的服务执行事件。
+
+关键点：
+
+1. 事件必须继承`com.acooly.openapi.framework.core.listener.SmartListenter`基类。
+2. 事件处理类需要使用@OpenApiListener标记。主要设置范围（global）和同/异步（asyn），我们建议采用同步方式（异步方式的线程池大小目前是内部写定的，没有对外公开配置参数）
+
+### 4.1.3 案例
+
+下面的代码是通过OpenApi限制IP段访问的临时扩展
+
+```java
+@Slf4j
+@OpenApiListener(global = true, asyn = false)
+public class IpBlockLimitApiListener extends AbstractListener<BeforeServiceExecuteEvent> {
+
+    @Autowired
+    private IpSearchService ipSearchService;
+
+    @Override
+    public void onOpenApiEvent(BeforeServiceExecuteEvent event) {
+        String requestIp = event.getApiContext().getRequestIp();
+        if (Strings.isNotBlank(requestIp) && IPUtil.isPublicIpv4(requestIp)) {
+            if (ipSearchService.isChinaIp(requestIp)) {
+                throw new BusinessException(CommonErrorCodes.UNAUTHORIZED_ERROR, "限制IP访问");
+            }
+        }
+    }
+
+    @Override
+    public int getOrder() {
+        return Ordered.HIGHEST_PRECEDENCE;
+    }
+}
+
+```
+
+>注意：`ipSearchService.isChinaIp`的工具服务来自组件`acooly-component-data-ip`
+
+
+## 4.2 认证扩展
 
 在对接App/前端客户端时，采用登录认证+动态秘钥方式保证安全。每个具体集成系统的认证可通过接口方式注入到spring容器中进行扩展。具体配置请参考：`动态秘钥`部分.
 
-### 相关配置：
+### 4.2.1 相关配置：
 
 ```ini
 # [可选] 网关动态登录认证接口，登录认证逻辑由目标项目实现com.acooly.openapi.framework.service.service.LoginApiService
@@ -431,7 +478,7 @@ acooly.openapi.login.enable=true
 acooly.openapi.login.secret-key-dynamic=true
 ```
 
-### 扩展开发
+### 4.2.2 扩展开发
 
 你需要在你的目标集成工程中实现：`com.acooly.openapi.framework.service.service.AppApiLoginService`接口，并根据自身业务逻辑完成认证逻辑的开发。例如:
 
@@ -457,7 +504,7 @@ public class customLoginApiServiceImpl implements AppApiLoginService {
 
 >注意：这里通过`@Primary`配置你的认证实现为主实现，否则框架会使用内置默认实现（默认实现全通过）
 
-## 租户扩展
+## 4.3 租户扩展
 
 针对多租户体系，框架提供了扩展租户信息的接口：`com.acooly.openapi.framework.service.service.tenant.ApiTenantLoaderService`
 
