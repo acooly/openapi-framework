@@ -18,10 +18,12 @@ import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.utils.ApiUtils;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
 import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
+import com.alibaba.fastjson.JSON;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.sun.org.apache.regexp.internal.RE;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -51,10 +53,10 @@ public class OpenApiClient {
     }
 
     public OpenApiClient(String gatewayUrl, String accessKey, String secretKey, boolean showLog) {
-        Assert.hasText(gatewayUrl, "网关地址不能为空");
-        Assert.hasText(accessKey, "accessKey不能为空");
-        Assert.hasText(secretKey, "secretKey不能为空");
-        Assert.isTrue(gatewayUrl.endsWith(".do") || gatewayUrl.endsWith(".mock"), "请求地址必须以.do或者.mock结尾");
+        Asserts.notEmpty(gatewayUrl, "网关地址");
+        Asserts.notEmpty(accessKey, "accessKey");
+        Asserts.notEmpty(secretKey, "secretKey");
+        Asserts.isTrue(gatewayUrl.endsWith(".do") || gatewayUrl.endsWith(".mock"), "请求地址必须以.do或者.mock结尾");
         this.gatewayUrl = gatewayUrl;
         this.accessKey = accessKey;
         this.secretKey = secretKey;
@@ -112,7 +114,8 @@ public class OpenApiClient {
         doSecurity(request, CryptoType.encrypt);
         ApiMessageContext context = new ApiMessageContext();
         if (request.getProtocol() == ApiProtocol.JSON) {
-            String body = JsonMarshallor.INSTANCE.marshall(request);
+            // 客户端的序列化调整为通用JSON序列化
+            String body = JSON.toJSONString(request);
             context.parameter(ApiConstants.BODY, Encodes.urlEncode(body));
             context.parameter(ApiConstants.PROTOCOL, ApiProtocol.JSON.code());
             context.parameter(ApiConstants.ACCESS_KEY, accessKey);
