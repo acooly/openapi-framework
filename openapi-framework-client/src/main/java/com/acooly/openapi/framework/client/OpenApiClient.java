@@ -1,7 +1,6 @@
 package com.acooly.openapi.framework.client;
 
 import com.acooly.core.common.exception.AppConfigException;
-import com.acooly.core.utils.Assert;
 import com.acooly.core.utils.Asserts;
 import com.acooly.core.utils.Encodes;
 import com.acooly.core.utils.Strings;
@@ -23,7 +22,6 @@ import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sun.org.apache.regexp.internal.RE;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -209,7 +207,7 @@ public class OpenApiClient {
         doDefaultVal(request);
         doSecurity(request, CryptoType.encrypt);
         if (request.getProtocol() == ApiProtocol.JSON) {
-            String body = JsonMarshallor.INSTANCE.marshall(request);
+            String body = JSON.toJSONString(request);
             context.setBody(body);
             context.header(ApiConstants.X_API_ACCESS_KEY, accessKey);
             context.header(ApiConstants.X_API_SIGN_TYPE, signType);
