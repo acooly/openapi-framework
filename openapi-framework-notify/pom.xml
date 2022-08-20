@@ -32,17 +32,10 @@
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-distributedlock</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-component-appservice</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-
     </dependencies>
 </project>

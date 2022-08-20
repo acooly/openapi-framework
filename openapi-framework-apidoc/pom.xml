@@ -43,12 +43,6 @@
             <artifactId>acooly-component-cms</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.acooly</groupId>
-            <artifactId>acooly-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-
         <!-- swagger -->
         <dependency>
             <groupId>io.swagger</groupId>

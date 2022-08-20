@@ -9,7 +9,7 @@
 package com.acooly.openapi.framework.core.filterchain;
 
 import com.acooly.module.filterchain.Filter;
-import com.acooly.module.filterchain.FilterChainBase;
+import com.acooly.module.filterchain.AbstractFilterChainBase;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
@@ -23,7 +23,7 @@ import java.util.Iterator;
  */
 @Slf4j
 @Component
-public class OpenApiFilterChain extends FilterChainBase<ApiContext> {
+public class OpenApiFilterChain extends AbstractFilterChainBase<ApiContext> {
 
     /**
      * 同步接口处理：

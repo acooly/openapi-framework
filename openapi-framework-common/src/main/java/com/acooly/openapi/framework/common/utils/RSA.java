@@ -244,7 +244,7 @@ public class RSA {
         } catch (Exception e) {
             throw new RuntimeException("privateKey decrypt fail:" + e.getMessage());
         } finally {
-            Streams.close(out);
+            Streams.closeQuietly(out);
         }
     }
 
@@ -294,7 +294,7 @@ public class RSA {
         } catch (Exception e) {
             throw new RuntimeException("通过keystore加载私钥失败:" + e.getMessage());
         } finally {
-            Streams.close(in);
+            Streams.closeQuietly(in);
         }
     }
 
@@ -444,7 +444,7 @@ public class RSA {
         } catch (Exception e) {
             throw new RuntimeException("加载公钥文件内容失败:" + e.getMessage());
         } finally {
-            Streams.close(in);
+            Streams.closeQuietly(in);
         }
     }
 
@@ -464,7 +464,7 @@ public class RSA {
         } catch (Exception e) {
             throw new RuntimeException("加载公钥文件内容失败:" + e.getMessage());
         } finally {
-            Streams.close(in);
+            Streams.closeQuietly(in);
         }
     }
 
@@ -494,7 +494,7 @@ public class RSA {
         } catch (Exception e) {
             throw new RuntimeException("通过keystore加载证书公钥失败:" + e.getMessage());
         } finally {
-            Streams.close(in);
+            Streams.closeQuietly(in);
         }
     }
 
