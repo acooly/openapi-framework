@@ -58,7 +58,7 @@ CREATE TABLE `api_partner` (
   `partner_id` varchar(32) NOT NULL COMMENT '合作方编码',
   `partner_name` varchar(32) NOT NULL COMMENT '合作方名称',
   `merchant_no` varchar(64) DEFAULT NULL COMMENT '商户会员号',
-  `tenant_id` varchar(64) DEFAULT NULL COMMENT '租户编码',
+  `tenant_no` varchar(64) DEFAULT NULL COMMENT '租户编码',
   `tenant_name` VARCHAR(32) NULL COMMENT '租户名称',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
