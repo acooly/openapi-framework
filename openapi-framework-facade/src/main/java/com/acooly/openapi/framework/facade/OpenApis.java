@@ -61,7 +61,7 @@ public class OpenApis {
         ResultBase resultBase = openApiRemoteService.verify(new ApiVerifyOrder(context));
         log.info("跳转请求 验签：{}", resultBase.success());
         if (!resultBase.success()) {
-            throw new BusinessException(resultBase.getStatus());
+            throw new BusinessException(resultBase);
         }
         ApiRedirectContext<T> apiRedirectContext = new ApiRedirectContext<>(context);
         T apiRedirect = redirectParseMessage(context.getBody(), clazz);

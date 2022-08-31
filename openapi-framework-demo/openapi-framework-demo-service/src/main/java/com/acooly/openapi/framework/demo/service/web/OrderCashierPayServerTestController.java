@@ -90,7 +90,7 @@ public class OrderCashierPayServerTestController extends AbstractStandardEntityC
             ResultBase resultBase = openApiRemoteService.verify(apiVerifyOrder);
             log.info("收银台 验签：{}", resultBase.success());
             if (!resultBase.success()) {
-                throw new BusinessException(resultBase.getStatus());
+                throw new BusinessException(resultBase);
             }
 
             // 3、do business，根据拿到的redirect报文进行业务操作
