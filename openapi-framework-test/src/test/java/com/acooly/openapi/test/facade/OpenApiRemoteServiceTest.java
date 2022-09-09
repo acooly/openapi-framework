@@ -49,7 +49,7 @@ public class OpenApiRemoteServiceTest extends AppTestBase {
         apiSignOrder.setPartnerId(ApiConstants.TEST_ACCESS_KEY);
         ApiSignResult apiSignResult = openApiRemoteService.sign(apiSignOrder);
         if (!apiSignResult.success()) {
-            log.warn("OpenApi Remote Sign failure: {}", apiSignResult.getStatus(), apiSignResult.getDetail());
+            log.warn("OpenApi Remote Sign failure: {}/{}/{}", apiSignResult.getCode(), apiSignResult.getMessage(), apiSignResult.getDetail());
             return;
         }
         log.info("OpenApi Remote Sign: {}", apiSignResult.getSign());
@@ -59,7 +59,7 @@ public class OpenApiRemoteServiceTest extends AppTestBase {
         apiVerifyOrder.setPartnerId(ApiConstants.TEST_ACCESS_KEY);
         ResultBase apiVerifyResult = openApiRemoteService.verify(apiVerifyOrder);
         if (!apiVerifyResult.success()) {
-            log.warn("OpenApi Remote verify failure: {}", apiVerifyResult.getStatus(), apiVerifyResult.getDetail());
+            log.warn("OpenApi Remote verify failure: {}", apiVerifyResult);
             return;
         }
         log.info("OpenApi Remote verify: ok");

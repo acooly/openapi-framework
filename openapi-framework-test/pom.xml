@@ -72,12 +72,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
             <groupId>com.acooly</groupId>
             <artifactId>acooly-coder</artifactId>
             <version>5.0.0-SNAPSHOT</version>

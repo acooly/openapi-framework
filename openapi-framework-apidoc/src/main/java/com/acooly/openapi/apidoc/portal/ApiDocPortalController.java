@@ -112,7 +112,6 @@ public class ApiDocPortalController extends AbstractPortalController {
                 serviceNo = Collections3.getFirst(apiDocServices).getServiceNo();
             }
         }
-
         model.addAttribute("serviceNo", serviceNo);
         model.addAttribute("apiScheme", apiScheme);
         model.addAllAttributes(referenceData(request));

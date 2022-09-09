@@ -22,8 +22,8 @@ a:hover {color:#009688}
 .doc-menu .doc-menu-header {  padding-left: 20px;  border-left: 2px solid #5FB878;  border-bottom: 1px solid #e6e6e6;  line-height: 40px;  font-size: 16px;  position: relative;  }
 .doc-menu .doc-menu-header .icon_menu_switch { margin-right: 5px;  margin-top: -2px;  vertical-align: middle;  display: inline-block;  width: 0;  height: 0;  border-width: 5px;  border-style: dashed;  border-color: transparent;  border-top-width: 0;  border-bottom-color: #babec4;  border-bottom-style: solid;  position: absolute;  right: 10px;  top: 20px;  border-top: 5px solid #babec4;  border-bottom-width: 0;  }
 .doc-menu ul {}
-.doc-menu ul li {  display: block;  width: 100%;  line-height: 40px;  vertical-align: middle;  }
-.doc-menu ul li a { border-bottom: 1px dashed #eee;  display: block;  height: 40px;  padding: 0 20px;  text-overflow: ellipsis;  overflow: hidden;  white-space: nowrap;  color: #222;  background-color: #fff;  }
+.doc-menu ul li {  display: block;  width: 100%;   vertical-align: middle;  }
+.doc-menu ul li a { border-bottom: 1px dashed #eee;  display: block;  height: 40px;  padding: 5px 20px;  text-overflow: ellipsis;  overflow: hidden;  white-space: nowrap;  color: #222;  background-color: #fff;  }
 .doc-menu ul li a:hover {background-color: #f4f5f9;}
 .doc-menu .item-this a ,.doc-menu .item-this a:hover {color:#fff;  background-color: #5FB878;border-bottom:0;}
 
