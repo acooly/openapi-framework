@@ -42,7 +42,7 @@ public class DemoOrderCreateApiRequest extends ApiRequest {
     @OpenApiField(desc = "付款用户ID", demo = "201603080912340001", ordinal = 4)
     private String payerUserId;
 
-    @OpenApiFieldCondition("单付款而用户ID(payerUserId)为空时,该字段必选")
+    @OpenApiFieldCondition("当付款而用户ID(payerUserId)为空时,该字段必选")
     @Size(min = 20, max = 20)
     @OpenApiField(desc = "买家用户ID", demo = "201603080912340001", ordinal = 5)
     private String buyerUserId;
