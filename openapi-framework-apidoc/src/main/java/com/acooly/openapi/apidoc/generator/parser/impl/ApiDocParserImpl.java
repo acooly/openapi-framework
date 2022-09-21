@@ -19,7 +19,7 @@ import com.acooly.openapi.apidoc.persist.entity.ApiDocItem;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocMessage;
 import com.acooly.openapi.apidoc.persist.entity.ApiDocService;
 import com.acooly.openapi.apidoc.utils.ApiDataTypeUtils;
-import com.acooly.openapi.apidoc.utils.ApiDocPrivateUtils;
+import com.acooly.openapi.framework.common.utils.ApiPrivateUtils;
 import com.acooly.openapi.apidoc.utils.ApiDocs;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.annotation.OpenApiFieldCondition;
@@ -163,7 +163,7 @@ public class ApiDocParserImpl extends OpenApiDocParserSupport implements ApiDocP
                 }
                 //OpenApiField标识的才做解析
                 if (!field.isAnnotationPresent(OpenApiField.class)) {
-                    log.warn("报文:{}，属性:{} 为标记OpenApiField，忽略解析", cc.getName(), field.getName());
+                    log.warn("报文:{}，属性:{} 没有标记OpenApiField，忽略解析", cc.getName(), field.getName());
                     continue;
                 }
 
@@ -175,7 +175,7 @@ public class ApiDocParserImpl extends OpenApiDocParserSupport implements ApiDocP
                 Class<?> subItemType = null;
                 if (ApiDataTypeUtils.isCollection(field)) {
                     // 集合或数组
-                    Class<?> genericClass = ApiDocPrivateUtils.getParameterGenericType(clazz, field);
+                    Class<?> genericClass = ApiPrivateUtils.getParameterGenericType(clazz, field);
                     if (genericClass != null && !ApiDataTypeUtils.isSimpleType(genericClass)) {
                         subItemType = genericClass;
                     }

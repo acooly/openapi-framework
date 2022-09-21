@@ -29,6 +29,7 @@ public enum OpenApiFilterEnum implements Messageable {
     RateLimitAuth("RateLimitAuth", "流控认证"),
     RequestMarshall("RequestMarshall", "请求解析"),
     ServiceExecute("ServiceExecute", "服务执行"),
+    ServiceMock("ServiceMock", "服务MOCK"),
     ExceptionHandler("ExceptionHandler", "异常处理"),
     ResponseMarshall("ResponseMarshall", "响应组装"),
     FinishHandle("FinishHandle", "回收处理");
@@ -39,24 +40,6 @@ public enum OpenApiFilterEnum implements Messageable {
     OpenApiFilterEnum(String code, String message) {
         this.code = code;
         this.message = message;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    @Override
-    public String code() {
-        return code;
-    }
-
-    @Override
-    public String message() {
-        return message;
     }
 
     public static Map<String, String> mapping() {
@@ -107,6 +90,24 @@ public enum OpenApiFilterEnum implements Messageable {
             list.add(status.code());
         }
         return list;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    @Override
+    public String code() {
+        return code;
+    }
+
+    @Override
+    public String message() {
+        return message;
     }
 
 }

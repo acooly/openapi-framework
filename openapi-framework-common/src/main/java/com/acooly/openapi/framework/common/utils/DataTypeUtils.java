@@ -10,9 +10,7 @@ import com.acooly.core.utils.Money;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Api文档类型判断工具
@@ -72,6 +70,23 @@ public class DataTypeUtils {
      */
     public static boolean isCollection(Field field) {
         return Collection.class.isAssignableFrom(field.getType()) || field.getType().isArray();
+    }
+
+    public static boolean isCollectionStandard(Field field) {
+        return Collection.class.isAssignableFrom(field.getType());
+    }
+
+    public static boolean isList(Field field) {
+        return List.class.isAssignableFrom(field.getType());
+    }
+
+    public static boolean isSet(Field field) {
+        return Set.class.isAssignableFrom(field.getType());
+    }
+
+
+    public static boolean isArray(Field field) {
+        return field.getType().isArray();
     }
 
     public static boolean isMap(Field field) {

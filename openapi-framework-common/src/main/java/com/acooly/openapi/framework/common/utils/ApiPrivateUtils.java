@@ -3,7 +3,7 @@
  * Copyright (c) 2015 All Rights Reserved.
  */
 
-package com.acooly.openapi.apidoc.utils;
+package com.acooly.openapi.framework.common.utils;
 
 import com.acooly.core.utils.Reflections;
 import com.acooly.core.utils.Strings;
@@ -22,9 +22,9 @@ import java.lang.reflect.Type;
  *
  * @author zhangpu
  */
-public class ApiDocPrivateUtils {
+public class ApiPrivateUtils {
     private static final Logger logger = LoggerFactory
-            .getLogger(ApiDocPrivateUtils.class);
+            .getLogger(ApiPrivateUtils.class);
 
     /**
      * 获取集合对象的泛型参数类型

@@ -17,6 +17,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.StringJoiner;
 
 /**
  * @author zhangpu
@@ -55,4 +56,13 @@ public class GoodsInfo {
         this.quantity = quantity;
         this.price = price;
     }
+
+    public GoodsInfo(String name, GoodType goodType, int quantity, Money price, String referUrl) {
+        this.name = name;
+        this.goodType = goodType;
+        this.quantity = quantity;
+        this.price = price;
+        this.referUrl = referUrl;
+    }
+
 }

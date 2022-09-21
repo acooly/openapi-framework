@@ -52,6 +52,7 @@ public class OpenAPIProperties {
      */
     private Log log = new Log();
 
+
     /**
      * 匿名访问
      */
@@ -76,6 +77,31 @@ public class OpenAPIProperties {
      * 权限配置
      */
     private Permi permi = new Permi();
+
+    /**
+     * Mock配置
+     */
+    private Mock mock = new Mock();
+
+    /**
+     * 查询日志分离到不同的日志文件
+     */
+    @Deprecated
+    private Boolean queryLogSeparationEnable = false;
+    /**
+     * 是否启用openapi性能日志
+     */
+    @Deprecated
+    private Boolean enablePerfLog = true;
+    /**
+     * 日志脱敏(默认关闭)
+     */
+    @Deprecated
+    private Boolean logSafety = false;
+    @Deprecated
+    private String logSafetyIgnores;
+    @Deprecated
+    private String logSafetyMasks;
 
     @PostConstruct
     public void init() {
@@ -118,7 +144,6 @@ public class OpenAPIProperties {
          */
         private boolean secretKeyDynamic = false;
     }
-
 
     @Data
     public static class AuthInfoCache {
@@ -212,7 +237,6 @@ public class OpenAPIProperties {
         private String safetyMasks;
     }
 
-
     /**
      * 权限参数配置
      */
@@ -227,27 +251,16 @@ public class OpenAPIProperties {
 
     }
 
-
     /**
-     * 查询日志分离到不同的日志文件
+     * Mock开工及配置
      */
-    @Deprecated
-    private Boolean queryLogSeparationEnable = false;
-
-    /**
-     * 是否启用openapi性能日志
-     */
-    @Deprecated
-    private Boolean enablePerfLog = true;
-
-    /**
-     * 日志脱敏(默认关闭)
-     */
-    @Deprecated
-    private Boolean logSafety = false;
-    @Deprecated
-    private String logSafetyIgnores;
-    @Deprecated
-    private String logSafetyMasks;
+    @Data
+    public static class Mock {
+        /**
+         * 是否开启，默认关闭
+         * 如果开启后，才处理标记为@OpenApiMock的服务
+         */
+        private boolean enable = false;
+    }
 
 }
