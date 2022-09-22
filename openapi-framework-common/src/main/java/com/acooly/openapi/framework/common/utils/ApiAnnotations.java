@@ -134,10 +134,16 @@ public class ApiAnnotations {
     @Data
     @Builder
     public static class Options {
+
+        /**
+         * 集合数量
+         */
         private int listSize = 5;
+        
         /**
          * 字段的值自定义映射（支持非javabean对象和非集合类型）
          * key: fieldName, value对应的值（注意类型和格式匹配）
+         * 暂时未实现
          */
         private Map<String, Object> valueMapping = Maps.newHashMap();
     }

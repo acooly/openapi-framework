@@ -8,7 +8,7 @@ import org.springframework.boot.SpringApplication;
 @BootApp(sysName = "openapi", httpPort = 8089)
 public class Main {
   public static void main(String[] args) {
-    Apps.setProfileIfNotExists("online");
+    Apps.setProfileIfNotExists("sdev");
     new SpringApplication(TestMain.class).run(args);
   }
 }

@@ -18,7 +18,6 @@ import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
-import com.acooly.openapi.framework.core.OpenAPIProperties;
 import com.acooly.openapi.framework.core.filterchain.OpenApiFilterEnum;
 import com.acooly.openapi.framework.core.listener.multicaster.EventPublisher;
 import com.google.common.base.Strings;
@@ -36,22 +35,21 @@ import javax.annotation.Resource;
 @Slf4j
 @Component
 public class ServiceExecuteOpenApiFilter extends AbstractOpenApiFilter {
-    @Resource
-    protected OpenAPIProperties openAPIProperties;
+
     @Resource
     private EventPublisher eventPublisher;
 
     @Override
     public void doInternalFilter(ApiContext context, FilterChain<ApiContext> filterChain) {
         // 如果打开MOCK全局开关，则跳过
-        if (openAPIProperties.getMock().isEnable()) {
+        if (isMock(context)) {
             return;
         }
-        doExceute(context);
+        doExecute(context);
     }
 
 
-    protected void doExceute(ApiContext context) {
+    protected void doExecute(ApiContext context) {
         ApiService apiService = context.getApiService();
         ApiRequest apiRequest = context.getRequest();
         ApiResponse apiResponse = context.getResponse();

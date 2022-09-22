@@ -3,6 +3,7 @@ package com.acooly.openapi.framework.client;
 import com.acooly.core.common.exception.AppConfigException;
 import com.acooly.core.utils.Asserts;
 import com.acooly.core.utils.Encodes;
+import com.acooly.core.utils.Money;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.security.Cryptos;
 import com.acooly.openapi.framework.common.ApiConstants;
@@ -16,8 +17,10 @@ import com.acooly.openapi.framework.common.message.ApiMessage;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.utils.ApiUtils;
 import com.acooly.openapi.framework.common.utils.json.JsonMarshallor;
+import com.acooly.openapi.framework.common.utils.json.MoneySerializer;
 import com.acooly.openapi.framework.common.utils.json.ObjectAccessor;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
@@ -113,7 +116,7 @@ public class OpenApiClient {
         ApiMessageContext context = new ApiMessageContext();
         if (request.getProtocol() == ApiProtocol.JSON) {
             // 客户端的序列化调整为通用JSON序列化
-            String body = JSON.toJSONString(request);
+            String body = toJSONString(request);
             context.parameter(ApiConstants.BODY, Encodes.urlEncode(body));
             context.parameter(ApiConstants.PROTOCOL, ApiProtocol.JSON.code());
             context.parameter(ApiConstants.ACCESS_KEY, accessKey);
@@ -207,7 +210,7 @@ public class OpenApiClient {
         doDefaultVal(request);
         doSecurity(request, CryptoType.encrypt);
         if (request.getProtocol() == ApiProtocol.JSON) {
-            String body = JSON.toJSONString(request);
+            String body = toJSONString(request);
             context.setBody(body);
             context.header(ApiConstants.X_API_ACCESS_KEY, accessKey);
             context.header(ApiConstants.X_API_SIGN_TYPE, signType);
@@ -306,6 +309,12 @@ public class OpenApiClient {
             serviceName = StringUtils.substringBeforeLast(className, "Request");
         }
         request.setService(StringUtils.uncapitalize(serviceName));
+    }
+
+    private String toJSONString(Object object) {
+        SerializeConfig serializeConfig = SerializeConfig.getGlobalInstance();
+        serializeConfig.put(Money.class, MoneySerializer.INSTANCE);
+        return JSON.toJSONString(object, serializeConfig);
     }
 
     public String getSignType() {

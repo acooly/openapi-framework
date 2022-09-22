@@ -1,5 +1,5 @@
 /*
- * acooly.com Inc.
+ * acooly.cn Inc.
  * Copyright (c) 2014 All Rights Reserved
  */
 
@@ -27,8 +27,7 @@ import com.acooly.openapi.framework.core.OpenAPIProperties;
 import com.acooly.openapi.framework.core.service.route.ServiceRouter;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,11 +52,9 @@ import static com.acooly.openapi.framework.common.enums.ResponseType.SYN;
  * @author zhangpu
  * @author Bohr.Qiu <qiubo@qq.com>
  */
+@Slf4j
 @Component
-public class ApiServiceFactoryImpl
-        implements ApiServiceFactory, ApplicationContextAware, InitializingBean {
-
-    private static final Logger logger = LoggerFactory.getLogger(ApiServiceFactoryImpl.class);
+public class ApiServiceFactoryImpl implements ApiServiceFactory, ApplicationContextAware, InitializingBean {
 
     private ApplicationContext applicationContext;
 
@@ -69,13 +66,24 @@ public class ApiServiceFactoryImpl
     @Autowired
     private OpenAPIProperties openAPIProperties;
 
+    /**
+     * @param serviceName
+     * @param version
+     * @return
+     */
+    @Override
+    public ApiService getApiService(String serviceName, String version) {
+        Collection<ApiService> apiServices = servicesMap.get(serviceName);
+        return serviceRouter.route(serviceName, version, apiServices);
+    }
+
+
     @Override
     public void afterPropertiesSet() throws Exception {
         servicesMap = HashMultimap.create();
-        Map<String, ApiService> apiServiceBeansMap =
-                applicationContext.getBeansOfType(ApiService.class);
+        Map<String, ApiService> apiServiceBeansMap = applicationContext.getBeansOfType(ApiService.class);
         if (apiServiceBeansMap.isEmpty()) {
-            logger.warn("openapi没有对外提供服务");
+            log.warn("OpenApi没有对外提供服务");
             return;
         }
         for (ApiService apiService : apiServiceBeansMap.values()) {
@@ -86,8 +94,7 @@ public class ApiServiceFactoryImpl
     private void registerService(ApiService curApiService, Multimap<String, ApiService> servicesMap) {
         OpenApiService openApiService = getOpenApiServiceAnnotation(curApiService);
         if (openApiService == null) {
-            throw new RuntimeException(
-                    "openapi服务" + curApiService.getClass() + "必须要标记com.acooly.openapi.framework.core.meta.OpenApiService注解");
+            throw new RuntimeException("OpenApi服务" + curApiService.getClass() + "必须要标记com.acooly.openapi.framework.core.meta.OpenApiService注解");
         }
         if (!openAPIProperties.getLogin().isEnable()) {
             if (openApiService.name().equals(ApiConstants.LOGIN_SERVICE_NAME)) {
@@ -102,19 +109,23 @@ public class ApiServiceFactoryImpl
             while (iterator.hasNext()) {
                 ApiService apiService = iterator.next();
                 if (getOpenApiServiceAnnotation(apiService).version().equals(openApiService.version())) {
-                    throw new RuntimeException(
-                            "服务冲突:" + curApiService.getClass() + "和" + apiService.getClass());
+                    throw new RuntimeException("服务冲突:" + curApiService.getClass() + "和" + apiService.getClass());
                 }
             }
         }
+        // 设置mock
+        curApiService.setMock(openApiService.mock());
         servicesMap.put(openApiService.name(), curApiService);
-        logger.info(
-                "加载openapi服务[{}] {}:{}  {} {}",
+
+        log.info(
+                "加载OpenApi服务[{}]{} {}:{}  {} {}",
                 openApiService.desc(),
+                openApiService.mock() ? " MOCK" : "",
                 openApiService.name(),
                 openApiService.version(),
                 curApiService.getClass().getName(),
                 openApiService.responseType().name());
+
         // 启动时检查是否有属性名重复的情况.并加载缓存
         ObjectAccessor.of(curApiService.getRequestBean());
         ObjectAccessor.of(curApiService.getResponseBean());
@@ -138,28 +149,18 @@ public class ApiServiceFactoryImpl
         if (!Env.isOnline()) {
             ApiDocType apiDocType = AnnotationUtils.findAnnotation(curApiService.getClass(), ApiDocType.class);
             if (apiDocType == null) {
-                logger.info("[警告] openapi服务[{}] {}:{} 未标记@ApiDocType，请告诉Apidoc应该放到那个菜单",
+                log.warn("[警告] OpenApi服务[{}] {}:{} 未标记@ApiDocType，请告诉Apidoc应该放到那个菜单",
                         apiServiceAnnotation.desc(), apiServiceAnnotation.name(), apiServiceAnnotation.version());
             }
             ApiDocNote apiDocNote = AnnotationUtils.findAnnotation(curApiService.getClass(), ApiDocNote.class);
             if (apiDocNote == null) {
-                logger.info("[警告] openapi服务[{}] {}:{} 未标记@ApiDocNote，请告诉客户端这个接口做什么的，什么场景用，是否有特别注意的？",
+                log.warn("[警告] OpenApi服务[{}] {}:{} 未标记@ApiDocNote，请告诉客户端这个接口做什么的，什么场景用，是否有特别注意的？",
                         apiServiceAnnotation.desc(), apiServiceAnnotation.name(), apiServiceAnnotation.version());
             }
         }
         return true;
     }
 
-    /**
-     * @param serviceName
-     * @param version
-     * @return
-     */
-    @Override
-    public ApiService getApiService(String serviceName, String version) {
-        Collection<ApiService> apiServices = servicesMap.get(serviceName);
-        return serviceRouter.route(serviceName, version, apiServices);
-    }
 
     private OpenApiService getOpenApiServiceAnnotation(ApiService apiService) {
         return apiService.getClass().getAnnotation(OpenApiService.class);

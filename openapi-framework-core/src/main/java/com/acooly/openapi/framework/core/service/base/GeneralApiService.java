@@ -38,6 +38,10 @@ public abstract class GeneralApiService<O extends ApiRequest, R extends ApiRespo
     private Class<R> responseClazz;
 
     private String redirectUrl;
+    /**
+     * 当前是否MOCK
+     */
+    private boolean mock;
 
     @Override
     public O getRequestBean() {
@@ -118,5 +122,15 @@ public abstract class GeneralApiService<O extends ApiRequest, R extends ApiRespo
         if (apiContext != null) {
             apiContext.setRedirectUrl(redirectUrl);
         }
+    }
+
+    @Override
+    public boolean isMock() {
+        return mock;
+    }
+
+    @Override
+    public void setMock(boolean mock) {
+        this.mock = mock;
     }
 }

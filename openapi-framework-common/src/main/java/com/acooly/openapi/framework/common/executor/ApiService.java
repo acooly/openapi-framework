@@ -41,5 +41,24 @@ public interface ApiService<O extends ApiRequest, R extends ApiResponse>
      */
     String getRedirectUrl();
 
+    /**
+     * 设置跳转URL
+     *
+     * @param redirectUrl
+     */
     void setRedirectUrl(String redirectUrl);
+
+    /**
+     * 是否mock
+     *
+     * @return
+     */
+    boolean isMock();
+
+    /**
+     * 设置mock
+     *
+     * @param mock
+     */
+    void setMock(boolean mock);
 }

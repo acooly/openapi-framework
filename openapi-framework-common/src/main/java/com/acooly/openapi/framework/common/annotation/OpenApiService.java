@@ -27,46 +27,54 @@ import java.lang.annotation.*;
 @Documented
 @Service
 public @interface OpenApiService {
-  /**
-   * 服务名称
-   *
-   * @return
-   */
-  String name();
+    /**
+     * 服务名称
+     *
+     * @return
+     */
+    String name();
 
-  /**
-   * 服务版本
-   *
-   * @return
-   */
-  String version() default ApiConstants.VERSION_DEFAULT;
+    /**
+     * 服务版本
+     *
+     * @return
+     */
+    String version() default ApiConstants.VERSION_DEFAULT;
 
-  /**
-   * 服务描述
-   *
-   * @return
-   */
-  String desc();
+    /**
+     * 服务描述
+     *
+     * @return
+     */
+    String desc();
 
-  /**
-   * 服务响应类型,默认为同步响应
-   *
-   * @return
-   */
-  ResponseType responseType() default ResponseType.SYN;
+    /**
+     * 服务响应类型,默认为同步响应
+     *
+     * @return
+     */
+    ResponseType responseType() default ResponseType.SYN;
 
 
-  /**
-   * 归属
-   *
-   * @return
-   */
-  String owner() default "unknown";
+    /**
+     * 归属
+     *
+     * @return
+     */
+    String owner() default "unknown";
 
-  /**
-   * 业务类型
-   *
-   * @return
-   */
-  ApiBusiType busiType() default ApiBusiType.Trade;
+    /**
+     * 业务类型
+     *
+     * @return
+     */
+    ApiBusiType busiType() default ApiBusiType.Trade;
+
+    /**
+     * 是否MOCK
+     * 默认为false，true：表示该服务直接使用demo属性生成mock响应数据
+     *
+     * @return
+     */
+    boolean mock() default false;
 }

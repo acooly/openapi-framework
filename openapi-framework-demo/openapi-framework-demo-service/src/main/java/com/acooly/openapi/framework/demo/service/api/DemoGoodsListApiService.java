@@ -10,6 +10,7 @@ package com.acooly.openapi.framework.demo.service.api;
 
 import com.acooly.openapi.framework.common.annotation.ApiDocNote;
 import com.acooly.openapi.framework.common.annotation.ApiDocType;
+import com.acooly.openapi.framework.common.annotation.OpenApiMock;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
 import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.enums.ResponseType;
@@ -29,7 +30,8 @@ import java.util.List;
 @Slf4j
 @ApiDocType(code = DemoApiUtils.API_DEMO_DOC_TYPE_CODE, name = DemoApiUtils.API_DEMO_DOC_TYPE_NAME)
 @ApiDocNote("提供OpenApi的标准分页列表查询Demo：商品列表分页条件查询，注意：数据都是MOCK的，重点演示结构")
-@OpenApiService(name = "demoGoodsList", desc = "商品列表", responseType = ResponseType.SYN, owner = "zhangpu", busiType = ApiBusiType.Trade)
+@OpenApiMock
+@OpenApiService(name = "demoGoodsList", desc = "商品列表", responseType = ResponseType.SYN, owner = "zhangpu", busiType = ApiBusiType.Trade, mock = true)
 public class DemoGoodsListApiService extends BaseApiService<DemoGoodsListApiRequest, DemoGoodsListApiResponse> {
     @Override
     protected void doService(DemoGoodsListApiRequest request, DemoGoodsListApiResponse response) {
