@@ -4,54 +4,55 @@
 <!-- date: 2020-02-10 -->
 
 # 1. 简介
+
 `openapi-framework-core`是开放平台网关的核心，实现了网关的核心架构和能力。结构上网关核心包括服务执行层和服务实现层，能力上包括：多租户，认证，授权，加解密，日志，事件，协议等。
 
 # 2. 集成及配置
+
 OpenApi服务框架核心提供API服务的统一处理和执行能力，只需在目标工程整合该模块即可实现网关服务。
 
 ## 2.1. 服务端依赖
+
 请在目标工程的pom.xml中添加该模块的依赖，如下：
 
 ```xml
 <!-- 核心网关 -->
 <dependency>
-	<groupId>com.acooly</groupId>
-	<artifactId>openapi-framework-core</artifactId>
-	<version>${openapi-framework.version}</version>
+    <groupId>com.acooly</groupId>
+    <artifactId>openapi-framework-core</artifactId>
+    <version>${openapi-framework.version}</version>
 </dependency>
 
-<!-- 异步/跳转通知 -->
+        <!-- 异步/跳转通知 -->
 <dependency>
-	<groupId>com.acooly</groupId>
-	<artifactId>openapi-framework-notify</artifactId>
-	<version>${openapi-framework.version}</version>
+<groupId>com.acooly</groupId>
+<artifactId>openapi-framework-notify</artifactId>
+<version>${openapi-framework.version}</version>
 </dependency>
 
-<!-- 自动文档化 -->
+        <!-- 自动文档化 -->
 <dependency>
-	<groupId>com.acooly</groupId>
-	<artifactId>openapi-framework-apidoc</artifactId>
-	<version>${openapi-framework.version}</version>
+<groupId>com.acooly</groupId>
+<artifactId>openapi-framework-apidoc</artifactId>
+<version>${openapi-framework.version}</version>
 </dependency>
 ```
 
-
->注意：openapi-framework.version，请根据具体情况选择，一般推荐选择最新发布版本。
+> 注意：openapi-framework.version，请根据具体情况选择，一般推荐选择最新发布版本。
 
 ## 2.2. 版本说明
 
-* 1.4.x : acoolyV3版本	 -> YIJI/HTD
+* 1.4.x : acoolyV3版本 -> YIJI/HTD
 * 4.0.x : acoolyV4.0版本 -> cnevx
 * 4.2.1 : acoolyV4.2.x 版本 (支持JSON协议）
 * 4.2.2 : acoolyv4.2.x 版本（v4最新版本：支持JSON和HTTP_FORM_JOSN老协议）
-* 5.0.x : acoolyV5.x.x 
-
+* 5.0.x : acoolyV5.x.x
 
 ## 2.3. 配置
 
 网关服务的所有核心配置所有都是可选的，默认可以不配置，以下的配置案例中的参数值都是默认的参数值，你可以根据项目需求，修改配置。
 
->注意：以下所有配置都依赖`openapi-framework-core`核心模块
+> 注意：以下所有配置都依赖`openapi-framework-core`核心模块
 
 ### 2.3.1. 日志配置
 
@@ -65,7 +66,7 @@ acooly.openapi.log.mult-file-enable=false
 acooly.openapi.save-order=true
 ```
 
->请特别注意`acooly.openapi.save-order=true`参数，虽然设置为true后，会大大提高效率（查询请求不写数据库），但会造成报文请求号(requestNo)可重复的问题，请各位在配置选择时，斟酌选择。
+> 请特别注意`acooly.openapi.save-order=true`参数，虽然设置为true后，会大大提高效率（查询请求不写数据库），但会造成报文请求号(requestNo)可重复的问题，请各位在配置选择时，斟酌选择。
 
 
 以下是日志配置的参数废弃和替换说明
@@ -112,7 +113,6 @@ acooly.openapi.logSafetyIgnores=password,pswd  ==> acooly.openapi.log.safety-ign
 acooly.openapi.logSafetyMasks=mobileNo,certNo  ==> acooly.openapi.log.safety-masks=mobileNo,certNo
 ```
 
-
 #### 2.3.2.2. 应用
 
 日志脱敏特性设计为在报文进入（请求）后和报文发出（响应/通知）前对目标报文（例如JSON字符串）进行脱敏处理。框架采用正则匹配替换模式对目标属性值进行脱敏处理，脱敏的方式包括忽略和Mask两种方式。
@@ -138,15 +138,13 @@ acooly.openapi.logSafetyMasks=payeeUserId,buyeryMobileNo,buyerCertNo
 @OpenApiField(desc = "标题", demo = "特色牛肉干", ordinal = 2)
 @ToString.Maskable
 private String title;
-    
+
 @NotEmpty
 @ToString.Invisible
 @Size(min = 20, max = 20)
 @OpenApiField(desc = "卖家用户ID", demo = "201603080912340002", ordinal = 9)
 private String payeeUserId;
 ```
-
-
 
 ### 2.3.3. 缓存配置
 
@@ -181,7 +179,6 @@ acooly.openapi.login.enable=true
 acooly.openapi.login.secret-key-dynamic=true
 ```
 
-
 ### 2.3.5. 流控
 
 OpenApi框架对流控的支持模式为多级（parentId,service两级）控流（非整流模式），当流量超过流控配置则拒绝请求。
@@ -211,8 +208,7 @@ acooly.openapi.rates[2].interval=1000
 acooly.openapi.rates[2].max-requests=10
 ```
 
->注意，流控需要引入模块依赖: `openapi-framework-extensions`
-
+> 注意，流控需要引入模块依赖: `openapi-framework-extensions`
 
 ### 2.3.6. 异步通知
 
@@ -235,6 +231,13 @@ OpenApi框架提供了多租户的能力集成支撑，但本身不管理和配�
 3. 外部请求接口时候，框架通过请求的accessKey -（匹配）-> partnerId -(匹配)-> tenantId
 4. 在Api服务内部，通过`tenantId()`方法获取当前请求对应的租户ID(tenantId),也可以通过`ApiContextHolder.getContext().getTenantId()`静态工具方法获取当前线程对应的租户ID。
 
+### 2.3.9 接口MOCK
+
+OpenApi支持接口服务按需MOCK，mock的接口以@OpenApiField.demo作为mock的数据响应请求。
+
+1. 需要打开全局mock开关：`acooly.openapi.mock.enable=true`
+2. 对OpenApi服务的@OpenApiService的mock属性设置为true：`@OpenApiService(demo=true)`
+
 
 # 3. 服务开发
 
@@ -244,47 +247,44 @@ OpenApi框架提供了多租户的能力集成支撑，但本身不管理和配�
 
 ```java
 xxxx-project
-	|--xxxx-project-assemble
-	|--xxxx-project-common
-	|--xxxx-project-core
-	|--xxxx-project-openapi
-		|--xxxx-project-openapi-service	// 独立的openApi服务
-		|--xxxx-project-openapi-message	// 可复用的openApi报文定义
-	|--xxxx-project-....
-	|--xxxx-project-test
+        |--xxxx-project-assemble
+        |--xxxx-project-common
+        |--xxxx-project-core
+        |--xxxx-project-openapi
+        |--xxxx-project-openapi-service    // 独立的openApi服务
+        |--xxxx-project-openapi-message    // 可复用的openApi报文定义
+        |--xxxx-project-....
+        |--xxxx-project-test
 ```
 
->独立的`xxxx-project-openapi-message`可以打包后，结合openapi-framework-client提供java版本的SDK。
+> 独立的`xxxx-project-openapi-message`可以打包后，结合openapi-framework-client提供java版本的SDK。
 
 依赖设计：
 
 1. common：底层，不依赖任何模块，提取项目中的公共domain，dto，enum，constants，exceptions等公用。
-2. core：核心业务和逻辑服务  --（依赖）--> common
+2. core：核心业务和逻辑服务 --（依赖）--> common
 3. openapi-service 网关服务实现模块（OpenApi服务开发） --（依赖）--> core和openapi-message
 4. openapi-message --（依赖）--> common
-
-
 
 ## 3.2. 开发说明
 
 openapi框架提供的Api服务开发模式比较简单，基于接口报文定义，由框架完成报文（请求，响应，通知等）的解析，组装，认证，授权等，开发人员定义具体服务后，框架会提供组装好的客户端请求对象，开发人员按需注入服务进行逻辑处理后，回填数据到定义的响应对象就完成接口开发工作，由框架完成后续的签名，组装报文并响应/发送给客户端请求方。
-
 
 ### 3.3. 报文定义
 
 服务开发的第一步是根据业务需求分析和设计，完成接口服务的报文定义，根据接口类型的不同，我们可能会定义请求报文，响应报文，通知报文等。定义报文通用的规则是相同的。具体主要规则如下：
 
 * 所有的报文必须继承ApiMessage或其子类，作为报文体的公共报文头.
-	* 常规请求报文需继承ApiRequest(extends ApiMessage)
-	* App的请求报文需继承AppRequest(extends AppRequest),但增对App手机了设备信息
-	* 分页查询请求报文需继承PageApiRequest(extends AppRequest)，增加页号和页大小
-	* 异步接口请求报文需继承ApiAsyncRequest(extends AppRequest)，增加回调地址和通知地址
+    * 常规请求报文需继承ApiRequest(extends ApiMessage)
+    * App的请求报文需继承AppRequest(extends AppRequest),但增对App手机了设备信息
+    * 分页查询请求报文需继承PageApiRequest(extends AppRequest)，增加页号和页大小
+    * 异步接口请求报文需继承ApiAsyncRequest(extends AppRequest)，增加回调地址和通知地址
 * 报文内定义的所有数据项必须编写@OpenApiField文档，用于生成自动文档，否则框架不会序列化并启动时警告。
-	* desc：[必选] 表示字段中文名称，必填；**（你不填试试，除非你不想用这个接口）**
-	* constraint：表示字段说明，可选，如果为空则为解析为desc 
-	* demo: [必选] 字段demo，必填 **（你不填试试，除非你不想用这个接口）**
-	* ordinal: [必选] 文档顺序，必填**（你不填试试，除非你不想用这个接口）**
-	* security：是否加密字段数据，可选，默认为false
+    * desc：[必选] 表示字段中文名称，必填；**（你不填试试，除非你不想用这个接口）**
+    * constraint：表示字段说明，可选，如果为空则为解析为desc
+    * demo: [必选] 字段demo，必填 **（你不填试试，除非你不想用这个接口）**
+    * ordinal: [必选] 文档顺序，必填**（你不填试试，除非你不想用这个接口）**
+    * security：是否加密字段数据，可选，默认为false
 * 报文内定义的所有数据项必须编写JSR303的验证注释，否则框架不会序列化并启动时警告
 * 推荐使用的数据项数据类型为：String, Integer, Long, Money(金额或2位小数), Enum。其他类型不推荐但可以支持（如：decimal,boolean等）。
 
@@ -317,9 +317,9 @@ public class WithdrawRequest extends ApiAsyncRequest {
     @Max(1)
     private Integer delay = 1;
 
-    @OpenApiField(desc = "业务类型", demo = "BUSI2",ordinal = 5)
+    @OpenApiField(desc = "业务类型", demo = "BUSI2", ordinal = 5)
     private BusiTypeEnum busiType = BusiTypeEnum.BUSI2;
-    
+
     //...
 }    
 ```
@@ -330,16 +330,15 @@ public class WithdrawRequest extends ApiAsyncRequest {
 
 * **类定义：**必须继承：`com.acooly.openapi.framework.core.service.base.BaseApiService`,并通过泛型制定该接口的请求和响应报文，notify报文请实现getApiNotifyBean()方法提供。
 * **服务标记：**openapi服务必须使用专用的annotation标注：@OpenApiService。
-	* name：[必选] 服务名称（服务码），英文唯一编码，请使用名字前置方式定义，比如：orderCreate，orderPay，orderCancel，已便于代码和文档的排序。
-	* desc：[必选] 服务标题（中文名）
-	* version: 服务版本，默认：1.0
-	* responseType: 服务类型，默认：SYN,可选为SYN,ASYN和REDIRECT（不推荐）
-	* busiType: 业务类型，可选：Trade（默认），Manage和Query，框架默认情况下，Query类型不持久化请求数据，以提高效率。
-	* owner: 标记服务提供者或开发人员，便于管理。
+    * name：[必选] 服务名称（服务码），英文唯一编码，请使用名字前置方式定义，比如：orderCreate，orderPay，orderCancel，已便于代码和文档的排序。
+    * desc：[必选] 服务标题（中文名）
+    * version: 服务版本，默认：1.0
+    * responseType: 服务类型，默认：SYN,可选为SYN,ASYN和REDIRECT（不推荐）
+    * busiType: 业务类型，可选：Trade（默认），Manage和Query，框架默认情况下，Query类型不持久化请求数据，以提高效率。
+    * owner: 标记服务提供者或开发人员，便于管理。
 * **文档标记：**主要用于文档自动化生成。包括：@ApiDocType：标记文档的scheme分类方案，@ApiDocNote接口说明，支持HTML。
 * **逻辑实现：**接口的逻辑实现请覆写doService方法实现，调用逻辑处理。回填response.
 * **异常处理：**doService方法内部可选进行异常处理，因为框架已提供了统一的基于BusinessException的异常处理。也就是说你的内容业务服务或openapi服务内如果手动抛出异常，请使用BusinessExcetion或其子类。
-
 
 案例：
 
@@ -388,7 +387,7 @@ public class WithdrawApiService extends BaseApiService<WithdrawRequest, Withdraw
 
 单元测试基类：com.acooly.openapi.framework.core.test.AbstractApiServieTests
 
->单元测试基类提供了对OpenApiClient的封装，并可在子类中覆写请求的基础参数，包括：gatewayUrl，partnerId，accessKey，secretKey等。
+> 单元测试基类提供了对OpenApiClient的封装，并可在子类中覆写请求的基础参数，包括：gatewayUrl，partnerId，accessKey，secretKey等。
 
 案例：
 
@@ -400,14 +399,13 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
         OrderCreateRequest request = new OrderCreateRequest();
         request.setRequestNo(Ids.getDid());
         request.setMerchOrderNo(Ids.getDid());
-    	 // fill request datas
+        // fill request datas
         OrderCreateResponse response = request(request, OrderCreateResponse.class);
         assertThat(response).isNotNull();
         assertThat(response.isSuccess()).isTrue();
         assertThat(response.getContext()).isEqualTo(content);
     }
 ```
-
 
 # 4. 扩展
 
@@ -437,6 +435,7 @@ public class OrderOpenApiTest extends AbstractApiServieTests {
 下面的代码是通过OpenApi限制IP段访问的临时扩展
 
 ```java
+
 @Slf4j
 @OpenApiListener(global = true, asyn = false)
 public class IpBlockLimitApiListener extends AbstractListener<BeforeServiceExecuteEvent> {
@@ -462,8 +461,7 @@ public class IpBlockLimitApiListener extends AbstractListener<BeforeServiceExecu
 
 ```
 
->注意：`ipSearchService.isChinaIp`的工具服务来自组件`acooly-component-data-ip`
-
+> 注意：`ipSearchService.isChinaIp`的工具服务来自组件`acooly-component-data-ip`
 
 ## 4.2 认证扩展
 
@@ -483,6 +481,7 @@ acooly.openapi.login.secret-key-dynamic=true
 你需要在你的目标集成工程中实现：`com.acooly.openapi.framework.service.service.AppApiLoginService`接口，并根据自身业务逻辑完成认证逻辑的开发。例如:
 
 ```java
+
 @Slf4j
 @Component
 @Primary
@@ -502,18 +501,19 @@ public class customLoginApiServiceImpl implements AppApiLoginService {
 }
 ```
 
->注意：这里通过`@Primary`配置你的认证实现为主实现，否则框架会使用内置默认实现（默认实现全通过）
+> 注意：这里通过`@Primary`配置你的认证实现为主实现，否则框架会使用内置默认实现（默认实现全通过）
 
 ## 4.3 租户扩展
 
 针对多租户体系，框架提供了扩展租户信息的接口：`com.acooly.openapi.framework.service.service.tenant.ApiTenantLoaderService`
 
- * OpenApi层默认不建议提供租户的管理，该接口实现可以由集成系统实现接口返回租户相关数据，用于Api层配置。
- * OpenApi框架提供默认实现，集成系统实现该接口后，通过@Primary标记注入
+* OpenApi层默认不建议提供租户的管理，该接口实现可以由集成系统实现接口返回租户相关数据，用于Api层配置。
+* OpenApi框架提供默认实现，集成系统实现该接口后，通过@Primary标记注入
 
 下面是实现的案例：
 
 ```java
+
 @Slf4j
 @Component
 @Primary
