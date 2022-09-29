@@ -236,7 +236,7 @@ OpenApi框架提供了多租户的能力集成支撑，但本身不管理和配�
 OpenApi支持接口服务按需MOCK，mock的接口以@OpenApiField.demo作为mock的数据响应请求。
 
 1. 需要打开全局mock开关：`acooly.openapi.mock.enable=true`
-2. 对OpenApi服务的@OpenApiService的mock属性设置为true：`@OpenApiService(demo=true)`
+2. 对OpenApi服务的@OpenApiService的mock属性设置为true：`@OpenApiService(mock=true)`
 
 
 # 3. 服务开发
