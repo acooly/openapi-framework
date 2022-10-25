@@ -25,6 +25,7 @@ import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.executor.ApiService;
 import com.acooly.openapi.framework.common.message.ApiRequest;
 import com.acooly.openapi.framework.common.message.ApiResponse;
+import com.acooly.openapi.framework.common.utils.AccessKeys;
 import com.acooly.openapi.framework.common.utils.ApiServerUtils;
 import com.acooly.openapi.framework.common.utils.ApiUtils;
 import com.google.common.collect.Maps;
@@ -50,7 +51,6 @@ import java.util.Map;
 @Setter
 public class ApiContext extends Context {
     private static final Logger perlogger = LoggerFactory.getLogger(ApiConstants.PERFORMANCE_LOGGER);
-    public static final String ACCESSKEY_SUB_SPLIT_CHAR = "#";
 
     private HttpServletRequest httpRequest;
     private HttpServletResponse httpResponse;
@@ -248,12 +248,17 @@ public class ApiContext extends Context {
      * @return
      */
     public String getCanonicalAccessKey() {
-        if (Strings.contains(getAccessKey(), ACCESSKEY_SUB_SPLIT_CHAR)) {
-            return Strings.substringBefore(getAccessKey(), ACCESSKEY_SUB_SPLIT_CHAR);
-        }
-        return getAccessKey();
+        return AccessKeys.getCanonicalAccessKey(getAccessKey());
     }
 
+    /**
+     * 针对用户/会员的子AccessKey，根据约定获取subAccesskey对应的用户唯一标志(customerId)
+     *
+     * @return
+     */
+    public String getCustomerId() {
+        return AccessKeys.getCustomerId(getAccessKey());
+    }
 
     public void setApiService(ApiService apiService) {
         this.setOpenApiService(apiService.getClass().getAnnotation(OpenApiService.class));
