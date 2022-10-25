@@ -72,7 +72,7 @@ public abstract class AbstractJsonResponseMarshall<T, S extends ApiResponse> imp
         ApiContext context = ApiContextHolder.getContext();
         if (result.getClass().isAssignableFrom(ApiMessageContext.class)) {
             ApiMessageContext amc = (ApiMessageContext) result;
-            if (Strings.isNotBlank(context.getAccessKey()) && context.isSignResponse()) {
+            if (Strings.isNotBlank(context.getAccessKey()) && context.isAuthenticated()) {
                 String sign = apiAuthentication.signature(amc.getBody(), context.getAccessKey(), context.getSignType().name());
                 amc.header(ApiConstants.X_API_SIGN, sign);
                 amc.header(ApiConstants.X_API_SIGN_TYPE, context.getSignType().code());
