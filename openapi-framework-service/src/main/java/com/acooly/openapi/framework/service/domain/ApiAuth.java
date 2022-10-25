@@ -111,11 +111,17 @@ public class ApiAuth extends AbstractEntity implements TreeNode<ApiAuth> {
     @Enumerated(EnumType.STRING)
     private SimpleStatus status;
 
+    @Transient
+    private List<ApiAuth> children;
+
+
     /**
-     * 试图状态（非持久化）
+     * 视图状态（非持久化）
      */
     @Transient
-    private String state = "closed";
+    public String getState() {
+        return Strings.contains(accessKey, "#") ? "open" : "closed";
+    }
 
     @Transient
     public List<String> getAllowServices() {
@@ -134,13 +140,4 @@ public class ApiAuth extends AbstractEntity implements TreeNode<ApiAuth> {
         return services;
     }
 
-    @Override
-    public List<ApiAuth> getChildren() {
-        return null;
-    }
-
-    @Override
-    public void setChildren(List<ApiAuth> children) {
-
-    }
 }

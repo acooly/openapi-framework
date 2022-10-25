@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 /**
- *
  * @author zhangpu
  * @date 2021-03-26 15:40
  */
@@ -32,8 +31,9 @@ public class customLoginApiServiceImpl implements AppApiLoginService {
         String requestIp = apiContext.getRequestIp();
         // do auth...
         // String customerId = yourAuthService.auth(username,password,requestIp);
+        String customerId = "12345678901234567890";
         LoginDto loginDto = new LoginDto();
-        loginDto.setCustomerId("000000");
+        loginDto.setCustomerId(customerId);
         loginDto.ext("x", "o");
         return loginDto;
     }

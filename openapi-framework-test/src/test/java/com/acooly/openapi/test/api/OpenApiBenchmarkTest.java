@@ -29,8 +29,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class OpenApiBenchmarkTest extends AbstractApiServieTests {
 
     {
-        accessKey = "210323212041022F0007";
-        secretKey = "8f00a552a051c3cb3c480f2620b662d1";
+        accessKey = "210323212041022F0007#12345678901234567890";
+        secretKey = "d318e79e3c9c264d89db781962772df9";
     }
 
     @Test

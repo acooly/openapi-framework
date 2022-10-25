@@ -16,7 +16,6 @@ import com.acooly.core.utils.Servlets;
 import com.acooly.core.utils.Strings;
 import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.core.utils.enums.WhetherStatus;
-import com.acooly.openapi.framework.common.enums.ApiBusiType;
 import com.acooly.openapi.framework.common.enums.SecretType;
 import com.acooly.openapi.framework.common.enums.SignType;
 import com.acooly.openapi.framework.common.utils.AccessKeys;
@@ -29,7 +28,6 @@ import com.acooly.openapi.framework.service.service.ApiAuthService;
 import com.acooly.openapi.framework.service.service.ApiMetaServiceService;
 import com.acooly.openapi.framework.service.service.ApiPartnerService;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -71,8 +69,11 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
             Long parentId = Servlets.getLongParameter("id");
             String serviceCode = Servlets.getParameter("serviceCode");
             Map<String, Object> map = getSearchParams(request);
+
             if (parentId == null) {
-                map.put("NULL_parentId", 0L);
+                if (map.isEmpty()) {
+                    map.put("NULL_parentId", 0L);
+                }
             } else {
                 map.put("EQ_parentId", parentId);
             }

@@ -49,6 +49,13 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
     @Autowired
     private ApiAuthAclService apiAuthAclService;
 
+
+    @Transactional(rollbackFor = Throwable.class)
+    @Override
+    public void removeByParentId(Long parentId) {
+        getEntityDao().deleteByParentId(parentId);
+    }
+
     @Override
     public ApiAuth findByAccesskey(String accesskey) {
         return this.getEntityDao().findByAccesskey(accesskey);
@@ -101,16 +108,12 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
     @Transactional(rollbackFor = Throwable.class)
     public void removeById(Serializable id) throws BusinessException {
         ApiAuth apiAuth = get(id);
-        if (apiAuth == null) {
-            log.warn("ApiAuth 删除 失败：id（{}）对应的对象不存在。", id);
-            throw new BusinessException(CommonErrorCodes.OBJECT_NOT_EXIST);
+        if (apiAuth != null) {
+            // 级联删除子，目前只设计2层结构
+            removeByParentId(apiAuth.getId());
+            // 调整逻辑为级联删除ACLs
+            apiAuthAclService.removeByAuthNo(apiAuth.getAuthNo());
         }
-//        if (Collections3.isNotEmpty(apiAuthAclService.queryAcls(apiAuth.getAccessKey()))) {
-//            log.warn("ApiAuth 删除 失败：该认证对象还存在已分配的ACL权限", id);
-//            throw new BusinessException(CommonErrorCodes.UNSUPPORTED_ERROR, "该认证对象还存在已分配的ACL权限");
-//        }
-        // 调整逻辑为级联删除ACLs
-        apiAuthAclService.removeByAuthNo(apiAuth.getAuthNo());
         super.removeById(id);
         eventBus.publish(new ApiUpdateEvent(apiAuth));
     }

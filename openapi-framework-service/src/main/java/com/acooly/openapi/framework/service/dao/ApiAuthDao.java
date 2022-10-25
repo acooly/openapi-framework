@@ -8,6 +8,7 @@ package com.acooly.openapi.framework.service.dao;
 
 import com.acooly.module.mybatis.EntityMybatisDao;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -21,6 +22,15 @@ import java.util.List;
  * @author qiubo
  */
 public interface ApiAuthDao extends EntityMybatisDao<ApiAuth> {
+
+    /**
+     * 根据父节点ID删除
+     *
+     * @param parentId
+     * @return
+     */
+    @Delete("delete from api_auth where parent_id = #{parentId}")
+    void deleteByParentId(@Param("parentId") Long parentId);
 
     /**
      * 根据accesskey查询

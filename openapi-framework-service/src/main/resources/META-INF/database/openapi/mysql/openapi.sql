@@ -4,7 +4,7 @@
 DROP TABLE IF EXISTS `api_order_info`;
 CREATE TABLE `api_order_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `access_key` varchar(40) NOT NULL COMMENT '访问key',
+  `access_key` varchar(45) NOT NULL COMMENT '访问key',
   `partner_id` varchar(40) NOT NULL COMMENT '商户ID',
   `gid` varchar(40) NOT NULL COMMENT '统一流水',
   `request_no` varchar(40) NOT NULL COMMENT '请求号',
@@ -29,8 +29,8 @@ CREATE TABLE `api_order_info` (
 CREATE TABLE `api_notify_message` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `gid` varchar(40) DEFAULT NULL,
-  `partner_id` varchar(40) DEFAULT NULL,
-  `request_no` varchar(40) DEFAULT NULL,
+  `partner_id` varchar(32) DEFAULT NULL,
+  `request_no` varchar(32) DEFAULT NULL,
   `merch_order_no` varchar(40) DEFAULT NULL,
   `message_type` varchar(16) NOT NULL,
   `protocol` varchar(40) DEFAULT NULL COMMENT '报文协议',
@@ -80,6 +80,7 @@ CREATE TABLE `api_auth` (
   `permissions` varchar(1024) DEFAULT NULL COMMENT '访问权限',
   `whitelist_check` VARCHAR(16) NULL COMMENT '白名单验证',
   `whitelist` VARCHAR(127) NULL COMMENT '白名单',
+  `expired_time` DATETIME NULL COMMENT '有效期',
   `status` VARCHAR(16) NULL DEFAULT 'enable' COMMENT '状态',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',

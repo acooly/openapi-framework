@@ -36,12 +36,13 @@
     }
 
     function manage_apiAuth_action_show(row) {
-        var html = "";
+        var html = "<div class=\"btn-group btn-group-xs\">";
         if (!row.parentId) {
-            html = "<a onclick=\"$.acooly.framework.edit({url:'/manage/openapi/apiAuth/edit.html',id:'" + row.id + "',entity:'apiAuth',width:600,height:600});\" href=\"#\" title=\"编辑\"><i class=\"fa fa-pencil fa-lg fa-fw fa-col\"></i></a>";
+            html += "<a onclick=\"$.acooly.framework.edit({url:'/manage/openapi/apiAuth/edit.html',id:'" + row.id + "',entity:'apiAuth',width:600,height:600});\" class=\"btn btn-outline-primary btn-xs\" href=\"#\" title=\"编辑\"><i class=\"fa fa-pencil\"></i> 编辑</a>"
             // " <a onclick=\"$.acooly.framework.show('/manage/openapi/apiAuth/show.html?id="+row.id+"',500,400);\" href=\"#\" title=\"查看\"><i class=\"fa fa-file-o fa-lg fa-fw fa-col\"></i></a>";
         }
-        html += "<a onclick=\"$.acooly.framework.remove('/manage/openapi/apiAuth/deleteJson.html','" + row.id + "','manage_apiAuth_datagrid');\" href=\"#\" title=\"删除\"><i class=\"fa fa-trash-o fa-lg fa-fw fa-col\"></i></a>"
+        html += "<a onclick=\"$.acooly.framework.remove('/manage/openapi/apiAuth/deleteJson.html','" + row.id + "','manage_apiAuth_datagrid');\" class=\"btn btn-outline-primary btn-xs\" href=\"#\" title=\"删除\"><i class=\"fa fa-trash-o\"></i> 删除</a>";
+        html += "</div>";
         return html;
     }
 
@@ -81,7 +82,7 @@
 
     <!-- 列表和工具栏 -->
     <div data-options="region:'center',border:false">
-        <table id="manage_apiAuth_datagrid" class="easyui-treegrid" url="/manage/openapi/apiAuth/loadLevel.html" toolbar="#manage_apiAuth_toolbar" fit="true" border="false" fitColumns="false"
+        <table id="manage_apiAuth_datagrid" class="easyui-treegrid" url="/manage/openapi/apiAuth/loadLevel.html" toolbar="#manage_apiAuth_toolbar" fit="true" fitColumns="false"
                pagination="true" idField="id" pageSize="20" pageList="[ 10, 20, 30, 40, 50 ]" sortName="id" sortOrder="desc" checkOnSelect="true" selectOnCheck="true" singleSelect="true"
                treeField="accessKey" data-options="loadFilter:manage_apiAuth_datagrid_loadFilter,onSelect:manage_apiAuth_onClickRow">
             <thead>
@@ -95,8 +96,12 @@
                 <th field="whitelistCheck" formatter="mappingFormatter">启用白名单</th>
                 <th field="whitelist">白名单</th>
                 <th field="status" formatter="mappingFormatter">状态</th>
-                <th field="rowActions" data-options="formatter:function(value, row, index){return manage_apiAuth_action_show(row)}">动作</th>
+                <th field="createTime" formatter="dateTimeFormatter">创建时间</th>
+                <th field="updateTime" formatter="dateTimeFormatter">修改时间</th>
             </tr>
+            </thead>
+            <thead frozen="true">
+            <th field="rowActions" data-options="formatter:function(value, row, index){return manage_apiAuth_action_show(row)}">动作</th>
             </thead>
         </table>
 
@@ -118,7 +123,7 @@
         <div class="easyui-tabs" fit="true">
             <div title="服务ACL列表">
                 <table id="manage_apiAuthAcl_datagrid" class="easyui-datagrid" toolbar="#manage_apiAuthAcl_toolbar"
-                       fit="true" border="false" fitColumns="false" idField="id" sortName="id" sortOrder="desc"
+                       fit="true" fitColumns="false" idField="id" sortName="id" sortOrder="desc"
                        checkOnSelect="true" selectOnCheck="true" singleSelect="true">
                     <thead>
                     <tr>

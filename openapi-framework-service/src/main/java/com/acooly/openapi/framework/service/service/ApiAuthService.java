@@ -22,6 +22,14 @@ import java.util.Map;
  * @author qiubo
  */
 public interface ApiAuthService extends EntityService<ApiAuth> {
+
+    /**
+     * 根据父ID删除全部子
+     *
+     * @param parentId
+     */
+    void removeByParentId(Long parentId);
+
     /**
      * 根据AccessKey查询认证对象
      *
