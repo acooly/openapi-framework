@@ -31,14 +31,6 @@ public class AppRequest extends ApiRequest {
     @OpenApiField(desc = "APP版本号", constraint = "APP程序版本号", demo = "1.2.0", ordinal = ApiConstants.ORDINAL_MAX + 2)
     private String appVersion;
 
-    /**
-     * 用户唯一标志
-     * 用户名(userNo) or 会员编码(memberNo) or 客户编码(customerId)
-     */
-    @Size(min = 6, max = 32)
-    @OpenApiField(desc = "用户标志", constraint = "用户唯一标志", demo = "12345678901234567890", ordinal = ApiConstants.ORDINAL_MAX + 3)
-    private String customerId;
-
     public String getDeviceId() {
         return deviceId;
     }
