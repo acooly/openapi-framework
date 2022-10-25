@@ -60,26 +60,27 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
             // OpenApi的login不提供App客户端请求参数的存储和处理，交给集成工程的login接口实现
             LoginDto dto = appApiLoginService.login(request, ApiContextHolder.getApiContext());
             response.setCustomerId(dto.getCustomerId());
-            String accessKey = requestAccessKey + "#" + request.getUsername();
+            // 子访问码为主访码前缀+"#"+当前登录用户的唯一标志
+            String subAccessKey = requestAccessKey + "#" + dto.getCustomerId();
             String secretKey = null;
-            ApiAuth apiAuth = apiAuthService.findByAccesskey(accessKey);
-            if(apiAuth != null){
+            ApiAuth apiAuth = apiAuthService.findByAccesskey(subAccessKey);
+            if (apiAuth != null) {
                 secretKey = apiAuth.getSecretKey();
             }
             if (Strings.isBlank(secretKey)) {
                 secretKey = AccessKeys.newSecretKey();
-                authInfoRealmManageService.createAuthenticationInfo(requestAccessKey, accessKey, secretKey);
+                authInfoRealmManageService.createAuthenticationInfo(requestAccessKey, subAccessKey, secretKey);
                 // 这里不用设置动态accessKey的权限，权限与其父accessKey一致。
             } else {
                 if (openAPIProperties.getLogin().isSecretKeyDynamic()) {
                     secretKey = AccessKeys.newSecretKey();
-                    authInfoRealmManageService.updateAuthenticationInfo(accessKey, secretKey);
-                    cacheableAuthInfoRealm.removeCache(accessKey);
+                    authInfoRealmManageService.updateAuthenticationInfo(subAccessKey, secretKey);
+                    cacheableAuthInfoRealm.removeCache(subAccessKey);
                 }
             }
             response.getExt().putAll(dto.getExt());
             response.setCustomerId(dto.getCustomerId());
-            response.setAccessKey(accessKey);
+            response.setAccessKey(subAccessKey);
             response.setSecretKey(secretKey);
         } catch (BusinessException be) {
             throw be;
