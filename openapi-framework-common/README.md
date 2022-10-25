@@ -22,6 +22,15 @@ OpenApi开放平台框架提供完善的网关服务开放平台的完整解决�
 
 ## 3. changelog
 
+### v5.2.0-SNAPSHOT.20221025
+
+* 2022-10-25 - 迁移ACL设置的按钮到顶部统一的工具栏，节省一行空间。 - [zhangpu] 591921e
+* 2022-10-25 - 优化认证授权对象列表的展示和查询，支持树形结构展示父子秘钥；可通过子秘钥的部分字符串查询；优化秘钥删除功能，删除时候，同时级联删除子对象，级联删除对应的ACL权限 - [zhangpu] 3b9e27f
+* 2022-10-25 - 修正：档接入认证对象或密码状态不正确（未认证状态下），响应对应错误的进行签名的BUG - [zhangpu] baafefd
+* 2022-10-25 - 修正login接口登录认证时BUG，调整subAccessKey的生成逻辑为：mainAccessKey#customerId，以便于不用查询数据库关系直接获取当前操作的接入方下用户标志 - [zhangpu] 33c2da3
+* 2022-10-25 - 根据约定(subAccessKey=AccessKey#CustomerId)，封装AccessKeys获取主AccessKey和CustomerId的静态工具类，并在ApiContext中提供访问方法，在OpenApi服务或执行链（集成扩展时）执行时，可通过静态方法直接访问:`ApiContextHolder.getContext().getgetCanonicalAccessKey()`,`ApiContextHolder.getContext().getCustomerId()`,请参考：`com.acooly.openapi.framework.demo.service.api.DemoOrderCreateApiService` - [zhangpu] 851a2d4
+* 2022-09-22 - 完成OpenApi的按需MOCK（使用文档的demo作为响应数据）功能开发， - [zhangpu] 0210b5f
+
 ### v5.2.0
 
 * 从5.1.4升级为5.2.0，准备启动spring-cloud的feign方式调用支持和Demo编写
