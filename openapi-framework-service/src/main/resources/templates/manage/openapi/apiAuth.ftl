@@ -116,13 +116,15 @@
         <div id="manage_apiAuth_toolbar">
             <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.create({url:'/manage/openapi/apiAuth/create.html',entity:'apiAuth',width:600,height:600})"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
             <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/openapi/apiAuth/deleteJson.html','manage_apiAuth_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>
+            <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_apiAuth_showSetting();"><i class="fa fa-cog fa-lg fa-fw fa-col"></i>设置ACL权限</a>
         </div>
     </div>
 
     <div data-options="region:'south',border:false" style="height:45%;">
         <div class="easyui-tabs" fit="true">
             <div title="服务ACL列表">
-                <table id="manage_apiAuthAcl_datagrid" class="easyui-datagrid" toolbar="#manage_apiAuthAcl_toolbar"
+                <table id="manage_apiAuthAcl_datagrid" class="easyui-datagrid"
+<#--                       toolbar="#manage_apiAuthAcl_toolbar"-->
                        fit="true" fitColumns="false" idField="id" sortName="id" sortOrder="desc"
                        checkOnSelect="true" selectOnCheck="true" singleSelect="true">
                     <thead>
@@ -148,7 +150,7 @@
 
                 <div id="manage_apiAuthAcl_toolbar">
                     <#--                    <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/openapi/apiAuthAcl/deleteJson.html','manage_apiAuthAcl_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>-->
-                    <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_apiAuth_showSetting();"><i class="fa fa-cog fa-lg fa-fw fa-col"></i>设置ACL权限</a>
+
                 </div>
             </div>
         </div>
