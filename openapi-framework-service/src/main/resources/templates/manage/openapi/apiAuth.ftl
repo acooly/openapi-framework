@@ -1,6 +1,4 @@
-<#if ssoEnable>
-    <#include "/manage/common/ssoInclude.ftl">
-</#if>
+<#if ssoEnable><#include "/manage/common/ssoInclude.ftl"></#if>
 <script type="text/javascript">
 
     $(function () {
@@ -83,9 +81,9 @@
 
     <!-- 列表和工具栏 -->
     <div data-options="region:'center',border:false">
-        <table id="manage_apiAuth_datagrid" class="easyui-datagrid" url="/manage/openapi/apiAuth/loadLevel.html" toolbar="#manage_apiAuth_toolbar" fit="true" border="false" fitColumns="false"
+        <table id="manage_apiAuth_datagrid" class="easyui-treegrid" url="/manage/openapi/apiAuth/loadLevel.html" toolbar="#manage_apiAuth_toolbar" fit="true" border="false" fitColumns="false"
                pagination="true" idField="id" pageSize="20" pageList="[ 10, 20, 30, 40, 50 ]" sortName="id" sortOrder="desc" checkOnSelect="true" selectOnCheck="true" singleSelect="true"
-               treeField="accessKey" data-options="onClickRow:manage_apiAuth_onClickRow">
+               treeField="accessKey" data-options="loadFilter:manage_apiAuth_datagrid_loadFilter,onSelect:manage_apiAuth_onClickRow">
             <thead>
             <tr>
                 <th field="showCheckboxWithId" checkbox="true" data-options="formatter:function(value, row, index){ return row.id }">编号</th>
@@ -137,14 +135,14 @@
                 </table>
 
                 <!-- 每行的Action动作模板 -->
-<#--                <div id="manage_apiAuthAcl_action" style="display: none;">-->
-<#--                    <a onclick="$.acooly.framework.edit({url:'/manage/openapi/apiAuth/edit.html',id:'{0}',entity:'apiAuth',width:500,height:400});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>-->
-<#--                    <a onclick="$.acooly.framework.show('/manage/openapi/apiAuth/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>-->
-<#--                    <a onclick="$.acooly.framework.remove('/manage/openapi/apiAuth/deleteJson.html','{0}','manage_apiAuth_datagrid');" href="#" title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>-->
-<#--                </div>-->
+                <#--                <div id="manage_apiAuthAcl_action" style="display: none;">-->
+                <#--                    <a onclick="$.acooly.framework.edit({url:'/manage/openapi/apiAuth/edit.html',id:'{0}',entity:'apiAuth',width:500,height:400});" href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>-->
+                <#--                    <a onclick="$.acooly.framework.show('/manage/openapi/apiAuth/show.html?id={0}',500,400);" href="#" title="查看"><i class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>-->
+                <#--                    <a onclick="$.acooly.framework.remove('/manage/openapi/apiAuth/deleteJson.html','{0}','manage_apiAuth_datagrid');" href="#" title="删除"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i></a>-->
+                <#--                </div>-->
 
                 <div id="manage_apiAuthAcl_toolbar">
-<#--                    <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/openapi/apiAuthAcl/deleteJson.html','manage_apiAuthAcl_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>-->
+                    <#--                    <a href="#" class="easyui-linkbutton" plain="true" onclick="$.acooly.framework.removes('/manage/openapi/apiAuthAcl/deleteJson.html','manage_apiAuthAcl_datagrid')"><i class="fa fa-trash-o fa-lg fa-fw fa-col"></i>批量删除</a>-->
                     <a href="#" class="easyui-linkbutton" plain="true" onclick="manage_apiAuth_showSetting();"><i class="fa fa-cog fa-lg fa-fw fa-col"></i>设置ACL权限</a>
                 </div>
             </div>
@@ -175,7 +173,8 @@
         });
     }
 
-    function manage_apiAuth_onClickRow(rowid, rowData) {
+    function manage_apiAuth_onClickRow(rowData) {
+        console.info("row:", rowData)
         manage_apiAuth_reloadSubList(rowData.authNo);
     }
 

@@ -66,6 +66,7 @@ public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageSer
         ApiAuth apiAuth = apiAuthService.findByAccesskey(accessKey);
         apiAuth.setSecretKey(sercretKey);
         apiAuthService.update(apiAuth);
+
     }
 
     @Override

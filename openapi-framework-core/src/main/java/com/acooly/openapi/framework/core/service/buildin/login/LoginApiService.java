@@ -16,7 +16,9 @@ import com.acooly.openapi.framework.common.utils.AccessKeys;
 import com.acooly.openapi.framework.core.OpenAPIProperties;
 import com.acooly.openapi.framework.core.auth.realm.impl.CacheableAuthInfoRealm;
 import com.acooly.openapi.framework.core.service.base.BaseApiService;
+import com.acooly.openapi.framework.service.domain.ApiAuth;
 import com.acooly.openapi.framework.service.domain.LoginDto;
+import com.acooly.openapi.framework.service.service.ApiAuthService;
 import com.acooly.openapi.framework.service.service.AppApiLoginService;
 import com.acooly.openapi.framework.service.service.AuthInfoRealmManageService;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +47,9 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
     @Autowired(required = false)
     private AuthInfoRealmManageService authInfoRealmManageService;
 
+    @Autowired
+    private ApiAuthService apiAuthService;
+
     @Resource
     private CacheableAuthInfoRealm cacheableAuthInfoRealm;
 
@@ -56,7 +61,11 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
             LoginDto dto = appApiLoginService.login(request, ApiContextHolder.getApiContext());
             response.setCustomerId(dto.getCustomerId());
             String accessKey = requestAccessKey + "#" + request.getUsername();
-            String secretKey = authInfoRealmManageService.getSercretKey(accessKey);
+            String secretKey = null;
+            ApiAuth apiAuth = apiAuthService.findByAccesskey(accessKey);
+            if(apiAuth != null){
+                secretKey = apiAuth.getSecretKey();
+            }
             if (Strings.isBlank(secretKey)) {
                 secretKey = AccessKeys.newSecretKey();
                 authInfoRealmManageService.createAuthenticationInfo(requestAccessKey, accessKey, secretKey);

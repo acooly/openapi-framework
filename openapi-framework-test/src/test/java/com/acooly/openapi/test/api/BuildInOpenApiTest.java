@@ -21,10 +21,13 @@ import java.util.UUID;
 public class BuildInOpenApiTest extends AbstractApiServieTests {
 
     static String content = UUID.randomUUID().toString();
-
-
     String payerUserId = "09876543211234567890";
     Money amount = Money.amout("200");
+
+    {
+        accessKey = "210323212041022F0007";
+        secretKey = "8f00a552a051c3cb3c480f2620b662d1";
+    }
 
     /**
      * 测试登录接口
