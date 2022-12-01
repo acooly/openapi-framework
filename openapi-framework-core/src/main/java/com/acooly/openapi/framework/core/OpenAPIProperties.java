@@ -42,6 +42,12 @@ public class OpenAPIProperties {
     public static final String PREFIX = "acooly.openapi";
 
     /**
+     * 网关入口URLs配置，可配置多个，如不配置，则默认：/gateway.do
+     */
+    private List<String> gateways = Lists.newArrayList();
+
+
+    /**
      * 是否在api中存储非查询类请求
      * 注意：如果开启，则默认查询类请求无法检测requestNo唯一性
      */

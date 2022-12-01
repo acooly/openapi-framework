@@ -1,5 +1,6 @@
 package com.acooly.openapi.framework.core;
 
+import com.acooly.core.utils.Collections3;
 import com.acooly.openapi.framework.common.cache.OpenApiCacheManager;
 import com.acooly.openapi.framework.core.auth.ApiAuthorization;
 import com.acooly.openapi.framework.core.auth.impl.DefaultApiAuthorization;
@@ -12,7 +13,6 @@ import com.acooly.openapi.framework.core.servlet.OpenAPIDispatchServlet;
 import com.acooly.openapi.framework.service.service.AppApiLoginService;
 import com.acooly.openapi.framework.service.service.OrderInfoService;
 import com.acooly.openapi.framework.service.service.impl.NothingToDoOrderInfoService;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
@@ -22,6 +22,8 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 import static com.acooly.openapi.framework.core.OpenAPIProperties.PREFIX;
 
@@ -65,7 +67,11 @@ public class OpenApiConfiguration {
     @Bean
     public ServletRegistrationBean openAPIServlet() {
         ServletRegistrationBean bean = new ServletRegistrationBean();
-        bean.setUrlMappings(Lists.newArrayList("/gateway.do"));
+        List<String> urlMappings = properties.getGateways();
+        if (Collections3.isEmpty(urlMappings)) {
+            urlMappings.add("/gateway.do");
+        }
+        bean.setUrlMappings(urlMappings);
         OpenAPIDispatchServlet openAPIDispatchServlet = new OpenAPIDispatchServlet();
         bean.setServlet(openAPIDispatchServlet);
         bean.setLoadOnStartup(1);
