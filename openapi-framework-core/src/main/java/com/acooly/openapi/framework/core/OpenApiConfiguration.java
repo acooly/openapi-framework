@@ -14,6 +14,7 @@ import com.acooly.openapi.framework.service.service.AppApiLoginService;
 import com.acooly.openapi.framework.service.service.OrderInfoService;
 import com.acooly.openapi.framework.service.service.impl.NothingToDoOrderInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -34,6 +35,7 @@ import static com.acooly.openapi.framework.core.OpenAPIProperties.PREFIX;
 @EnableConfigurationProperties({OpenAPIProperties.class})
 @ConditionalOnProperty(value = PREFIX + ".enable", matchIfMissing = true)
 @ComponentScan(basePackages = "com.acooly.openapi.framework")
+@AutoConfigureAfter
 public class OpenApiConfiguration {
     @Autowired
     private OpenAPIProperties properties;

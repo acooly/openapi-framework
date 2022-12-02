@@ -50,22 +50,6 @@
 
         <dependency>
             <groupId>com.acooly</groupId>
-            <artifactId>acooly-taglibs</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.servlet.jsp</groupId>
-                    <artifactId>jsp-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.acooly</groupId>
             <artifactId>acooly-component-jpa</artifactId>
         </dependency>
         <dependency>
