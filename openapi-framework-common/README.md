@@ -22,6 +22,10 @@ OpenApi开放平台框架提供完善的网关服务开放平台的完整解决�
 
 ## 3. changelog
 
+### v5.2.0-SNAPSHOT.20221201
+
+2022-12-01 - 新增特性：可配置网关的多个入口地址`acooly.openapi.gateways[0~n]`，如果不配置，则默认为:/gateway.do。例如配置：`acooly.openapi.gateways[0]=/a/b/gateway.x` - [zhangpu] 0f5cf29
+
 ### v5.2.0-SNAPSHOT.20221025
 
 * 2022-10-25 - 迁移ACL设置的按钮到顶部统一的工具栏，节省一行空间。 - [zhangpu] 591921e

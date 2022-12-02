@@ -238,6 +238,15 @@ OpenApi支持接口服务按需MOCK，mock的接口以@OpenApiField.demo作为mo
 1. 需要打开全局mock开关：`acooly.openapi.mock.enable=true`
 2. 对OpenApi服务的@OpenApiService的mock属性设置为true：`@OpenApiService(mock=true)`
 
+### 2.3.10 网关多入口URLs配置
+
+从`v5.2.0-SNAPSHOT`开始，支持配置网关的多个入口URL地址，默认不配置则保持原有的`/gateway.do`。
+
+```properties
+acooly.openapi.gateways[0]=/gateway1
+acooly.openapi.gateways[1]=/gateway2.html
+acooly.openapi.gateways[2]=/a/b/gateway.do
+```
 
 # 3. 服务开发
 
