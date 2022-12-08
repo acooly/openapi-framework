@@ -276,8 +276,5 @@
     });
 
 </script>
-
-
-
 	</body>
 </html>

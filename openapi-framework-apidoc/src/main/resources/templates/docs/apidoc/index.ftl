@@ -72,7 +72,9 @@
 <!--end-->
 
 <!--底部-->
-		<@includePage path="/docs/common/footer.html"/>
+<div style="position: fixed;bottom: 0;width: 100%;">
+    <@includePage path="/docs/common/footer.html"/>
+</div>
 <!--end-->
 
 <script>

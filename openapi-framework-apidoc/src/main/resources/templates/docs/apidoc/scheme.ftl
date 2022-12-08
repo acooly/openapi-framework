@@ -9,7 +9,7 @@
 		<!--顶部-->
 		<@includePage path="/docs/common/header.html"/>
 		<!--end-->
-		
+
 		<!--面包屑-->
         <div class="crumb">
             <div class="w1190">
@@ -19,7 +19,7 @@
             </span>
             </div>
         </div>
-		
+
 		<!--正文-->
 		<div class="container">
             <!--左边-->
@@ -63,9 +63,11 @@
             </div>
 		</div>
 		<!--end-->
-		
+
 		<!--底部-->
+        <div style="position: fixed;bottom: 0;width: 100%;">
 		<@includePage path="/docs/common/footer.html"/>
+        </div>
 		<!--end-->
 
 
