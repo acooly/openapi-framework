@@ -32,11 +32,17 @@
                     <div class="doc-header-title"><i class="layui-icon">&#xe62a;</i> ${schemeName}</div>
                 </div>
                 <div class="doc-content">
-
                     <div>
-                        ${apiSchemeDesc.schemeDesc}
+                        <form class="layui-form" action="/docs/scheme/scheme.html" style="margin-top:20px;">
+                            <input type="hidden" name="schemeId" value="${schemeId}">
+                            <div class="layui-form-item">
+                                <div class="layui-input-inline" style="width: 600px;">
+                                    <input type="text" style="width: 600px;" name="key" value="${key}"  placeholder="全局服务码，名称搜索" class="layui-input">
+                                </div>
+                                <button type="submit" class="layui-btn layui-btn-normal">查询</button>
+                            </div>
+                        </form>
                     </div>
-
                     <table class="layui-table" lay-skin="line">
                         <thead>
                         <tr>

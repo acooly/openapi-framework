@@ -95,7 +95,7 @@
                             var anchor;
                             if(e.messageType == 'Request'){ anchor = 'toc421'; }else if(e.messageType == 'Response'){ anchor = 'toc422'; }else{ anchor = 'toc423'; }
                             %>
-                            <td colspan="7">公共参数: <a href="https://acooly.cn/docs/component/openapi-framework-client.html#toc318" target="_blank">公共<%=e.messageType%>报文</a></td>
+                            <td colspan="7">公共参数: <a href="https://acooly.cn/component/openapi/openapi-framework-client" target="_blank">公共<%=e.messageType%>报文</a></td>
                         </tr>
                         <%
                         if(e.apiDocItems && e.apiDocItems.length > 0){

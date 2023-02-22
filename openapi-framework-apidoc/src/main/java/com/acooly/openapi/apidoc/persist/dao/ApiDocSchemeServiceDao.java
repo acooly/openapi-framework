@@ -33,6 +33,14 @@ public interface ApiDocSchemeServiceDao extends EntityMybatisDao<ApiDocSchemeSer
             " order by t2.sort_time,t1.name desc")
     List<ApiDocService> findSchemeService(@Param("schemeNo") String schemeNo);
 
+
+    @Select("select t2.id,t1.service_no,t1.name,t1.version,t1.title,t1.owner,t1.note,t1.manual_note,t1.service_type,t1.busi_type,t2.scheme_no," +
+            "t1.comments,t1.create_time,t1.update_time,t2.sort_time from api_doc_service t1,api_doc_scheme_service t2 " +
+            "where t1.service_no = t2.service_no and t2.scheme_no =  #{schemeNo} and (t1.name like concat('%',#{searchKey},'%') or  t1.title like concat('%',#{searchKey},'%')) " +
+            " order by t2.sort_time,t1.name desc")
+    List<ApiDocService> searchSchemeService(@Param("schemeNo") String schemeNo, @Param("searchKey") String searchKey);
+
+
     @Select("select t1.*,t2.scheme_no from api_doc_service t1,api_doc_scheme_service t2 " +
             "where t1.service_no = t2.service_no " +
             " order by t2.sort_time,t1.name desc")

@@ -1,0 +1,4 @@
+acooly:
+  openapi:
+    mock:
+      enable: true

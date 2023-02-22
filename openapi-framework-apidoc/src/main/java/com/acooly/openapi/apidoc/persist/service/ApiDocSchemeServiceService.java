@@ -26,6 +26,8 @@ public interface ApiDocSchemeServiceService extends EntityService<ApiDocSchemeSe
 
     List<ApiDocSchemeService> findSchemeServices(String schemeNo);
 
+    List<ApiDocService> searchApiDocServices(String schemeNo, String key);
+
     List<ApiDocService> findSchemeApiDocServices(String schemeNo);
 
     void deleteSchemeService(String schemeNo, String serviceNo);
@@ -44,7 +46,7 @@ public interface ApiDocSchemeServiceService extends EntityService<ApiDocSchemeSe
      * @param keywords
      * @return
      */
-    PageInfo<ApiDocService> findContentServicesByKey(PageInfo<ApiDocService> pageInfo,String keywords);
+    PageInfo<ApiDocService> findContentServicesByKey(PageInfo<ApiDocService> pageInfo, String keywords);
 
     /**
      * 下移
@@ -69,6 +71,7 @@ public interface ApiDocSchemeServiceService extends EntityService<ApiDocSchemeSe
 
     /**
      * 删除关联关系
+     *
      * @param id
      */
     void remove(Long id);

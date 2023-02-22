@@ -165,14 +165,19 @@ public class ApiDocSchemePortalController extends AbstractPortalController {
 
 
     protected void doSchemeApis(HttpServletRequest request, Model model) {
-        long id = Long.parseLong(request.getParameter("schemeId"));
+        Long id = Long.parseLong(request.getParameter("schemeId"));
+        String key = Servlets.getParameter(request, "key");
+        if (Strings.isNotBlank(key)) {
+            // 设置为SYSTEM全局SCHEME
+            id = 1L;
+        }
         ApiDocScheme apiScheme = apiDocSchemeService.get(id);
-        List<ApiDocService> entities = apiDocSchemeServiceService.findSchemeApiDocServices(apiScheme.getSchemeNo());
-        model.addAttribute("apis", entities);
         model.addAttribute("schemeName", apiScheme.getTitle());
         model.addAttribute("schemeId", id);
         model.addAttribute("apiScheme", apiScheme);
-
+        List<ApiDocService> entities = apiDocSchemeServiceService.searchApiDocServices(apiScheme.getSchemeNo(), key);
+        model.addAttribute("apis", entities);
+        model.addAttribute("key", key);
 
         ApiDocSchemeDesc apiDocSchemeDesc = apiDocSchemeDescService.findBySchemeNo(apiScheme.getSchemeNo());
         if (apiDocSchemeDesc != null && Strings.isNotBlank(apiDocSchemeDesc.getSchemeDesc())) {

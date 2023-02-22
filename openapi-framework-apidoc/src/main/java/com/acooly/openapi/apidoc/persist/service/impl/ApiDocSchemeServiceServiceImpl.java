@@ -46,6 +46,15 @@ public class ApiDocSchemeServiceServiceImpl extends EntityServiceImpl<ApiDocSche
     }
 
     @Override
+    public List<ApiDocService> searchApiDocServices(String schemeNo, String key) {
+        if (Strings.isNotBlank(key)) {
+            return getEntityDao().searchSchemeService("SYSTEM", key);
+        } else {
+            return findSchemeApiDocServices(schemeNo);
+        }
+    }
+
+    @Override
     public void deleteSchemeService(String schemeNo, String serviceNo) {
         List<ApiDocSchemeService> apiSchemeServiceDocList = apiDocSchemeServiceDao.findSchemeServicesBySchemeIdAndServiceNo(schemeNo, serviceNo);
         for (ApiDocSchemeService apiSchemeServiceDoc : apiSchemeServiceDocList) {
