@@ -9,8 +9,8 @@
                 <a href="javascript:;">文档中心</a>
                 <dl class="layui-nav-child"> <!-- 二级菜单 -->
                     <#--<dd><a href="#">网关架构</a></dd>-->
-                    <dd><a target="_blank" href="https://acooly.cn/docs/component/openapi-framework-client.html">接入指南</a></dd>
-                    <dd><a target="_blank" href="https://acooly.cn/docs/component/openapi-framework-common-util.html">接入工具</a></dd>
+                    <dd><a target="_blank" href="https://acooly.cn/component/openapi/openapi-framework-client">接入指南</a></dd>
+                    <dd><a target="_blank" href="https://acooly.cn/component/openapi/openapi-framework-common-util">接入工具</a></dd>
                 </dl>
             </li>
         <li class="layui-nav-item">
