@@ -108,10 +108,12 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
                 return;
             }
             Map<String, ApiDocScheme> atMap = apiDocSchemes.stream().collect(Collectors.toMap(ApiDocScheme::getSchemeNo, apiDocScheme -> apiDocScheme));
-            List<ApiDocScheme> persists = findBySchemeTypeAndCategory(SchemeTypeEnum.auto.code(), ApiDocProperties.DEFAULT_CATEGORY);
+            List<ApiDocScheme> persists = findBySchemeTypeAndCategory(null, ApiDocProperties.DEFAULT_CATEGORY);
             if (persists == null) {
                 persists = Lists.newArrayList();
             }
+            // 删除自定义custom的处理
+            persists.removeIf(persist -> persist.getSchemeType() == SchemeTypeEnum.custom);
             List<Serializable> needRemoves = Lists.newArrayList();
             // 删除注解中无，而数据库中存在的方案
             for (ApiDocScheme scheme : persists) {
@@ -125,7 +127,7 @@ public class ApiDocSchemeServiceImpl extends EntityServiceImpl<ApiDocScheme, Api
             if (apiDocProperties.isDefaultSchemeEnable()) {
                 for (ApiDocScheme scheme : commonSchemes) {
                     // 删除自动生成已持久化的未匹配的scheme
-                    if (atMap.get(scheme.getSchemeNo()) != null) {
+                    if (atMap.get(scheme.getSchemeNo()) == null) {
                         needRemoves.add(scheme.getId());
                     }
                 }
