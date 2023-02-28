@@ -1,28 +1,28 @@
 <script type="text/javascript">
     $(function () {
         $("#manage_apiDocScheme_datagrid${category}").treegrid({
-            idField :'id',
+            idField: 'id',
             treeField: 'title',
             url: "${pageContext.request.contextPath}/manage/apidoc/apiDocScheme/loadTree.html?category=${category}",
-            onLoadSuccess: function(row){
-                $(this).treegrid('enableDnd', row?row.id:null);
+            onLoadSuccess: function (row) {
+                $(this).treegrid('enableDnd', row ? row.id : null);
             },
-            onBeforeDrop :function(targetRow, sourceRow, point){
-                if (!point || point == null|| !targetRow || targetRow == null || !sourceRow || sourceRow == null){
+            onBeforeDrop: function (targetRow, sourceRow, point) {
+                if (!point || point == null || !targetRow || targetRow == null || !sourceRow || sourceRow == null) {
                     return false;
                 }
                 $.ajax({
-                    url : '/manage/apidoc/apiDocScheme/move.html',
-                    data : {
-                        sourceId : sourceRow.id,
-                        targetId : targetRow.id,
-                        point : point
+                    url: '/manage/apidoc/apiDocScheme/move.html',
+                    data: {
+                        sourceId: sourceRow.id,
+                        targetId: targetRow.id,
+                        point: point
                     },
-                    success : function(data, status) {
+                    success: function (data, status) {
                         if (data.success) {
                             $("#manage_apiDocScheme_datagrid${category}").treegrid('reload');
                             // console.info("save move success!");
-                        }else {
+                        } else {
                             return false;
                         }
                     }
@@ -43,7 +43,7 @@
                         标题: <input type="text" class="text" size="15" name="search_LIKE_title"/>
                         <a href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:false"
                            onclick="$.acooly.framework.search('manage_apiDocScheme_searchform${category}','manage_apiDocScheme_datagrid${category}');"><i
-                                class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
+                                    class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
                     </div>
                 </td>
             </tr>
@@ -74,12 +74,12 @@
 
         <!-- 每行的Action动作模板 -->
         <div id="manage_apiDocScheme_action_create${category}" style="display: none;">
-            <a onclick="$.acooly.framework.create({url:'/manage/apidoc/apiDocScheme/create.html?parentId={0}&category=${category}',form: 'manage_apiDocScheme_editform${category}', datagrid: 'manage_apiDocScheme_datagrid${category}',width:400,height:280,reload:true});"
+            <a onclick="$.acooly.framework.create({url:'/manage/apidoc/apiDocScheme/create.html?parentId={0}&category=${category}',form: 'manage_apiDocScheme_editform${category}', datagrid: 'manage_apiDocScheme_datagrid${category}',width:500,height:300,reload:true});"
                href="#" title="添加"><i class="fa fa-plus-circle fa-lg fa-fw fa-col"></i></a>
         </div>
 
         <div id="manage_apiDocScheme_action_edit${category}" style="display: none;">
-            <a onclick="$.acooly.framework.edit({url:'/manage/apidoc/apiDocScheme/edit.html?category=${category}',id:'{0}',form: 'manage_apiDocScheme_editform${category}', datagrid: 'manage_apiDocScheme_datagrid${category}',width:400,height:280,reload:true});"
+            <a onclick="$.acooly.framework.edit({url:'/manage/apidoc/apiDocScheme/edit.html?category=${category}',id:'{0}',form: 'manage_apiDocScheme_editform${category}', datagrid: 'manage_apiDocScheme_datagrid${category}',width:500,height:300,reload:true});"
                href="#" title="编辑"><i class="fa fa-pencil fa-lg fa-fw fa-col"></i></a>
         </div>
         <div id="manage_apiDocScheme_action_remove${category}" style="display: none;">
@@ -94,22 +94,19 @@
             <a href="#" onclick="$.acooly.framework.confirmSubmit('/manage/apidoc/apiDocScheme/changeStatus.html?status=offShelf','{0}','manage_apiDocScheme_datagrid${category}','确定','您是否要提交该操作?')"
                title="下架">下架</a>
         </div>
-        <div id="manage_apiDocScheme_action_doc${category}" style="display: none;">
-            <a onclick="$.acooly.framework.edit({url:'/manage/apidoc/apiDocSchemeDesc/createOrEdit.html?schemeNo={1}',id:'{0}',form: 'manage_apiDocSchemeDesc_editform', datagrid: 'manage_apiDocScheme_datagrid${category}',width:1200,height:800,reload:false});"
-               href="#" title="文章内容"><i class="fa fa-file-text fa-lg fa-fw fa-col" aria-hidden="true"></i></a>
-        </div>
+<#--        <div id="manage_apiDocScheme_action_doc${category}" style="display: none;">-->
+<#--            <a onclick="$.acooly.framework.edit({url:'/manage/apidoc/apiDocSchemeDesc/createOrEdit.html?schemeNo={1}',id:'{0}',form: 'manage_apiDocSchemeDesc_editform', datagrid: 'manage_apiDocScheme_datagrid${category}',width:1200,height:800,reload:false});"-->
+<#--               href="#" title="文章内容"><i class="fa fa-file-text fa-lg fa-fw fa-col" aria-hidden="true"></i></a>-->
+<#--        </div>-->
         <div id="manage_apiDocScheme_action_api${category}" style="display: none;">
             <a href="#" onclick="showApis${category}('{0}','{1}')" title="关联api">关联api</a>
         </div>
-    <#--            <a onclick="$.acooly.framework.show('/manage/module/security/apiDocScheme/show.html?id={0}',600,500);" href="#" title="查看"><i-->
-    <#--                        class="fa fa-file-o fa-lg fa-fw fa-col"></i></a>-->
-
 
         <!-- 表格的工具栏 -->
         <div id="manage_apiDocScheme_toolbar${category}">
             <a href="#" class="easyui-linkbutton" plain="true"
-               onclick="$.acooly.framework.create({url:'/manage/apidoc/apiDocScheme/create.html?category=${category}',form: 'manage_apiDocScheme_editform${category}', datagrid: 'manage_apiDocScheme_datagrid${category}',width:400,height:280})"><i
-                    class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
+               onclick="$.acooly.framework.create({url:'/manage/apidoc/apiDocScheme/create.html?category=${category}',form: 'manage_apiDocScheme_editform${category}', datagrid: 'manage_apiDocScheme_datagrid${category}',width:500,height:300})"><i
+                        class="fa fa-plus-circle fa-lg fa-fw fa-col"></i>添加</a>
         </div>
     </div>
 
@@ -157,17 +154,17 @@
 
     var lastSchemeNo = "";
 
-    function manage_apiDocScheme_action_formatter${category}(value, row, index){
+    function manage_apiDocScheme_action_formatter${category}(value, row, index) {
         let actionHtml = "";
         actionHtml += formatString($('#manage_apiDocScheme_action_create${category}').html(), row.id);
         actionHtml += formatString($('#manage_apiDocScheme_action_edit${category}').html(), row.id);
         if (row.subCount == 0) {
-            actionHtml += formatString($('#manage_apiDocScheme_action_doc${category}').html(), row.id, row.schemeNo);
+            <#--actionHtml += formatString($('#manage_apiDocScheme_action_doc${category}').html(), row.id, row.schemeNo);-->
             actionHtml += formatString($('#manage_apiDocScheme_action_api${category}').html(), row.id, row.schemeNo);
         }
         if (row.status == 'draft' || row.status == 'offShelf') {
             actionHtml += formatString($('#manage_apiDocScheme_action_onShelf${category}').html(), row.id);
-        } else if(row.status == 'onShelf'){
+        } else if (row.status == 'onShelf') {
             actionHtml += formatString($('#manage_apiDocScheme_action_offShelf${category}').html(), row.id);
         }
         actionHtml += formatString($('#manage_apiDocScheme_action_remove${category}').html(), row.id);
@@ -175,7 +172,7 @@
     }
 
     function apiDocSchemeServiceAction(actionContainer, value, row) {
-        return formatString($('#' + actionContainer).html(), row.id,row.schemeNo);
+        return formatString($('#' + actionContainer).html(), row.id, row.schemeNo);
     }
 
     function manage_apiDocScheme_onClickRow${category}(rowData) {
@@ -186,15 +183,15 @@
     /**
      * 打开编辑解决方案服务界面
      */
-    function showApis${category}(id,schemeNo){
+    function showApis${category}(id, schemeNo) {
         $('<div/>').dialog({
-            title:'<i class="fa fa-cog fa-lg fa-fw fa-col"></i> 配置关联api列表',
-            href:'${pageContext.request.contextPath}/manage/apidoc/apiDocScheme/settingService.html?id='+id,
-            closable : true,
+            title: '<i class="fa fa-cog fa-lg fa-fw fa-col"></i> 配置关联api列表',
+            href: '${pageContext.request.contextPath}/manage/apidoc/apiDocScheme/settingService.html?id=' + id,
+            closable: true,
             modal: true,
             width: 1000,
             height: 450,
-            onClose:function(){
+            onClose: function () {
                 $(this).dialog('destroy');
                 lastSchemeNo = schemeNo;
                 reloadApisList();
