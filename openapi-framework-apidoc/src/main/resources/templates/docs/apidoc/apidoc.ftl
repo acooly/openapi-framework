@@ -24,6 +24,7 @@
 		<!--end-->
 
 		<!--正文-->
+        <div class="container-wrapper">
         <div class="container">
             <div class="container-left">
                 <!--左边-->
@@ -32,8 +33,8 @@
 
             <!--右边-->
             <div id="dataCont" class="container-main"></div>
-
 		</div>
+        </div>
 		<!--end-->
 
         <!-- 隐藏:metadata元数据渲染容器 -->
@@ -52,7 +53,7 @@
             <#--<button onclick="location.href='/docs/apidebug/index.html?service=<%=entity.name%>'" class="layui-btn layui-btn-small layui-btn-radius">-->
                 <#--<i class="layui-icon">&#xe64e;</i> 点此联调-->
             <#--</button>-->
-            <button onclick="showMetaData('<%=entity.id%>','<%=entity.serviceNo%>')" class="layui-btn layui-btn-small layui-btn-radius">
+            <button onclick="showMetaData('<%=entity.id%>','<%=entity.serviceNo%>')" class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius">
                 <i class="layui-icon">&#xe63c;</i> 元数据
             </button>
         </div>

@@ -72,7 +72,7 @@ public class ApiDocProperties {
         /**
          * 版权信息
          */
-        private String copyright = "@ Copyright Acooly 2019";
+        private String copyright = "@ Copyright Acooly 2018~2023";
 
         /**
          * LOGO

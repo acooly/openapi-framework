@@ -7,8 +7,8 @@
         <#list apidocs as e>
             <li id="apidoc_api_${e.id}" <#if e.serviceNo == serviceNo>class="item-this"</#if>>
                 <a href="/docs/apidoc/scheme/${apiScheme.id}/${e.serviceNo}.html" title="${e.title}">
-                    <div>${e.name}</div>
-                    <div>${e.title}</div>
+                    <div class="api-title">${e.name}</div>
+                    <div class="api-subtitle">${e.title}</div>
                 </a>
             </li>
         </#list>

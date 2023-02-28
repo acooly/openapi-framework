@@ -21,6 +21,7 @@
         </div>
 
 		<!--正文-->
+        <div class="container-wrapper">
 		<div class="container">
             <!--左边-->
             <div class="container-left">
@@ -39,18 +40,21 @@
                                 <div class="layui-input-inline" style="width: 600px;">
                                     <input type="text" style="width: 600px;" name="key" value="${key}"  placeholder="全局服务码，名称搜索" class="layui-input">
                                 </div>
-                                <button type="submit" class="layui-btn layui-btn-normal">查询</button>
+                                <button type="submit" class="layui-btn layui-btn-normal">
+                                    <i class="layui-icon layui-icon-search layui-font-12"></i>
+                                    查询
+                                </button>
                             </div>
                         </form>
                     </div>
                     <table class="layui-table" lay-skin="line">
                         <thead>
                         <tr>
-                            <th>服务码</th>
-                            <th>版本</th>
-                            <th>服务类型</th>
-                            <th>说明</th>
-                            <th>元数据</th>
+                            <th style="width: 25%;">服务码</th>
+                            <th style="width: 10%;">版本</th>
+                            <th style="width: 10%;">服务类型</th>
+                            <th style="width: 45%;">说明</th>
+                            <th style="width: 10%;">元数据</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -68,6 +72,7 @@
                 </div>
             </div>
 		</div>
+        </div>
 		<!--end-->
 
 		<!--底部-->

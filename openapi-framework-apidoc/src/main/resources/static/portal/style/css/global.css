@@ -123,8 +123,13 @@ input[type=submit] {
     float: right;
 }
 
+.w1440 {
+    width: 1440px;
+    margin: 0 auto;
+}
+
 .w1190 {
-    width: 1190px;
+    width: 1440px;
     margin: 0 auto;
 }
 
