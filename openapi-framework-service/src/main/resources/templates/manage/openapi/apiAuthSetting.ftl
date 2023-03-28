@@ -51,7 +51,8 @@
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-    .servicelist{
+
+    .servicelist {
         padding-left: 10px;
     }
 </style>
@@ -60,7 +61,8 @@
 <div id="manage_apiAuth_setting_layout" class="easyui-layout" data-options="fit:true,border:true">
     <div style="padding-left: 10px;padding-right:20px;margin-top:5px;text-align: left;" class="tableForm">
         <div>
-            关键字 : <input type="text" class="text" id="keywords" onkeyup="searchService()" />
+            全选 <input type="checkbox" onclick="toggleAll()" id="manage_apiAuth_setting_selectAllServices" style="margin-right: 10px;">
+            <input type="text" class="text" id="keywords" placeholder="关键字" onkeyup="searchService()"/>
             <a href="javascript:void(0);" class="easyui-linkbutton" onclick="searchService()"><i class="fa fa-search fa-lg fa-fw fa-col"></i>查询</a>
             <a href="javascript:void(0);" class="easyui-linkbutton" onclick="showAllService()">显示全部服务</a>
             显示总数：<span id="manage_apiAuth_setting_showcount"></span>
@@ -70,8 +72,6 @@
     <div id="manage_openapi_apilist_container" class="servicelist" style="border-bottom: cornflowerblue;">
     </div>
 </div>
-
-
 
 
 <script id="manage_openapi_apilist_template" type="text/html">
@@ -95,6 +95,18 @@
 
     var totalService = 0;
     var authService = 0;
+
+
+    function toggleAll() {
+        $("#manage_apiAuth_setting_selectAllServices").click(function () {
+            if ($(this).prop("checked")) {
+                $("#manage_openapi_apilist_container input[type=checkbox]").parent().parent().addClass("selected");
+            } else {
+                $("#manage_openapi_apilist_container input[type=checkbox]").parent().parent().removeClass("selected");
+            }
+            $("#manage_openapi_apilist_container input[type=checkbox]").prop("checked", $(this).prop("checked"));
+        });
+    }
 
     /**
      * 加载全部服务API
@@ -166,7 +178,7 @@
                 $.acooly.messager('失败', e, 'danger');
 
             },
-            complete : function () {
+            complete: function () {
                 $.acooly.loaded();
             }
         });
@@ -177,8 +189,8 @@
      */
     function saveAcls(dial) {
         var serviceNoValues = getServiceNoValues();
-        if(!serviceNoValues || serviceNoValues ===''){
-            $.acooly.messager("提示信息","请至少选择一个服务",'danger');
+        if (!serviceNoValues || serviceNoValues === '') {
+            $.acooly.messager("提示信息", "请至少选择一个服务", 'danger');
             return;
         }
         $.acooly.loading("保存中...");
@@ -190,14 +202,14 @@
             },
             success: function (result) {
                 if (result.success) {
-                    $.acooly.messager("设置ACL", result.message, result.success?'success':'danger');
+                    $.acooly.messager("设置ACL", result.message, result.success ? 'success' : 'danger');
                 }
             },
             error: function (r, s, e) {
                 $.acooly.messager('失败', e, 'danger');
 
             },
-            complete : function () {
+            complete: function () {
                 dial.dialog('close');
                 $.acooly.loaded();
             }
@@ -215,14 +227,14 @@
 
     function searchService() {
         var keyval = $("#keywords").val();
-        if(keyval === '' ){
+        if (keyval === '') {
             $(".openapi-apilist > li").show();
         }
         var showCount = 0;
-        $(".openapi-apilist > li").each(function(){
+        $(".openapi-apilist > li").each(function () {
             var tobj = $(this);
             tobj.hide();
-            if(tobj.text().indexOf(keyval) > -1){
+            if (tobj.text().indexOf(keyval) > -1) {
                 tobj.show();
                 showCount++;
             }
