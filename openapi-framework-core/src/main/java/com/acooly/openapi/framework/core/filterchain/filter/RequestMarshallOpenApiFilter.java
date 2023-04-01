@@ -8,12 +8,12 @@
  */
 package com.acooly.openapi.framework.core.filterchain.filter;
 
-import com.acooly.core.utils.validate.Validators;
 import com.acooly.module.filterchain.FilterChain;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.message.ApiRequest;
+import com.acooly.openapi.framework.common.utils.ApiValidators;
 import com.acooly.openapi.framework.core.filterchain.OpenApiFilterEnum;
 import com.acooly.openapi.framework.core.marshall.ApiMarshallFactory;
 import com.acooly.openapi.framework.core.marshall.ApiRequestMarshall;
@@ -58,7 +58,7 @@ public class RequestMarshallOpenApiFilter extends AbstractOpenApiFilter {
      */
     protected void doValidateParameter(ApiRequest apiRequest) {
         try {
-            Validators.assertJSR303(apiRequest);
+            ApiValidators.validate(apiRequest);
             apiRequest.check();
         } catch (IllegalArgumentException iae) {
             throw new ApiServiceException(ApiServiceResultCode.PARAMETER_ERROR, iae.getMessage());

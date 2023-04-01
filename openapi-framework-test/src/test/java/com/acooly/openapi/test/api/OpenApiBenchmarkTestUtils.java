@@ -45,7 +45,7 @@ public class OpenApiBenchmarkTestUtils {
         request.setPayerUserId(PAYER_USER_ID);
         request.setBuyerUserId("09876543211234567890");
         request.setBuyeryEmail("qiuboboyqq.com");
-        request.setBuyeryMobileNo("1389876545");
+        request.setBuyeryMobileNo("138987654");
         request.setBuyerCertNo("51022119820915641");
         request.setPassword("12312312");
         request.setContext(CONTEXT);

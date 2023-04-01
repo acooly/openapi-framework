@@ -95,6 +95,7 @@ public class MultiLevelOpenApiCacheManager implements OpenApiCacheManager, Initi
         redisTemplate.delete(namedKey);
     }
 
+
     protected void putLocalCache(String key, Object val) {
         if (!openAPIProperties.getAuthInfoCache().isLevelOneEnable()) {
             return;
