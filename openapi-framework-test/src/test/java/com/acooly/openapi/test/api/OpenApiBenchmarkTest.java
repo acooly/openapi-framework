@@ -28,11 +28,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class OpenApiBenchmarkTest extends AbstractApiServieTests {
 
-    {
-        accessKey = "210323212041022F0007#12345678901234567890";
-        secretKey = "d318e79e3c9c264d89db781962772df9";
-    }
-
     @Test
     public void testBenchmark() {
         testSync();

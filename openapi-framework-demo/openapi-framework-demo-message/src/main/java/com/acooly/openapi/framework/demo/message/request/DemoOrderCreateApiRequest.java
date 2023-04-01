@@ -2,12 +2,11 @@ package com.acooly.openapi.framework.demo.message.request;
 
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.validate.jsr303.CertNo;
-import com.acooly.core.utils.validate.jsr303.MobileNo;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.annotation.OpenApiFieldCondition;
 import com.acooly.openapi.framework.common.message.ApiRequest;
-import com.acooly.openapi.framework.demo.message.enums.TestBigEnum;
 import com.acooly.openapi.framework.demo.message.dto.GoodsInfo;
+import com.acooly.openapi.framework.demo.message.enums.TestBigEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,7 +46,7 @@ public class DemoOrderCreateApiRequest extends ApiRequest {
     @OpenApiField(desc = "买家用户ID", demo = "201603080912340001", ordinal = 5)
     private String buyerUserId;
 
-    @MobileNo
+    @Size(min = 11, max = 11, message = "手机号码长度为11位")
     @OpenApiField(desc = "买家手机号码", demo = "13676455680", ordinal = 6)
     private String buyeryMobileNo;
 
