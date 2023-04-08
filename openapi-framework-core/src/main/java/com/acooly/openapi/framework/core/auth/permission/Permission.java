@@ -36,4 +36,5 @@ public interface Permission {
      * @return
      */
     boolean implies(String resource);
+
 }

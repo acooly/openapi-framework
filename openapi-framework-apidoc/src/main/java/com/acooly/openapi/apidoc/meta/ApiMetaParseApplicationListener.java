@@ -1,5 +1,6 @@
 package com.acooly.openapi.apidoc.meta;
 
+import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.annotation.ApiDocNote;
 import com.acooly.openapi.framework.common.annotation.OpenApiNote;
 import com.acooly.openapi.framework.common.annotation.OpenApiService;
@@ -42,8 +43,8 @@ public class ApiMetaParseApplicationListener implements ApplicationListener<Appl
                         OpenApiService openApiService = apiService.getClass().getAnnotation(OpenApiService.class);
                         ApiMetaService entity = new ApiMetaService();
                         entity.setNote(getApiDocNote(apiService));
-                        entity.setServiceName(openApiService.name());
-                        entity.setVersion(openApiService.version());
+                        entity.setServiceName(Strings.trimToEmpty(openApiService.name()));
+                        entity.setVersion(Strings.trimToEmpty(openApiService.version()));
                         entity.setBusiType(openApiService.busiType());
                         entity.setServiceDesc(openApiService.desc());
                         entity.setResponseType(openApiService.responseType());
