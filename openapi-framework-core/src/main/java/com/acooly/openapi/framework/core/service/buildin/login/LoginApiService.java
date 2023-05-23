@@ -56,12 +56,19 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
     @Override
     protected void doService(LoginRequest request, LoginResponse response) {
         try {
-            String requestAccessKey = ApiContextHolder.getApiContext().getAccessKey();
             // OpenApi的login不提供App客户端请求参数的存储和处理，交给集成工程的login接口实现
             LoginDto dto = appApiLoginService.login(request, ApiContextHolder.getApiContext());
             response.setCustomerId(dto.getCustomerId());
             // 子访问码为主访码前缀+"#"+当前登录用户的唯一标志
-            String subAccessKey = requestAccessKey + "#" + dto.getCustomerId();
+            String parentAccessKey = openAPIProperties.getLogin().getParentAccessKey();
+            if (Strings.isBlank(parentAccessKey)) {
+                throw new BusinessException(ApiServiceResultCode.ACCESS_KEY_NOT_EXIST, "登录的父AccessKey未配置");
+            }
+            ApiAuth parentApiAuth = apiAuthService.findByAccesskey(parentAccessKey);
+            if (parentApiAuth == null) {
+                throw new BusinessException(ApiServiceResultCode.ACCESS_KEY_NOT_EXIST, "登录的父AccessKey不存在");
+            }
+            String subAccessKey = parentAccessKey + "#" + dto.getCustomerId();
             String secretKey = null;
             ApiAuth apiAuth = apiAuthService.findByAccesskey(subAccessKey);
             if (apiAuth != null) {
@@ -69,7 +76,7 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
             }
             if (Strings.isBlank(secretKey)) {
                 secretKey = AccessKeys.newSecretKey();
-                authInfoRealmManageService.createAuthenticationInfo(requestAccessKey, subAccessKey, secretKey);
+                authInfoRealmManageService.createAuthenticationInfo(parentAccessKey, subAccessKey, secretKey);
                 // 这里不用设置动态accessKey的权限，权限与其父accessKey一致。
             } else {
                 if (openAPIProperties.getLogin().isSecretKeyDynamic()) {
@@ -82,6 +89,7 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
             response.setCustomerId(dto.getCustomerId());
             response.setAccessKey(subAccessKey);
             response.setSecretKey(secretKey);
+            response.setParentId(parentApiAuth.getPartnerId());
         } catch (BusinessException be) {
             throw be;
         } catch (Exception e) {

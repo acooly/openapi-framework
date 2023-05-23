@@ -116,9 +116,13 @@ public class OpenAPIProperties {
         Validators.assertJSR303(anonymous);
     }
 
+    /**
+     * 匿名Key，专用于客户端登录接口请求获取动态秘钥和权限
+     */
     @Data
     public static class Anonymous {
         private boolean enable = true;
+
         /**
          * 匿名accessKey
          */
@@ -130,8 +134,11 @@ public class OpenAPIProperties {
         @NotBlank
         @Length(min = 16)
         private String secretKey = ANONYMOUS_SECRET_KEY;
+
+
         /**
          * 匿名权限信息
+         * 默认支持“login”接口
          */
         private Map<String, String> permissions = Maps.newHashMap();
 
@@ -149,6 +156,11 @@ public class OpenAPIProperties {
          * 每次登陆动态生成秘钥，false表示登录后生成用户秘钥后不再改变
          */
         private boolean secretKeyDynamic = false;
+
+        /**
+         * 登录成功后返回的秘钥对的父AccessKey,所有动态秘钥的权限于此相同，作为该accessKey的子秘钥
+         */
+        private String parentAccessKey;
     }
 
     @Data

@@ -29,11 +29,16 @@ public class LoginResponse extends ApiResponse {
             demo = "asdfadfasd234asdfarqwerq", ordinal = 2)
     private String secretKey;
 
+    @Size(min = 40, max = 40)
+    @OpenApiField(desc = "合作方ID", constraint = "登录后所有接口的parentId参数", demo = "asdfadfasd234asdfarqwerq", ordinal = 3)
+    private String parentId;
+
+
     @NotBlank
-    @OpenApiField(desc = "客户id", constraint = "客户id", demo = "112", ordinal = 3)
+    @OpenApiField(desc = "客户id", constraint = "客户id", demo = "112", ordinal = 4)
     private String customerId;
 
     @NotBlank
-    @OpenApiField(desc = "扩展字段", constraint = "响应扩展字段,Json格式", demo = "{\"xxxx\":\"yyyy\"}", ordinal = 4)
+    @OpenApiField(desc = "扩展字段", constraint = "响应扩展字段,Json格式", demo = "{\"xxxx\":\"yyyy\"}", ordinal = 5)
     private String extJson;
 }
