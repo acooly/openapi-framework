@@ -4,12 +4,6 @@
         <@jodd.form bean="apiAuth" scope="request">
             <input name="id" type="hidden"/>
             <div class="card-body">
-                <#if action=='edit'>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">认证编码</label>
-                        <div class="col-sm-10"><span style="line-height: 35px;">${apiAuth.authNo}</span></div>
-                    </div>
-                </#if>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">接入方</label>
                     <div class="col-sm-10">
@@ -43,14 +37,18 @@
 
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">访问帐号</label>
-                    <div class="col-sm-10">
-                        <div class="input-group">
-                            <input type="text" id="manage_editform_accessKey" name="accessKey" placeholder="点击生成访问帐号..." class="easyui-validatebox form-control" data-options="validType:['length[1,45]']" required="true"/>
-                            <div class="input-group-append">
-                                <a href="javascript:;" title="生成新的访问账号AccessKey" onclick="generateAccessKey()" class="input-group-text easyui-tooltip"><i class="fa fa-refresh"></i></a>
+                    <#if action='create'>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" id="manage_editform_accessKey" name="accessKey" placeholder="点击生成访问帐号..." class="easyui-validatebox form-control" data-options="validType:['length[1,45]']" required="true"/>
+                                <div class="input-group-append">
+                                    <a href="javascript:;" title="生成新的访问账号AccessKey" onclick="generateAccessKey()" class="input-group-text easyui-tooltip"><i class="fa fa-refresh"></i></a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    <#else>
+                        <div class="col-sm-10 col-form-content">${apiAuth.accessKey}</div>
+                    </#if>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">访问秘钥</label>
@@ -87,7 +85,7 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">
                         <a data-toggle="tooltip" data-placement="right" title="状态修改为非'正常'时，该认证对象不可用">状态
-                        <i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                            <i class="fa fa-info-circle" aria-hidden="true"></i></a>
                     </label>
                     <div class="col-sm-10">
                         <select name="status" class="form-control select2bs4">

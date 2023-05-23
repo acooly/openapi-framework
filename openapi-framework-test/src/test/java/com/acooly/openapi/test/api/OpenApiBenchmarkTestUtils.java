@@ -39,14 +39,14 @@ public class OpenApiBenchmarkTestUtils {
         request.setMerchOrderNo(Ids.RandomNumberGenerator.getNewString(20));
         request.setService("demoOrderCreate");
         String specString = "同步请求创建订单\uD83D\uDC3E一休哥\uD83D\uDC3E ";
-        request.setTitle(specString);
+//        request.setTitle(specString);
         request.setAmount(AMOUNT);
         request.setPayeeUserId("12345678900987654321");
         request.setPayerUserId(PAYER_USER_ID);
         request.setBuyerUserId("09876543211234567890");
-        request.setBuyeryEmail("qiuboboy@qq.com");
-        request.setBuyeryMobileNo("13898765453");
-        request.setBuyerCertNo("51022119820915641X");
+        request.setBuyeryEmail("qiuboboyqq.com");
+        request.setBuyeryMobileNo("138987654");
+        request.setBuyerCertNo("51022119820915641");
         request.setPassword("12312312");
         request.setContext(CONTEXT);
         List<GoodsInfo> goodsInfos = Lists.newArrayList();
