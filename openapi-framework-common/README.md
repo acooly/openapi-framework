@@ -22,6 +22,19 @@ OpenApi开放平台框架提供完善的网关服务开放平台的完整解决�
 
 ## 3. changelog
 
+### v5.2.0-SNAPSHOT.20230523
+
+* 2023-05-23 - [动态秘钥] 优化：匿名访问登录接口后，返回的动态秘钥的父秘必须采用参数配置（`acooly.openapi.login.parent-acess-key`）代替原有的随意通过请求的parentId指定；同事优化回传parentId为动态父秘钥的parentId。详情请参考最新的`OpenAPI服务端开发指南的3.4.动态秘钥`部分 - [zhangpu] 210e034
+* 2023-05-23 - [动态秘钥] 修正：修正匿名秘钥对访问（login）时因找不到对应的租户造成的BUG。 - [zhangpu] 5bdcded
+* 2023-04-08 - [网关服务] 优化：解决OpenApiField时候，增加trimToEmpty,解决开发人员写入接口名称时前面加入空格，造成初始化权限ACLs错误问题。 - [zhangpu] f1b61a7
+* 2023-04-08 - [网关服务] 优化：增加权限初始化时，检查权重字符串格式的错误消息输出错误权限字符串的功能。 - [zhangpu] be8c010
+* 2023-04-01 - [网关服务] 优化：重构javabean验证的错误消息处理模式，调整为：1、如果是标准错误消息模板（例如：@NotBank等），则返回报文中文名称+错误消息（例如：标题不能为空，其中"标题"是"title"属性的中文名称，"不
+能为空"是模板标准消息）；2、如果是自定义消息，则直接返回开发人员自定义的消息；3、多个字段的错误消息间使用英文逗号分隔。 - [zhangpu] 2b9c8d2
+* 2023-04-01 - [权限管理] 修正：认证对象的accessKey调整为不能修改，只能添加和删除，防止在修改accessKey时，造成以认证编码关联的ACLs错乱无效。 - [zhangpu] 221dc64
+* 2023-03-28 - [权限管理] 优化：为API权限的ACLs管理增加全选功能；优化scheme的后台管理；修正和优化部分展示和体验问题 - [zhangpu] 52c7ef7
+* 2023-02-27 - [API文档] 优化：增加全局API搜索功能；在不调整原有逻辑基础上，去除低custom类型scheme的合并；自定义的API-Scheme重启呗删除问题；修正顶部菜单中的OpenApi文档链接地址 - [zhangpu] eda6732
+
+
 ### v5.2.0-SNAPSHOT.20221201
 
 2022-12-01 - 新增特性：可配置网关的多个入口地址`acooly.openapi.gateways[0~n]`，如果不配置，则默认为:/gateway.do。例如配置：`acooly.openapi.gateways[0]=/a/b/gateway.x` - [zhangpu] 0f5cf29
