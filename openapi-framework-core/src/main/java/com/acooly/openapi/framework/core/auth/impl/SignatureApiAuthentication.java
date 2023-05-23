@@ -1,12 +1,14 @@
 package com.acooly.openapi.framework.core.auth.impl;
 
 import com.acooly.core.common.boot.Env;
+import com.acooly.core.utils.Strings;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.context.ApiContext;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
 import com.acooly.openapi.framework.common.enums.SignTypeEnum;
 import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.common.utils.ApiUtils;
+import com.acooly.openapi.framework.core.OpenAPIProperties;
 import com.acooly.openapi.framework.core.auth.ApiAuthentication;
 import com.acooly.openapi.framework.core.auth.realm.AuthInfoRealm;
 import com.acooly.openapi.framework.core.exception.impl.ApiServiceAuthenticationException;
@@ -34,6 +36,8 @@ public class SignatureApiAuthentication implements ApiAuthentication {
     protected SignerFactory<ApiContext> signerFactory;
     @Resource
     protected AuthInfoRealm authInfoRealm;
+    @Resource
+    protected OpenAPIProperties openAPIProperties;
 
     /**
      * 认证
@@ -50,11 +54,13 @@ public class SignatureApiAuthentication implements ApiAuthentication {
             }
             verify(apiContext.getRequestBody(), accessKey, apiContext.getSignType(), requestSign);
             apiContext.setAuthenticated(true);
-            // 读取当前对应的租户信息
-            String tenantId = authInfoRealm.getTenantId(accessKey);
-            apiContext.setTenantId(tenantId);
-            MDC.put(ApiConstants.TENANT_ID, tenantId);
 
+            if (!Strings.equals(openAPIProperties.getAnonymous().getAccessKey(), accessKey)) {
+                // 读取当前对应的租户信息
+                String tenantId = authInfoRealm.getTenantId(accessKey);
+                apiContext.setTenantId(tenantId);
+                MDC.put(ApiConstants.TENANT_ID, tenantId);
+            }
         } catch (ApiServiceException asae) {
             throw asae;
         } catch (Exception e) {
