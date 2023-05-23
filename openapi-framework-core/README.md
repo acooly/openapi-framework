@@ -178,6 +178,8 @@ acooly.openapi.anonymous.permissions.login=*:login
 acooly.openapi.login.enable=true
 # [可选] 每次访问是否动态生成秘钥
 acooly.openapi.login.secret-key-dynamic=true
+# [必选] 登录后下发的动态秘钥所属的父秘钥。1、该秘钥是在后台配置好的秘钥对，并配置的合理的权限；2、根据该主秘钥生产的动态子秘钥继承该父秘钥的权限
+acooly.openapi.login.parent-access-key=test
 ```
 
 ## 3.5. 流控

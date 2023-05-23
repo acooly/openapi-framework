@@ -2,6 +2,7 @@ package com.acooly.openapi.test.api;
 
 import com.acooly.core.utils.Money;
 import com.acooly.core.utils.system.IPUtil;
+import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.DeviceType;
 import com.acooly.openapi.framework.common.message.builtin.LoginRequest;
 import com.acooly.openapi.framework.common.message.builtin.LoginResponse;
@@ -25,12 +26,14 @@ public class BuildInOpenApiTest extends AbstractApiServieTests {
     Money amount = Money.amout("200");
 
     {
-        accessKey = "210323212041022F0007";
-        secretKey = "8f00a552a051c3cb3c480f2620b662d1";
+        accessKey = ApiConstants.ANONYMOUS_ACCESS_KEY;
+        secretKey = ApiConstants.ANONYMOUS_SECRET_KEY;
     }
 
     /**
      * 测试登录接口
+     * test#12345678901234567890
+     * c3614b2fa098b4905d81509f443e053b
      */
     @Test
     public void testLogin() throws Exception {
