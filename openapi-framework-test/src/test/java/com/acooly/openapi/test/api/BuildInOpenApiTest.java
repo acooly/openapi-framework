@@ -4,6 +4,8 @@ import com.acooly.core.utils.Money;
 import com.acooly.core.utils.system.IPUtil;
 import com.acooly.openapi.framework.common.ApiConstants;
 import com.acooly.openapi.framework.common.enums.DeviceType;
+import com.acooly.openapi.framework.common.message.ApiRequest;
+import com.acooly.openapi.framework.common.message.ApiResponse;
 import com.acooly.openapi.framework.common.message.builtin.LoginRequest;
 import com.acooly.openapi.framework.common.message.builtin.LoginResponse;
 import com.acooly.openapi.framework.core.test.AbstractApiServieTests;
@@ -49,5 +51,12 @@ public class BuildInOpenApiTest extends AbstractApiServieTests {
         log.info("{}", response);
     }
 
+    @Test
+    public void testAnno() throws Exception {
+        ApiRequest request = new ApiRequest();
+        request.setService("anno");
+        ApiResponse response = request(request, ApiResponse.class);
+        log.info("{}", response);
+    }
 
 }
