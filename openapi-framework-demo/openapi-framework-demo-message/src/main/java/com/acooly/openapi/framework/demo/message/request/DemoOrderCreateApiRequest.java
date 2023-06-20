@@ -1,6 +1,7 @@
 package com.acooly.openapi.framework.demo.message.request;
 
 import com.acooly.core.utils.Money;
+import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.validate.jsr303.CertNo;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.common.annotation.OpenApiFieldCondition;
@@ -31,7 +32,6 @@ public class DemoOrderCreateApiRequest extends ApiRequest {
     @NotBlank
     @Size(max = 64)
     @OpenApiField(desc = "标题", constraint = "标题", demo = "特色牛肉干", ordinal = 2)
-//    @ToString.Maskable
     private String title;
 
     @OpenApiField(desc = "金额", constraint = "单笔金额最小1元，最大10000元", demo = "120.00", ordinal = 3)
@@ -50,21 +50,23 @@ public class DemoOrderCreateApiRequest extends ApiRequest {
     @OpenApiField(desc = "买家手机号码", demo = "13676455680", ordinal = 6)
     private String buyeryMobileNo;
 
+    @ToString.Maskable
     @OpenApiField(desc = "买家电子邮件", demo = "wangsa@gooogle.com", ordinal = 7)
     private String buyeryEmail;
 
     @CertNo
+    @ToString.Maskable
     @OpenApiField(desc = "买家身份证号码", demo = "510232987409587463", ordinal = 8)
     private String buyerCertNo;
 
     @NotBlank
-//    @ToString.Invisible
+    @ToString.Invisible
     @Size(min = 20, max = 20)
     @OpenApiField(desc = "卖家用户ID", demo = "201603080912340002", ordinal = 9)
     private String payeeUserId;
 
     @NotBlank
-//    @Length(min = 6)
+    @ToString.Invisible
     @OpenApiField(desc = "交易密码", demo = "!QAZ@WSX", security = true, ordinal = 10)
     private String password;
 

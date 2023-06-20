@@ -8,6 +8,7 @@
 package com.acooly.openapi.framework.demo.message.dto;
 
 import com.acooly.core.utils.Money;
+import com.acooly.core.utils.ToString;
 import com.acooly.core.utils.validate.jsr303.HttpUrl;
 import com.acooly.openapi.framework.common.annotation.OpenApiField;
 import com.acooly.openapi.framework.demo.message.enums.GoodType;
@@ -17,7 +18,6 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.StringJoiner;
 
 /**
  * @author zhangpu
@@ -26,6 +26,7 @@ import java.util.StringJoiner;
 @Setter
 public class GoodsInfo {
 
+    @ToString.Maskable
     @NotBlank
     @Size(max = 63)
     @OpenApiField(desc = "商品名称", demo = "牛肉干", ordinal = 1)
@@ -42,7 +43,7 @@ public class GoodsInfo {
     @OpenApiField(desc = "价格", demo = "120.00", ordinal = 4)
     private Money price;
 
-    //    @ToString.Invisible
+    @ToString.Invisible
     @HttpUrl(blankable = true)
     @OpenApiField(desc = "介绍网址", demo = "http://www.merchant.com/goods.html", ordinal = 5)
     private String referUrl;
