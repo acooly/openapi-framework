@@ -155,7 +155,7 @@ public class OpenAPIProperties {
         /**
          * 每次登陆动态生成秘钥，false表示登录后生成用户秘钥后不再改变
          */
-        private boolean secretKeyDynamic = false;
+        private boolean secretKeyDynamic = true;
 
         /**
          * 登录成功后返回的秘钥对的父AccessKey,所有动态秘钥的权限于此相同，作为该accessKey的子秘钥
