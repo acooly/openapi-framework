@@ -149,19 +149,24 @@ private String payeeUserId;
 
 ## 3.3. 缓存配置
 
-缓存配置主要用于秘钥，ACL权限等核心高频率使用数据，按请求AccessKey为单位进行缓存，以提高处理效率。
+缓存配置主要用于秘钥，ACL权限，IP白名单，租户信息等核心高频率使用数据，按请求AccessKey为单位进行缓存，以提高处理效率。
 
 ```ini
 ## 缓存配置
 # [可选] 缓存总开关，如果开启，自动启动二级缓存（redis）。
 acooly.openapi.auth-info-cache.enable=true
-# [可选] 二级缓存缓存信息过期时间,单位：ms,默认10分钟
+# [可选] 二级缓存（redis）缓存信息过期时间,单位：ms,默认10分钟,二级缓存是强制开启的
 acooly.openapi.auth-info-cache.defaultTimeout=600000
 # [可选] 一级本地缓存是否开启（注意：一级缓存为本地缓存，多节点时无法通过管理界面变更设置其他节点自动失效，只能通过到期时间）
 acooly.openapi.auth-info-cache.levelOneEnable=true
 # [可选] 一级本地缓存缓存信息过期时间,单位：ms,默认10分钟
 acooly.openapi.auth-info-cache.levelOneTimeout=600000
 ```
+
+特别注意 > 
+1. 最新版本已提供通过后台BOSS界面对缓存清除功能, 但是一级缓存在多节点时，无法通过后台管理界面变更设置其他节点自动失效，只能通过到期时间`acooly.openapi.auth-info-cache.levelOneTimeout`。
+2. 子秘钥的缓存不提供清除功能，提供直接删除秘钥方式同时会清除缓存。
+
 
 ## 3.4. 动态秘钥
 
@@ -181,6 +186,10 @@ acooly.openapi.login.secret-key-dynamic=true
 # [必选] 登录后下发的动态秘钥所属的父秘钥。1、该秘钥是在后台配置好的秘钥对，并配置的合理的权限；2、根据该主秘钥生产的动态子秘钥继承该父秘钥的权限
 acooly.openapi.login.parent-access-key=test
 ```
+
+>注意：
+> 1. 动态秘钥的权限继承于父秘钥，所以父秘钥的权限必须配置合理，否则会导致动态秘钥权限不足。
+> 2. 每次`login`请求后是否生成动态秘钥的开关`acooly.openapi.login.secret-key-dynamic`默认调整为true。
 
 ## 3.5. 流控
 
