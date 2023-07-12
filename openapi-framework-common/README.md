@@ -30,6 +30,8 @@ OpenApi开放平台框架提供完善的网关服务开放平台的完整解决�
 * 2023-07-12 - 登录（`login`）接口获取的动态秘钥加入了对所属父秘钥（参数配置的）状态检查的功能。
 * 2023-07-10 - 登录接口获取的秘钥，默认调整为动态秘钥。即：每次登录返回的秘钥都是新生成的。 - [zhangpu] b4ef2f8
 
+ >注意: 为分离动态秘钥，需要配置新功能（动态秘钥）BOSS资源和权限，请已线上系统运行升级SQL:`openapi-framework-service`模块（jar内）的 `META-INF/database/openapi/mysql/openapi-v5.2.0_20230712_SNAPSHOT-upgrade.sql`
+
 ### v5.2.0-SNAPSHOT.20230523
 
 * 2023-05-23 - [动态秘钥] 优化：匿名访问登录接口后，返回的动态秘钥的父秘必须采用参数配置（`acooly.openapi.login.parent-acess-key`）代替原有的随意通过请求的parentId指定；同事优化回传parentId为动态父秘钥的parentId。详情请参考最新的`OpenAPI服务端开发指南的3.4.动态秘钥`部分 - [zhangpu] 210e034
