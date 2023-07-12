@@ -32,6 +32,10 @@ import static com.acooly.openapi.framework.core.OpenAPIProperties.PREFIX;
 
 /**
  * OpenApi 全局配置文件
+ * <p>
+ * todo：动态秘钥的有效期及处理
+ * todo：后台管理独立查询子秘钥和对子秘钥进行管理（删除，清楚缓存过期）
+ * todo: 提供清楚主秘钥下所有子秘钥缓存的功能
  *
  * @author qiubo@yiji.com
  * @author zhangpu

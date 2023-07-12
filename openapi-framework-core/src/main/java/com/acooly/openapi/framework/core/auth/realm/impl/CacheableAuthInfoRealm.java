@@ -49,6 +49,7 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
         Object value = openApiCacheManager.get(key);
         if (value == null) {
             value = getSecretKey(accessKey);
+            logger.info("认证缓存不存在，从DB获取成功。 accessKey: {}", accessKey);
             if (value != null) {
                 openApiCacheManager.add(key, value);
             } else {
@@ -65,6 +66,7 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
         List<Permission> value = (List<Permission>) openApiCacheManager.get(key);
         if (value == null) {
             Set<String> permStrList = getAuthorizedServices(accessKey);
+            logger.info("权限缓存不存在，从DB获取成功。 accessKey: {}", accessKey);
             // 如果没有查询到权限信息,不设置缓存,有可能是网络或者权限系统内部错误
             if (permStrList == null || permStrList.isEmpty()) {
                 return null;
@@ -96,6 +98,7 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
         Set<String> value = (Set<String>) openApiCacheManager.get(key);
         if (value == null) {
             value = getAuthIpWhitelist(accessKey);
+            logger.debug("IP白名单缓存不存在，从DB获取成功。 accessKey: {}, ipWhitelist: {}", accessKey, value);
             // 如果没有查询到权限信息,不设置缓存,有可能是网络或者权限系统内部错误
             if (Collections3.isEmpty(value)) {
                 return null;
@@ -112,6 +115,7 @@ public abstract class CacheableAuthInfoRealm implements AuthInfoRealm {
         String value = (String) openApiCacheManager.get(key);
         if (value == null) {
             value = loadTenantId(accessKey);
+            logger.debug("租户缓存不存在，从DB获取成功。 accessKey: {}, tenantId: {}", accessKey, value);
             // 如果没有查询到权限信息,不设置缓存,有可能是网络或者权限系统内部错误
             if (Strings.isNullOrEmpty(value)) {
                 return null;

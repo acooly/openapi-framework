@@ -66,6 +66,7 @@ public class ApiUpdateEventHandler {
 
     protected void clearCache(String accessKey) {
         ((CacheableAuthInfoRealm) authInfoRealm).removeCache(accessKey);
+        log.info("事件处理 清除缓存完成：{}", accessKey);
     }
 
 }

@@ -52,8 +52,8 @@ public class MultiLevelOpenApiCacheManager implements OpenApiCacheManager, Initi
                 return;
             }
             redisTemplate.opsForValue().set(namedKey, value, getMillisecondTimeout(), TimeUnit.MILLISECONDS);
+            log.debug("OpenApi缓存 写入 成功。key: {}", key);
         } catch (Exception e) {
-            //ig
             log.warn("OpenApi缓存 写入 失败。key: {}", key, e);
         }
     }
@@ -150,5 +150,9 @@ public class MultiLevelOpenApiCacheManager implements OpenApiCacheManager, Initi
                 return currentDuration;
             }
         }).build();
+    }
+
+    public void setOpenAPIProperties(OpenAPIProperties openAPIProperties) {
+        this.openAPIProperties = openAPIProperties;
     }
 }

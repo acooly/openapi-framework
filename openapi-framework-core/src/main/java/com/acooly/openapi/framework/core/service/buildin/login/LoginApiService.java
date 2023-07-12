@@ -60,17 +60,19 @@ public class LoginApiService extends BaseApiService<LoginRequest, LoginResponse>
             LoginDto dto = appApiLoginService.login(request, ApiContextHolder.getApiContext());
             response.setCustomerId(dto.getCustomerId());
             // 子访问码为主访码前缀+"#"+当前登录用户的唯一标志
+            // 特别注意：如果存在根据业务逻辑动态返回多个`parentAccessKey`（权限不同）的情况，需要重新实现该逻辑，
+            // 默认只提供一个父访问码，即`openapi.login.parentAccessKey`配置的值
             String parentAccessKey = openAPIProperties.getLogin().getParentAccessKey();
             if (Strings.isBlank(parentAccessKey)) {
                 throw new BusinessException(ApiServiceResultCode.ACCESS_KEY_NOT_EXIST, "登录的父AccessKey未配置");
             }
-            ApiAuth parentApiAuth = apiAuthService.findByAccesskey(parentAccessKey);
+            ApiAuth parentApiAuth = apiAuthService.findValidByAccesskey(parentAccessKey);
             if (parentApiAuth == null) {
-                throw new BusinessException(ApiServiceResultCode.ACCESS_KEY_NOT_EXIST, "登录的父AccessKey不存在");
+                throw new BusinessException(ApiServiceResultCode.ACCESS_KEY_NOT_EXIST, "登录的父AccessKey不存在或已被停用");
             }
             String subAccessKey = parentAccessKey + "#" + dto.getCustomerId();
             String secretKey = null;
-            ApiAuth apiAuth = apiAuthService.findByAccesskey(subAccessKey);
+            ApiAuth apiAuth = apiAuthService.findValidByAccesskey(subAccessKey);
             if (apiAuth != null) {
                 secretKey = apiAuth.getSecretKey();
             }

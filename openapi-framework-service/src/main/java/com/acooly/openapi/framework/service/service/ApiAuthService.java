@@ -39,6 +39,21 @@ public interface ApiAuthService extends EntityService<ApiAuth> {
     ApiAuth findByAccesskey(String accesskey);
 
     /**
+     * 返回有效的认证对象
+     * @param accesskey
+     * @return
+     */
+    ApiAuth findValidByAccesskey(String accesskey);
+
+    /**
+     * 根据AccessKey查询认证对象并进行合法性校验
+     *
+     * @param accesskey
+     * @return
+     */
+    ApiAuth findAndCheckByAccesskey(String accesskey);
+
+    /**
      * 根据编码查询
      *
      * @param authNo

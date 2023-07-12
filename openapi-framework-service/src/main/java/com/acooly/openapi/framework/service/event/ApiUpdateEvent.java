@@ -14,6 +14,10 @@ import com.acooly.openapi.framework.service.domain.ApiPartner;
 import lombok.Data;
 
 /**
+ * Api管理对象更新事件
+ * <p>
+ * 事件处理：ApiUpdateEventHandler
+ *
  * @author zhangpu
  * @date 2019-02-12 23:13
  */

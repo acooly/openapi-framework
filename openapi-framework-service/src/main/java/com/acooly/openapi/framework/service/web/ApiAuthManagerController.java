@@ -9,6 +9,7 @@ package com.acooly.openapi.framework.service.web;
 import com.acooly.core.common.dao.support.PageInfo;
 import com.acooly.core.common.view.ViewResult;
 import com.acooly.core.common.web.AbstractJsonEntityController;
+import com.acooly.core.common.web.MappingMethod;
 import com.acooly.core.common.web.support.JsonListResult;
 import com.acooly.core.common.web.support.JsonResult;
 import com.acooly.core.utils.Collections3;
@@ -23,6 +24,7 @@ import com.acooly.openapi.framework.service.domain.ApiAuth;
 import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
 import com.acooly.openapi.framework.service.domain.ApiMetaService;
 import com.acooly.openapi.framework.service.domain.ApiPartner;
+import com.acooly.openapi.framework.service.event.ApiUpdateEventManager;
 import com.acooly.openapi.framework.service.service.ApiAuthAclService;
 import com.acooly.openapi.framework.service.service.ApiAuthService;
 import com.acooly.openapi.framework.service.service.ApiMetaServiceService;
@@ -59,6 +61,57 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
     private ApiAuthAclService apiAuthAclService;
     @Autowired
     private ApiPartnerService apiPartnerService;
+    @Autowired
+    private ApiUpdateEventManager apiUpdateEventManager;
+
+    @ResponseBody
+    @RequestMapping(value = "clearCache")
+    public JsonResult clearCache(HttpServletRequest request, HttpServletResponse response) {
+        JsonResult result = new JsonResult();
+        try {
+            ApiAuth apiAuth = loadEntity(request);
+            apiUpdateEventManager.publish(apiAuth);
+            result.setMessage("发布清除缓存事件成功");
+        } catch (Exception e) {
+            handleException(result, "发布清除缓存事件", e);
+        }
+        return result;
+    }
+
+    /**
+     * 动态秘钥列表首页
+     */
+    @RequestMapping("dynamic")
+    public String dynamic(HttpServletRequest request, HttpServletResponse response, Model model) {
+        model.addAllAttributes(referenceData(request));
+        return "/manage/openapi/apiAuthDynamic";
+    }
+
+    /**
+     * 分页多条件查询
+     */
+    @RequestMapping(value = {"listDynamic"})
+    @ResponseBody
+    public JsonListResult<ApiAuth> listDynamic(HttpServletRequest request, HttpServletResponse response) {
+        JsonListResult<ApiAuth> result = new JsonListResult<>();
+        allow(request, response, MappingMethod.list);
+        try {
+            result.appendData(referenceData(request));
+            Map<String, Object> map = getSearchParams(request);
+            // 查询parentId不为null的，表示：都是子的动态秘钥
+            map.put("NOTNULL_parentId", 0L);
+            PageInfo<ApiAuth> pageInfo = getEntityService().query(getPageInfo(request), map, getSortMap(request));
+            result.setTotal(pageInfo.getTotalCount());
+            result.setRows(pageInfo.getPageResults());
+            result.setHasNext(pageInfo.hasNext());
+            result.setPageNo(pageInfo.getCurrentPage());
+            result.setPageSize(pageInfo.getCountOfCurrentPage());
+        } catch (Exception e) {
+            handleException(result, "分页查询", e);
+        }
+        return result;
+
+    }
 
     @RequestMapping(value = "loadLevel")
     @ResponseBody
@@ -69,14 +122,8 @@ public class ApiAuthManagerController extends AbstractJsonEntityController<ApiAu
             Long parentId = Servlets.getLongParameter("id");
             String serviceCode = Servlets.getParameter("serviceCode");
             Map<String, Object> map = getSearchParams(request);
-
-            if (parentId == null) {
-                if (map.isEmpty()) {
-                    map.put("NULL_parentId", 0L);
-                }
-            } else {
-                map.put("EQ_parentId", parentId);
-            }
+            // 只查顶级
+            map.put("NULL_parentId", 0L);
             PageInfo<ApiAuth> pageInfo = apiAuthService.query(getPageInfo(request), map, getSortMap(request), serviceCode);
             result.setTotal(pageInfo.getTotalCount());
             result.setRows(pageInfo.getPageResults());

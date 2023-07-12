@@ -23,7 +23,10 @@ public class ApiServiceComponentInitializer implements ComponentInitializer {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
 
+        // 设置自定义的模块JS
         setPropertyIfMissing("acooly.framework.custom-scripts.openapi[0]", "/manage/assert/openapi/openapi-manage.js");
+        // 开启剪贴板前端插件，用于秘钥管理模块
+        setPropertyIfMissing("acooly.framework.plugin.clipboard", "true");
 
         /** 升级增加apiAuth白名单 */
         setPropertyIfMissing("acooly.ds.dbPatchs.api_auth[0].columnName", "whitelist");

@@ -12,11 +12,14 @@ import com.acooly.core.common.exception.CommonErrorCodes;
 import com.acooly.core.common.service.EntityServiceImpl;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
-import com.acooly.module.event.EventBus;
+import com.acooly.core.utils.enums.SimpleStatus;
+import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
+import com.acooly.openapi.framework.common.exception.ApiServiceException;
 import com.acooly.openapi.framework.service.dao.ApiAuthDao;
 import com.acooly.openapi.framework.service.domain.ApiAuth;
 import com.acooly.openapi.framework.service.domain.ApiAuthAcl;
 import com.acooly.openapi.framework.service.event.ApiUpdateEvent;
+import com.acooly.openapi.framework.service.event.ApiUpdateEventManager;
 import com.acooly.openapi.framework.service.service.ApiAuthAclService;
 import com.acooly.openapi.framework.service.service.ApiAuthService;
 import com.alibaba.fastjson.JSONObject;
@@ -44,7 +47,8 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
      * 发布时间，用于更新缓存
      */
     @Autowired(required = false)
-    private EventBus eventBus;
+    ApiUpdateEventManager apiUpdateEventManager;
+
 
     @Autowired
     private ApiAuthAclService apiAuthAclService;
@@ -57,8 +61,28 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
     }
 
     @Override
-    public ApiAuth findByAccesskey(String accesskey) {
-        return this.getEntityDao().findByAccesskey(accesskey);
+    public ApiAuth findByAccesskey(String accessKey) {
+        return this.getEntityDao().findByAccesskey(accessKey);
+    }
+
+    @Override
+    public ApiAuth findValidByAccesskey(String accessKey) {
+        ApiAuth apiAuth = findByAccesskey(accessKey);
+        return apiAuth != null && apiAuth.getStatus() == SimpleStatus.enable ? apiAuth : null;
+    }
+
+    @Override
+    public ApiAuth findAndCheckByAccesskey(String accessKey) {
+        ApiAuth apiAuth = findByAccesskey(accessKey);
+        if (apiAuth == null) {
+            log.warn("加载认证对象 失败 AccessKey:{}, 认证对象(ApiAuth)不存在。", accessKey);
+            throw new ApiServiceException(ApiServiceResultCode.ACCESS_KEY_NOT_EXIST);
+        }
+        if (apiAuth.getStatus() != SimpleStatus.enable) {
+            log.warn("加载认证对象 失败 AccessKey:{}, ApiAuth对象状态非法:{}", accessKey, apiAuth.getStatus());
+            throw new ApiServiceException(ApiServiceResultCode.ACCESS_KEY_STATE_ERROR, "AccessKey对应的认证对象状态非法");
+        }
+        return apiAuth;
     }
 
     @Override
@@ -86,14 +110,14 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
             o.setAuthNo(Ids.did());
         }
         super.update(o);
-        eventBus.publish(new ApiUpdateEvent(oldApiAuth));
+        apiUpdateEventManager.publish(oldApiAuth);
     }
 
 
     @Override
     public void remove(ApiAuth o) throws BusinessException {
         super.remove(o);
-        eventBus.publish(new ApiUpdateEvent(o));
+        apiUpdateEventManager.publish(o);
     }
 
     @Override
@@ -115,7 +139,7 @@ public class ApiAuthServiceImpl extends EntityServiceImpl<ApiAuth, ApiAuthDao> i
             apiAuthAclService.removeByAuthNo(apiAuth.getAuthNo());
         }
         super.removeById(id);
-        eventBus.publish(new ApiUpdateEvent(apiAuth));
+        apiUpdateEventManager.publish(apiAuth);
     }
 
     @Override

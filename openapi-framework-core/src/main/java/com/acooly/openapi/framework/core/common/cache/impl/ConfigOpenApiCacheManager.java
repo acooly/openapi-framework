@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author qiuboboy@qq.com
  * @date 2018-07-23 16:16
  */
+@Deprecated
 public class ConfigOpenApiCacheManager implements OpenApiCacheManager, InitializingBean {
     private static final String NAME_SPACE = "openapi.cache.";
 

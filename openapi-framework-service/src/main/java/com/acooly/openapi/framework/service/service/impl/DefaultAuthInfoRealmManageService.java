@@ -3,7 +3,6 @@ package com.acooly.openapi.framework.service.service.impl;
 import com.acooly.core.utils.Collections3;
 import com.acooly.core.utils.Ids;
 import com.acooly.core.utils.Strings;
-import com.acooly.core.utils.enums.SimpleStatus;
 import com.acooly.core.utils.enums.WhetherStatus;
 import com.acooly.core.utils.mapper.BeanCopier;
 import com.acooly.openapi.framework.common.enums.ApiServiceResultCode;
@@ -116,16 +115,7 @@ public class DefaultAuthInfoRealmManageService implements AuthInfoRealmManageSer
     }
 
     private ApiAuth loadAndCheckApiAuth(String accessKey) {
-        ApiAuth apiAuth = apiAuthService.findByAccesskey(accessKey);
-        if (apiAuth == null) {
-            log.warn("加载认证对象 失败 AccessKey:{}, 认证对象(ApiAuth)不存在。", accessKey);
-            throw new ApiServiceException(ApiServiceResultCode.ACCESS_KEY_NOT_EXIST);
-        }
-        if (apiAuth.getStatus() != SimpleStatus.enable) {
-            log.warn("加载认证对象 失败 AccessKey:{}, ApiAuth对象状态非法:{}", accessKey, apiAuth.getStatus());
-            throw new ApiServiceException(ApiServiceResultCode.ACCESS_KEY_STATE_ERROR, "AccessKey对应的认证对象状态非法");
-        }
-        return apiAuth;
+        return apiAuthService.findAndCheckByAccesskey(accessKey);
     }
 
     private ApiPartner loadAndCheckPartner(String partnerId) {
