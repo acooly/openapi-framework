@@ -144,7 +144,7 @@
             if (!row.parentId) {
                 html += "<a onclick=\"$.acooly.framework.edit({url:'/manage/openapi/apiAuth/edit.html',id:'" + row.id + "',entity:'apiAuth',width:600,height:600});\" class=\"btn btn-outline-primary btn-xs\" href=\"#\" title=\"编辑\"><i class=\"fa fa-pencil\"></i> 编辑</a>"
             }
-            html += "<a onclick=\"$.acooly.openapi.manage.auth.clearCache('manage_apiAuth_datagrid','" + row.id + "');\" class=\"btn btn-outline-primary btn-xs\" href=\"#\" title=\"删除\"><i class=\"fa fa-trash-o\"></i> 清除缓存</a>";
+            html += "<a onclick=\"$.acooly.openapi.manage.auth.clearCache('manage_apiAuth_datagrid','" + row.id + "');\" class=\"btn btn-outline-primary btn-xs\" href=\"#\" title=\"删除\"><i class=\"fa fa-clock-o\"></i> 清除缓存</a>";
             html += "<a onclick=\"$.acooly.framework.remove('/manage/openapi/apiAuth/deleteJson.html','" + row.id + "','manage_apiAuth_datagrid','','确认删除吗？删除认证秘钥的同时会清除缓存。如果开启的一级缓存，则需要等待所有节点过期。');\" class=\"btn btn-outline-primary btn-xs\" href=\"#\" title=\"删除\"><i class=\"fa fa-trash-o\"></i> 删除</a>";
             html += "</div>";
             return html;

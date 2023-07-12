@@ -32,7 +32,7 @@ let acooly_openapi_manage_order = {
 
 let acooly_openapi_manage_auth = {
     clearCache: function (datagridId, id) {
-        $.acooly.framework.confirmRequest("/manage/openapi/auth/clearCache.html",
+        $.acooly.framework.confirmRequest("/manage/openapi/apiAuth/clearCache.html",
             {id: id}, datagridId, null, "确定要清除该认证对象的缓存吗？"
         );
     }
