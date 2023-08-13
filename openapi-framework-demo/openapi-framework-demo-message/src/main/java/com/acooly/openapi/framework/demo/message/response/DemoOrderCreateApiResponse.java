@@ -31,4 +31,7 @@ public class DemoOrderCreateApiResponse extends ApiResponse {
     @OpenApiField(desc = "状态", ordinal = 4)
     private SimpleStatus status;
 
+    @OpenApiField(desc = "测试", ordinal = 5)
+    private String testNull;
+
 }
